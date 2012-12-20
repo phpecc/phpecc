@@ -1,0 +1,8 @@
+Hardware:
+Processor Name:Intel Core 2 Duo
+Processor Speed: 2.4 GHz
+Number Of Processors: 1
+Total Number Of Cores: 2
+L2 Cache: 4 MB
+Memory: 4 GB
+Bus Speed: 800 MHz
