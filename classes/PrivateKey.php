@@ -49,7 +49,7 @@ class PrivateKey implements PrivateKeyInterface {
             $s = gmp_Utils::gmp_mod2(gmp_mul(NumberTheory::inverse_mod($k, $n), gmp_Utils::gmp_mod2(gmp_add($hash, gmp_mul($this->secret_multiplier, $r)), $n)), $n);
 
             if (gmp_cmp($s, 0) == 0) {
-                throw new ErrorExcpetion("error: random number S = 0<br />");
+                throw new ErrorException("error: random number S = 0<br />");
             }
 
             return new Signature($r, $s);
