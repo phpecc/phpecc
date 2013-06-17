@@ -57,7 +57,7 @@ class gmp_Utils {
 
     public static function gmp_hexdec($hex) {
         if (extension_loaded('gmp') && USE_EXT=='GMP') {
-            $dec = gmp_strval(gmp_init($hex), 10);
+            $dec = gmp_strval(gmp_init($hex, 16), 10);
 
             return $dec;
         } else {
@@ -67,7 +67,7 @@ class gmp_Utils {
 
     public static function gmp_dechex($dec) {
         if (extension_loaded('gmp') && USE_EXT=='GMP') {
-            $hex = gmp_strval(gmp_init($dec), 16);
+            $hex = gmp_strval(gmp_init($dec, 10), 16);
 
             return $hex;
         } else {
