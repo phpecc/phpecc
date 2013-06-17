@@ -79,7 +79,7 @@ class TestSuite {
             $start_time = microtime(true);
             echo "<b>BCMATH PHP extension</b> was found performance will tend to <b>SEVERELY LACK USABILITY</b>. Consider installing GMP. <br /><b>Initiating tests.</b><br />\n";
             if (!$verbose) {
-                echo "You selected NONE-VERBOSE mode. <br /><b>ONLY FAILURES and TIME STATISTICS are REPORTED.</b><br />\n";
+                echo "You selected NON-VERBOSE mode. <br /><b>ONLY FAILURES and TIME STATISTICS are REPORTED.</b><br />\n";
             } else {
                 echo "You selected VERBOSE mode. <br /><b>ALL OUTCOMES are REPORTED.</b><br />\n";
             }
@@ -1078,20 +1078,24 @@ class TestSuite {
 
         $pubPointA = $alice->getPublicPoint();
         $pubPointB = $bob->getPublicPoint();
-
+        
         $alice->setPublicPoint($pubPointB);
         $bob->setPublicPoint($pubPointA);
 
         $key_A = $alice->calculateKey();
         $key_B = $bob->calculateKey();
 
-        if ($key_A == $key_B) {
+        
+        if ($key_A == $key_B && !is_null($key_A)) {
             if ($verbose)
                 echo "<br />ECDH key agreement SUCCESS.";
             flush();
-        } else {
-            echo "<br />ECDH key agreement ERROR.";
+        } else if(is_null($key_A) && is_null($key_B)){
+            echo "<br />ECDH key agreement ERROR. One of the keys is null.";
             flush();
+        }else{
+        	echo "<br />ECDH key agreement ERROR.";
+        	flush();
         }
 
         $end_time = microtime(true);

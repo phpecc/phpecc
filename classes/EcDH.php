@@ -45,7 +45,7 @@ class EcDH implements EcDHInterface {
 
     public function calculateKey() {
 
-        $this->agreed_key = Point::mul($this->secret, $this->receivedPubPoint)->getX();
+        return $this->agreed_key = Point::mul($this->secret, $this->receivedPubPoint)->getX();
     }
 
     public function getPublicPoint() {
