@@ -220,13 +220,9 @@ class Point implements PointInterface {
 
                         $result = self::double($result);
 
-                        if (gmp_cmp(gmp_and($e3, $i), 0) != 0 && gmp_cmp(gmp_and($e, $i), 0) == 0) {
-
-                            $result = self::add($result, $p1);
-                        }
-                        if (gmp_cmp(gmp_and($e3, $i), 0) == 0 && gmp_cmp(gmp_and($e, $i), 0) != 0) {
-                            $result = self::add($result, $negative_self);
-                        }
+                        $e3bit = bccomp(bcmath_Utils::bcand($e3, $i), 0);
+                        $ebit = bccomp(bcmath_Utils::bcand($e, $i), 0);
+                        if ($e3bit != $ebit) $result = self::add($result, (($e3bit == 0)? $negative_self : $p1));
 
                         $i = gmp_strval(gmp_div($i, 2));
                     }
