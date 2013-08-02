@@ -220,11 +220,13 @@ class Point implements PointInterface {
 
                         $result = self::double($result);
 
-                        if (gmp_cmp(gmp_and($e3, $i), 0) != 0 && gmp_cmp(gmp_and($e, $i), 0) == 0) {
+                        $e3bit = gmp_cmp(gmp_and($e3, $i), 0);
+                        $ebit = gmp_cmp(gmp_and($e, $i), 0);
+                        
+                        if ($e3bit != 0 && $ebit == 0) {
 
                             $result = self::add($result, $p1);
-                        }
-                        if (gmp_cmp(gmp_and($e3, $i), 0) == 0 && gmp_cmp(gmp_and($e, $i), 0) != 0) {
+                        }else if ($e3bit == 0 && $ebit != 0) {
                             $result = self::add($result, $negative_self);
                         }
 
@@ -260,10 +262,12 @@ class Point implements PointInterface {
                     while (bccomp($i, 1) == 1) {
                         $result = self::double($result);
 
-                        if (bccomp(bcmath_Utils::bcand($e3, $i), '0') != 0 && bccomp(bcmath_Utils::bcand($e, $i), '0') == 0) {
+                        $e3bit = bccomp(bcmath_Utils::bcand($e3, $i), '0');
+                        $ebit = bccomp(bcmath_Utils::bcand($e, $i), '0');
+                        
+                        if ($e3bit != 0 && $ebit == 0) {
                             $result = self::add($result, $p1);
-                        }
-                        if (bccomp(bcmath_Utils::bcand($e3, $i), 0) == 0 && bccomp(bcmath_Utils::bcand($e, $i), 0) != 0) {
+                        }else if ($e3bit == 0 && $ebit != 0) {
                             $result = self::add($result, $negative_self);
                         }
 
