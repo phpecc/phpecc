@@ -253,7 +253,7 @@ class NISTcurve {
             $_Gy = gmp_Utils::gmp_hexdec('0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8');
 
             $curve_256K1 = new CurveFp($_p, 0, $_b);
-            $generator_256 = new Point($curve_256K1, $_Gx, $_Gy, $_r);
+            $generator_256K1 = new Point($curve_256K1, $_Gx, $_Gy, $_r);
         } else if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
             $_p = gmp_Utils::gmp_hexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F');
             $_r = gmp_Utils::gmp_hexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141');
@@ -262,9 +262,9 @@ class NISTcurve {
             $_Gy = gmp_Utils::gmp_hexdec('0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8');
 
             $curve_256K1 = new CurveFp($_p, 0, $_b);
-            $generator_256 = new Point($curve_256K1, $_Gx, $_Gy, $_r);
+            $generator_256K1 = new Point($curve_256K1, $_Gx, $_Gy, $_r);
         }
-        return $generator_256;
+        return $generator_256K1;
     }
 
     public static function generator_256() {
