@@ -808,7 +808,7 @@ class NumberTheory
     public static function is_prime($n)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            return gmp_prob_prime($n);
+            return (gmp_prob_prime($n) == 2);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 self::$miller_rabin_test_count = 0;
