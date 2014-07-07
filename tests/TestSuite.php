@@ -66,12 +66,10 @@ class TestSuite
             echo "Test ported to unit tests<br />\n";
             echo "<br /><br />--------- END NEXT PRIME TEST ---------<br /><br />\n";
             echo "--------- START SQUARE ROOT MOD P TEST ---------<br /><br />\n";
-
-            self::gmp_squareRootModP($this->START_PRIME, $verbose);
+            echo "Test ported to unit tests<br />\n";
             echo "<br /><br />--------- END SQUARE ROOT MOD P TEST ---------<br /><br />\n";
             echo "--------- START MULTIPLICATIVE INVERSE MOD P TEST ---------<br /><br />\n";
-
-            self::gmp_multInverseModP($verbose);
+            echo "Test ported to unit tests<br />\n";
             echo "<br /><br />--------- END MULTIPLICATIVE INVERSE TEST ---------<br /><br />\n";
             echo "--------- START ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
 
@@ -143,68 +141,7 @@ class TestSuite
             }
     }
 
-    public static function gmp_squareRootModP($prime, $verbose = false)
-    {
-        $start_time = microtime(true);
-        if ($verbose)
-            echo "Testing primes for modulus " . $prime . "<br />";
-        $squares = array();
 
-        for ($root = 0; gmp_cmp($root, gmp_add(1, gmp_div($prime, 2))) < 0; $root = gmp_add($root, 1)) {
-            $sq = gmp_strval(gmp_powm($root, 2, $prime));
-
-            $calculated = NumberTheory::square_root_mod_prime($sq, $prime);
-
-            $calc_sq = gmp_strval(gmp_powm($calculated, 2, $prime));
-
-            if (gmp_cmp($calculated, $root) != 0 && gmp_cmp(gmp_sub($prime, $calculated), $root) != 0) {
-
-                $error_tally ++;
-                echo "FAILED TO FIND " . gmp_strval($root) . " AS sqrt(" . gmp_strval($sq) . ") mod $prime . Said $calculated (" . ($prime - $calculated) . ") <br />\n";
-
-                flush();
-            } else {
-                if ($verbose)
-                    echo "SUCCESS TO FIND " . gmp_strval($root) . " AS sqrt(" . gmp_strval($sq) . ") mod $prime . Said $calculated (" . ($prime - $calculated) . ") <br />\n";
-
-                flush();
-            }
-        }
-        $end_time = microtime(true);
-
-        $time_res = $end_time - $start_time;
-
-        echo "<br />Square roots mod " . $prime . " took: " . $time_res . " seconds. <br />";
-    }
-
-    public static function gmp_multInverseModP($verbose = false)
-    {
-        $start_time = microtime(true);
-        $n_tests = 0;
-        for ($i = 0; $i < 100; $i ++) {
-            $m = rand(20, 10000);
-            for ($j = 0; $j < 100; $j ++) {
-                $a = rand(1, $m - 1);
-                if (NumberTheory::gcd2($a, $m) == 1) {
-                    $n_tests ++;
-                    $inv = NumberTheory::inverse_mod($a, $m);
-
-                    if ($inv <= 0 || $inv >= $m || ($a * $inv) % $m != 1) {
-                        $error_tally ++;
-                        print "$inv = inverse_mod( $a, $m ) is wrong.<br />\n";
-                    } else {
-                        if ($verbose)
-                            print "$inv = inverse_mod( $a, $m ) is CORRECT.<br />\n";
-                    }
-                }
-            }
-        }
-        $end_time = microtime(true);
-
-        $time_res = $end_time - $start_time;
-
-        echo "<br />Multiplicative inverse mod arbitrary primes took: " . $time_res . " seconds. <br />";
-    }
 
     public static function gmp_EcArithmetic($verbose = false)
     {

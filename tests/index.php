@@ -25,7 +25,7 @@ include dirname(__DIR__) . '/vendor/autoload.php';
 $seconds = 7200;
 set_time_limit($seconds);
 
-define('USE_EXT', 'BCMATH');
+//define('USE_EXT', 'BCMATH');
 
 if (extension_loaded('gmp') && ! defined('USE_EXT')) {
     define('USE_EXT', 'GMP');
