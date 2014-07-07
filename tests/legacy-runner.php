@@ -55,7 +55,6 @@ if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
 }
 
 \Mdanter\Ecc\ModuleConfig::useBcMath();
-NumberTheory::setTheoryAdapter(new Bc(NumberTheory::$smallprimes));
 if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
     $errors += runSuite($t, false);
 }
