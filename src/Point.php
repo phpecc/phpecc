@@ -51,13 +51,13 @@ class Point implements PointInterface
         
         if (isset($this->curve) && ($this->curve instanceof CurveFp)) {
             if (! $this->curve->contains($this->x, $this->y)) {
-                throw new ErrorException("Curve" . print_r($this->curve, true) . " does not contain point ( " . $x . " , " . $y . " )");
+                throw new \RuntimeException("Curve" . print_r($this->curve, true) . " does not contain point ( " . $x . " , " . $y . " )");
             }
             
             if ($this->order != null) {
                 
                 if (self::cmp(self::mul($order, $this), self::$infinity) != 0) {
-                    throw new ErrorException("SELF * ORDER MUST EQUAL INFINITY.");
+                    throw new \RuntimeException("SELF * ORDER MUST EQUAL INFINITY.");
                 }
             }
         }
@@ -65,7 +65,7 @@ class Point implements PointInterface
 
     public static function cmp($p1, $p2)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             if (! ($p1 instanceof Point)) {
                 if (($p2 instanceof Point))
                     return 1;
@@ -86,7 +86,7 @@ class Point implements PointInterface
                 return 1;
             }
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 if (! ($p1 instanceof Point)) {
                     if (($p2 instanceof Point))
                         return 1;
@@ -107,7 +107,7 @@ class Point implements PointInterface
                     return 1;
                 }
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 
@@ -124,7 +124,7 @@ class Point implements PointInterface
             return self::$infinity;
         }
         
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             
             if (CurveFp::cmp($p1->curve, $p2->curve) == 0) {
                 if (gmp_Utils::gmp_mod2(gmp_cmp($p1->x, $p2->x), $p1->curve->getPrime()) == 0) {
@@ -147,10 +147,10 @@ class Point implements PointInterface
                 
                 return $p3;
             } else {
-                throw new ErrorException("The Elliptic Curves do not match.");
+                throw new \RuntimeException("The Elliptic Curves do not match.");
             }
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 
                 if (CurveFp::cmp($p1->curve, $p2->curve) == 0) {
                     if (bcmod(bccomp($p1->x, $p2->x), $p1->curve->getPrime()) == 0) {
@@ -179,16 +179,16 @@ class Point implements PointInterface
                     
                     return $p3;
                 } else {
-                    throw new ErrorException("The Elliptic Curves do not match.");
+                    throw new \RuntimeException("The Elliptic Curves do not match.");
                 }
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 
     public static function mul($x2, Point $p1)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $e = $x2;
             
             if (self::cmp($p1, self::$infinity) == 0) {
@@ -233,7 +233,7 @@ class Point implements PointInterface
                 return $result;
             }
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 $e = $x2;
                 
                 if (self::cmp($p1, self::$infinity) == 0) {
@@ -275,13 +275,13 @@ class Point implements PointInterface
                     return $result;
                 }
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 
     public static function leftmost_bit($x)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             if (gmp_cmp($x, 0) > 0) {
                 $result = 1;
                 while (gmp_cmp($result, $x) < 0 || gmp_cmp($result, $x) == 0) {
@@ -290,7 +290,7 @@ class Point implements PointInterface
                 return gmp_strval(gmp_div($result, 2));
             }
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 if (bccomp($x, 0) == 1) {
                     $result = 1;
                     while (bccomp($result, $x) == - 1 || bccomp($result, $x) == 0) {
@@ -299,7 +299,7 @@ class Point implements PointInterface
                     return bcdiv($result, 2);
                 }
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 
@@ -317,7 +317,7 @@ class Point implements PointInterface
 
     public static function double(Point $p1)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             
             $p = $p1->curve->getPrime();
             $a = $p1->curve->getA();
@@ -339,7 +339,7 @@ class Point implements PointInterface
             
             return $p3;
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 
                 $p = $p1->curve->getPrime();
                 $a = $p1->curve->getA();
@@ -361,7 +361,7 @@ class Point implements PointInterface
                 
                 return $p3;
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 

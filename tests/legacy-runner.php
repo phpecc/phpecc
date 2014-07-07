@@ -1,4 +1,7 @@
 <?php
+use Mdanter\Ecc\Theory\Bc;
+use Mdanter\Ecc\NumberTheory;
+use Mdanter\Ecc\Tests\TestSuite;
 /***********************************************************************
 Copyright (C) 2012 Matyas Danter
 
@@ -22,21 +25,39 @@ OTHER DEALINGS IN THE SOFTWARE.
 *************************************************************************/
 include dirname(__DIR__) . '/vendor/autoload.php';
 
+function runSuite($t, $gmp) {
+    $module = $gmp ? 'GMP' : 'BCMATH';
+    echo '-- using ' . $module . ' math module.' . PHP_EOL;
+    ob_start();
+
+    $errors = $t->run($gmp);
+
+    if ($errors !== 0) {
+        ob_end_flush();
+    } else {
+        ob_end_clean();
+    }
+
+    return $errors;
+}
+
 $seconds = 7200;
 set_time_limit($seconds);
 
-//define('USE_EXT', 'BCMATH');
-
-if (extension_loaded('gmp') && ! defined('USE_EXT')) {
-    define('USE_EXT', 'GMP');
-}
-elseif (extension_loaded('bcmath') && ! defined('USE_EXT')) {
-    define('USE_EXT', 'BCMATH');
-}
-
 // verbosity for test methods
-$verbose = false;
+$verbose = true;
+$errors = 0;
+$t = new TestSuite($verbose);
 
-$t = new \Mdanter\Ecc\Tests\TestSuite($verbose);
+\Mdanter\Ecc\ModuleConfig::useGmp();
+if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+    $errors += runSuite($t, true);
+}
 
-?>
+\Mdanter\Ecc\ModuleConfig::useBcMath();
+NumberTheory::setTheoryAdapter(new Bc(NumberTheory::$smallprimes));
+if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+    $errors += runSuite($t, false);
+}
+
+return $errors;

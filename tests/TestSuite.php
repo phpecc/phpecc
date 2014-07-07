@@ -50,10 +50,25 @@ class TestSuite
     private $START_PRIME = 31;
 
     private $NUM_PRIMES = 10;
-
+    
+    private static $useGmp = false;
+    
+    private static $errors = 0;
+    
+    private $verbose = false;
+    
     public function __construct($verbose = false)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        $this->verbose = $verbose;
+    }
+    
+    public function run($useGmp) {
+        self::$useGmp = $useGmp;
+        self::$errors = 0;
+        
+        $verbose = $this->verbose;
+        
+        if (self::$useGmp && extension_loaded('gmp')) {
             $start_time = microtime(true);
             echo "GMP PHP extension was found and is preferred for performance reasons.<br /><b>Initiating tests.</b><br />\n";
             if (! $verbose) {
@@ -61,7 +76,7 @@ class TestSuite
             } else {
                 echo "You selected VERBOSE mode. <br /><b>ALL OUTCOMES are REPORTED.</b><br />\n";
             }
-
+        
             echo "<br /><br />--------- START NEXT PRIME TEST ---------<br /><br />\n";
             echo "Test ported to unit tests<br />\n";
             echo "<br /><br />--------- END NEXT PRIME TEST ---------<br /><br />\n";
@@ -72,11 +87,11 @@ class TestSuite
             echo "Test ported to unit tests<br />\n";
             echo "<br /><br />--------- END MULTIPLICATIVE INVERSE TEST ---------<br /><br />\n";
             echo "--------- START ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
-
+        
             self::gmp_EcArithmetic($verbose);
             echo "<br /><br />--------- END ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
             echo "--------- START NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
-
+        
             self::gmp_NISTCurveTest($verbose);
             echo "<br /><br />--------- END NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
             echo "--------- START POINT VALIDITY TEST ---------<br /><br />\n";
@@ -89,56 +104,59 @@ class TestSuite
             self::gmp_diffieHellman($verbose);
             echo "<br /><br />--------- END DIFFIE HELLMAN KEY EXHANGE TEST ---------<br /><br />\n";
             $end_time = microtime(true);
-
+        
             $time_res = $end_time - $start_time;
-
+        
             echo "<br /><h3>TEST SUITE TOTAL TIME : " . $time_res . " seconds. </h3><br />";
         } else
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
-                $start_time = microtime(true);
-                echo "<b>BCMATH PHP extension</b> was found performance will tend to <b>SEVERELY LACK USABILITY</b>. Consider installing GMP. <br /><b>Initiating tests.</b><br />\n";
-                if (! $verbose) {
-                    echo "You selected NON-VERBOSE mode. <br /><b>ONLY FAILURES and TIME STATISTICS are REPORTED.</b><br />\n";
-                } else {
-                    echo "You selected VERBOSE mode. <br /><b>ALL OUTCOMES are REPORTED.</b><br />\n";
-                }
-                echo "<br /><br />--------- START NEXT PRIME TEST ---------<br /><br />\n";
-
-                self::bcmath_NextPrime($this->START_PRIME, $this->NUM_PRIMES, $verbose);
-                echo "<br /><br />--------- END NEXT PRIME TEST ---------<br /><br />\n";
-                echo "--------- START SQUARE ROOT MOD P TEST ---------<br /><br />\n";
-
-                self::bcmath_squareRootModP($this->START_PRIME, $verbose);
-                echo "<br /><br />--------- END SQUARE ROOT MOD P TEST ---------<br /><br />\n";
-                echo "--------- START MULTIPLICATIVE INVERSE MOD P TEST ---------<br /><br />\n";
-
-                self::bcmath_multInverseModP($verbose);
-                echo "<br /><br />--------- END MULTIPLICATIVE INVERSE TEST ---------<br /><br />\n";
-                echo "--------- START ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
-
-                self::bcmath_EcArithmetic($verbose);
-                echo "<br /><br />--------- END ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
-                echo "--------- START NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
-
-                self::bcmath_NISTCurveTest($verbose);
-                echo "<br /><br />--------- END NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
-                echo "--------- START POINT VALIDITY TEST ---------<br /><br />\n";
-                self::bcmath_pointValidity($verbose);
-                echo "<br /><br />--------- END POINT VALIDITY TEST ---------<br /><br />\n";
-                echo "--------- START SIGNATURE VALIDITY TEST ---------<br /><br />\n";
-                self::bcmath_signatureValidity($verbose);
-                echo "<br /><br />--------- END SIGNATURE VALIDITY TEST ---------<br /><br />\n";
-                echo "--------- START DIFFIE HELLMAN KEY EXCHANGE TEST ---------<br /><br />\n";
-                self::bcmath_diffieHellman($verbose);
-                echo "<br /><br />--------- END DIFFIE HELLMAN KEY EXHANGE TEST ---------<br /><br />\n";
-                $end_time = microtime(true);
-
-                $time_res = $end_time - $start_time;
-
-                echo "<br /><h3>TEST SUITE TOTAL TIME : " . $time_res . " seconds. </h3><br />";
+        if (extension_loaded('bcmath')) {
+            $start_time = microtime(true);
+            echo "<b>BCMATH PHP extension</b> was found performance will tend to <b>SEVERELY LACK USABILITY</b>. Consider installing GMP. <br /><b>Initiating tests.</b><br />\n";
+            if (! $verbose) {
+                echo "You selected NON-VERBOSE mode. <br /><b>ONLY FAILURES and TIME STATISTICS are REPORTED.</b><br />\n";
             } else {
-                echo "Please install GMP or BCMATH. For higher performance GMP is preferred.";
+                echo "You selected VERBOSE mode. <br /><b>ALL OUTCOMES are REPORTED.</b><br />\n";
             }
+            echo "<br /><br />--------- START NEXT PRIME TEST ---------<br /><br />\n";
+        
+            self::bcmath_NextPrime($this->START_PRIME, $this->NUM_PRIMES, $verbose);
+            echo "<br /><br />--------- END NEXT PRIME TEST ---------<br /><br />\n";
+            echo "--------- START SQUARE ROOT MOD P TEST ---------<br /><br />\n";
+        
+            self::bcmath_squareRootModP($this->START_PRIME, $verbose);
+            echo "<br /><br />--------- END SQUARE ROOT MOD P TEST ---------<br /><br />\n";
+            echo "--------- START MULTIPLICATIVE INVERSE MOD P TEST ---------<br /><br />\n";
+        
+            self::bcmath_multInverseModP($verbose);
+            echo "<br /><br />--------- END MULTIPLICATIVE INVERSE TEST ---------<br /><br />\n";
+            echo "--------- START ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
+        
+            self::bcmath_EcArithmetic($verbose);
+            echo "<br /><br />--------- END ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
+            echo "--------- START NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
+        
+            self::bcmath_NISTCurveTest($verbose);
+            echo "<br /><br />--------- END NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
+            echo "--------- START POINT VALIDITY TEST ---------<br /><br />\n";
+            self::bcmath_pointValidity($verbose);
+            echo "<br /><br />--------- END POINT VALIDITY TEST ---------<br /><br />\n";
+            echo "--------- START SIGNATURE VALIDITY TEST ---------<br /><br />\n";
+            self::bcmath_signatureValidity($verbose);
+            echo "<br /><br />--------- END SIGNATURE VALIDITY TEST ---------<br /><br />\n";
+            echo "--------- START DIFFIE HELLMAN KEY EXCHANGE TEST ---------<br /><br />\n";
+            self::bcmath_diffieHellman($verbose);
+            echo "<br /><br />--------- END DIFFIE HELLMAN KEY EXHANGE TEST ---------<br /><br />\n";
+            $end_time = microtime(true);
+        
+            $time_res = $end_time - $start_time;
+        
+            echo "<br /><h3>TEST SUITE TOTAL TIME : " . $time_res . " seconds. </h3><br />";
+        } else {
+            echo "Please install GMP or BCMATH. For higher performance GMP is preferred.";
+            self::$errors++;
+        }
+        
+        return self::$errors;
     }
 
 
@@ -174,6 +192,7 @@ class TestSuite
                     print " Correct.<br />";
                 }
             } else {
+                self::$errors++;
                 print "$g * $i = $p, expected $check . . .";
                 print " Wrong.<br />";
             }
@@ -198,8 +217,10 @@ class TestSuite
 
         $d = '651056770906015076056810763456358567190100156695615665659';
         $Q = Point::mul($d, $p192);
-        if ($Q->getX() != gmp_Utils::gmp_hexdec('0x62B12D60690CDCF330BABAB6E69763B471F994DD702D16A5'))
+        if ($Q->getX() != gmp_Utils::gmp_hexdec('0x62B12D60690CDCF330BABAB6E69763B471F994DD702D16A5')) {
+            self::$errors++;
             print "*** p192 * d came out wrong.<br />\n";
+        }
         else {
             if ($verbose)
                 print "p192 * d came out right.<br />\n";
@@ -211,8 +232,10 @@ class TestSuite
 
         $Check = new Point(NISTcurve::curve_192(), gmp_Utils::gmp_hexdec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD'), gmp_Utils::gmp_hexdec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835'));
 
-        if ($R->getX() != gmp_Utils::gmp_hexdec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD') || $R->getY() != gmp_Utils::gmp_hexdec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835'))
+        if ($R->getX() != gmp_Utils::gmp_hexdec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD') || $R->getY() != gmp_Utils::gmp_hexdec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835')) {
+            self::$errors++;
             print "*** k * p192 came out wrong.<br />$R<br />$Check<br />\n";
+        }
         else {
             if ($verbose)
                 print "k * p192 came out right.<br />\n";
@@ -221,8 +244,10 @@ class TestSuite
         $u1 = '2563697409189434185194736134579731015366492496392189760599';
         $u2 = '6266643813348617967186477710235785849136406323338782220568';
         $temp = Point::add(Point::mul($u1, $p192), Point::mul($u2, $Q));
-        if ($temp->getX() != gmp_Utils::gmp_hexdec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD') || $temp->getY() != gmp_Utils::gmp_hexdec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835'))
+        if ($temp->getX() != gmp_Utils::gmp_hexdec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD') || $temp->getY() != gmp_Utils::gmp_hexdec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835')) {
+            self::$errors++;
             print "*** u1 * p192 + u2 * Q came out wrong.<br />\n";
+        }
         else {
             if ($verbose)
                 print "u1 * p192 + u2 * Q came out right.<br />\n";
@@ -284,8 +309,10 @@ class TestSuite
         $sig = $privk->sign($e, $k);
         $r = $sig->getR();
         $s = $sig->getS();
-        if ($r != '3342403536405981729393488334694600415596881826869351677613' || $s != '5735822328888155254683894997897571951568553642892029982342')
+        if ($r != '3342403536405981729393488334694600415596881826869351677613' || $s != '5735822328888155254683894997897571951568553642892029982342') {
+            self::$errors++;
             print "*** r or s came out wrong.<br />";
+        }
         else {
             if ($verbose)
                 print "r and s came out right.<br />";
@@ -296,15 +323,17 @@ class TestSuite
             if ($verbose)
                 print "Signature verified OK.<br />";
         } else {
-
+            self::$errors++;
             print "*** Signature failed verification.<br />";
         }
         $valid = $pubk->verifies(gmp_strval(gmp_sub($e, 1)), $sig);
         if (! $valid) {
             if ($verbose)
                 print "Forgery was correctly rejected.<br />";
-        } else
+        } else {
+            self::$errors++;
             print "*** Forgery was erroneously accepted.<br />";
+        }
 
         if ($verbose)
             print "Trying signature-verification tests from ECDSAVS.pdf B.2.4:<br />";
@@ -444,11 +473,14 @@ class TestSuite
             if ($verbose)
                 print "Demo verification succeeded.<br />";
         } else {
+            self::$errors++;
             print "*** Demo verification failed.<br />";
         }
 
-        if ($pubkey->verifies(gmp_strval(gmp_sub($hash, 1)), $signature))
+        if ($pubkey->verifies(gmp_strval(gmp_sub($hash, 1)), $signature)) {
+            self::$errors++;
             print "**** Demo verification failed to reject tampered hash.<br />";
+        }
         else {
             if ($verbose)
                 print "Demo verification correctly rejected tampered hash.<br />";
@@ -482,6 +514,7 @@ class TestSuite
             if ($verbose)
                 echo "<br />ECDH key agreement SUCCESS.";
         } else {
+            self::$errors++;
             echo "<br />ECDH key agreement ERROR.";
         }
 
@@ -512,7 +545,7 @@ class TestSuite
                     echo "SUCCESSFULLY FOUND A LARGE PRIME: " . $cur_prime . "<br />\n";
                 flush();
             } else {
-
+                self::$errors++;
                 echo "FAILED TO FIND A LARGE PRIME " . $cur_prime . "<br />\n";
                 flush();
             }
@@ -542,7 +575,7 @@ class TestSuite
             $calc_sq = bcpowmod($calculated, 2, $prime);
 
             if (bccomp($calculated, $root) != 0 && bccomp(bcsub($prime, $calculated), $root) != 0) {
-
+                self::$errors++;
                 $error_tally ++;
                 echo "FAILED TO FIND " . $root . " AS sqrt(" . $sq . ") mod $prime . Said $calculated (" . ($prime - $calculated) . ") <br />\n";
 
@@ -576,6 +609,7 @@ class TestSuite
 
                     if ($inv <= 0 || $inv >= $m || ($a * $inv) % $m != 1) {
                         $error_tally ++;
+                        self::$errors++;
                         print "$inv = inverse_mod( $a, $m ) is wrong.<br />\n";
                         flush();
                     } else {
@@ -630,6 +664,7 @@ class TestSuite
                     flush();
                 }
             } else {
+                self::$errors++;
                 echo "$g * $i = $p, expected $check . . .";
                 echo " Wrong.<br />";
                 flush();
@@ -658,6 +693,7 @@ class TestSuite
         $d = '651056770906015076056810763456358567190100156695615665659';
         $Q = Point::mul($d, $p192);
         if ($Q->getX() != bcmath_Utils::bchexdec('0x62B12D60690CDCF330BABAB6E69763B471F994DD702D16A5')) {
+            self::$errors++;
             echo "*** p192 * d came out wrong.<br />\n";
             flush();
         } else {
@@ -673,6 +709,7 @@ class TestSuite
         $Check = new Point(NISTcurve::curve_192(), bcmath_Utils::bchexdec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD'), bcmath_Utils::bchexdec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835'));
 
         if ($R->getX() != bcmath_Utils::bchexdec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD') || $R->getY() != bcmath_Utils::bchexdec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835')) {
+            self::$errors++;
             print "*** k * p192 came out wrong.<br />$R<br />$Check<br />\n";
             flush();
         } else {
@@ -685,6 +722,7 @@ class TestSuite
         $u2 = '6266643813348617967186477710235785849136406323338782220568';
         $temp = Point::add(Point::mul($u1, $p192), Point::mul($u2, $Q));
         if ($temp->getX() != bcmath_Utils::bchexdec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD') || $temp->getY() != bcmath_Utils::bchexdec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835')) {
+            self::$errors++;
             print "*** u1 * p192 + u2 * Q came out wrong.<br />\n";
             flush();
         } else {
@@ -753,6 +791,7 @@ class TestSuite
         $r = $sig->getR();
         $s = $sig->getS();
         if ($r != '3342403536405981729393488334694600415596881826869351677613' || $s != '5735822328888155254683894997897571951568553642892029982342') {
+            self::$errors++;
             print "*** r or s came out wrong.<br />";
             flush();
         } else {
@@ -767,7 +806,7 @@ class TestSuite
                 print "Signature verified OK.<br />";
             flush();
         } else {
-
+            self::$errors++;
             print "*** Signature failed verification.<br />";
             flush();
         }
@@ -777,6 +816,7 @@ class TestSuite
                 print "Forgery was correctly rejected.<br />";
             flush();
         } else
+            self::$errors++;
             print "*** Forgery was erroneously accepted.<br />";
         flush();
 
@@ -921,11 +961,13 @@ class TestSuite
                 print "Demo verification succeeded.<br />";
             flush();
         } else {
+            self::$errors++;
             print "*** Demo verification failed.<br />";
             flush();
         }
 
         if ($pubkey->verifies(bcsub($hash, 1), $signature)) {
+            self::$errors++;
             print "**** Demo verification failed to reject tampered hash.<br />";
             flush();
         } else {
@@ -963,7 +1005,7 @@ class TestSuite
             if ($verbose)
                 echo "<br />ECDH key agreement SUCCESS.";
             flush();
-        } else
+        } else {
             if (is_null($key_A) && is_null($key_B)) {
                 echo "<br />ECDH key agreement ERROR. One of the keys is null.";
                 flush();
@@ -971,6 +1013,8 @@ class TestSuite
                 echo "<br />ECDH key agreement ERROR.";
                 flush();
             }
+            self::$errors++;
+        }
 
         $end_time = microtime(true);
 
@@ -983,7 +1027,7 @@ class TestSuite
     // generic static methods for curve arithemetic testing
     public static function test_add(CurveFp $c, $x1, $y1, $x2, $y2, $x3, $y3, $verbose = false)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (self::$useGmp && extension_loaded('gmp')) {
             // expect that on curve c, (x1, y1) + (x2, y2) = (x3, y3)
             $p1 = new Point($c, $x1, $y1);
             $p2 = new Point($c, $x2, $y2);
@@ -991,6 +1035,7 @@ class TestSuite
             if ($verbose)
                 echo $p1 . " + " . $p2 . " = " . $p3;
             if (gmp_Utils::gmp_mod2($p3->getX(), 23) != $x3 || gmp_Utils::gmp_mod2($p3->getY(), 23) != $y3) {
+                self::$errors++;
                 echo " ADD TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                 flush();
             } else {
@@ -999,7 +1044,7 @@ class TestSuite
                 flush();
             }
         } else
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (extension_loaded('bcmath')) {
                 // expect that on curve c, (x1, y1) + (x2, y2) = (x3, y3)
                 $p1 = new Point($c, $x1, $y1);
                 $p2 = new Point($c, $x2, $y2);
@@ -1007,6 +1052,7 @@ class TestSuite
                 if ($verbose)
                     echo $p1 . " + " . $p2 . " = " . $p3;
                 if (bcmod($p3->getX(), 23) != $x3 || bcmod($p3->getY(), 23) != $y3) {
+                    self::$errors++;
                     echo " ADD TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                     flush();
                 } else {
@@ -1019,7 +1065,7 @@ class TestSuite
 
     public static function test_double(CurveFp $c, $x1, $y1, $x3, $y3, $verbose = false)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (self::$useGmp && extension_loaded('gmp')) {
             // expect that on curve c, (x1, y1) + (x2, y2) = (x3, y3)
             $p1 = new Point($c, $x1, $y1);
             $p3 = Point::double($p1);
@@ -1027,6 +1073,7 @@ class TestSuite
                 echo $p1 . " doubled  = " . $p3;
             flush();
             if (gmp_Utils::gmp_mod2($p3->getX(), 23) != $x3 || gmp_Utils::gmp_mod2($p3->getY(), 23) != $y3) {
+                self::$errors++;
                 if ($verbose)
                     echo " DOUBLE TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                 flush();
@@ -1036,7 +1083,7 @@ class TestSuite
                 flush();
             }
         } else
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (extension_loaded('bcmath')) {
                 // expect that on curve c, (x1, y1) + (x2, y2) = (x3, y3)
                 $p1 = new Point($c, $x1, $y1);
                 $p3 = Point::double($p1);
@@ -1044,6 +1091,7 @@ class TestSuite
                     echo $p1 . " doubled  = " . $p3;
                 flush();
                 if (bcmod($p3->getX(), 23) != $x3 || bcmod($p3->getY(), 23) != $y3) {
+                    self::$errors++;
                     if ($verbose)
                         echo " DOUBLE TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                     flush();
@@ -1057,7 +1105,7 @@ class TestSuite
 
     public static function test_multiply(CurveFp $c, $x1, $y1, $m, $x3, $y3, $verbose = false)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (self::$useGmp && extension_loaded('gmp')) {
             // expect that on curve c, m * (x2, y2) = (x3, y3)
             $p1 = new Point($c, $x1, $y1);
             $p3 = Point::mul($m, $p1);
@@ -1066,6 +1114,7 @@ class TestSuite
 
             if ($p3 instanceof Point) {
                 if (gmp_Utils::gmp_mod2($p3->getX(), 23) != $x3 || gmp_Utils::gmp_mod2($p3->getY(), 23) != $y3) {
+                    self::$errors++;
                     echo " MULT TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                     flush();
                 } else {
@@ -1075,6 +1124,7 @@ class TestSuite
                 }
             } else {
                 if ($p3 == 'infinity') {
+                    self::$errors++;
                     echo " INFINITY MULT TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                     flush();
                 } else {
@@ -1084,7 +1134,7 @@ class TestSuite
                 }
             }
         } else
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (extension_loaded('bcmath')) {
                 // expect that on curve c, m * (x2, y2) = (x3, y3)
                 $p1 = new Point($c, $x1, $y1);
                 $p3 = Point::mul($m, $p1);
@@ -1094,6 +1144,7 @@ class TestSuite
 
                 if ($p3 instanceof Point) {
                     if (bcmod($p3->getX(), 23) != $x3 || bcmod($p3->getY(), 23) != $y3) {
+                        self::$errors++;
                         echo " MULT TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                         flush();
                     } else {
@@ -1103,6 +1154,7 @@ class TestSuite
                     }
                 } else {
                     if ($p3 == 'infinity') {
+                        self::$errors++;
                         echo " INFINITY MULT TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                         flush();
                     } else {
@@ -1122,8 +1174,10 @@ class TestSuite
             if ($verbose)
                 print "Point validity tested as expected.<br />";
             flush();
-        } else
+        } else {
+            self::$errors++;
             print "Point validity test gave wrong result.<br />";
+        }
         flush();
     }
 
@@ -1138,8 +1192,10 @@ class TestSuite
             if ($verbose)
                 print "Signature tested as expected: received " . var_export($got, true) . ", expected " . var_export($expected, true) . ".<br />";
             flush();
-        } else
+        } else {
+            self::$errors++;
             print "*** Signature test failed: received " . var_export($got, true) . ", expected " . var_export($expected, true) . ".<br />";
+        }
         flush();
     }
 }

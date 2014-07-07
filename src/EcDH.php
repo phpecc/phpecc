@@ -61,7 +61,7 @@ class EcDH implements EcDHInterface
 
     public function getPublicPoint()
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             // alice selects a random number between 1 and the order of the generator point(private)
             $n = $this->generator->getOrder();
             
@@ -72,7 +72,7 @@ class EcDH implements EcDHInterface
             
             return $this->pubPoint;
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 // alice selects a random number between 1 and the order of the generator point(private)
                 $n = $this->generator->getOrder();
                 
@@ -83,7 +83,7 @@ class EcDH implements EcDHInterface
                 
                 return $this->pubPoint;
             } else {
-                throw new ErrorException("Please Install BCMATH or GMP.");
+                throw new \RuntimeException("Please Install BCMATH or GMP.");
             }
     }
 
