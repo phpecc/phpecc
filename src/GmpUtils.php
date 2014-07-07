@@ -34,7 +34,7 @@ namespace Mdanter\Ecc;
 class GmpUtils
 {
 
-    public static function gmp_mod2($n, $d)
+    public static function gmpMod2($n, $d)
     {
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $res = gmp_div_r($n, $d);
@@ -47,7 +47,7 @@ class GmpUtils
         }
     }
 
-    public static function gmp_random($n)
+    public static function gmpRandom($n)
     {
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $random = gmp_strval(gmp_random());
@@ -62,7 +62,7 @@ class GmpUtils
         }
     }
 
-    public static function gmp_hexdec($hex)
+    public static function gmpHexDec($hex)
     {
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $dec = gmp_strval(gmp_init($hex, 16), 10);
@@ -73,7 +73,7 @@ class GmpUtils
         }
     }
 
-    public static function gmp_dechex($dec)
+    public static function gmpDecHex($dec)
     {
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $hex = gmp_strval(gmp_init($dec, 10), 16);
@@ -84,4 +84,3 @@ class GmpUtils
         }
     }
 }
-?>

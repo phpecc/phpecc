@@ -53,26 +53,24 @@ class CurveFp implements CurveFpInterface
         $eq_zero = null;
         
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            
-            $eq_zero = gmp_cmp(GmpUtils::gmp_mod2(gmp_sub(gmp_pow($y, 2), gmp_add(gmp_add(gmp_pow($x, 3), gmp_mul($this->a, $x)), $this->b)), $this->prime), 0);
+            $eq_zero = gmp_cmp(GmpUtils::gmpMod2(gmp_sub(gmp_pow($y, 2), gmp_add(gmp_add(gmp_pow($x, 3), gmp_mul($this->a, $x)), $this->b)), $this->prime), 0);
             
             if ($eq_zero == 0) {
                 return true;
             } else {
                 return false;
             }
-        } else 
-            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-                
-                $eq_zero = bccomp(bcmod(bcsub(bcpow($y, 2), bcadd(bcadd(bcpow($x, 3), bcmul($this->a, $x)), $this->b)), $this->prime), 0);
-                if ($eq_zero == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+            $eq_zero = bccomp(bcmod(bcsub(bcpow($y, 2), bcadd(bcadd(bcpow($x, 3), bcmul($this->a, $x)), $this->b)), $this->prime), 0);
+            
+            if ($eq_zero == 0) {
+                return true;
             } else {
-                throw new \RuntimeException("Please install BCMATH or GMP");
+                return false;
             }
+        } else {
+            throw new \RuntimeException("Please install BCMATH or GMP");
+        }
     }
 
     public function getA()
@@ -95,22 +93,19 @@ class CurveFp implements CurveFpInterface
         $same = null;
         
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            
             if (gmp_cmp($cp1->a, $cp2->a) == 0 && gmp_cmp($cp1->b, $cp2->b) == 0 && gmp_cmp($cp1->prime, $cp2->prime) == 0) {
                 return 0;
             } else {
                 return 1;
             }
-        } else 
-            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-                if (bccomp($cp1->a, $cp2->a) == 0 && bccomp($cp1->b, $cp2->b) == 0 && bccomp($cp1->prime, $cp2->prime) == 0) {
-                    return 0;
-                } else {
-                    return 1;
-                }
+        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+            if (bccomp($cp1->a, $cp2->a) == 0 && bccomp($cp1->b, $cp2->b) == 0 && bccomp($cp1->prime, $cp2->prime) == 0) {
+                return 0;
             } else {
-                throw new \RuntimeException("Please install BCMATH or GMP");
+                return 1;
             }
+        } else {
+            throw new \RuntimeException("Please install BCMATH or GMP");
+        }
     }
 }
-?>

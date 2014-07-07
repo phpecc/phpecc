@@ -40,4 +40,3 @@ interface SignatureInterface
 
     public function getS();
 }
-?>

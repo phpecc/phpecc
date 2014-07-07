@@ -50,4 +50,3 @@ interface EcDHInterface
 
     public function decryptFile($path);
 }
-?>

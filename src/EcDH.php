@@ -1,5 +1,4 @@
 <?php
-
 namespace Mdanter\Ecc;
 
 /**
@@ -65,26 +64,25 @@ class EcDH implements EcDHInterface
             // alice selects a random number between 1 and the order of the generator point(private)
             $n = $this->generator->getOrder();
             
-            $this->secret = GmpUtils::gmp_random($n);
+            $this->secret = GmpUtils::gmpRandom($n);
             
             // Alice computes da * generator Qa is public, da is private
             $this->pubPoint = Point::mul($this->secret, $this->generator);
             
             return $this->pubPoint;
-        } else 
-            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-                // alice selects a random number between 1 and the order of the generator point(private)
-                $n = $this->generator->getOrder();
-                
-                $this->secret = BcMathUtils::bcrand($n);
-                
-                // Alice computes da * generator Qa is public, da is private
-                $this->pubPoint = Point::mul($this->secret, $this->generator);
-                
-                return $this->pubPoint;
-            } else {
-                throw new \RuntimeException("Please Install BCMATH or GMP.");
-            }
+        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+            // alice selects a random number between 1 and the order of the generator point(private)
+            $n = $this->generator->getOrder();
+            
+            $this->secret = BcMathUtils::bcrand($n);
+            
+            // Alice computes da * generator Qa is public, da is private
+            $this->pubPoint = Point::mul($this->secret, $this->generator);
+            
+            return $this->pubPoint;
+        } else {
+            throw new \RuntimeException("Please Install BCMATH or GMP.");
+        }
     }
 
     public function setPublicPoint(Point $q)
@@ -135,5 +133,3 @@ class EcDH implements EcDHInterface
         }
     }
 }
-
-?>
