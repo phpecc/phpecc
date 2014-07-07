@@ -37,6 +37,6 @@ elseif (extension_loaded('bcmath') && ! defined('USE_EXT')) {
 // verbosity for test methods
 $verbose = false;
 
-$t = new \PhpEcc\Tests\TestSuite($verbose);
+$t = new \Mdanter\Ecc\Tests\TestSuite($verbose);
 
 ?>

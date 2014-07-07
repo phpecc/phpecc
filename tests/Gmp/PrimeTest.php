@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpEcc\Tests\Gmp;
+namespace Mdanter\Ecc\Tests\Gmp;
 
-use PhpEcc\NumberTheory;
+use Mdanter\Ecc\NumberTheory;
 
 /* @codeCoverageIgnoreStart */
 if (! extension_loaded('gmp')) {

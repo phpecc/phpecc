@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpEcc\Theory;
+namespace Mdanter\Ecc\Theory;
 
-use PhpEcc\TheoryAdapter;
-use PhpEcc\gmp_Utils;
+use Mdanter\Ecc\TheoryAdapter;
+use Mdanter\Ecc\gmp_Utils;
 
 class Gmp implements TheoryAdapter
 {

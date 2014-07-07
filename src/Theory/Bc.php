@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpEcc\Theory;
+namespace Mdanter\Ecc\Theory;
 
-use PhpEcc\TheoryAdapter;
-use PhpEcc\bcmath_Utils;
+use Mdanter\Ecc\TheoryAdapter;
+use Mdanter\Ecc\bcmath_Utils;
 
 class Bc implements TheoryAdapter
 {

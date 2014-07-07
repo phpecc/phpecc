@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpEcc\Tests\Gmp;
+namespace Mdanter\Ecc\Tests\Gmp;
 
-use PhpEcc\NumberTheory;
+use Mdanter\Ecc\NumberTheory;
 /* @codeCoverageIgnoreStart */
 if (! extension_loaded('gmp')) {
     return;
@@ -20,18 +20,16 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $file = __DIR__ . '/../data/primes.lst';
-        
-        echo 'Loading ' . $file;
-        
+
         if (! file_exists($file)) {
             $this->fail('Primes not found');
         }
-        
+
         $lines = file($file);
         if (! $lines) {
             $this->fail('Empty prime file');
         }
-        
+
         $this->knownPrimes = $lines;
     }
 
@@ -41,7 +39,7 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
             if (trim($prime) == '') {
                 user_error('Empty prime number detected from line #' . $key + 1, E_USER_WARNING);
             }
-            
+
             $this->assertTrue(NumberTheory::is_prime($prime), 'Testing prime ' . $prime);
         }
     }
