@@ -20,19 +20,19 @@ OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 *************************************************************************/
-
 include dirname(__DIR__) . '/vendor/autoload.php';
 
 $seconds = 7200;
 set_time_limit($seconds);
 
-if(extension_loaded('gmp') && !defined('USE_EXT')){
-    define ('USE_EXT', 'GMP');
-}else if(extension_loaded('bcmath') && !defined('USE_EXT')){
-    define ('USE_EXT', 'BCMATH');
-}
+if (extension_loaded('gmp') && ! defined('USE_EXT')) {
+    define('USE_EXT', 'GMP');
+} else 
+    if (extension_loaded('bcmath') && ! defined('USE_EXT')) {
+        define('USE_EXT', 'BCMATH');
+    }
 
-//verbosity for test methods
+// verbosity for test methods
 $verbose = false;
 
 $t = new \PhpEcc\Tests\TestSuite($verbose);

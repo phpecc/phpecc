@@ -2,27 +2,31 @@
 
 namespace PhpEcc;
 
-/***********************************************************************
-Copyright (C) 2012 Matyas Danter
+use PhpEcc\Theory\Gmp as GmpTheoryAdapter;
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the "Software"),
-to deal in the Software without restriction, including without limitation
-the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
-OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-*************************************************************************/
+/**
+ * *********************************************************************
+ * Copyright (C) 2012 Matyas Danter
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ***********************************************************************
+ */
 
 /**
  * Implementation of some number theoretic algorithms
@@ -35,15 +39,17 @@ OTHER DEALINGS IN THE SOFTWARE.
 class NumberTheory
 {
 
+    private static $theory;
+
+    public static function setTheoryAdapter(TheoryAdapter $adapter)
+    {
+        self::$theory =$adapter;
+    }
+
     public static function modular_exp($base, $exponent, $modulus)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            if ($exponent < 0) {
-                return new ErrorException("Negative exponents (" . $exponent . ") not allowed");
-            } else {
-                $p = gmp_strval(gmp_powm($base, $exponent, $modulus));
-                return $p;
-            }
+            return self::$theory->modular_exp($base, $exponent, $modulus);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if ($exponent < 0) {
@@ -60,21 +66,7 @@ class NumberTheory
     public static function polynomial_reduce_mod($poly, $polymod, $p)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-
-            if (end($polymod) == 1 && count($polymod) > 1) {
-
-                while (count($poly) >= count($polymod)) {
-                    if (end($poly) != 0) {
-                        for ($i = 2; $i < count($polymod) + 1; $i ++) {
-
-                            $poly[count($poly) - $i] = gmp_strval(gmp_Utils::gmp_mod2(gmp_sub($poly[count($poly) - $i], gmp_mul(end($poly), $polymod[count($polymod) - $i])), $p));
-                        }
-                    }
-                    $poly = array_slice($poly, 0, count($poly) - 1);
-                }
-
-                return $poly;
-            }
+            return self::$theory->polynomial_reduce_mod($poly, $polymod, $p);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if (end($polymod) == 1 && count($polymod) > 1) {
@@ -98,20 +90,7 @@ class NumberTheory
     public static function polynomial_multiply_mod($m1, $m2, $polymod, $p)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            $prod = array();
-
-            for ($i = 0; $i < count($m1); $i ++) {
-                for ($j = 0; $j < count($m2); $j ++) {
-                    $index = $i + $j;
-
-                    if (! isset($prod[$index]))
-                        $prod[$index] = 0;
-
-                    $prod[$index] = gmp_strval(gmp_Utils::gmp_mod2((gmp_add($prod[$index], gmp_mul($m1[$i], $m2[$j]))), $p));
-                }
-            }
-
-            return self::polynomial_reduce_mod($prod, $polymod, $p);
+            return self::$theory->polynomial_multiply_mod($m1, $m2, $polymod, $p);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 $prod = array();
@@ -132,34 +111,7 @@ class NumberTheory
     public static function polynomial_exp_mod($base, $exponent, $polymod, $p)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            $s = '';
-
-            if (gmp_cmp($exponent, $p) < 0) {
-
-                if (gmp_cmp($exponent, 0) == 0)
-                    return 1;
-
-                $G = $base;
-                $k = $exponent;
-
-                if (gmp_cmp(gmp_Utils::gmp_mod2($k, 2), 1) == 0)
-                    $s = $G;
-                else
-                    $s = array(
-                        1
-                    );
-
-                while (gmp_cmp($k, 1) > 0) {
-                    $k = gmp_div($k, 2);
-                    $G = self::polynomial_multiply_mod($G, $G, $polymod, $p);
-
-                    if (gmp_Utils::gmp_mod2($k, 2) == 1) {
-                        $s = self::polynomial_multiply_mod($G, $s, $polymod, $p);
-                    }
-                }
-
-                return $s;
-            }
+            return self::$theory->polynomial_exp_mod($base, $exponent, $polymod, $p);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 $s = '';
@@ -198,7 +150,7 @@ class NumberTheory
     public static function jacobi($a, $n)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            return gmp_strval(gmp_jacobi($a, $n));
+            return self::$theory->jacobi($a, $n);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if ($n >= 3 && $n % 2 == 1) {
@@ -237,48 +189,7 @@ class NumberTheory
     public static function square_root_mod_prime($a, $p)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            if (0 <= $a && $a < $p && 1 < $p) {
-
-                if ($a == 0)
-                    return 0;
-                if ($p == 2)
-                    return $a;
-
-                $jac = self::jacobi($a, $p);
-
-                if ($jac == - 1)
-                    throw new SquareRootException($a . " has no square root modulo " . $p);
-
-                if (gmp_strval(gmp_Utils::gmp_mod2($p, 4)) == 3)
-                    return self::modular_exp($a, gmp_strval(gmp_div(gmp_add($p, 1), 4)), $p);
-
-                if (gmp_strval(gmp_Utils::gmp_mod2($p, 8)) == 5) {
-                    $d = self::modular_exp($a, gmp_strval(gmp_div(gmp_sub($p, 1), 4)), $p);
-                    if ($d == 1)
-                        return self::modular_exp($a, gmp_strval(gmp_div(gmp_add($p, 3), 8)), $p);
-                    if ($d == $p - 1)
-                        return gmp_strval(gmp_Utils::gmp_mod2(gmp_mul(gmp_mul(2, $a), self::modular_exp(gmp_mul(4, $a), gmp_div(gmp_sub($p, 5), 8), $p)), $p));
-                    // shouldn't get here
-                }
-
-                for ($b = 2; $b < $p; $b ++) {
-                    if (self::jacobi(gmp_sub(gmp_mul($b, $b), gmp_mul(4, $a)), $p) == - 1) {
-                        $f = array(
-                            $a,
-                            - $b,
-                            1
-                        );
-                        $ff = self::polynomial_exp_mod(array(
-                            0,
-                            1
-                        ), gmp_strval(gmp_div(gmp_add($p, 1), 2)), $f, $p);
-                        if (isset($ff[1]) && $ff[1] == 0)
-                            return $ff[0];
-
-                        // if we got here no b was found
-                    }
-                }
-            }
+            return self::$theory->square_root_mod_prime($a, $p);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if (0 <= $a && $a < $p && 1 < $p) {
@@ -332,8 +243,7 @@ class NumberTheory
     public static function inverse_mod($a, $m)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            $inverse = gmp_strval(gmp_invert($a, $m));
-            return $inverse;
+            return self::$theory->inverse_mod($a, $m);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 while (bccomp($a, 0) == - 1) {
@@ -386,13 +296,7 @@ class NumberTheory
     public static function gcd2($a, $b)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            while ($a) {
-                $temp = $a;
-                $a = gmp_Utils::gmp_mod2($b, $a);
-                $b = $temp;
-            }
-
-            return gmp_strval($b);
+            return self::$theory->gcd2($a, $b);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 while ($a) {
@@ -410,8 +314,7 @@ class NumberTheory
     public static function gcd($a)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            if (count($a) > 1)
-                return array_reduce($a, "self::gcd2", $a[0]);
+            return self::$theory->gcd($a);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if (count($a) > 1)
@@ -424,12 +327,7 @@ class NumberTheory
     public static function lcm2($a, $b)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            $ab = gmp_strval(gmp_mul($a, $b));
-            $g = self::gcd2($a, $b);
-
-            $lcm = gmp_strval(gmp_div($ab, $g));
-
-            return $lcm;
+            return self::$theory->lcm2($a, $b);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 $ab = bcmul($a, $b);
@@ -446,8 +344,7 @@ class NumberTheory
     public static function lcm($a)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            if (count($a) > 1)
-                return array_reduce($a, "self::lcm2", $a[0]);
+            return self::$theory->lcm($a);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if (count($a) > 1)
@@ -460,72 +357,7 @@ class NumberTheory
     public static function factorization($n)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            if (is_int($n) || is_long($n)) {
-
-                if ($n < 2)
-                    return array();
-
-                $result = array();
-                $d = 2;
-
-                foreach (self::$smallprimes as $d) {
-                    if ($d > $n)
-                        break;
-                    $q = $n / $d;
-                    $r = $n % $d;
-                    if ($r == 0) {
-                        $count = 1;
-                        while ($d <= $n) {
-                            $n = $q;
-                            $q = $n / $d;
-                            $r = $n % $d;
-                            if ($r != 0)
-                                break;
-                            $count ++;
-                        }
-                        array_push($result, array(
-                            $d,
-                            $count
-                        ));
-                    }
-                }
-
-                if ($n > end(self::$smallprimes)) {
-                    if (is_prime($n)) {
-                        array_push($result, array(
-                            $n,
-                            1
-                        ));
-                    } else {
-                        $d = end(self::$smallprimes);
-                        while (true) {
-                            $d += 2;
-                            $q = $n / $d;
-                            $r = $n % $d;
-                            if ($q < $d)
-                                break;
-                            if ($r == 0) {
-                                $count = 1;
-                                $n = $q;
-                                while ($d <= n) {
-                                    $q = $n / $d;
-                                    $r = $n % $d;
-                                    if ($r != 0)
-                                        break;
-                                    $n = $q;
-                                    $count ++;
-                                }
-                                array_push($result, array(
-                                    $n,
-                                    1
-                                ));
-                            }
-                        }
-                    }
-                }
-
-                return $result;
-            }
+            return self::$theory->factorization($n);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if (is_int($n) || is_long($n)) {
@@ -602,25 +434,7 @@ class NumberTheory
     public static function phi($n)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            if (is_int($n) || is_long($n)) {
-
-                if ($n < 3)
-                    return 1;
-
-                $result = 1;
-                $ff = self::factorization($n);
-
-                foreach ($ff as $f) {
-                    $e = $f[1];
-                    if ($e > 1) {
-                        $result = gmp_mul($result, gmp_mul(gmp_pow($f[0], gmp_sub($e, 1)), gmp_sub($f[0], 1)));
-                    } else {
-                        $result = gmp_mul($result, gmp_sub($f[0], 1));
-                    }
-                }
-
-                return gmp_strval($result);
-            }
+            return self::$theory->phi($n);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if (is_int($n) || is_long($n)) {
@@ -650,7 +464,7 @@ class NumberTheory
     public static function carmichael($n)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            return self::carmichael_of_factorized(self::factorization($n));
+            return self::$theory->carmichael($n);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 return self::carmichael_of_factorized(self::factorization($n));
@@ -662,16 +476,7 @@ class NumberTheory
     public static function carmichael_of_factorized($f_list)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            if (count($f_list) < 1)
-                return 1;
-
-            $result = self::carmichael_of_ppower($f_list[0]);
-
-            for ($i = 1; $i < count($f_list); $i ++) {
-                $result = lcm($result, self::carmichael_of_ppower($f_list[$i]));
-            }
-
-            return $result;
+            return self::$theory->carmichael_of_factorized($f_list);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if (count($f_list) < 1)
@@ -692,13 +497,7 @@ class NumberTheory
     public static function carmichael_of_ppower($pp)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            $p = $pp[0];
-            $a = $pp[1];
-
-            if ($p == 2 && $a > 2)
-                return 1 >> ($a - 2);
-            else
-                return gmp_strval(gmp_mul(($p - 1), gmp_pow($p, ($a - 1))));
+            return self::$theory->carmichael_of_ppower($pp);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 $p = $pp[0];
@@ -716,20 +515,7 @@ class NumberTheory
     public static function order_mod($x, $m)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            if ($m <= 1)
-                return 0;
-
-            if (gcd($x, m) == 1) {
-                $z = $x;
-                $result = 1;
-
-                while ($z != 1) {
-                    $z = gmp_strval(gmp_Utils::gmp_mod2(gmp_mul($z, $x), $m));
-                    $result = gmp_add($result, 1);
-                }
-
-                return gmp_strval($result);
-            }
+            return self::$theory->order_mod($x, $m);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if ($m <= 1)
@@ -754,22 +540,7 @@ class NumberTheory
     public static function largest_factor_relatively_prime($a, $b)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            while (true) {
-                $d = self::gcd($a, $b);
-                if ($d <= 1)
-                    break;
-
-                $b = $d;
-                while (true) {
-                    $q = $a / $d;
-                    $r = $a % $d;
-                    if ($r > 0)
-                        break;
-                    $a = $q;
-                }
-            }
-
-            return $a;
+            return self::$theory->largest_factor_relatively_prime($a, $b);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 while (true) {
@@ -796,7 +567,7 @@ class NumberTheory
     public static function kinda_order_mod($x, $m)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            return self::order_mod($x, self::largest_factor_relatively_prime($m, $x));
+            return self::$theory->kinda_order_mod($x, $m);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 return self::order_mod($x, self::largest_factor_relatively_prime($m, $x));
@@ -806,6 +577,7 @@ class NumberTheory
     }
 
     /**
+     *
      * @todo Better detection of big primes with GMP (current mode is probabilistic)
      * @param string $n
      * @throws ErrorException
@@ -814,12 +586,7 @@ class NumberTheory
     public static function is_prime($n)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            $prob = gmp_prob_prime($n);
-
-            if ($prob > 0) {
-                return true;
-            }
-
+            return self::$theory->is_prime($n);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 self::$miller_rabin_test_count = 0;
@@ -874,8 +641,7 @@ class NumberTheory
     public static function next_prime($starting_value)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            $result = gmp_strval(gmp_nextprime($starting_value));
-            return $result;
+            return self::$theory->next_prime($starting_value);
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 if (bccomp($starting_value, 2) == - 1)
@@ -1098,4 +864,10 @@ class NumberTheory
         1229
     );
 }
+
+if (extension_loaded('gmp') && defined('USE_EXT') && USE_EXT === 'GMP') {
+    NumberTheory::setTheoryAdapter(new GmpTheoryAdapter());
+}
+
+
 ?>
