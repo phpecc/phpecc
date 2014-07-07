@@ -25,31 +25,27 @@ OTHER DEALINGS IN THE SOFTWARE.
 *************************************************************************/
 
 /**
- * Plain Old PHP Object that stores the signature r,s for ECDSA
+ * This is the contract for implementing EcDH (EC Diffie Hellman).
  *
  * @author Matej Danter
  */
-class Signature implements SignatureInterface
+interface EcDHInterface
 {
 
-    protected $r;
+    public function __construct(Point $g);
 
-    protected $s;
+    public function calculateKey();
 
-    public function __construct($r, $s)
-    {
-        $this->r = $r;
-        $this->s = $s;
-    }
+    public function getPublicPoint();
 
-    public function getR()
-    {
-        return $this->r;
-    }
+    public function setPublicPoint(Point $q);
 
-    public function getS()
-    {
-        return $this->s;
-    }
+    public function encrypt($string);
+
+    public function decrypt($string);
+
+    public function encryptFile($path);
+
+    public function decryptFile($path);
 }
 ?>

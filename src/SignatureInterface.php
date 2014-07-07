@@ -25,31 +25,17 @@ OTHER DEALINGS IN THE SOFTWARE.
 *************************************************************************/
 
 /**
- * Plain Old PHP Object that stores the signature r,s for ECDSA
+ * This is the contract for describing a signature used in ECDSA.
  *
  * @author Matej Danter
  */
-class Signature implements SignatureInterface
+interface SignatureInterface
 {
 
-    protected $r;
+    public function __construct($r, $s);
 
-    protected $s;
+    public function getR();
 
-    public function __construct($r, $s)
-    {
-        $this->r = $r;
-        $this->s = $s;
-    }
-
-    public function getR()
-    {
-        return $this->r;
-    }
-
-    public function getS()
-    {
-        return $this->s;
-    }
+    public function getS();
 }
 ?>
