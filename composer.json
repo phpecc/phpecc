@@ -1,5 +1,5 @@
 {
-   "name":"aztech/php-ecc",
+   "name":"mdanter/ecc",
    "description":"PHP Elliptic Curve Cryptography library",
    "type":"library",
    "homepage":"http://www.aztech.io",
