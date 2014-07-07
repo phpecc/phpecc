@@ -6,7 +6,7 @@ php:
   - 5.6
 
 before_script:
-#  - composer selfupdate
+  - composer selfupdate
   - composer install --prefer-source
   - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - phpenv rehash
