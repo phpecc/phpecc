@@ -3,7 +3,7 @@
 namespace Mdanter\Ecc\Theory;
 
 use Mdanter\Ecc\TheoryAdapter;
-use Mdanter\Ecc\bcmath_Utils;
+use Mdanter\Ecc\BcMathUtils;
 
 class Bc implements TheoryAdapter
 {
@@ -440,7 +440,7 @@ class Bc implements TheoryAdapter
 
         for ($i = 0; $i < $t; $i ++) {
 
-            $a = bcmath_Utils::bcrand(1, bcsub($n, 1));
+            $a = BcMathUtils::bcrand(1, bcsub($n, 1));
 
             $b0 = $this->modular_exp($a, $m, $n);
 
@@ -477,7 +477,7 @@ class Bc implements TheoryAdapter
         if (bccomp($starting_value, 2) == - 1)
             return 2;
 
-        $result = bcmath_Utils::bcor(bcadd($starting_value, 1), 1);
+        $result = BcMathUtils::bcor(bcadd($starting_value, 1), 1);
         while (! $this->is_prime($result)) {
             $result = bcadd($result, 2);
         }

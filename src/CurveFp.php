@@ -54,7 +54,7 @@ class CurveFp implements CurveFpInterface
         
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             
-            $eq_zero = gmp_cmp(gmp_Utils::gmp_mod2(gmp_sub(gmp_pow($y, 2), gmp_add(gmp_add(gmp_pow($x, 3), gmp_mul($this->a, $x)), $this->b)), $this->prime), 0);
+            $eq_zero = gmp_cmp(GmpUtils::gmp_mod2(gmp_sub(gmp_pow($y, 2), gmp_add(gmp_add(gmp_pow($x, 3), gmp_mul($this->a, $x)), $this->b)), $this->prime), 0);
             
             if ($eq_zero == 0) {
                 return true;

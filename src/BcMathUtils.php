@@ -34,7 +34,7 @@ namespace Mdanter\Ecc;
 if (! defined('MAX_BASE'))
     define('MAX_BASE', 128);
 
-class bcmath_Utils
+class BcMathUtils
 {
 
     public static function bcrand($min, $max = false)
