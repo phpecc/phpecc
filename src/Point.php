@@ -189,7 +189,7 @@ class Point implements PointInterface
         }
     }
 
-    public static function mul($x2, Point $p1)
+    public static function mul($x2, PointInterface $p1)
     {
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $e = $x2;
@@ -300,7 +300,7 @@ class Point implements PointInterface
         }
     }
 
-    public static function rmul(Point $x1, $m)
+    public static function rmul(PointInterface $x1, $m)
     {
         return self::mul($m, $x1);
     }
@@ -314,7 +314,7 @@ class Point implements PointInterface
         return "(" . $this->x . "," . $this->y . ")";
     }
 
-    public static function double(Point $p1)
+    public static function double(PointInterface $p1)
     {
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $p = $p1->curve->getPrime();

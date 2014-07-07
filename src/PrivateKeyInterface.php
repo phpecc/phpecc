@@ -40,7 +40,7 @@ interface PrivateKeyInterface
 
     public static function intToString($x);
 
-    public static function intToString($s);
+    public static function stringToInt($s);
 
     public static function digestInteger($m);
 

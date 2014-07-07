@@ -129,7 +129,7 @@ class PrivateKey implements PrivateKeyInterface
         }
     }
 
-    public static function intToString($s)
+    public static function stringToInt($s)
     {
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $result = 0;
@@ -154,7 +154,7 @@ class PrivateKey implements PrivateKeyInterface
 
     public static function digestInteger($m)
     {
-        return self::intToString(hash('sha1', self::intToString($m), true));
+        return self::stringToInt(hash('sha1', self::intToString($m), true));
     }
 
     public static function pointIsValid(Point $generator, $x, $y)
