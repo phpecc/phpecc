@@ -25,15 +25,18 @@ include dirname(__DIR__) . '/vendor/autoload.php';
 $seconds = 7200;
 set_time_limit($seconds);
 
+define('USE_EXT', 'BCMATH');
+
 if (extension_loaded('gmp') && ! defined('USE_EXT')) {
     define('USE_EXT', 'GMP');
-} else 
-    if (extension_loaded('bcmath') && ! defined('USE_EXT')) {
-        define('USE_EXT', 'BCMATH');
-    }
+}
+elseif (extension_loaded('bcmath') && ! defined('USE_EXT')) {
+    define('USE_EXT', 'BCMATH');
+}
 
 // verbosity for test methods
 $verbose = false;
 
 $t = new \PhpEcc\Tests\TestSuite($verbose);
+
 ?>
