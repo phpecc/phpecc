@@ -805,10 +805,21 @@ class NumberTheory
             }
     }
 
+    /**
+     * @todo Better detection of big primes with GMP (current mode is probabilistic)
+     * @param string $n
+     * @throws ErrorException
+     * @return boolean
+     */
     public static function is_prime($n)
     {
         if (extension_loaded('gmp') && USE_EXT == 'GMP') {
-            return (gmp_prob_prime($n) == 2);
+            $prob = gmp_prob_prime($n);
+
+            if ($prob > 0) {
+                return true;
+            }
+
         } else
             if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
                 self::$miller_rabin_test_count = 0;

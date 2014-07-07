@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpEcc\Tests;
+namespace PhpEcc\Tests\Gmp;
 
 use PhpEcc\NumberTheory;
 
@@ -12,9 +12,9 @@ if (! extension_loaded('gmp')) {
 if (! defined('USE_EXT')) {
     define('USE_EXT', 'GMP');
 }
-
 /* @codeCoverageIgnoreEnd */
-class GmpPrimeTest extends \PHPUnit_Framework_TestCase
+
+class PrimeTest extends \PHPUnit_Framework_TestCase
 {
 
     private $startPrime = 31;

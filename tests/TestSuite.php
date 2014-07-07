@@ -139,37 +139,6 @@ class TestSuite
             }
     }
 
-    // gmp test methods
-    public static function gmp_NextPrime($prime, $num_primes, $verbose = false)
-    {
-        $start_time = microtime(true);
-
-        $next_prime = NumberTheory::next_prime($prime);
-
-        $error_tally = 0;
-
-        $cur_prime = $next_prime;
-
-        for ($i = 0; $i < $num_primes; $i ++) {
-
-            $cur_prime = NumberTheory::next_prime($cur_prime);
-
-            if (NumberTheory::is_prime($cur_prime)) {
-                if ($verbose)
-                    echo "SUCCESSFULLY FOUND A LARGE PRIME: " . $cur_prime . "<br />\n";
-            } else {
-
-                echo "FAILED TO FIND A LARGE PRIME " . $cur_prime . "<br />\n";
-            }
-        }
-
-        $end_time = microtime(true);
-
-        $time_res = $end_time - $start_time;
-
-        echo "<br />Next prime took: " . $time_res . " seconds. <br />";
-    }
-
     public static function gmp_squareRootModP($prime, $verbose = false)
     {
         $start_time = microtime(true);
