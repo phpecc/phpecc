@@ -1,7 +1,16 @@
 <?php
 
-namespace PhpEcc;
+namespace PhpEcc\Tests;
 
+use PhpEcc\NumberTheory;
+use PhpEcc\CurveFp;
+use PhpEcc\Point;
+use PhpEcc\NISTcurve;
+use PhpEcc\gmp_Utils;
+use PhpEcc\PublicKey;
+use PhpEcc\PrivateKey;
+use PhpEcc\Signature;
+use PhpEcc\EcDH;
 /***********************************************************************
 Copyright (C) 2012 Matyas Danter
 

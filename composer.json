@@ -26,7 +26,8 @@
 	},
 	"autoload" : {
 		"psr-4":{
-            "\\PhpEcc\\":"src/"
+		    "PhpEcc\\Tests\\":"tests/",
+            "PhpEcc\\":"src/"
         }
     }
 }

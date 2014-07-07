@@ -90,7 +90,7 @@ class CurveFp implements CurveFpInterface
         return $this->prime;
     }
 
-    public static function cmp(CurveFpInterface $cp1, CurveFp $cp2)
+    public static function cmp(CurveFpInterface $cp1, CurveFpInterface $cp2)
     {
         $same = null;
 
