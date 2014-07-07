@@ -53,7 +53,7 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
                 user_error('Empty prime number detected from line #' . $key + 1, E_USER_WARNING);
             }
 
-            $this->assertTrue($this->theory->is_prime($prime), 'Prime "' . $prime . '" is not detected as prime.');
+            $this->assertTrue($this->theory->isPrime($prime), 'Prime "' . $prime . '" is not detected as prime.');
         }
     }
 
@@ -64,7 +64,7 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
 
         for ($root = 0; gmp_cmp($root, gmp_add(1, gmp_div($prime, 2))) < 0; $root = gmp_add($root, 1)) {
             $sq = gmp_strval(gmp_powm($root, 2, $prime));
-            $calculated = $this->theory->square_root_mod_prime($sq, $prime);
+            $calculated = $this->theory->squareRootModPrime($sq, $prime);
             $calc_sq = gmp_strval(gmp_powm($calculated, 2, $prime));
 
             $this->assertFalse(gmp_cmp($calculated, $root) != 0 && gmp_cmp(gmp_sub($prime, $calculated), $root) != 0);
@@ -73,12 +73,12 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNextPrimes()
     {
-        $nextPrime = $this->theory->next_prime($this->startPrime);
+        $nextPrime = $this->theory->nextPrime($this->startPrime);
         $currentPrime = $nextPrime;
 
         for ($i = 0; $i < $this->primeCount; $i ++) {
-            $currentPrime = $this->theory->next_prime($currentPrime);
-            $this->assertTrue($this->theory->is_prime($currentPrime));
+            $currentPrime = $this->theory->nextPrime($currentPrime);
+            $this->assertTrue($this->theory->isPrime($currentPrime));
         }
     }
 
@@ -91,7 +91,7 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
                 $a = rand(1, $m - 1);
 
                 if ($this->theory->gcd2($a, $m) == 1) {
-                    $inv = $this->theory->inverse_mod($a, $m);
+                    $inv = $this->theory->inverseMod($a, $m);
                     $this->assertFalse($inv <= 0 || $inv >= $m || ($a * $inv) % $m != 1);
                 }
             }

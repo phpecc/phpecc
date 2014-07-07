@@ -44,4 +44,3 @@ interface PublicKeyInterface
 
     public function getPoint();
 }
-?>

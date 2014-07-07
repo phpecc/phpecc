@@ -38,12 +38,11 @@ interface PrivateKeyInterface
 
     public function sign($hash, $random_k);
 
-    public static function int_to_string($x);
+    public static function intToString($x);
 
-    public static function string_to_int($s);
+    public static function intToString($s);
 
-    public static function digest_integer($m);
+    public static function digestInteger($m);
 
-    public static function point_is_valid(Point $generator, $x, $y);
+    public static function pointIsValid(Point $generator, $x, $y);
 }
-?>

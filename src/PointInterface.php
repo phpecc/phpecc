@@ -43,7 +43,7 @@ interface PointInterface
 
     public static function mul($x2, Point $p1);
 
-    public static function leftmost_bit($x);
+    public static function lefmostBit($x);
 
     public static function rmul(Point $p1, $m);
 
@@ -59,4 +59,3 @@ interface PointInterface
 
     public function getOrder();
 }
-?>
