@@ -1,7 +1,7 @@
 ## Pure PHP Elliptic Curve DSA and DH
 
-[![Build Status](https://travis-ci.org/mdanter/phpecc.svg?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mdanter/phpecc/badges/quality-score.png?b=master)
+[![Build Status](https://travis-ci.org/mdanter/phpecc.svg?branch=master)](https://travis-ci.org/mdanter/phpecc)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mdanter/phpecc/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mdanter/phpecc?branch=master)
 ### Foreword
 
 This library is a rewrite/update of Matys Danter's ECC library. All credit goes to him.
