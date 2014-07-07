@@ -83,10 +83,10 @@ class PublicKey implements PublicKeyInterface
                 return false;
             }
             $c = NumberTheory::inverse_mod($s, $n);
-            $u1 = gmp_Utils::gmp_mod2(gmp_mul($hash, $c), $n);
-            $u2 = gmp_Utils::gmp_mod2(gmp_mul($r, $c), $n);
+            $u1 = GmpUtils::gmp_mod2(gmp_mul($hash, $c), $n);
+            $u2 = GmpUtils::gmp_mod2(gmp_mul($r, $c), $n);
             $xy = Point::add(Point::mul($u1, $G), Point::mul($u2, $point));
-            $v = gmp_Utils::gmp_mod2($xy->getX(), $n);
+            $v = GmpUtils::gmp_mod2($xy->getX(), $n);
             
             if (gmp_cmp($v, $r) == 0)
                 return true;

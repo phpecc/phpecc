@@ -31,7 +31,7 @@ namespace Mdanter\Ecc;
  * for elliptic curve encryption
  * This class implements all neccessary static methods
  */
-class gmp_Utils
+class GmpUtils
 {
 
     public static function gmp_mod2($n, $d)
