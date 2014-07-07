@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpEcc;
+namespace Mdanter\Ecc;
 
-use PhpEcc\Theory\Gmp as GmpTheoryAdapter;
-use PhpEcc\Theory\Bc as BcTheoryAdapter;
+use Mdanter\Ecc\Theory\Gmp as GmpTheoryAdapter;
+use Mdanter\Ecc\Theory\Bc as BcTheoryAdapter;
 
 /**
  * *********************************************************************

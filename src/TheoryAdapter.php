@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpEcc;
+namespace Mdanter\Ecc;
 
 interface TheoryAdapter
 {

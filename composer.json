@@ -2,7 +2,7 @@
    "name":"mdanter/ecc",
    "description":"PHP Elliptic Curve Cryptography library",
    "type":"library",
-   "homepage":"http://www.aztech.io",
+   "homepage":"https://github.com/mdanter/phpecc",
    "time":"2014-07-07 12:44:15",
    "license":"MIT",
    "authors":[
@@ -16,6 +16,12 @@
          "email":"thibaud@aztech.io",
          "homepage":"http://www.aztech.io",
          "role":"OO & PSR-4 migration"
+      },
+      {
+          "name":"Drak",
+          "email":"drak@zikula.org",
+          "homepage":"http://zikula.org",
+          "role":"OO & PSR-4 migration"
       }
    ],
    "require-dev":{
@@ -29,8 +35,8 @@
    },
    "autoload":{
       "psr-4":{
-         "PhpEcc\\Tests\\":"tests/",
-         "PhpEcc\\":"src/"
+         "Mdanter\\Ecc\\Tests\\":"tests/",
+         "Mdanter\\Ecc\\":"src/"
       }
    }
 }
