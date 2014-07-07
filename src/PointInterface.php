@@ -35,21 +35,21 @@ namespace Mdanter\Ecc;
 interface PointInterface
 {
 
-    public function __construct(CurveFp $curve, $x, $y, $order = null);
+    public function __construct(CurveFpInterface $curve, $x, $y, $order = null);
 
     public static function cmp($p1, $p2);
 
     public static function add($p1, $p2);
 
-    public static function mul($x2, Point $p1);
+    public static function mul($x2, PointInterface $p1);
 
     public static function lefmostBit($x);
 
-    public static function rmul(Point $p1, $m);
+    public static function rmul(PointInterface $p1, $m);
 
     public function __toString();
 
-    public static function double(Point $p1);
+    public static function double(PointInterface $p1);
 
     public function getX();
 
