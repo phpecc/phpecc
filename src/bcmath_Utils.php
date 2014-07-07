@@ -44,7 +44,7 @@ class bcmath_Utils
                 $max = $min;
                 $min = 0;
             }
-            
+
             return bcadd(bcmul(bcdiv(mt_rand(0, mt_getrandmax()), mt_getrandmax(), strlen($max)), bcsub(bcadd($max, 1), $min)), $min);
         } else {
             throw new ErrorException("Please install BCMATH");
@@ -58,7 +58,7 @@ class bcmath_Utils
             $dec = '';
             for ($i = 1; $i <= $len; $i ++)
                 $dec = bcadd($dec, bcmul(strval(hexdec($hex[$i - 1])), bcpow('16', strval($len - $i))));
-            
+
             return $dec;
         } else {
             throw new ErrorException("Please install BCMATH");
@@ -70,15 +70,15 @@ class bcmath_Utils
         if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
             $hex = '';
             $positive = $dec < 0 ? false : true;
-            
+
             while ($dec) {
                 $hex .= dechex(abs(bcmod($dec, '16')));
                 $dec = bcdiv($dec, '16', 0);
             }
-            
+
             if ($positive)
                 return strrev($hex);
-            
+
             for ($i = 0; $isset($hex[$i]); $i ++)
                 $hex[$i] = dechex(15 - hexdec($hex[$i]));
             for ($i = 0; isset($hex[$i]) && $hex[$i] == 'f'; $i ++)
@@ -94,12 +94,12 @@ class bcmath_Utils
     public static function bcand($x, $y)
     {
         if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
-            return self::_bcbitwise_internal($x, $y, 'bcmath_Utils::_bcand');
+            return self::_bcbitwise_internal($x, $y, 'self::_bcand');
         } else {
             throw new ErrorException("Please install BCMATH");
         }
     }
-    
+
     // Bitwise OR
     public static function bcor($x, $y)
     {
@@ -109,7 +109,7 @@ class bcmath_Utils
             throw new ErrorException("Please install BCMATH");
         }
     }
-    
+
     // Bitwise XOR
     public static function bcxor($x, $y)
     {
@@ -119,7 +119,7 @@ class bcmath_Utils
             throw new ErrorException("Please install BCMATH");
         }
     }
-    
+
     // Left shift (<<)
     public static function bcleftshift($num, $shift)
     {
@@ -130,7 +130,7 @@ class bcmath_Utils
             throw new ErrorException("Please install BCMATH");
         }
     }
-    
+
     // Right shift (>>)
     public static function bcrightshift($num, $shift)
     {
@@ -141,7 +141,7 @@ class bcmath_Utils
             throw new ErrorException("Please install BCMATH");
         }
     }
-    
+
     // // INTERNAL ROUTINES
     // These routines operate on only one byte. They are used to
     // implement _bcbitwise_internal.
@@ -159,7 +159,7 @@ class bcmath_Utils
     {
         return $x ^ $y;
     }
-    
+
     // _bcbitwise_internal - The majority of the code that implements
     // the bitwise functions bcand, bcor, and bcxor.
     //
@@ -174,20 +174,20 @@ class bcmath_Utils
     {
         $bx = self::bc2bin($x);
         $by = self::bc2bin($y);
-        
+
         // Pad $bx and $by so that both are the same length.
-        
+
         self::equalbinpad($bx, $by);
-        
+
         $ix = 0;
         $ret = '';
-        
+
         for ($ix = 0; $ix < strlen($bx); $ix ++) {
             $xd = substr($bx, $ix, 1);
             $yd = substr($by, $ix, 1);
             $ret .= call_user_func($op, $xd, $yd);
         }
-        
+
         return self::bin2bc($ret);
     }
 
@@ -264,7 +264,7 @@ class bcmath_Utils
     {
         $xlen = strlen($x);
         $ylen = strlen($y);
-        
+
         $length = max($xlen, $ylen);
         self::fixedbinpad($x, $length);
         self::fixedbinpad($y, $length);
@@ -276,7 +276,7 @@ class bcmath_Utils
         for ($ii = 0; $ii < $length - strlen($num); $ii ++) {
             $pad .= self::bc2bin('0');
         }
-        
+
         $num = $pad . $num;
     }
 }
