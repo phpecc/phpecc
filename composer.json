@@ -1,33 +1,35 @@
 {
-	"name" : "aztech/php-ecc",
-	"description" : "PHP Elliptic Curve Cryptography library",
-	"type" : "library",
-	"homepage" : "http://www.aztech.io",
-	"time" : "2014-07-07 12:44:15",
-	"license" : "MIT",
-	"authors" : [{
-            "name" : "Matyas Danter",
-            "homepage" : "http://matejdanter.com/",
-            "role" : "Original developper"
-        },
-        {
-			"name" : "Thibaud Fabre",
-			"email" : "thibaud@aztech.io",
-			"homepage" : "http://www.aztech.io",
-			"role" : "OO & PSR-4 migration"
-		}
-	],
-	"require-dev": {
-	    "phpunit/phpunit" : "~4.1",
-	    "squizlabs/php_codesniffer" : "~1.5"
-	},
-	"suggest": {
-    	"ext-gmp": "Improves drastically ECDSA library performance"
-	},
-	"autoload" : {
-		"psr-4":{
-		    "PhpEcc\\Tests\\":"tests/",
-            "PhpEcc\\":"src/"
-        }
-    }
+   "name":"aztech/php-ecc",
+   "description":"PHP Elliptic Curve Cryptography library",
+   "type":"library",
+   "homepage":"http://www.aztech.io",
+   "time":"2014-07-07 12:44:15",
+   "license":"MIT",
+   "authors":[
+      {
+         "name":"Matyas Danter",
+         "homepage":"http://matejdanter.com/",
+         "role":"Original developper"
+      },
+      {
+         "name":"Thibaud Fabre",
+         "email":"thibaud@aztech.io",
+         "homepage":"http://www.aztech.io",
+         "role":"OO & PSR-4 migration"
+      }
+   ],
+   "require-dev":{
+      "phpunit/phpunit":"~4.1",
+      "squizlabs/php_codesniffer":"~1.5"
+   },
+   "suggest":{
+      "ext-gmp":"Improves drastically ECDSA library performance",
+      "ext-bcmath":"Required if GMP is not installed."
+   },
+   "autoload":{
+      "psr-4":{
+         "PhpEcc\\Tests\\":"tests/",
+         "PhpEcc\\":"src/"
+      }
+   }
 }
