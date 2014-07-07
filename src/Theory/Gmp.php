@@ -13,7 +13,7 @@ class Gmp implements TheoryAdapter
     public function __construct(array $smallPrimes)
     {
         if (! extension_loaded('gmp')) {
-            throw new \ErrorException('GMP extension is not loaded.');
+            throw new \RuntimeException('GMP extension is not loaded.');
         }
 
         $this->smallprimes = $smallPrimes;
@@ -22,7 +22,7 @@ class Gmp implements TheoryAdapter
     public function modular_exp($base, $exponent, $modulus)
     {
         if ($exponent < 0) {
-            throw new ErrorException("Negative exponents (" . $exponent . ") not allowed");
+            throw new \RuntimeException("Negative exponents (" . $exponent . ") not allowed");
         }
 
         $p = gmp_strval(gmp_powm($base, $exponent, $modulus));

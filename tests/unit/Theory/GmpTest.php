@@ -4,6 +4,7 @@ namespace Mdanter\Ecc\Tests\Theory;
 
 use Mdanter\Ecc\NumberTheory;
 use Mdanter\Ecc\Theory\Gmp;
+use Mdanter\Ecc\ModuleConfig;
 
 /* @codeCoverageIgnoreStart */
 if (! extension_loaded('gmp')) {
@@ -13,6 +14,7 @@ if (! extension_loaded('gmp')) {
 if (! defined('USE_EXT')) {
     define('USE_EXT', 'GMP');
 }
+
 /* @codeCoverageIgnoreEnd */
 class NumberTheoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +29,9 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $file = __DIR__ . '/../data/primes.lst';
+        ModuleConfig::useGmp();
+        
+        $file = TEST_DATA_DIR. '/primes.lst';
 
         if (! file_exists($file)) {
             $this->fail('Primes not found');

@@ -44,7 +44,7 @@ class PrivateKey implements PrivateKeyInterface
 
     public function sign($hash, $random_k)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $G = $this->public_key->getGenerator();
             $n = $G->getOrder();
             $k = gmp_Utils::gmp_mod2($random_k, $n);
@@ -52,17 +52,17 @@ class PrivateKey implements PrivateKeyInterface
             $r = $p1->getX();
             
             if (gmp_cmp($r, 0) == 0) {
-                throw new ErrorException("error: random number R = 0 <br />");
+                throw new \RuntimeException("error: random number R = 0 <br />");
             }
             $s = gmp_Utils::gmp_mod2(gmp_mul(NumberTheory::inverse_mod($k, $n), gmp_Utils::gmp_mod2(gmp_add($hash, gmp_mul($this->secret_multiplier, $r)), $n)), $n);
             
             if (gmp_cmp($s, 0) == 0) {
-                throw new ErrorException("error: random number S = 0<br />");
+                throw new \RuntimeException("error: random number S = 0<br />");
             }
             
             return new Signature($r, $s);
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 $G = $this->public_key->getGenerator();
                 $n = $G->getOrder();
                 $k = bcmod($random_k, $n);
@@ -70,7 +70,7 @@ class PrivateKey implements PrivateKeyInterface
                 $r = $p1->getX();
                 
                 if (bccomp($r, 0) == 0) {
-                    throw new ErrorException("error: random number R = 0 <br />");
+                    throw new \RuntimeException("error: random number R = 0 <br />");
                 }
                 $s = bcmod(bcmul(NumberTheory::inverse_mod($k, $n), bcmod(bcadd($hash, bcmul($this->secret_multiplier, $r)), $n)), $n);
                 
@@ -80,13 +80,13 @@ class PrivateKey implements PrivateKeyInterface
                 
                 return new Signature($r, $s);
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 
     public static function int_to_string($x)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             if (gmp_cmp($x, 0) >= 0) {
                 if (gmp_cmp($x, 0) == 0)
                     return chr(0);
@@ -103,7 +103,7 @@ class PrivateKey implements PrivateKeyInterface
                 return $result;
             }
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 if (bccomp($x, 0) != - 1) {
                     if (bccomp($x, 0) == 0)
                         return chr(0);
@@ -120,13 +120,13 @@ class PrivateKey implements PrivateKeyInterface
                     return $result;
                 }
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 
     public static function string_to_int($s)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $result = 0;
             for ($c = 0; $c < strlen($s); $c ++) {
                 
@@ -134,7 +134,7 @@ class PrivateKey implements PrivateKeyInterface
             }
             return $result;
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 $result = 0;
                 for ($c = 0; $c < strlen($s); $c ++) {
                     
@@ -142,7 +142,7 @@ class PrivateKey implements PrivateKeyInterface
                 }
                 return $result;
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 
@@ -153,7 +153,7 @@ class PrivateKey implements PrivateKeyInterface
 
     public static function point_is_valid(Point $generator, $x, $y)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $n = $generator->getOrder();
             $curve = $generator->getCurve();
             
@@ -177,7 +177,7 @@ class PrivateKey implements PrivateKeyInterface
             }
             return true;
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 $n = $generator->getOrder();
                 $curve = $generator->getCurve();
                 
@@ -201,7 +201,7 @@ class PrivateKey implements PrivateKeyInterface
                 }
                 return true;
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 }

@@ -50,26 +50,26 @@ class PublicKey implements PublicKeyInterface
             throw new ErrorExcpetion("Generator Must have order.");
         }
         if (Point::cmp(Point::mul($n, $point), Point::$infinity) != 0) {
-            throw new ErrorException("Generator Point order is bad.");
+            throw new \RuntimeException("Generator Point order is bad.");
         }
         
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             if (gmp_cmp($point->getX(), 0) < 0 || gmp_cmp($n, $point->getX()) <= 0 || gmp_cmp($point->getY(), 0) < 0 || gmp_cmp($n, $point->getY()) <= 0) {
-                throw new ErrorException("Generator Point has x and y out of range.");
+                throw new \RuntimeException("Generator Point has x and y out of range.");
             }
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 if (bccomp($point->getX(), 0) == - 1 || bccomp($n, $point->getX()) != 1 || bccomp($point->getY(), 0) == - 1 || bccomp($n, $point->getY()) != 1) {
-                    throw new ErrorException("Generator Point has x and y out of range.");
+                    throw new \RuntimeException("Generator Point has x and y out of range.");
                 }
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 
     public function verifies($hash, Signature $signature)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $G = $this->generator;
             $n = $this->generator->getOrder();
             $point = $this->point;
@@ -94,7 +94,7 @@ class PublicKey implements PublicKeyInterface
                 return false;
             }
         } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 $G = $this->generator;
                 $n = $this->generator->getOrder();
                 $point = $this->point;
@@ -119,7 +119,7 @@ class PublicKey implements PublicKeyInterface
                     return false;
                 }
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
     }
 

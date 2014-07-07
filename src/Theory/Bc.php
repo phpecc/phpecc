@@ -13,7 +13,7 @@ class Bc implements TheoryAdapter
     public function __construct(array $smallPrimes)
     {
         if (! extension_loaded('bcmath')) {
-            throw new \ErrorException('BCMath extension is not loaded.');
+            throw new \RuntimeException('BCMath extension is not loaded.');
         }
 
         $this->smallprimes = $smallPrimes;
@@ -22,7 +22,7 @@ class Bc implements TheoryAdapter
     public function modular_exp($base, $exponent, $modulus)
     {
         if ($exponent < 0) {
-            return new ErrorException("Negative exponents (" . $exponent . ") not allowed");
+            return new \RuntimeException("Negative exponents (" . $exponent . ") not allowed");
         } else {
             $p = bcpowmod($base, $exponent, $modulus);
             return $p;
@@ -211,7 +211,7 @@ class Bc implements TheoryAdapter
             else
                 $result = bcadd($ud, $m);
         } else {
-            throw new ErrorException("ERROR: $a and $m are NOT relatively prime.");
+            throw new \RuntimeException("ERROR: $a and $m are NOT relatively prime.");
         }
 
         return $result;

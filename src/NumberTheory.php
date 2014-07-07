@@ -146,7 +146,7 @@ class NumberTheory
      *
      * @todo Better detection of big primes with GMP (current mode is probabilistic)
      * @param string $n
-     * @throws ErrorException
+     * @throws RuntimeException
      * @return boolean
      */
     public static function is_prime($n)
@@ -364,10 +364,10 @@ class NumberTheory
     );
 }
 
-if (extension_loaded('gmp') && defined('USE_EXT') && USE_EXT === 'GMP') {
+if (ModuleConfig::hasGmp()) {
     NumberTheory::setTheoryAdapter(new GmpTheoryAdapter(NumberTheory::$smallprimes));
 }
-elseif (extension_loaded('bcmath') && defined('USE_EXT') && USE_EXT === 'BCMATH') {
+elseif (ModuleConfig::hasBcMath()) {
     NumberTheory::setTheoryAdapter(new BcTheoryAdapter(NumberTheory::$smallprimes));
 }
 else {
