@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpEcc\Tests;
+namespace Mdanter\Ecc\Tests;
 
-use PhpEcc\NumberTheory;
-use PhpEcc\CurveFp;
-use PhpEcc\Point;
-use PhpEcc\NISTcurve;
-use PhpEcc\gmp_Utils;
-use PhpEcc\PublicKey;
-use PhpEcc\PrivateKey;
-use PhpEcc\Signature;
-use PhpEcc\EcDH;
-use PhpEcc\bcmath_Utils;
+use Mdanter\Ecc\NumberTheory;
+use Mdanter\Ecc\CurveFp;
+use Mdanter\Ecc\Point;
+use Mdanter\Ecc\NISTcurve;
+use Mdanter\Ecc\gmp_Utils;
+use Mdanter\Ecc\PublicKey;
+use Mdanter\Ecc\PrivateKey;
+use Mdanter\Ecc\Signature;
+use Mdanter\Ecc\EcDH;
+use Mdanter\Ecc\bcmath_Utils;
 
 /**
  * *********************************************************************
