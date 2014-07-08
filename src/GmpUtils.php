@@ -31,25 +31,25 @@ namespace Mdanter\Ecc;
  * for elliptic curve encryption
  * This class implements all neccessary static methods
  */
-class gmp_Utils
+class GmpUtils
 {
 
-    public static function gmp_mod2($n, $d)
+    public static function gmpMod2($n, $d)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $res = gmp_div_r($n, $d);
             if (gmp_cmp(0, $res) > 0) {
                 $res = gmp_add($d, $res);
             }
             return gmp_strval($res);
         } else {
-            throw new Exception("PLEASE INSTALL GMP");
+            throw new \RuntimeException("PLEASE INSTALL GMP");
         }
     }
 
-    public static function gmp_random($n)
+    public static function gmpRandom($n)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $random = gmp_strval(gmp_random());
             $small_rand = rand();
             while (gmp_cmp($random, $n) > 0) {
@@ -58,30 +58,29 @@ class gmp_Utils
             
             return gmp_strval($random);
         } else {
-            throw new Exception("PLEASE INSTALL GMP");
+            throw new \RuntimeException("PLEASE INSTALL GMP");
         }
     }
 
-    public static function gmp_hexdec($hex)
+    public static function gmpHexDec($hex)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $dec = gmp_strval(gmp_init($hex, 16), 10);
             
             return $dec;
         } else {
-            throw new Exception("PLEASE INSTALL GMP");
+            throw new \RuntimeException("PLEASE INSTALL GMP");
         }
     }
 
-    public static function gmp_dechex($dec)
+    public static function gmpDecHex($dec)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $hex = gmp_strval(gmp_init($dec, 10), 16);
             
             return $hex;
         } else {
-            throw new Exception("PLEASE INSTALL GMP");
+            throw new \RuntimeException("PLEASE INSTALL GMP");
         }
     }
 }
-?>

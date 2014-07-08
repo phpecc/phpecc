@@ -1,5 +1,4 @@
 <?php
-
 namespace Mdanter\Ecc;
 
 /**
@@ -49,27 +48,29 @@ class PublicKey implements PublicKeyInterface
         if ($n == null) {
             throw new ErrorExcpetion("Generator Must have order.");
         }
+        
         if (Point::cmp(Point::mul($n, $point), Point::$infinity) != 0) {
-            throw new ErrorException("Generator Point order is bad.");
+            throw new \RuntimeException("Generator Point order is bad.");
         }
         
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             if (gmp_cmp($point->getX(), 0) < 0 || gmp_cmp($n, $point->getX()) <= 0 || gmp_cmp($point->getY(), 0) < 0 || gmp_cmp($n, $point->getY()) <= 0) {
-                throw new ErrorException("Generator Point has x and y out of range.");
+                throw new \RuntimeException("Generator Point has x and y out of range.");
             }
-        } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
+        } else {
+            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
                 if (bccomp($point->getX(), 0) == - 1 || bccomp($n, $point->getX()) != 1 || bccomp($point->getY(), 0) == - 1 || bccomp($n, $point->getY()) != 1) {
-                    throw new ErrorException("Generator Point has x and y out of range.");
+                    throw new \RuntimeException("Generator Point has x and y out of range.");
                 }
             } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+                throw new \RuntimeException("Please install BCMATH or GMP");
             }
+        }
     }
 
     public function verifies($hash, Signature $signature)
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $G = $this->generator;
             $n = $this->generator->getOrder();
             $point = $this->point;
@@ -82,45 +83,46 @@ class PublicKey implements PublicKeyInterface
             if (gmp_cmp($s, 1) < 0 || gmp_cmp($s, gmp_sub($n, 1)) > 0) {
                 return false;
             }
-            $c = NumberTheory::inverse_mod($s, $n);
-            $u1 = gmp_Utils::gmp_mod2(gmp_mul($hash, $c), $n);
-            $u2 = gmp_Utils::gmp_mod2(gmp_mul($r, $c), $n);
+            $c = NumberTheory::inverseMod($s, $n);
+            $u1 = GmpUtils::gmpMod2(gmp_mul($hash, $c), $n);
+            $u2 = GmpUtils::gmpMod2(gmp_mul($r, $c), $n);
             $xy = Point::add(Point::mul($u1, $G), Point::mul($u2, $point));
-            $v = gmp_Utils::gmp_mod2($xy->getX(), $n);
+            $v = GmpUtils::gmpMod2($xy->getX(), $n);
             
-            if (gmp_cmp($v, $r) == 0)
+            if (gmp_cmp($v, $r) == 0) {
                 return true;
-            else {
+            } else {
                 return false;
             }
-        } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
-                $G = $this->generator;
-                $n = $this->generator->getOrder();
-                $point = $this->point;
-                $r = $signature->getR();
-                $s = $signature->getS();
-                
-                if (bccomp($r, 1) == - 1 || bccomp($r, bcsub($n, 1)) == 1) {
-                    return false;
-                }
-                if (bccomp($s, 1) == - 1 || bccomp($s, bcsub($n, 1)) == 1) {
-                    return false;
-                }
-                $c = NumberTheory::inverse_mod($s, $n);
-                $u1 = bcmod(bcmul($hash, $c), $n);
-                $u2 = bcmod(bcmul($r, $c), $n);
-                $xy = Point::add(Point::mul($u1, $G), Point::mul($u2, $point));
-                $v = bcmod($xy->getX(), $n);
-                
-                if (bccomp($v, $r) == 0)
-                    return true;
-                else {
-                    return false;
-                }
-            } else {
-                throw new ErrorException("Please install BCMATH or GMP");
+        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+            $G = $this->generator;
+            $n = $this->generator->getOrder();
+            $point = $this->point;
+            $r = $signature->getR();
+            $s = $signature->getS();
+            
+            if (bccomp($r, 1) == - 1 || bccomp($r, bcsub($n, 1)) == 1) {
+                return false;
             }
+            
+            if (bccomp($s, 1) == - 1 || bccomp($s, bcsub($n, 1)) == 1) {
+                return false;
+            }
+            
+            $c = NumberTheory::inverseMod($s, $n);
+            $u1 = bcmod(bcmul($hash, $c), $n);
+            $u2 = bcmod(bcmul($r, $c), $n);
+            $xy = Point::add(Point::mul($u1, $G), Point::mul($u2, $point));
+            $v = bcmod($xy->getX(), $n);
+            
+            if (bccomp($v, $r) == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            throw new \RuntimeException("Please install BCMATH or GMP");
+        }
     }
 
     public function getCurve()
@@ -144,4 +146,3 @@ class PublicKey implements PublicKeyInterface
         return $this;
     }
 }
-?>

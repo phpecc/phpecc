@@ -5,19 +5,19 @@ namespace Mdanter\Ecc;
 interface TheoryAdapter
 {
 
-    function modular_exp($base, $exponent, $modulus);
+    function modularExp($base, $exponent, $modulus);
 
-    function polynomial_reduce_mod($poly, $polymod, $p);
+    function polynomialReduceMod($poly, $polymod, $p);
 
-    function polynomial_multiply_mod($m1, $m2, $polymod, $p);
+    function polynomialMultiplyMod($m1, $m2, $polymod, $p);
 
-    function polynomial_exp_mod($base, $exponent, $polymod, $p);
+    function polynomialExpMod($base, $exponent, $polymod, $p);
 
     function jacobi($a, $n);
 
-    function square_root_mod_prime($a, $p);
+    function squareRootModPrime($a, $p);
 
-    function inverse_mod($a, $m);
+    function inverseMod($a, $m);
 
     function gcd2($a, $b);
 
@@ -33,17 +33,17 @@ interface TheoryAdapter
 
     function carmichael($n);
 
-    function carmichael_of_factorized($f_list);
+    function carmichaelOfFactorized($f_list);
 
-    function carmichael_of_ppower($pp);
+    function carmichaelOfPpower($pp);
 
-    function order_mod($x, $m);
+    function orderMod($x, $m);
 
-    function largest_factor_relatively_prime($a, $b);
+    function largestFactorRelativelyPrime($a, $b);
 
-    function kinda_order_mod($x, $m);
+    function kindaOrderMod($x, $m);
 
-    function is_prime($n);
+    function isPrime($n);
 
-    function next_prime($starting_value);
+    function nextPrime($starting_value);
 }

@@ -54,4 +54,3 @@ class Signature implements SignatureInterface
         return $this->s;
     }
 }
-?>

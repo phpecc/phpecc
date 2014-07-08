@@ -46,4 +46,3 @@ interface CurveFpInterface
 
     public static function cmp(CurveFpInterface $cp1, CurveFpInterface $cp2);
 }
-?>
