@@ -1,8 +1,7 @@
 ## Pure PHP Elliptic Curve DSA and DH
 
-[![Build Status](https://magnum.travis-ci.com/aztech-digital/php-coins.svg?token=2PviB9phybzQwMnuzpZy&branch=master)](https://magnum.travis-ci.com/aztech-digital/php-coins)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/aztech-digital/php-ecc/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/aztech-digital/php-ecc/?branch=master)
-
+[![Build Status](https://travis-ci.org/mdanter/phpecc.svg?branch=master)](https://travis-ci.org/mdanter/phpecc)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mdanter/phpecc/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mdanter/phpecc?branch=master)
 ### Foreword
 
 This library is a rewrite/update of Matys Danter's ECC library. All credit goes to him.
@@ -25,6 +24,6 @@ This package is released under the MIT license.
 
 You can install this library via Composer :
 
-`composer require aztech/php-ecc:0.1`
+`composer require mdanter/ecc:0.1`
 
 
