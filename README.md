@@ -8,7 +8,7 @@ This library is a rewrite/update of Matys Danter's ECC library. All credit goes 
 
 ### Information
 
-For more information on Elliptic Curve Cryptography please read http://matejdanter.com/2010/12/elliptic-curve-php-oop-dsa-and-diffie-hellman/
+For more information on Elliptic Curve Cryptography please read http://matejdanter.com/?cat=14
 
 ### License
 
