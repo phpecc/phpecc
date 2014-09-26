@@ -27,7 +27,7 @@ class SECcurve
 {
 
     private static function secp128r1Params() {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+        if (ModuleConfig::hasGmp()) {
             return array(
                 'p' => GmpUtils::gmpHexDec('0xFFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFF'),
                 'a' => GmpUtils::gmpHexDec('0xFFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFC'),
@@ -36,7 +36,7 @@ class SECcurve
                 'x' => GmpUtils::gmpHexDec("0x161FF7528B899B2D0C28607CA52C5B86"),
                 'y' => GmpUtils::gmpHexDec("0xCF5AC8395BAFEB13C02DA292DDED7A83")
             );
-        } else if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+        } else if (ModuleConfig::hasBcMath()) {
             return array(
                 'p' => BcMathUtils::bchexdec('0xFFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFF'),
                 'a' => BcMathUtils::bchexdec('0xFFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFC'),
@@ -49,7 +49,7 @@ class SECcurve
     }
 
     private static function secp160k1Params() {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+        if (ModuleConfig::hasGmp()) {
             return array(
                 'p' => GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFAC73'),
                 'a' => GmpUtils::gmpHexDec('0x0000000000000000000000000000000000000000'),
@@ -58,7 +58,7 @@ class SECcurve
                 'x' => GmpUtils::gmpHexDec("0x3B4C382CE37AA192A4019E763036F4F5DD4D7EBB"),
                 'y' => GmpUtils::gmpHexDec("0x938CF935318FDCED6BC28286531733C3F03C4FEE")
             );
-        } else if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+        } else if (ModuleConfig::hasBcMath()) {
             return array(
                 'p' => BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFAC73'),
                 'a' => BcMathUtils::bchexdec('0x0000000000000000000000000000000000000000'),
@@ -71,7 +71,7 @@ class SECcurve
     }
 
     private static function secp160r1Params() {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+        if (ModuleConfig::hasGmp()) {
             return array(
                 'p' => GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFF'),
                 'a' => GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFC'),
@@ -80,7 +80,7 @@ class SECcurve
                 'x' => GmpUtils::gmpHexDec("0x4A96B5688EF573284664698968C38BB913CBFC82"),
                 'y' => GmpUtils::gmpHexDec("0x23A628553168947D59DCC912042351377AC5FB32")
             );
-        } else if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+        } else if (ModuleConfig::hasBcMath()) {
             return array(
                 'p' => BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFF'),
                 'a' => BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFC'),
@@ -93,7 +93,7 @@ class SECcurve
     }
 
     private static function secp192k1Params() {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+        if (ModuleConfig::hasGmp()) {
             return array(
                 'p' => GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFEE37'),
                 'a' => GmpUtils::gmpHexDec('0x000000000000000000000000000000000000000000000000'),
@@ -102,7 +102,7 @@ class SECcurve
                 'x' => GmpUtils::gmpHexDec("0xDB4FF10EC057E9AE26B07D0280B7F4341DA5D1B1EAE06C7D"),
                 'y' => GmpUtils::gmpHexDec("0x9B2F2F6D9C5628A7844163D015BE86344082AA88D95E2F9D")
             );
-        } else if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+        } else if (ModuleConfig::hasBcMath()) {
             return array(
                 'p' => BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFEE37'),
                 'a' => BcMathUtils::bchexdec('0x000000000000000000000000000000000000000000000000'),
@@ -115,7 +115,7 @@ class SECcurve
     }
 
     private static function secp192r1Params() {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+        if (ModuleConfig::hasGmp()) {
             return array(
                 'p' => GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFF'),
                 'a' => GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFC'),
@@ -124,7 +124,7 @@ class SECcurve
                 'x' => GmpUtils::gmpHexDec("0x188DA80EB03090F67CBF20EB43A18800F4FF0AFD82FF1012"),
                 'y' => GmpUtils::gmpHexDec("0x07192B95FFC8DA78631011ED6B24CDD573F977A11E794811")
             );
-        } else if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+        } else if (ModuleConfig::hasBcMath()) {
             return array(
                 'p' => BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFF'),
                 'a' => BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFC'),
@@ -137,7 +137,7 @@ class SECcurve
     }
 
     private static function secp224r1Params() {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+        if (ModuleConfig::hasGmp()) {
             return array(
                 'p' => GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000001'),
                 'a' => GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFE'),
@@ -146,7 +146,7 @@ class SECcurve
                 'x' => GmpUtils::gmpHexDec("0xB70E0CBD6BB4BF7F321390B94A03C1D356C21122343280D6115C1D21"),
                 'y' => GmpUtils::gmpHexDec("0xBD376388B5F723FB4C22DFE6CD4375A05A07476444D5819985007E34")
             );
-        } else if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+        } else if (ModuleConfig::hasBcMath()) {
             return array(
                 'p' => BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000001'),
                 'a' => BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFE'),
@@ -159,7 +159,7 @@ class SECcurve
     }
 
     private static function secp256r1Params() {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+        if (ModuleConfig::hasGmp()) {
             return array(
                 'p' => GmpUtils::gmpHexDec('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF'),
                 'a' => GmpUtils::gmpHexDec('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC'),
@@ -168,7 +168,7 @@ class SECcurve
                 'x' => GmpUtils::gmpHexDec("0x6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296"),
                 'y' => GmpUtils::gmpHexDec("0x4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5")
             );
-        } else if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+        } else if (ModuleConfig::hasBcMath()) {
             return array(
                 'p' => BcMathUtils::bchexdec('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF'),
                 'a' => BcMathUtils::bchexdec('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC'),
@@ -181,7 +181,7 @@ class SECcurve
     }
 
     private static function secp256k1Params() {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+        if (ModuleConfig::hasGmp()) {
             return array(
                 'p' => GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F'),
                 'a' => GmpUtils::gmpHexDec('0x0000000000000000000000000000000000000000000000000000000000000000'),
@@ -190,7 +190,7 @@ class SECcurve
                 'x' => GmpUtils::gmpHexDec("0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798"),
                 'y' => GmpUtils::gmpHexDec("0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8")
             );
-        } else if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+        } else if (ModuleConfig::hasBcMath()) {
             return array(
                 'p' => BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F'),
                 'a' => BcMathUtils::bchexdec('0x0000000000000000000000000000000000000000000000000000000000000000'),
