@@ -1,6 +1,7 @@
 <?php
 namespace Mdanter\Ecc\Theory;
 
+use Mdanter\Ecc\SquareRootException;
 use Mdanter\Ecc\TheoryAdapter;
 use Mdanter\Ecc\BcMathUtils;
 
@@ -314,7 +315,7 @@ class Bc implements TheoryAdapter
                             $count = 1;
                             $n = $q;
                             
-                            while ($d <= n) {
+                            while ($d <= $n) {
                                 $q = $n / $d;
                                 $r = $n % $d;
                                 
@@ -397,7 +398,7 @@ class Bc implements TheoryAdapter
             return 0;
         }
         
-        if (gcd($x, m) == 1) {
+        if (gcd($x, $m) == 1) {
             $z = $x;
             $result = 1;
             

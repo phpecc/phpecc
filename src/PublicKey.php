@@ -46,7 +46,7 @@ class PublicKey implements PublicKeyInterface
         $n = $generator->getOrder();
         
         if ($n == null) {
-            throw new ErrorExcpetion("Generator Must have order.");
+            throw new \ErrorException("Generator Must have order.");
         }
         
         if (Point::cmp(Point::mul($n, $point), Point::$infinity) != 0) {
