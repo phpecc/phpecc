@@ -9,6 +9,7 @@ use Mdanter\Ecc\NISTcurve;
 use Mdanter\Ecc\GmpUtils;
 use Mdanter\Ecc\PublicKey;
 use Mdanter\Ecc\PrivateKey;
+use Mdanter\Ecc\SECcurve;
 use Mdanter\Ecc\Signature;
 use Mdanter\Ecc\EcDH;
 use Mdanter\Ecc\BcMathUtils;
@@ -103,6 +104,8 @@ class TestSuite
             echo "--------- START DIFFIE HELLMAN KEY EXCHANGE TEST ---------<br /><br />\n";
             self::gmp_diffieHellman($verbose);
             echo "<br /><br />--------- END DIFFIE HELLMAN KEY EXHANGE TEST ---------<br /><br />\n";
+            self::test_SECcurve();
+            echo "<br /><br />--------- END SECCURVE TEST ---------<br /><br />\n";
             $end_time = microtime(true);
         
             $time_res = $end_time - $start_time;
@@ -146,6 +149,8 @@ class TestSuite
             echo "--------- START DIFFIE HELLMAN KEY EXCHANGE TEST ---------<br /><br />\n";
             self::bcmath_diffieHellman($verbose);
             echo "<br /><br />--------- END DIFFIE HELLMAN KEY EXHANGE TEST ---------<br /><br />\n";
+            self::test_SECcurve();
+            echo "<br /><br />--------- END SECCURVE TEST ---------<br /><br />\n";
             $end_time = microtime(true);
         
             $time_res = $end_time - $start_time;
@@ -1198,5 +1203,42 @@ class TestSuite
         }
         flush();
     }
+
+    public static function test_SECcurve() {
+        $tests = array(
+            'curveSecp128r1' => array('340282366762482138434845932244680310780', '308990863222245658030922601041482374867', '340282366762482138434845932244680310783'),
+            'curveSecp160k1' => array('0', '7', '1461501637330902918203684832716283019651637554291'),
+            'curveSecp160r1' => array('1461501637330902918203684832716283019653785059324', '163235791306168110546604919403271579530548345413', '1461501637330902918203684832716283019653785059327'),
+            'curveSecp192k1' => array('0', '3', '6277101735386680763835789423207666416102355444459739541047'),
+            'curveSecp192r1' => array('6277101735386680763835789423207666416083908700390324961276', '2455155546008943817740293915197451784769108058161191238065', '6277101735386680763835789423207666416083908700390324961279'),
+            'curveSecp224r1' => array('26959946667150639794667015087019630673557916260026308143510066298878', '18958286285566608000408668544493926415504680968679321075787234672564', '26959946667150639794667015087019630673557916260026308143510066298881'),
+            'curveSecp256k1' => array('0', '7', '115792089237316195423570985008687907853269984665640564039457584007908834671663'),
+            'curveSecp256r1' => array('115792089210356248762697446949407573530086143415290314195533631308867097853948', '41058363725152142129326129780047268409114441015993725554835256314039467401291', '115792089210356248762697446949407573530086143415290314195533631308867097853951'),
+        );
+
+        foreach ($tests as $fn => $result) {
+            $obj = call_user_func(array('\\Mdanter\\Ecc\\SECcurve', $fn));
+
+            if (!$obj || !($obj instanceof CurveFp)) {
+                self::$errors++;
+                print "*** SECcurve::{$fn} test failed: got object " . (!$obj ? null : get_class($obj)) . ", expected instance of CurveFp.<br />";
+                continue;
+            }
+
+            if ($obj->getA() != $result[0]) {
+                self::$errors++;
+                print "*** SECcurve::{$fn}->getA() test failed: got " . $obj->getA() . ", expected " . $result[0] . ".<br />";
+            }
+
+            if ($obj->getB() != $result[1]) {
+                self::$errors++;
+                print "*** SECcurve::{$fn}->getB() test failed: got " . $obj->getB() . ", expected " . $result[1] . ".<br />";
+            }
+
+            if ($obj->getPrime() != $result[2]) {
+                self::$errors++;
+                print "*** SECcurve::{$fn}->getPrime() test failed: got " . $obj->getPrime() . ", expected " . $result[2] . ".<br />";
+            }
+        }
+    }
 }
-?>
