@@ -2,4 +2,7 @@
 
 namespace Mdanter\Ecc;
 
-class SquareRootException extends \ErrorException {};
+class SquareRootException extends \ErrorException
+{
+
+}

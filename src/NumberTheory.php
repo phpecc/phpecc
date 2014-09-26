@@ -39,10 +39,10 @@ use Mdanter\Ecc\Theory\Bc as BcTheoryAdapter;
 class NumberTheory
 {
 
-	/**
-	 * @var TheoryAdapter
-	 */
-	private static $theory;
+    /**
+     * @var TheoryAdapter
+     */
+    private static $theory;
 
     public static function setTheoryAdapter(TheoryAdapter $adapter)
     {
