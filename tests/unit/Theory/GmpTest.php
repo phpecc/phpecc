@@ -50,7 +50,7 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
     {
         foreach ($this->knownPrimes as $key => $prime) {
             if (trim($prime) == '') {
-                user_error('Empty prime number detected from line #' . $key + 1, E_USER_WARNING);
+                user_error('Empty prime number detected from line #' . ($key + 1), E_USER_WARNING);
             }
 
             $this->assertTrue($this->theory->isPrime($prime), 'Prime "' . $prime . '" is not detected as prime.');

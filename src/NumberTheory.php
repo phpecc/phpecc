@@ -39,7 +39,10 @@ use Mdanter\Ecc\Theory\Bc as BcTheoryAdapter;
 class NumberTheory
 {
 
-    private static $theory;
+	/**
+	 * @var TheoryAdapter
+	 */
+	private static $theory;
 
     public static function setTheoryAdapter(TheoryAdapter $adapter)
     {
@@ -145,7 +148,7 @@ class NumberTheory
      *
      * @todo Better detection of big primes with GMP (current mode is probabilistic)
      * @param string $n            
-     * @throws RuntimeException
+     * @throws \RuntimeException
      * @return boolean
      */
     public static function isPrime($n)
