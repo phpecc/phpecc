@@ -75,7 +75,7 @@ class PrivateKey implements PrivateKeyInterface
             $s = bcmod(bcmul(NumberTheory::inverseMod($k, $n), bcmod(bcadd($hash, bcmul($this->secret_multiplier, $r)), $n)), $n);
             
             if (bccomp($s, 0) == 0) {
-                throw new \ErrorException("error: random number S = 0<br />");
+                throw new \LogicException("error: random number S = 0<br />");
             }
             
             return new Signature($r, $s);
