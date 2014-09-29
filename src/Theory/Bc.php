@@ -1,7 +1,6 @@
 <?php
 namespace Mdanter\Ecc\Theory;
 
-use Mdanter\Ecc\SquareRootException;
 use Mdanter\Ecc\TheoryAdapter;
 use Mdanter\Ecc\BcMathUtils;
 
@@ -142,7 +141,7 @@ class Bc implements TheoryAdapter
             $jac = $this->jacobi($a, $p);
             
             if ($jac == - 1) {
-                throw new SquareRootException($a . " has no square root modulo " . $p);
+                throw new \LogicException($a . " has no square root modulo " . $p);
             }
             
             if (bcmod($p, 4) == 3) {
