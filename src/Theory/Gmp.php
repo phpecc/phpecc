@@ -1,7 +1,6 @@
 <?php
 namespace Mdanter\Ecc\Theory;
 
-use Mdanter\Ecc\SquareRootException;
 use Mdanter\Ecc\TheoryAdapter;
 use Mdanter\Ecc\GmpUtils;
 
@@ -118,7 +117,7 @@ class Gmp implements TheoryAdapter
             $jac = $this->jacobi($a, $p);
             
             if ($jac == - 1) {
-                throw new SquareRootException($a . " has no square root modulo " . $p);
+                throw new \LogicException($a . " has no square root modulo " . $p);
             }
             
             if (gmp_strval(GmpUtils::gmpMod2($p, 4)) == 3) {
