@@ -81,7 +81,7 @@ class BcMathUtils
                 return strrev($hex);
             }
             
-            for ($i = 0; $isset($hex[$i]); $i ++) {
+            for ($i = 0; isset($hex[$i]); $i ++) {
                 $hex[$i] = dechex(15 - hexdec($hex[$i]));
             }
             

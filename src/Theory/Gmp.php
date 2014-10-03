@@ -117,7 +117,7 @@ class Gmp implements TheoryAdapter
             $jac = $this->jacobi($a, $p);
             
             if ($jac == - 1) {
-                throw new SquareRootException($a . " has no square root modulo " . $p);
+                throw new \LogicException($a . " has no square root modulo " . $p);
             }
             
             if (gmp_strval(GmpUtils::gmpMod2($p, 4)) == 3) {
@@ -252,7 +252,7 @@ class Gmp implements TheoryAdapter
                             $count = 1;
                             $n = $q;
                             
-                            while ($d <= n) {
+                            while ($d <= $n) {
                                 $q = $n / $d;
                                 $r = $n % $d;
                                 
@@ -336,7 +336,7 @@ class Gmp implements TheoryAdapter
             return 0;
         }
         
-        if (gcd($x, m) == 1) {
+        if (gcd($x, $m) == 1) {
             $z = $x;
             $result = 1;
             
