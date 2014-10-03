@@ -1,8 +1,10 @@
 <?php
-namespace Mdanter\Ecc;
+
+namespace Mdanter\Ecc\Curves;
 
 use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Math\Gmp;
+
 /**
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter

@@ -30,22 +30,29 @@ function runSuite($t, $gmp) {
     echo '-- using ' . $module . ' math module.' . PHP_EOL;
     ob_start();
 
-    $errors = $t->run($gmp);
+    try {
+        $errors = $t->run($gmp);
+    }
+    catch (\Exception $ex) {
+        $errors = $ex->__toString();
+    }
 
     if ($errors !== 0) {
-        ob_end_flush();
+        $content = ob_get_clean();
+
+        echo str_replace(PHP_EOL . PHP_EOL, PHP_EOL, str_replace("<br />", PHP_EOL, $content));
     } else {
         ob_end_clean();
     }
 
-    return $errors;
+    return str_replace(PHP_EOL . PHP_EOL, PHP_EOL, str_replace("<br />", PHP_EOL, $errors));
 }
 
 $seconds = 7200;
 set_time_limit($seconds);
 
 // verbosity for test methods
-$verbose = true;
+$verbose = false;
 $errors = 0;
 $t = new TestSuite($verbose);
 

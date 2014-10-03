@@ -6,15 +6,16 @@ use Mdanter\Ecc\NumberTheory;
 use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\Point;
 use Mdanter\Ecc\NISTcurve;
-use Mdanter\Ecc\GmpUtils;
+use Mdanter\Ecc\Math\GmpUtils;
 use Mdanter\Ecc\PublicKey;
 use Mdanter\Ecc\PrivateKey;
 use Mdanter\Ecc\SECcurve;
 use Mdanter\Ecc\Signature;
 use Mdanter\Ecc\EcDH;
-use Mdanter\Ecc\BcMathUtils;
+use Mdanter\Ecc\Math\BcMathUtils;
 use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\BcMath;
+use Mdanter\Ecc\Points;
 
 /**
  * *********************************************************************
@@ -186,10 +187,10 @@ class TestSuite
             echo ">>>>>>>>>>>>>>>>TESTING EC MULT<<<<<<<<<<<<<<<<<<<<<<br />\n";
         self::test_multiply($c, 3, 10, 2, 7, 12, $verbose);
 
-        $g = new Point($c, 13, 7, 7);
+        $g = new Point($c, 13, 7, 7, new Gmp());
         if ($verbose)
             echo ">>>>>>>>>>>>>>>>PERFORMING INFINITY TESTS<<<<<<<<<<<<<<<<<<<<<<br />\n";
-        $check = Point::$infinity;
+        $check = Points::infinity();
         for ($i = 0; $i < 8; $i ++) {
             $p = Point::mul(($i % 7), $g);
 
@@ -656,11 +657,11 @@ class TestSuite
         flush();
         self::test_multiply($c, 3, 10, 2, 7, 12, $verbose);
 
-        $g = new Point($c, 13, 7, 7);
+        $g = new Point($c, 13, 7, 7, new BcMath());
         if ($verbose)
             echo ">>>>>>>>>>>>>>>>PERFORMING INFINITY TESTS<<<<<<<<<<<<<<<<<<<<<<br />\n";
         flush();
-        $check = Point::$infinity;
+        $check = Points::infinity();
         for ($i = 0; $i < 8; $i ++) {
             $p = Point::mul(($i % 7), $g);
 
@@ -1036,9 +1037,10 @@ class TestSuite
     {
         if (self::$useGmp && extension_loaded('gmp')) {
             // expect that on curve c, (x1, y1) + (x2, y2) = (x3, y3)
-            $p1 = new Point($c, $x1, $y1);
-            $p2 = new Point($c, $x2, $y2);
-            $p3 = Point::add($p1, $p2);
+            $p1 = new Point($c, $x1, $y1, null, new Gmp());
+            $p2 = new Point($c, $x2, $y2, null, new Gmp());
+            $p3 = $p1->add($p2);
+
             if ($verbose)
                 echo $p1 . " + " . $p2 . " = " . $p3;
             if (GmpUtils::gmpMod2($p3->getX(), 23) != $x3 || GmpUtils::gmpMod2($p3->getY(), 23) != $y3) {
@@ -1053,9 +1055,10 @@ class TestSuite
         } else
             if (extension_loaded('bcmath')) {
                 // expect that on curve c, (x1, y1) + (x2, y2) = (x3, y3)
-                $p1 = new Point($c, $x1, $y1);
-                $p2 = new Point($c, $x2, $y2);
-                $p3 = Point::add($p1, $p2);
+                $p1 = new Point($c, $x1, $y1, null, new BcMath());
+                $p2 = new Point($c, $x2, $y2, null, new BcMath());
+                $p3 = $p1->add($p2);
+
                 if ($verbose)
                     echo $p1 . " + " . $p2 . " = " . $p3;
                 if (bcmod($p3->getX(), 23) != $x3 || bcmod($p3->getY(), 23) != $y3) {
@@ -1074,11 +1077,13 @@ class TestSuite
     {
         if (self::$useGmp && extension_loaded('gmp')) {
             // expect that on curve c, (x1, y1) + (x2, y2) = (x3, y3)
-            $p1 = new Point($c, $x1, $y1);
-            $p3 = Point::double($p1);
+            $p1 = new Point($c, $x1, $y1, null, new Gmp());
+            $p3 = $p1->getDouble();
+
             if ($verbose)
                 echo $p1 . " doubled  = " . $p3;
             flush();
+
             if (GmpUtils::gmpMod2($p3->getX(), 23) != $x3 || GmpUtils::gmpMod2($p3->getY(), 23) != $y3) {
                 self::$errors++;
                 if ($verbose)
@@ -1092,8 +1097,8 @@ class TestSuite
         } else
             if (extension_loaded('bcmath')) {
                 // expect that on curve c, (x1, y1) + (x2, y2) = (x3, y3)
-                $p1 = new Point($c, $x1, $y1);
-                $p3 = Point::double($p1);
+                $p1 = new Point($c, $x1, $y1, null, new BcMath());
+                $p3 = $p1->getDouble();
                 if ($verbose)
                     echo $p1 . " doubled  = " . $p3;
                 flush();
@@ -1114,8 +1119,8 @@ class TestSuite
     {
         if (self::$useGmp && extension_loaded('gmp')) {
             // expect that on curve c, m * (x2, y2) = (x3, y3)
-            $p1 = new Point($c, $x1, $y1);
-            $p3 = Point::mul($m, $p1);
+            $p1 = new Point($c, $x1, $y1, null, new Gmp());
+            $p3 = $p1->mul($m);
             if ($verbose)
                 echo $p1 . " * " . $m . " = " . $p3;
 
@@ -1130,7 +1135,7 @@ class TestSuite
                     flush();
                 }
             } else {
-                if ($p3 == 'infinity') {
+                if ($p3->equals(Points::infinity())) {
                     self::$errors++;
                     echo " INFINITY MULT TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                     flush();
@@ -1143,8 +1148,8 @@ class TestSuite
         } else
             if (extension_loaded('bcmath')) {
                 // expect that on curve c, m * (x2, y2) = (x3, y3)
-                $p1 = new Point($c, $x1, $y1);
-                $p3 = Point::mul($m, $p1);
+                $p1 = new Point($c, $x1, $y1, null, new BcMath());
+                $p3 = $p1->mul($m);
                 if ($verbose)
                     echo $p1 . " * " . $m . " = " . $p3;
                 flush();
@@ -1160,7 +1165,7 @@ class TestSuite
                         flush();
                     }
                 } else {
-                    if ($p3 == 'infinity') {
+                    if ($p3->equals(Points::infinity())) {
                         self::$errors++;
                         echo " INFINITY MULT TEST FAILURE: should give: (" . $x3 . " , " . $y3 . ")<br /><br /><br />";
                         flush();
@@ -1193,7 +1198,7 @@ class TestSuite
         $p192 = NISTcurve::generator192();
         $curve192 = NISTcurve::curve192();
 
-        $pubk = new PublicKey($p192, new Point($curve192, $Qx, $Qy));
+        $pubk = new PublicKey($p192, new Point($curve192, $Qx, $Qy, null, new Gmp()));
         $got = $pubk->verifies(PrivateKey::digestInteger($Msg), new Signature($R, $S));
         if (bccomp($got, $expected) == 0) {
             if ($verbose)

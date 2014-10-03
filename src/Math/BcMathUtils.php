@@ -1,5 +1,5 @@
 <?php
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Math;
 
 /**
  * *********************************************************************

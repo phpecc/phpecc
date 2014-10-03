@@ -12,8 +12,7 @@ include buildPath(__DIR__, '..', 'vendor', 'autoload.php');
 $oldTestSuite = include buildPath(__DIR__, 'legacy-runner.php');
 
 if ($oldTestSuite !== 0) {
-    echo PHP_EOL . 'Initial test suite FAILURE, stopping...' . PHP_EOL . PHP_EOL;
-    exit(1);
+    echo PHP_EOL . 'Initial test suite FAILURE, continuing...' . PHP_EOL . PHP_EOL;
 }
 else {
     echo 'Initial test suite successful, continuing...' . PHP_EOL . PHP_EOL;
