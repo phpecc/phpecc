@@ -34,8 +34,6 @@ namespace Mdanter\Ecc;
 interface SignatureInterface
 {
 
-    public function __construct($r, $s);
-
     public function getR();
 
     public function getS();

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Math;
 
 /**
  * *********************************************************************
@@ -55,7 +55,7 @@ class GmpUtils
             while (gmp_cmp($random, $n) > 0) {
                 $random = gmp_div($random, $small_rand, GMP_ROUND_ZERO);
             }
-            
+
             return gmp_strval($random);
         } else {
             throw new \RuntimeException("PLEASE INSTALL GMP");
@@ -66,7 +66,7 @@ class GmpUtils
     {
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $dec = gmp_strval(gmp_init($hex, 16), 10);
-            
+
             return $dec;
         } else {
             throw new \RuntimeException("PLEASE INSTALL GMP");
@@ -77,7 +77,7 @@ class GmpUtils
     {
         if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             $hex = gmp_strval(gmp_init($dec, 10), 16);
-            
+
             return $hex;
         } else {
             throw new \RuntimeException("PLEASE INSTALL GMP");

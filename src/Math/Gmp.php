@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\MathAdapter;
-use Mdanter\Ecc\GmpUtils;
 
 class Gmp implements MathAdapter
 {
@@ -32,6 +31,11 @@ class Gmp implements MathAdapter
         return gmp_mul($multiplier, $multiplicand);
     }
 
+    function div($dividend, $divisor)
+    {
+        return gmp_div($dividend, $divisor);
+    }
+
     function pow($base, $exponent)
     {
         return gmp_pow($base, $exponent);
@@ -40,5 +44,15 @@ class Gmp implements MathAdapter
     function rand($n)
     {
         return GmpUtils::gmpRandom($n);
+    }
+
+    function bitwiseAnd($first, $other)
+    {
+        return gmp_and($first, $other);
+    }
+
+    function toString($value)
+    {
+        return gmp_strval($value);
     }
 }

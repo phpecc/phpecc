@@ -14,7 +14,13 @@ interface MathAdapter
 
     function mul($multiplier, $multiplicand);
 
+    function div($dividend, $divisor);
+
     function pow($base, $exponent);
 
     function rand($n);
+
+    function bitwiseAnd($first, $other);
+
+    function toString($value);
 }
