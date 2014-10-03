@@ -33,8 +33,6 @@ namespace Mdanter\Ecc;
  */
 interface CurveFpInterface
 {
-    // constructor that sets up the instance variables
-    public function __construct($prime, $a, $b);
 
     public function contains($x, $y);
 
@@ -44,5 +42,6 @@ interface CurveFpInterface
 
     public function getPrime();
 
-    public static function cmp(CurveFpInterface $cp1, CurveFpInterface $cp2);
+    public function cmpWith(CurveFpInterface $other);
+
 }

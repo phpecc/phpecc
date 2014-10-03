@@ -1,6 +1,8 @@
 <?php
 namespace Mdanter\Ecc;
 
+use Mdanter\Ecc\Math\BcMath;
+use Mdanter\Ecc\Math\Gmp;
 /**
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter
@@ -40,13 +42,13 @@ class SECGcurve
             $_a = 0;
             $_b = 7;
 
-            $curve256k1 = new CurveFp($_p, $_a, $_b);
+            $curve256k1 = new CurveFp($_p, $_a, $_b, new Gmp());
         } elseif (ModuleConfig::hasBcMath()) {
             $_p = BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F');
             $_a = 0;
             $_b = 7;
 
-            $curve256k1 = new CurveFp($_p, $_a, $_b);
+            $curve256k1 = new CurveFp($_p, $_a, $_b, new BcMath());
         } else {
             throw new \RuntimeException('Please install GMP or BCMath extensions.');
         }
@@ -62,13 +64,13 @@ class SECGcurve
             $_a = GmpUtils::gmpHexDec('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC');
             $_b = GmpUtils::gmpHexDec('0x5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B');
 
-            $curve256r1 = new CurveFp($_p, $_a, $_b);
+            $curve256r1 = new CurveFp($_p, $_a, $_b, new Gmp());
         } elseif (ModuleConfig::hasBcMath()) {
             $_p = BcMathUtils::bchexdec('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF');
             $_a = BcMathUtils::bchexdec('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC');
             $_b = BcMathUtils::bchexdec('0x5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B');
 
-            $curve256r1 = new CurveFp($_p, $_a, $_b);
+            $curve256r1 = new CurveFp($_p, $_a, $_b, new BcMath());
         } else {
             throw new \RuntimeException('Please install GMP or BCMath extensions.');
         }
@@ -84,13 +86,13 @@ class SECGcurve
             $_a = GmpUtils::gmpHexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFC');
             $_b = GmpUtils::gmpHexDec('0xB3312FA7E23EE7E4988E056BE3F82D19181D9C6EFE8141120314088F5013875AC656398D8A2ED19D2A85C8EDD3EC2AEF');
 
-            $curve384r1 = new CurveFp($_p, $_a, $_b);
+            $curve384r1 = new CurveFp($_p, $_a, $_b, new Gmp());
         } elseif (ModuleConfig::hasBcMath()) {
             $_p = BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFF');
             $_a = BcMathUtils::bchexdec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFC');
             $_b = BcMathUtils::bchexdec('0xB3312FA7E23EE7E4988E056BE3F82D19181D9C6EFE8141120314088F5013875AC656398D8A2ED19D2A85C8EDD3EC2AEF');
 
-            $curve384r1 = new CurveFp($_p, $_a, $_b);
+            $curve384r1 = new CurveFp($_p, $_a, $_b, new BcMath());
         } else {
             throw new \RuntimeException('Please install GMP or BCMath extensions.');
         }
