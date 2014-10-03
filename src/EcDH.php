@@ -1,5 +1,4 @@
 <?php
-
 namespace Mdanter\Ecc;
 
 /**
@@ -61,30 +60,29 @@ class EcDH implements EcDHInterface
 
     public function getPublicPoint()
     {
-        if (extension_loaded('gmp') && USE_EXT == 'GMP') {
+        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
             // alice selects a random number between 1 and the order of the generator point(private)
             $n = $this->generator->getOrder();
             
-            $this->secret = gmp_Utils::gmp_random($n);
+            $this->secret = GmpUtils::gmpRandom($n);
             
             // Alice computes da * generator Qa is public, da is private
             $this->pubPoint = Point::mul($this->secret, $this->generator);
             
             return $this->pubPoint;
-        } else 
-            if (extension_loaded('bcmath') && USE_EXT == 'BCMATH') {
-                // alice selects a random number between 1 and the order of the generator point(private)
-                $n = $this->generator->getOrder();
-                
-                $this->secret = bcmath_Utils::bcrand($n);
-                
-                // Alice computes da * generator Qa is public, da is private
-                $this->pubPoint = Point::mul($this->secret, $this->generator);
-                
-                return $this->pubPoint;
-            } else {
-                throw new ErrorException("Please Install BCMATH or GMP.");
-            }
+        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
+            // alice selects a random number between 1 and the order of the generator point(private)
+            $n = $this->generator->getOrder();
+            
+            $this->secret = BcMathUtils::bcrand($n);
+            
+            // Alice computes da * generator Qa is public, da is private
+            $this->pubPoint = Point::mul($this->secret, $this->generator);
+            
+            return $this->pubPoint;
+        } else {
+            throw new \RuntimeException("Please Install BCMATH or GMP.");
+        }
     }
 
     public function setPublicPoint(Point $q)
@@ -135,5 +133,3 @@ class EcDH implements EcDHInterface
         }
     }
 }
-
-?>
