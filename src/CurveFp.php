@@ -32,45 +32,34 @@ namespace Mdanter\Ecc;
  */
 class CurveFp implements CurveFpInterface
 {
-    
+
     // Elliptic curve over the field of integers modulo a prime
     protected $a = 0;
 
     protected $b = 0;
 
     protected $prime = 0;
-    
+
+    protected $adapter = null;
+
     // constructor that sets up the instance variables
-    public function __construct($prime, $a, $b)
+    public function __construct($prime, $a, $b, MathAdapter $adapter)
     {
         $this->a = $a;
         $this->b = $b;
         $this->prime = $prime;
+        $this->adapter = $adapter;
     }
 
     public function contains($x, $y)
     {
-        $eq_zero = null;
-        
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            $eq_zero = gmp_cmp(GmpUtils::gmpMod2(gmp_sub(gmp_pow($y, 2), gmp_add(gmp_add(gmp_pow($x, 3), gmp_mul($this->a, $x)), $this->b)), $this->prime), 0);
-            
-            if ($eq_zero == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            $eq_zero = bccomp(bcmod(bcsub(bcpow($y, 2), bcadd(bcadd(bcpow($x, 3), bcmul($this->a, $x)), $this->b)), $this->prime), 0);
-            
-            if ($eq_zero == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
-        }
+        $math = $this->adapter;
+        $first = $math->mod($math->sub($math->pow($y, 2), $math->add($math->add($math->pow($x, 3), $math->mul($this->a, $x)), $this->b)), $this->prime);
+        $other = 0;
+
+        $eq_zero = $math->cmp($first, $other);
+
+        return ($eq_zero == 0);
     }
 
     public function getA()
@@ -88,24 +77,28 @@ class CurveFp implements CurveFpInterface
         return $this->prime;
     }
 
+    public function cmpWith(CurveFpInterface $other)
+    {
+        $math = $this->adapter;
+
+        $equal  = ($math->cmp($this->a, $other->getA()) == 0);
+        $equal &= ($math->cmp($this->b, $other->getB()) == 0);
+        $equal &= ($math->cmp($this->prime, $other->getPrime()) == 0);
+
+        if ($equal) {
+            return 0;
+        }
+
+        return 1;
+    }
+
+    /**
+     * @deprecated Use instance method cmpWith instead
+     * @param CurveFpInterface $cp1
+     * @param CurveFpInterface $cp2
+     */
     public static function cmp(CurveFpInterface $cp1, CurveFpInterface $cp2)
     {
-        $same = null;
-        
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            if (gmp_cmp($cp1->a, $cp2->a) == 0 && gmp_cmp($cp1->b, $cp2->b) == 0 && gmp_cmp($cp1->prime, $cp2->prime) == 0) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            if (bccomp($cp1->a, $cp2->a) == 0 && bccomp($cp1->b, $cp2->b) == 0 && bccomp($cp1->prime, $cp2->prime) == 0) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
-        }
+        return $cp1->cmpWith($cp2);
     }
 }
