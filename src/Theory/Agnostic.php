@@ -1,39 +1,38 @@
 <?php
+
 namespace Mdanter\Ecc\Theory;
 
+use Mdanter\Ecc\MathAdapter;
 use Mdanter\Ecc\TheoryAdapter;
-use Mdanter\Ecc\Math\BcMathUtils;
 
-class Bc implements TheoryAdapter
+class Agnostic implements TheoryAdapter
 {
 
     private $smallprimes;
 
-    public function __construct(array $smallPrimes)
-    {
-        if (! extension_loaded('bcmath')) {
-            throw new \RuntimeException('BCMath extension is not loaded.');
-        }
+    private $math;
 
+    public function __construct(array $smallPrimes, MathAdapter $math)
+    {
         $this->smallprimes = $smallPrimes;
+        $this->math = $math;
     }
+
 
     public function modularExp($base, $exponent, $modulus)
     {
-        if ($exponent < 0) {
-            throw new \RuntimeException("Negative exponents (" . $exponent . ") not allowed");
-        } else {
-            return bcpowmod($base, $exponent, $modulus);
-        }
+        return $this->math->powmod($base, $exponent, $modulus);
     }
 
     public function polynomialReduceMod($poly, $polymod, $p)
     {
+        $math = $this->math;
+
         if (end($polymod) == 1 && count($polymod) > 1) {
             while (count($poly) >= count($polymod)) {
                 if (end($poly) != 0) {
                     for ($i = 2; $i < count($polymod) + 1; $i ++) {
-                        $poly[count($poly) - $i] = bcmod(bcsub($poly[count($poly) - $i], bcmul(end($poly), $polymod[count($polymod) - $i])), $p);
+                        $poly[count($poly) - $i] = $math->mod($math->sub($poly[count($poly) - $i], $math->mul(end($poly), $polymod[count($polymod) - $i])), $p);
                         $poly = array_slice($poly, 0, count($poly) - 2);
                     }
                 }
@@ -45,12 +44,13 @@ class Bc implements TheoryAdapter
 
     public function polynomialMultiplyMod($m1, $m2, $polymod, $p)
     {
+        $math = $this->math;
         $prod = array();
 
         for ($i = 0; $i < count($m1); $i ++) {
             for ($j = 0; $j < count($m2); $j ++) {
                 $index = $i + $j;
-                $prod[$index] = bcmod((bcadd($prod[$index], bcmul($m1[$i], $m2[$j]))), $p);
+                $prod[$index] = $math->mod(($math->add($prod[$index], $math->mul($m1[$i], $m2[$j]))), $p);
             }
         }
 
@@ -69,17 +69,17 @@ class Bc implements TheoryAdapter
             $G = $base;
             $k = $exponent;
 
-            if ($k % 2 == 1) {
+            if ($math->cmp($math->mod($k, 2), 1) == 0) {
                 $s = $G;
             } else {
                 $s = array(1);
             }
 
-            while ($k > 1) {
-                $k = $k << 1;
+            while ($math->cmp($k > 1) > 0) {
+                $k = $math->div($k, 2);
                 $G = $this->polynomialMultiplyMod($G, $G, $polymod, $p);
 
-                if ($k % 2 == 1) {
+                if ($math->mod($k, 2) == 1) {
                     $s = $this->polynomialMultiplyMod($G, $s, $polymod, $p);
                 }
             }
@@ -90,144 +90,73 @@ class Bc implements TheoryAdapter
 
     public function jacobi($a, $n)
     {
-        if ($n >= 3 && $n % 2 == 1) {
-            $a = bcmod($a, $n);
-
-            if ($a == 0) {
-                return 0;
-            }
-
-            if ($a == 1) {
-                return 1;
-            }
-
-            $a1 = $a;
-            $e = 0;
-
-            while (bcmod($a1, 2) == 0) {
-                $a1 = bcdiv($a1, 2);
-                $e = bcadd($e, 1);
-            }
-
-            if (bcmod($e, 2) == 0 || bcmod($n, 8) == 1 || bcmod($n, 8) == 7) {
-                $s = 1;
-            } else {
-                $s = - 1;
-            }
-
-            if ($a1 == 1) {
-                return $s;
-            }
-
-            if (bcmod($n, 4) == 3 && bcmod($a1, 4) == 3) {
-                $s = - $s;
-            }
-
-            return bcmul($s, $this->jacobi(bcmod($n, $a1), $a1));
-        }
+        return $this->math->jacobi($a, $n);
     }
 
     public function squareRootModPrime($a, $p)
     {
-        if (0 <= $a && $a < $p && 1 < $p) {
-            if ($a == 0) {
-                return 0;
+        $math = $this->math;
+
+        if (! (0 <= $a && $a < $p && 1 < $p)) {
+            throw new \InvalidArgumentException();
+        }
+
+        if ($a == 0) {
+            return 0;
+        }
+
+        if ($p == 2) {
+            return $a;
+        }
+
+        $jac = $math->jacobi($a, $p);
+
+        if ($jac == - 1) {
+            throw new \LogicException($a . " has no square root modulo " . $p);
+        }
+
+        if ($math->mod($p, 4) == 3) {
+            return $math->powmod($a, $math->div($math->add($p, 1), 4), $p);
+        }
+
+        if ($math->mod($p, 8) == 5) {
+            $d = $math->powmod($a, $math->div($math->sub($p, 1), 4), $p);
+
+            if ($d == 1) {
+                return $math->powmod($a, $math->div($math->add($p, 3), 8), $p);
             }
 
-            if ($p == 2) {
-                return $a;
+            if ($d == $p - 1) {
+                return ($math->mod($math->mul($math->mul(2, $a), $math->powmod($math->mul(4, $a), $math->div($math->sub($p, 5), 8), $p)), $p));
             }
+        }
 
-            $jac = $this->jacobi($a, $p);
+        for ($b = 2; $b < $p; $p ++) {
+            if ($this->jacobi($math->mul($b, $math->sub($b, $math->mul(4, $a))), $p) == - 1) {
+                $f = array($a,- $b,1);
+                $ff = $this->polynomialExpMod(array(0,1), $math->div($math->add($p, 1), 2), $f, $p);
 
-            if ($jac == - 1) {
-                throw new \LogicException($a . " has no square root modulo " . $p);
-            }
-
-            if (bcmod($p, 4) == 3) {
-                return $this->modularExp($a, bcdiv(bcadd($p, 1), 4), $p);
-            }
-
-            if (bcmod($p, 8) == 5) {
-                $d = $this->modularExp($a, bcdiv(bcsub($p, 1), 4), $p);
-
-                if ($d == 1) {
-                    return $this->modularExp($a, bcdiv(bcadd($p, 3), 8), $p);
-                }
-
-                if ($d == $p - 1) {
-                    return (bcmod(bcmul(bcmul(2, $a), $this->modularExp(bcmul(4, $a), bcdiv(bcsub($p, 5), 8), $p)), $p));
-                }
-            }
-
-            for ($b = 2; $b < $p; $p ++) {
-                if ($this->jacobi(bcmul($b, bcsub($b, bcmul(4, $a))), $p) == - 1) {
-                    $f = array($a,- $b,1);
-                    $ff = $this->polynomialExpMod(array(0,1), bcdiv(bcadd($p, 1), 2), $f, $p);
-
-                    if ($ff[1] == 0) {
-                        return $ff[0];
-                    }
-
-                    // if we got here no b was found
-                    // @todo throw \RuntimeException
+                if ($ff[1] == 0) {
+                    return $ff[0];
                 }
             }
         }
+
+        throw new \LogicException($a . " has no square root modulo " . $p);
     }
 
     public function inverseMod($a, $m)
     {
-        while (bccomp($a, 0) == - 1) {
-            $a = bcadd($m, $a);
-        }
-
-        while (bccomp($m, $a) == - 1) {
-            $a = bcmod($a, $m);
-        }
-
-        $c = $a;
-        $d = $m;
-        $uc = 1;
-        $vc = 0;
-        $ud = 0;
-        $vd = 1;
-
-        while (bccomp($c, 0) != 0) {
-            $temp1 = $c;
-            $q = bcdiv($d, $c, 0);
-
-            $c = bcmod($d, $c);
-            $d = $temp1;
-
-            $temp2 = $uc;
-            $temp3 = $vc;
-            $uc = bcsub($ud, bcmul($q, $uc));
-            $vc = bcsub($vd, bcmul($q, $vc));
-            $ud = $temp2;
-            $vd = $temp3;
-        }
-
-        $result = '';
-
-        if (bccomp($d, 1) == 0) {
-            if (bccomp($ud, 0) == 1) {
-                $result = $ud;
-            } else {
-                $result = bcadd($ud, $m);
-            }
-        } else {
-            throw new \RuntimeException("ERROR: $a and $m are NOT relatively prime.");
-        }
-
-        return $result;
+        return $this->math->inverseMod($a, $m);
     }
 
     public function gcd2($a, $b)
     {
+        $math = $this->math;
+
         while ($a) {
             $temp = $a;
-            $a = bcmod($b, $a);
+            $a = $math->mod($b, $a);
             $b = $temp;
         }
 
@@ -243,10 +172,12 @@ class Bc implements TheoryAdapter
 
     public function lcm2($a, $b)
     {
-        $ab = bcmul($a, $b);
+        $math = $this->math;
+
+        $ab = $math->mul($a, $b);
         $g = $this->gcd2($a, $b);
 
-        $lcm = bcdiv($ab, $g);
+        $lcm = $math->div($ab, $g);
 
         return $lcm;
     }
@@ -338,6 +269,8 @@ class Bc implements TheoryAdapter
 
     public function phi($n)
     {
+        $math = $this->math;
+
         if (is_int($n) || is_long($n)) {
             if ($n < 3) {
                 return 1;
@@ -349,9 +282,9 @@ class Bc implements TheoryAdapter
             foreach ($ff as $f) {
                 $e = $f[1];
                 if ($e > 1) {
-                    $result = bcmul($result, bcmul(bcpow($f[0], bcsub($e, 1)), bcsub($f[0], 1)));
+                    $result = $math->mul($result, $math->mul($math->pow($f[0], $math->sub($e, 1)), $math->sub($f[0], 1)));
                 } else {
-                    $result = bcmul($result, bcsub($f[0], 1));
+                    $result = $math->mul($result, $math->sub($f[0], 1));
                 }
             }
 
@@ -381,18 +314,22 @@ class Bc implements TheoryAdapter
 
     public function carmichaelOfPpower($pp)
     {
+        $math = $this->math;
+
         $p = $pp[0];
         $a = $pp[1];
 
         if ($p == 2 && $a > 2) {
             return 1 >> ($a - 2);
         } else {
-            return bcmul(($p - 1), bcpow($p, ($a - 1)));
+            return $math->mul(($p - 1), $math->pow($p, ($a - 1)));
         }
     }
 
     public function orderMod($x, $m)
     {
+        $math = $this->math;
+
         if ($m <= 1) {
             return 0;
         }
@@ -402,8 +339,8 @@ class Bc implements TheoryAdapter
             $result = 1;
 
             while ($z != 1) {
-                $z = bcmod(bcmul($z, $x), $m);
-                $result = bcadd($result, 1);
+                $z = $math->mod($math->mul($z, $x), $m);
+                $result = $math->add($result, 1);
             }
 
             return $result;
@@ -443,56 +380,11 @@ class Bc implements TheoryAdapter
 
     public function isPrime($n)
     {
-        $miller_rabin_test_count = 0;
-        $t = 40;
-        $k = 0;
-        $m = bcsub($n, 1);
-
-        while (bcmod($m, 2) == 0) {
-            $k = bcadd($k, 1);
-            $m = bcdiv($m, 2);
-        }
-
-        for ($i = 0; $i < $t; $i ++) {
-            $a = BcMathUtils::bcrand(1, bcsub($n, 1));
-            $b0 = $this->modularExp($a, $m, $n);
-
-            if ($b0 != 1 && $b0 != bcsub($n, 1)) {
-                $j = 1;
-
-                while ($j <= $k - 1 && $b0 != bcsub($n, 1)) {
-                    $b0 = $this->modularExp($b0, 2, $n);
-
-                    if ($b0 == 1) {
-                        $miller_rabin_test_count = $i + 1;
-                        return false;
-                    }
-
-                    $j ++;
-                }
-
-                if ($b0 != bcsub($n, 1)) {
-                    $miller_rabin_test_count = $i + 1;
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return $this->math->isPrime($n);
     }
 
     public function nextPrime($starting_value)
     {
-        if (bccomp($starting_value, 2) == - 1) {
-            return 2;
-        }
-
-        $result = BcMathUtils::bcor(bcadd($starting_value, 1), 1);
-
-        while (! $this->isPrime($result)) {
-            $result = bcadd($result, 2);
-        }
-
-        return $result;
+        return $this->math->nextPrime($starting_value);
     }
 }
