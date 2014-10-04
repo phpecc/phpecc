@@ -27,7 +27,7 @@ namespace Mdanter\Ecc;
  */
 
 /**
- * This is a contract for the PrivaetKey portion of ECDSA.
+ * This is a contract for the PrivateKey portion of ECDSA.
  *
  * @author Matej Danter
  */

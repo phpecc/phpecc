@@ -34,6 +34,13 @@ namespace Mdanter\Ecc;
 interface CurveFpInterface
 {
 
+    /**
+     *
+     * @param string $x
+     * @param string $y
+     * @param string $order
+     * @return PointInterface
+     */
     public function getPoint($x, $y, $order = null);
 
     public function contains($x, $y);
@@ -44,7 +51,7 @@ interface CurveFpInterface
 
     public function getPrime();
 
-    public function cmpWith(CurveFpInterface $other);
+    public function cmp(CurveFpInterface $other);
 
     public function equals(CurveFpInterface $other);
 }

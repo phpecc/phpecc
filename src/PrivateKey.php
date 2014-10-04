@@ -60,76 +60,10 @@ class PrivateKey implements PrivateKeyInterface
 
         $s = $math->mod($math->mul(NumberTheory::inverseMod($k, $n), $math->mod($math->add($hash, $math->mul($this->secretMultiplier, $r)), $n)), $n);
 
-        if ($math6>cmp($s, 0) == 0) {
+        if ($math->cmp($s, 0) == 0) {
             throw new \RuntimeException("error: random number S = 0<br />");
         }
 
         return new Signature($r, $s);
-    }
-
-    public function intToString($x)
-    {
-        $math = $this->adapter;
-
-        if ($math->cmp($x, 0) == 0) {
-            return chr(0);
-        }
-
-        if ($math->cmp($x, 0) > 0) {
-            $result = "";
-
-            while ($math->cmp($x, 0) > 0) {
-                $q = $math->div($x, 256, 0);
-                $r = $math->mod($x, 256);
-                $ascii = chr($r);
-
-                $result = $ascii . $result;
-                $x = $q;
-            }
-
-            return $result;
-        }
-    }
-
-    public function stringToInt($s)
-    {
-        $math = $this->adapter;
-        $result = 0;
-
-        for ($c = 0; $c < strlen($s); $c ++) {
-            $result = $math->add($math->mul(256, $result), ord($s[$c]));
-        }
-
-        return $result;
-    }
-
-    public function digestInteger($m)
-    {
-        return $this->stringToInt(hash('sha1', $this->intToString($m), true));
-    }
-
-    public function pointIsValid(PointInterface $generator, $x, $y)
-    {
-        $math = $this->adapter;
-
-        $n = $generator->getOrder();
-        $curve = $generator->getCurve();
-
-        if ($math->cmp($x, 0) < 0 || $math->cmp($n, $x) <= 0 || $math->cmp($y, 0) < 0 || $math->cmp($n, $y) <= 0) {
-            return false;
-        }
-
-        if (! $curve->contains($x, $y)) {
-            return false;
-        }
-
-        $point = new Point($curve, $x, $y, null, $math);
-        $op = $point->mul($n);
-
-        if (! $op->equals(Points::infinity())) {
-            return false;
-        }
-
-        return true;
     }
 }
