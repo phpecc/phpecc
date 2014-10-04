@@ -20,8 +20,8 @@ if (! extension_loaded('gmp')) {
 if (! defined('USE_EXT')) {
     define('USE_EXT', 'GMP');
 }
-
 /* @codeCoverageIgnoreEnd */
+
 class NumberTheoryTest extends \PHPUnit_Framework_TestCase
 {
 

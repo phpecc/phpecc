@@ -91,7 +91,7 @@ class GeneratorPoint implements PointInterface
 
     public function getPrivateKey($x, $y, $secretMultiplier)
     {
-        return new PrivateKey($this->getPublicKey($x, $y), $secretMultiplier, $this->adapter);
+        return $this->getPublicKey($x, $y)->getPrivateKey($secretMultiplier);
     }
 
     public function __toString()

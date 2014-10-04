@@ -33,16 +33,38 @@ namespace Mdanter\Ecc;
 class CurveFp implements CurveFpInterface
 {
 
-    // Elliptic curve over the field of integers modulo a prime
+    /**
+     * Elliptic curve over the field of integers modulo a prime.
+     *
+     * @var number|string
+     */
     protected $a = 0;
 
+    /**
+     *
+     * @var number|string
+     */
     protected $b = 0;
 
+    /**
+     *
+     * @var number|string
+     */
     protected $prime = 0;
 
+    /**
+     *
+     * @var MathAdapter
+     */
     protected $adapter = null;
 
-    // constructor that sets up the instance variables
+    /**
+     * Constructor that sets up the instance variables.
+     *
+     * @param $prime number|string
+     * @param $a number|string
+     * @param $b number|string
+     */
     public function __construct($prime, $a, $b, MathAdapter $adapter)
     {
         $this->a = $a;
@@ -51,15 +73,19 @@ class CurveFp implements CurveFpInterface
         $this->adapter = $adapter;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getPoint()
+     */
     public function getPoint($x, $y, $order = null)
     {
-        if (! $this->contains($x, $y)) {
-            throw new \InvalidArgumentException('Curve does not contain point.');
-        }
-
         return new Point($this, $x, $y, $order, $this->adapter);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::contains()
+     */
     public function contains($x, $y)
     {
         $math = $this->adapter;
@@ -71,21 +97,37 @@ class CurveFp implements CurveFpInterface
         return ($eq_zero == 0);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getA()
+     */
     public function getA()
     {
         return $this->a;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getB()
+     */
     public function getB()
     {
         return $this->b;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getPrime()
+     */
     public function getPrime()
     {
         return $this->prime;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::cmp()
+     */
     public function cmp(CurveFpInterface $other)
     {
         $math = $this->adapter;
@@ -101,8 +143,17 @@ class CurveFp implements CurveFpInterface
         return 1;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::equals()
+     */
     public function equals(CurveFpInterface $other)
     {
         return $this->cmp($other) == 0;
+    }
+
+    public function __toString()
+    {
+        return 'curve(' . $this->a . ', ' . $this->b . ', ' . $this->prime . ')';
     }
 }

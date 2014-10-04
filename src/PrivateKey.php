@@ -58,7 +58,7 @@ class PrivateKey implements PrivateKeyInterface
             throw new \RuntimeException("error: random number R = 0 <br />");
         }
 
-        $s = $math->mod($math->mul(NumberTheory::inverseMod($k, $n), $math->mod($math->add($hash, $math->mul($this->secretMultiplier, $r)), $n)), $n);
+        $s = $math->mod($math->mul($math->inverseMod($k, $n), $math->mod($math->add($hash, $math->mul($this->secretMultiplier, $r)), $n)), $n);
 
         if ($math->cmp($s, 0) == 0) {
             throw new \RuntimeException("error: random number S = 0<br />");

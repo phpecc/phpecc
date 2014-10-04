@@ -51,7 +51,7 @@ class EcDH implements EcDHInterface
 
     private $adapter;
 
-    public function __construct(Point $g, MathAdapter $adapter)
+    public function __construct(PointInterface $g, MathAdapter $adapter)
     {
         $this->generator = $g;
         $this->adapter = $adapter;
@@ -59,7 +59,7 @@ class EcDH implements EcDHInterface
 
     public function calculateKey()
     {
-        return $this->agreed_key = Point::mul($this->secret, $this->receivedPubPoint)->getX();
+        return $this->agreed_key = $this->receivedPubPoint->mul($this->secret)->getX();
     }
 
     public function getPublicPoint($regenerate = false)
@@ -71,13 +71,13 @@ class EcDH implements EcDHInterface
             $this->secret = $this->adapter->rand($n);
 
             // Alice computes da * generator Qa is public, da is private
-            $this->pubPoint = Point::mul($this->secret, $this->generator);
+            $this->pubPoint = $this->generator->mul($this->secret);
         }
 
         return $this->pubPoint;
     }
 
-    public function setPublicPoint(Point $q)
+    public function setPublicPoint(PointInterface $q)
     {
         $this->receivedPubPoint = $q;
     }
@@ -96,7 +96,7 @@ class EcDH implements EcDHInterface
         $key = hash("sha256", $this->agreed_key, true);
 
         $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
-        
+
         return $clearText;
     }
 
@@ -105,7 +105,7 @@ class EcDH implements EcDHInterface
         if (file_exists($path)) {
             $string = file_get_contents($path);
             $key = hash("sha256", $this->agreed_key, true);
-            
+
             $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string), MCRYPT_MODE_CBC, $key);
 
             return $cypherText;
@@ -117,7 +117,7 @@ class EcDH implements EcDHInterface
         if (file_exists($path)) {
             $string = file_get_contents($path);
             $key = hash("sha256", $this->agreed_key, true);
-            
+
             $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
 
             return $clearText;

@@ -36,22 +36,47 @@ interface CurveFpInterface
 
     /**
      *
-     * @param string $x
-     * @param string $y
-     * @param string $order
+     * @param number|string $x
+     * @param number|string $y
+     * @param number|string $order
      * @return PointInterface
      */
     public function getPoint($x, $y, $order = null);
 
+    /**
+     *
+     * @param number|string $x
+     * @param number|string $y
+     * @return bool
+     */
     public function contains($x, $y);
 
+    /**
+     * @return number|string
+     */
     public function getA();
 
+    /**
+     * @return number|string
+     */
     public function getB();
 
+    /**
+     * @return number|string
+     */
     public function getPrime();
 
+    /**
+     *
+     * @param CurveFpInterface $other
+     * @return int < 0 if $this < $other, 0 if $other == $this, > 0 if $this > $other
+     */
     public function cmp(CurveFpInterface $other);
 
+    /**
+     *
+     * @param CurveFpInterface $other
+     * @return bool
+     */
     public function equals(CurveFpInterface $other);
 }

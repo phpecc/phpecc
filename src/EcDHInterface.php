@@ -38,7 +38,7 @@ interface EcDHInterface
 
     public function getPublicPoint();
 
-    public function setPublicPoint(Point $q);
+    public function setPublicPoint(PointInterface $q);
 
     public function encrypt($string);
 
