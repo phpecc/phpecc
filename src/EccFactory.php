@@ -23,16 +23,34 @@ class EccFactory
         throw new \RuntimeException('Please install either GMP or BCMath extensions.');
     }
 
+    /**
+     *
+     * @param MathAdapter $adapter
+     * @return \Mdanter\Ecc\Curves\NistCurve
+     */
     public static function getNistCurves(MathAdapter $adapter = null)
     {
         return new NistCurve($adapter ?: self::getAdapter());
     }
 
+    /**
+     *
+     * @param MathAdapter $adapter
+     * @return \Mdanter\Ecc\Curves\SecCurve
+     */
     public static function getSecCurves(MathAdapter $adapter = null)
     {
         return new SecCurve($adapter ?: self::getAdapter());
     }
 
+    /**
+     *
+     * @param number|string $prime
+     * @param number|string $a
+     * @param number|string $b
+     * @param number|string $adapter
+     * @return \Mdanter\Ecc\CurveFpInterface
+     */
     public static function createCurve($prime, $a, $b, MathAdapter $adapter = null)
     {
         return new CurveFp($prime, $a, $b, $adapter ?: self::getAdapter());

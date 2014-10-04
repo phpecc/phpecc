@@ -8,41 +8,16 @@ use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\MathAdapter;
 use Mdanter\Ecc\PublicKey;
 use Mdanter\Ecc\Signature;
+use Mdanter\Ecc\EcDH;
 
-class NistCurveTest extends \PHPUnit_Framework_TestCase
+class NistCurveTest extends AbstractTestCase
 {
-
-    private function _getAdapters(array $extra = null)
-    {
-        if ($extra == null) {
-            return [
-                [ new Gmp() ],
-                [ new BcMath() ]
-            ];
-        }
-
-        $adapters = $this->getAdapters(null);
-        $result = [];
-
-        foreach ($extra as $value) {
-            foreach ($adapters as $adapter) {
-                $result[] = array_merge($adapter, $value);
-            }
-        }
-
-        return $result;
-    }
-
-    public function getAdapters()
-    {
-        return $this->_getAdapters();
-    }
 
     /**
      *
      * @dataProvider getAdapters
      */
-    public function testP192CurveX962ValidityTest(MathAdapter $math)
+    public function testP192CurveAnsiX962ValidityTest(MathAdapter $math)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
 
@@ -83,7 +58,7 @@ class NistCurveTest extends \PHPUnit_Framework_TestCase
             [ '0x9d6ddbcd439baa0c6b80a654091680e462a7d1d3f1ffeb43', '0x6ad8efc4d133ccf167c44eb4691c80abffb9f82b932b8caa', false ],
             [ '0x146479d944e6bda87e5b35818aa666a4c998a71f4e95edbc', '0xa86d6fe62bc8fbd88139693f842635f687f132255858e7f6', false ],
             [ '0xe594d4a598046f3598243f50fd2c7bd7d380edb055802253', '0x509014c0c4d6b536e3ca750ec09066af39b4c8616a53a923', false ]
-            ]);
+        ]);
     }
 
     /**
@@ -119,6 +94,29 @@ class NistCurveTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('3342403536405981729393488334694600415596881826869351677613', $sig->getR());
         $this->assertEquals('5735822328888155254683894997897571951568553642892029982342', $sig->getS());
         $this->assertTrue($publicKey->verifies($e, $sig));
+        $this->assertFalse($publicKey->verifies($math->sub($e, 1), $sig));
+    }
+
+    /**
+     *
+     * @dataProvider getAdapters
+     */
+    public function testSignatureValidityWithGeneratedKeys(MathAdapter $math)
+    {
+        $generator = EccFactory::getNistCurves($math)->generator192();
+        $curve = EccFactory::getNistCurves($math)->curve192();
+        $n = $generator->getOrder();
+        $secret = $math->rand($n);
+        $secretG = $generator->mul($secret);
+        $hash = $math->rand($n);
+
+        $publicKey = $generator->getPublicKey($secretG->getX(), $secretG->getY());
+        $privateKey = $publicKey->getPrivateKey($secret);
+
+        $signature = $privateKey->sign($hash, $math->rand($n));
+
+        $this->assertTrue($publicKey->verifies($hash, $signature), 'Correctly validates valid hash.');
+        $this->assertFalse($publicKey->verifies($math->sub($hash, 1), $signature), 'Correctly rejects tampered hash.');
     }
 
     public function getB24Params()
@@ -254,6 +252,7 @@ class NistCurveTest extends \PHPUnit_Framework_TestCase
      */
     public function testP192CurveEcdsavsB24SignatureValidityTest(MathAdapter $math, $msg, $Qx, $Qy, $R, $S, $expected)
     {
+        $msg = $math->hexDec($msg);
         $Qx = $math->hexDec($Qx);
         $Qy = $math->hexDec($Qy);
         $R = $math->hexDec($R);
@@ -266,5 +265,22 @@ class NistCurveTest extends \PHPUnit_Framework_TestCase
         $actual = $publicKey->verifies($math->digestInteger($msg), new Signature($R, $S));
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     *
+     * @dataProvider getAdapters
+     */
+    public function testDiffieHellman(MathAdapter $math)
+    {
+        $generator = EccFactory::getNistCurves($math)->generator192();
+
+        $alice = new EcDH($generator, $math);
+        $bob = new EcDH($generator, $math);
+
+        $alice->setPublicPoint($bob->getPublicPoint());
+        $bob->setPublicPoint($alice->getPublicPoint());
+
+        $this->assertTrue($alice->calculateKey() == $bob->calculateKey());
     }
 }

@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\MathAdapter;
-use Mdanter\Ecc\NumberTheory;
 
 class BcMath implements MathAdapter
 {
@@ -55,7 +54,7 @@ class BcMath implements MathAdapter
 
     function toString($value)
     {
-        return (string)$value;
+        return $value;
     }
 
     public function hexDec($hex)
@@ -211,22 +210,22 @@ class BcMath implements MathAdapter
 
             return bcmul($s, $this->jacobi(bcmod($n, $a1), $a1));
         }
+
+        throw new \RuntimeException('Could not calc Jacobi');
     }
 
     public function intToString($x)
     {
-        $math = $this;
+        if (bccomp($x, 0) != - 1) {
+            if (bccomp($x, 0) == 0) {
+                return chr(0);
+            }
 
-        if ($math->cmp($x, 0) == 0) {
-            return chr(0);
-        }
-
-        if ($math->cmp($x, 0) > 0) {
             $result = "";
 
-            while ($math->cmp($x, 0) > 0) {
-                $q = $math->div($x, 256, 0);
-                $r = $math->mod($x, 256);
+            while (bccomp($x, 0) == 1) {
+                $q = bcdiv($x, 256, 0);
+                $r = bcmod($x, 256);
                 $ascii = chr($r);
 
                 $result = $ascii . $result;
@@ -235,15 +234,16 @@ class BcMath implements MathAdapter
 
             return $result;
         }
+
+        throw new \RuntimeException();
     }
 
     public function stringToInt($s)
     {
-        $math = $this;
-        $result = 0;
+         $result = 0;
 
         for ($c = 0; $c < strlen($s); $c ++) {
-            $result = $math->add($math->mul(256, $result), ord($s[$c]));
+            $result = bcadd(bcmul(256, $result), ord($s[$c]));
         }
 
         return $result;

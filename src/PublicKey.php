@@ -58,7 +58,7 @@ class PublicKey implements PublicKeyInterface
 
         if ($adapter->cmp($point->getX(), 0) < 0 || $adapter->cmp($n, $point->getX()) <= 0 ||
             $adapter->cmp($point->getY(), 0) < 0 || $adapter->cmp($n, $point->getY()) <= 0) {
-            throw new \RuntimeException("Generator Point has x and y out of range.");
+            throw new \RuntimeException("Generator point has x and y out of range.");
         }
     }
 
@@ -81,7 +81,7 @@ class PublicKey implements PublicKeyInterface
             return false;
         }
 
-        $c = NumberTheory::inverseMod($s, $n);
+        $c = $math->inverseMod($s, $n);
         $u1 = $math->mod($math->mul($hash, $c), $n);
         $u2 = $math->mod($math->mul($r, $c), $n);
         $xy = $G->mul($u1)->add($point->mul($u2));
