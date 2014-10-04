@@ -11,7 +11,7 @@ use Mdanter\Ecc\PrivateKey;
 use Mdanter\Ecc\PublicKey;
 use Mdanter\Ecc\Signature;
 use Mdanter\Ecc\Curves\NistCurve;
-use Mdanter\Ecc\Curves\SecCurve;
+use Mdanter\Ecc\Curves\SecgCurve;
 use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Math\BcMathUtils;
 use Mdanter\Ecc\Math\Gmp;
@@ -101,23 +101,23 @@ class TestSuite
 
             if (!$obj || !($obj instanceof CurveFp)) {
                 self::$errors++;
-                print "*** SecCurve::{$fn} test failed: got object " . (!$obj ? null : get_class($obj)) . ", expected instance of CurveFp.<br />";
+                print "*** SecgCurve::{$fn} test failed: got object " . (!$obj ? null : get_class($obj)) . ", expected instance of CurveFp.<br />";
                 continue;
             }
 
             if ($obj->getA() != $result[0]) {
                 self::$errors++;
-                print "*** SecCurve::{$fn}->getA() test failed: got " . $obj->getA() . ", expected " . $result[0] . ".<br />";
+                print "*** SecgCurve::{$fn}->getA() test failed: got " . $obj->getA() . ", expected " . $result[0] . ".<br />";
             }
 
             if ($obj->getB() != $result[1]) {
                 self::$errors++;
-                print "*** SecCurve::{$fn}->getB() test failed: got " . $obj->getB() . ", expected " . $result[1] . ".<br />";
+                print "*** SecgCurve::{$fn}->getB() test failed: got " . $obj->getB() . ", expected " . $result[1] . ".<br />";
             }
 
             if ($obj->getPrime() != $result[2]) {
                 self::$errors++;
-                print "*** SecCurve::{$fn}->getPrime() test failed: got " . $obj->getPrime() . ", expected " . $result[2] . ".<br />";
+                print "*** SecgCurve::{$fn}->getPrime() test failed: got " . $obj->getPrime() . ", expected " . $result[2] . ".<br />";
             }
         }
 
@@ -132,18 +132,18 @@ class TestSuite
 
             if (!$obj || !($obj instanceof Point)) {
                 self::$errors++;
-                print "*** SecCurve::{$fn} test failed: got object " . (!$obj ? null : get_class($obj)) . ", expected instance of Point.<br />";
+                print "*** SecgCurve::{$fn} test failed: got object " . (!$obj ? null : get_class($obj)) . ", expected instance of Point.<br />";
                 continue;
             }
 
             if ($obj->getOrder() != $result[0]) {
                 self::$errors++;
-                print "*** SecCurve::{$fn}->getOrder() test failed: got " . $obj->getOrder() . ", expected " . $result[0] . ".<br />";
+                print "*** SecgCurve::{$fn}->getOrder() test failed: got " . $obj->getOrder() . ", expected " . $result[0] . ".<br />";
             }
 
             if ($obj->getCurve()->getPrime() != $result[1]) {
                 self::$errors++;
-                print "*** SecCurve::{$fn}->getCurve()->getPrime() test failed: got " . $obj->getCurve()->getPrime() . ", expected " . $result[1] . ".<br />";
+                print "*** SecgCurve::{$fn}->getCurve()->getPrime() test failed: got " . $obj->getCurve()->getPrime() . ", expected " . $result[1] . ".<br />";
             }
         }
     }
