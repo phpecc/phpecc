@@ -32,80 +32,126 @@ namespace Mdanter\Ecc;
  */
 class CurveFp implements CurveFpInterface
 {
-    
-    // Elliptic curve over the field of integers modulo a prime
+
+    /**
+     * Elliptic curve over the field of integers modulo a prime.
+     *
+     * @var number|string
+     */
     protected $a = 0;
 
+    /**
+     *
+     * @var number|string
+     */
     protected $b = 0;
 
+    /**
+     *
+     * @var number|string
+     */
     protected $prime = 0;
-    
-    // constructor that sets up the instance variables
-    public function __construct($prime, $a, $b)
+
+    /**
+     *
+     * @var MathAdapter
+     */
+    protected $adapter = null;
+
+    /**
+     * Constructor that sets up the instance variables.
+     *
+     * @param $prime number|string
+     * @param $a number|string
+     * @param $b number|string
+     */
+    public function __construct($prime, $a, $b, MathAdapter $adapter)
     {
         $this->a = $a;
         $this->b = $b;
         $this->prime = $prime;
+        $this->adapter = $adapter;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getPoint()
+     */
+    public function getPoint($x, $y, $order = null)
+    {
+        return new Point($this, $x, $y, $order, $this->adapter);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::contains()
+     */
     public function contains($x, $y)
     {
-        $eq_zero = null;
-        
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            $eq_zero = gmp_cmp(GmpUtils::gmpMod2(gmp_sub(gmp_pow($y, 2), gmp_add(gmp_add(gmp_pow($x, 3), gmp_mul($this->a, $x)), $this->b)), $this->prime), 0);
-            
-            if ($eq_zero == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            $eq_zero = bccomp(bcmod(bcsub(bcpow($y, 2), bcadd(bcadd(bcpow($x, 3), bcmul($this->a, $x)), $this->b)), $this->prime), 0);
-            
-            if ($eq_zero == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
-        }
+        $math = $this->adapter;
+
+        $eq_zero = $math->cmp($math->mod($math->sub($math->pow($y, 2), $math->add($math->add($math->pow($x, 3), $math->mul($this->a, $x)), $this->b)), $this->prime), 0);
+
+        return ($eq_zero == 0);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getA()
+     */
     public function getA()
     {
         return $this->a;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getB()
+     */
     public function getB()
     {
         return $this->b;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getPrime()
+     */
     public function getPrime()
     {
         return $this->prime;
     }
 
-    public static function cmp(CurveFpInterface $cp1, CurveFpInterface $cp2)
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::cmp()
+     */
+    public function cmp(CurveFpInterface $other)
     {
-        $same = null;
-        
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            if (gmp_cmp($cp1->a, $cp2->a) == 0 && gmp_cmp($cp1->b, $cp2->b) == 0 && gmp_cmp($cp1->prime, $cp2->prime) == 0) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            if (bccomp($cp1->a, $cp2->a) == 0 && bccomp($cp1->b, $cp2->b) == 0 && bccomp($cp1->prime, $cp2->prime) == 0) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
+        $math = $this->adapter;
+
+        $equal  = ($math->cmp($this->a, $other->getA()) == 0);
+        $equal &= ($math->cmp($this->b, $other->getB()) == 0);
+        $equal &= ($math->cmp($this->prime, $other->getPrime()) == 0);
+
+        if ($equal) {
+            return 0;
         }
+
+        return 1;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::equals()
+     */
+    public function equals(CurveFpInterface $other)
+    {
+        return $this->cmp($other) == 0;
+    }
+
+    public function __toString()
+    {
+        return 'curve(' . $this->a . ', ' . $this->b . ', ' . $this->prime . ')';
     }
 }

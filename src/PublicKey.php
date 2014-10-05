@@ -37,92 +37,57 @@ class PublicKey implements PublicKeyInterface
 
     protected $point;
 
-    public function __construct(Point $generator, Point $point)
+    protected $adapter;
+
+    public function __construct(Point $generator, Point $point, MathAdapter $adapter)
     {
         $this->curve = $generator->getCurve();
         $this->generator = $generator;
         $this->point = $point;
-        
+        $this->adapter = $adapter;
+
         $n = $generator->getOrder();
-        
+
         if ($n == null) {
-            throw new \LogicException("Generator Must have order.");
+            throw new \LogicException("Generator must have order.");
         }
-        
-        if (Point::cmp(Point::mul($n, $point), Point::$infinity) != 0) {
-            throw new \RuntimeException("Generator Point order is bad.");
+
+        if (! $point->mul($n)->equals(Points::infinity())) {
+            throw new \RuntimeException("Generator point order is bad.");
         }
-        
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            if (gmp_cmp($point->getX(), 0) < 0 || gmp_cmp($n, $point->getX()) <= 0 || gmp_cmp($point->getY(), 0) < 0 || gmp_cmp($n, $point->getY()) <= 0) {
-                throw new \RuntimeException("Generator Point has x and y out of range.");
-            }
-        } else {
-            if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-                if (bccomp($point->getX(), 0) == - 1 || bccomp($n, $point->getX()) != 1 || bccomp($point->getY(), 0) == - 1 || bccomp($n, $point->getY()) != 1) {
-                    throw new \RuntimeException("Generator Point has x and y out of range.");
-                }
-            } else {
-                throw new \RuntimeException("Please install BCMATH or GMP");
-            }
+
+        if ($adapter->cmp($point->getX(), 0) < 0 || $adapter->cmp($n, $point->getX()) <= 0 ||
+            $adapter->cmp($point->getY(), 0) < 0 || $adapter->cmp($n, $point->getY()) <= 0) {
+            throw new \RuntimeException("Generator point has x and y out of range.");
         }
     }
 
-    public function verifies($hash, Signature $signature)
+    public function verifies($hash, SignatureInterface $signature)
     {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            $G = $this->generator;
-            $n = $this->generator->getOrder();
-            $point = $this->point;
-            $r = $signature->getR();
-            $s = $signature->getS();
-            
-            if (gmp_cmp($r, 1) < 0 || gmp_cmp($r, gmp_sub($n, 1)) > 0) {
-                return false;
-            }
-            if (gmp_cmp($s, 1) < 0 || gmp_cmp($s, gmp_sub($n, 1)) > 0) {
-                return false;
-            }
-            $c = NumberTheory::inverseMod($s, $n);
-            $u1 = GmpUtils::gmpMod2(gmp_mul($hash, $c), $n);
-            $u2 = GmpUtils::gmpMod2(gmp_mul($r, $c), $n);
-            $xy = Point::add(Point::mul($u1, $G), Point::mul($u2, $point));
-            $v = GmpUtils::gmpMod2($xy->getX(), $n);
-            
-            if (gmp_cmp($v, $r) == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            $G = $this->generator;
-            $n = $this->generator->getOrder();
-            $point = $this->point;
-            $r = $signature->getR();
-            $s = $signature->getS();
-            
-            if (bccomp($r, 1) == - 1 || bccomp($r, bcsub($n, 1)) == 1) {
-                return false;
-            }
-            
-            if (bccomp($s, 1) == - 1 || bccomp($s, bcsub($n, 1)) == 1) {
-                return false;
-            }
-            
-            $c = NumberTheory::inverseMod($s, $n);
-            $u1 = bcmod(bcmul($hash, $c), $n);
-            $u2 = bcmod(bcmul($r, $c), $n);
-            $xy = Point::add(Point::mul($u1, $G), Point::mul($u2, $point));
-            $v = bcmod($xy->getX(), $n);
-            
-            if (bccomp($v, $r) == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
+        $math = $this->adapter;
+
+        $G = $this->generator;
+        $n = $this->generator->getOrder();
+        $point = $this->point;
+
+        $r = $signature->getR();
+        $s = $signature->getS();
+
+        if ($math->cmp($r, 1) < 1 || $math->cmp($r, $math->sub($n, 1)) > 0) {
+            return false;
         }
+
+        if ($math->cmp($s, 1) < 1 || $math->cmp($s, $math->sub($n, 1)) > 0) {
+            return false;
+        }
+
+        $c = $math->inverseMod($s, $n);
+        $u1 = $math->mod($math->mul($hash, $c), $n);
+        $u2 = $math->mod($math->mul($r, $c), $n);
+        $xy = $G->mul($u1)->add($point->mul($u2));
+        $v = $math->mod($xy->getX(), $n);
+
+        return $math->cmp($v, $r) == 0;
     }
 
     public function getCurve()
@@ -142,7 +107,11 @@ class PublicKey implements PublicKeyInterface
 
     public function getPublicKey()
     {
-        print_r($this);
         return $this;
+    }
+
+    public function getPrivateKey($secretMultiplier)
+    {
+        return new PrivateKey($this, $secretMultiplier, $this->adapter);
     }
 }

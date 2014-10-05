@@ -34,19 +34,43 @@ namespace Mdanter\Ecc;
 interface EcDHInterface
 {
 
-    public function __construct(Point $g);
-
+    /**
+     * @return void
+     */
     public function calculateKey();
 
+    /**
+     * @return string
+     */
+    public function getSharedKey();
+
+    /**
+     * @return PointInterface
+     */
     public function getPublicPoint();
 
-    public function setPublicPoint(Point $q);
+    /**
+     * @return void
+     */
+    public function setPublicPoint(PointInterface $q);
 
+    /**
+     * @return string
+     */
     public function encrypt($string);
 
+    /**
+     * @return string
+     */
     public function decrypt($string);
 
+    /**
+     * @return string|null
+     */
     public function encryptFile($path);
 
+    /**
+     * @return string|null
+     */
     public function decryptFile($path);
 }

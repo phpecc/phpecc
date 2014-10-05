@@ -34,28 +34,60 @@ namespace Mdanter\Ecc;
  */
 interface PointInterface
 {
+    /**
+     *
+     * @param PointInterface $addend
+     * @return PointInterface
+     */
+    public function add(PointInterface $addend);
 
-    public function __construct(CurveFpInterface $curve, $x, $y, $order = null);
+    /**
+     * @param PointInterface $other
+     * @return int
+     */
+    public function cmp(PointInterface $other);
 
-    public static function cmp($p1, $p2);
+    /**
+     *
+     * @param PointInterface $other
+     * @return bool
+     */
+    public function equals(PointInterface $other);
 
-    public static function add($p1, $p2);
+    /**
+     *
+     * @param mixed $multiplier
+     * @return PointInterface
+     */
+    public function mul($multiplier);
 
-    public static function mul($x2, PointInterface $p1);
-
-    public static function lefmostBit($x);
-
-    public static function rmul(PointInterface $p1, $m);
-
-    public function __toString();
-
-    public static function double(PointInterface $p1);
-
-    public function getX();
-
-    public function getY();
-
+    /**
+     * @return CurveFpInterface
+     */
     public function getCurve();
 
+    /**
+     * @return PointInterface
+     */
+    public function getDouble();
+
+    /**
+     * @return number
+     */
     public function getOrder();
+
+    /**
+     * @return number
+     */
+    public function getX();
+
+    /**
+     * @return number
+     */
+    public function getY();
+
+    /**
+     * @return string
+     */
+    public function __toString();
 }
