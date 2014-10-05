@@ -118,15 +118,15 @@ class Gmp implements MathAdapter
     {
         $math = $this;
 
-        if ($math->cmp($x, 0) == 0) {
+        if (gmp_cmp($x, 0) == 0) {
             return chr(0);
         }
 
         if ($math->cmp($x, 0) > 0) {
             $result = "";
 
-            while ($math->cmp($x, 0) > 0) {
-                $q = $math->div($x, 256, 0);
+            while (gmp_cmp($x, 0) > 0) {
+                $q = gmp_div($x, 256, 0);
                 $r = $math->mod($x, 256);
                 $ascii = chr($r);
 

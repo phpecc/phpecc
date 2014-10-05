@@ -34,7 +34,7 @@ class Point implements PointInterface
 
         if (! $this->curve->contains($this->x, $this->y)) {
             throw new \RuntimeException(
-                "Curve" . print_r($this->curve, true) . " does not contain point ( " . $x . " , " . $y . " )");
+                "Curve " . $this->curve . " does not contain point (" . $x . ", " . $y . ")");
         }
 
         if ($this->order != null && ! $this->mul($order)->equals(Points::infinity())) {
