@@ -44,6 +44,11 @@ class PrivateKey implements PrivateKeyInterface
         $this->adapter = $adapter;
     }
 
+    public function getPublicKey()
+    {
+        return $this->publicKey;
+    }
+
     public function sign($hash, $random_k)
     {
         $math = $this->adapter;
