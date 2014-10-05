@@ -2,13 +2,9 @@
 
 namespace Mdanter\Ecc\Curves;
 
-use Mdanter\Ecc\Math\BcMath;
-use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\CurveFp;
-use Mdanter\Ecc\Point;
 use Mdanter\Ecc\GeneratorPoint;
 use Mdanter\Ecc\MathAdapter;
-use Mdanter\Ecc\Math\BcMathUtils;
 
 /**
  * *********************************************************************

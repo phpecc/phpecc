@@ -48,7 +48,7 @@ class EccFactory
      * @param number|string $prime
      * @param number|string $a
      * @param number|string $b
-     * @param number|string $adapter
+     * @param MathAdapter $adapter
      * @return \Mdanter\Ecc\CurveFpInterface
      */
     public static function createCurve($prime, $a, $b, MathAdapter $adapter = null)
