@@ -35,5 +35,4 @@ interface PrivateKeyInterface
 {
 
     public function sign($hash, $random_k);
-
 }

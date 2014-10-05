@@ -65,7 +65,7 @@ class EcDH implements EcDHInterface
     public function getPublicPoint($regenerate = false)
     {
         if ($this->pubPoint == null || $regenerate) {
-            // alice selects a random number between 1 and the order of the generator point(private)
+            // Alice selects a random number between 1 and the order of the generator point(private)
             $n = $this->generator->getOrder();
 
             $this->secret = $this->adapter->rand($n);

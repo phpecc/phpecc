@@ -88,25 +88,6 @@ class CurveFp implements CurveFpInterface
      */
     public function contains($x, $y)
     {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            $eq_zero = gmp_cmp(GmpUtils::gmpMod2(gmp_sub(gmp_pow($y, 2), gmp_add(gmp_add(gmp_pow($x, 3), gmp_mul($this->a, $x)), $this->b)), $this->prime), 0);
-
-            if ($eq_zero == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            $eq_zero = bccomp(bcmod(bcsub(bcpow($y, 2), bcadd(bcadd(bcpow($x, 3), bcmul($this->a, $x)), $this->b)), $this->prime), 0);
-
-            if ($eq_zero == 0) {
-                return true;
-            } else {
-                return false;
-            }
-
-        }
-
         $math = $this->adapter;
 
         $eq_zero = $math->cmp($math->mod($math->sub($math->pow($y, 2), $math->add($math->add($math->pow($x, 3), $math->mul($this->a, $x)), $this->b)), $this->prime), 0);
