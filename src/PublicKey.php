@@ -62,7 +62,7 @@ class PublicKey implements PublicKeyInterface
         }
     }
 
-    public function verifies($hash, Signature $signature)
+    public function verifies($hash, SignatureInterface $signature)
     {
         $math = $this->adapter;
 
@@ -108,5 +108,10 @@ class PublicKey implements PublicKeyInterface
     public function getPublicKey()
     {
         return $this;
+    }
+
+    public function getPrivateKey($secretMultiplier)
+    {
+        return new PrivateKey($this, $secretMultiplier, $this->adapter);
     }
 }

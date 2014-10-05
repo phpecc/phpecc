@@ -1,8 +1,9 @@
 <?php
 namespace Mdanter\Ecc;
 
-use Mdanter\Ecc\Theory\Bc;
-use Mdanter\Ecc\Theory\Gmp;
+use Mdanter\Ecc\Theory\Agnostic;
+use Mdanter\Ecc\Math\Gmp;
+use Mdanter\Ecc\Math\BcMath;
 
 /**
  * Temporary class to handle GMP/BCMath loading while reefactorisation is under way.
@@ -23,26 +24,26 @@ final class ModuleConfig
 
     public static function useGmp()
     {
-        if (!self::hasGmpExt()) {
+        if (! self::hasGmpExt()) {
             throw new \Exception("the GMP php extension is required.");
         }
 
         self::$useGmp = true;
         self::$useBcMath = false;
 
-        NumberTheory::setTheoryAdapter(new Gmp(NumberTheory::$smallprimes));
+        NumberTheory::setTheoryAdapter(new Agnostic(NumberTheory::$smallprimes, new Gmp()));
     }
 
     public static function useBcMath()
     {
-        if (!self::hasBcMathExt()) {
+        if (! self::hasBcMathExt()) {
             throw new \Exception("the BcMath php extension is required.");
         }
 
         self::$useGmp = false;
         self::$useBcMath = true;
 
-        NumberTheory::setTheoryAdapter(new Bc(NumberTheory::$smallprimes));
+        NumberTheory::setTheoryAdapter(new Agnostic(NumberTheory::$smallprimes, new BcMath()));
     }
 
     public static function hasGmp()

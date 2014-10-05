@@ -7,6 +7,10 @@ final class Infinity implements PointInterface
 
     private static $instance = null;
 
+    /**
+     *
+     * @return PointInterface
+     */
     public static function getInstance()
     {
         if (self::$instance === null) {
@@ -48,16 +52,12 @@ final class Infinity implements PointInterface
 
     public function add(PointInterface $addend)
     {
-        if ($addend->equals($this)) {
-            return $this;
-        }
-
         return $addend;
     }
 
     public function cmp(PointInterface $other)
     {
-        if ($other == self::$instance) {
+        if ($other == self::$instance || $other instanceof Infinity) {
             return 0;
         }
 

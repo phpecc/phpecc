@@ -53,6 +53,10 @@ class CurveFp implements CurveFpInterface
 
     public function getPoint($x, $y, $order = null)
     {
+        if (! $this->contains($x, $y)) {
+            throw new \InvalidArgumentException('Curve does not contain point.');
+        }
+
         return new Point($this, $x, $y, $order, $this->adapter);
     }
 
@@ -82,7 +86,7 @@ class CurveFp implements CurveFpInterface
         return $this->prime;
     }
 
-    public function cmpWith(CurveFpInterface $other)
+    public function cmp(CurveFpInterface $other)
     {
         $math = $this->adapter;
 
@@ -99,16 +103,6 @@ class CurveFp implements CurveFpInterface
 
     public function equals(CurveFpInterface $other)
     {
-        return $this->cmpWith($other) == 0;
-    }
-
-    /**
-     * @deprecated Use instance method cmpWith instead
-     * @param CurveFpInterface $cp1
-     * @param CurveFpInterface $cp2
-     */
-    public static function cmp(CurveFpInterface $cp1, CurveFpInterface $cp2)
-    {
-        return $cp1->cmpWith($cp2);
+        return $this->cmp($other) == 0;
     }
 }
