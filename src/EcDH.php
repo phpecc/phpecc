@@ -40,7 +40,7 @@ class EcDH implements EcDHInterface
 
     private $generator;
 
-    private $pubPoint;
+    private $pubPoint = null;
 
     private $receivedPubPoint;
 
@@ -48,9 +48,12 @@ class EcDH implements EcDHInterface
 
     private $agreed_key;
 
-    public function __construct(Point $g)
+    private $adapter;
+
+    public function __construct(Point $g, MathAdapter $adapter)
     {
         $this->generator = $g;
+        $this->adapter = $adapter;
     }
 
     public function calculateKey()
@@ -58,31 +61,19 @@ class EcDH implements EcDHInterface
         return $this->agreed_key = Point::mul($this->secret, $this->receivedPubPoint)->getX();
     }
 
-    public function getPublicPoint()
+    public function getPublicPoint($regenerate = false)
     {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
+        if ($this->pubPoint == null || $regenerate) {
             // alice selects a random number between 1 and the order of the generator point(private)
             $n = $this->generator->getOrder();
-            
-            $this->secret = GmpUtils::gmpRandom($n);
-            
+
+            $this->secret = $this->adapter->rand($n);
+
             // Alice computes da * generator Qa is public, da is private
             $this->pubPoint = Point::mul($this->secret, $this->generator);
-            
-            return $this->pubPoint;
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            // alice selects a random number between 1 and the order of the generator point(private)
-            $n = $this->generator->getOrder();
-            
-            $this->secret = BcMathUtils::bcrand($n);
-            
-            // Alice computes da * generator Qa is public, da is private
-            $this->pubPoint = Point::mul($this->secret, $this->generator);
-            
-            return $this->pubPoint;
-        } else {
-            throw new \RuntimeException("Please Install BCMATH or GMP.");
         }
+
+        return $this->pubPoint;
     }
 
     public function setPublicPoint(Point $q)
@@ -93,16 +84,16 @@ class EcDH implements EcDHInterface
     public function encrypt($string)
     {
         $key = hash("sha256", $this->agreed_key, true);
-        
+
         $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string), MCRYPT_MODE_CBC, $key);
-        
+
         return $cypherText;
     }
 
     public function decrypt($string)
     {
         $key = hash("sha256", $this->agreed_key, true);
-        
+
         $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
         return $clearText;
     }
@@ -111,11 +102,11 @@ class EcDH implements EcDHInterface
     {
         if (file_exists($path)) {
             $string = file_get_contents($path);
-            
+
             $key = hash("sha256", $this->agreed_key, true);
-            
+
             $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string), MCRYPT_MODE_CBC, $key);
-            
+
             return $cypherText;
         }
     }
@@ -124,11 +115,11 @@ class EcDH implements EcDHInterface
     {
         if (file_exists($path)) {
             $string = file_get_contents($path);
-            
+
             $key = hash("sha256", $this->agreed_key, true);
-            
+
             $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
-            
+
             return $clearText;
         }
     }

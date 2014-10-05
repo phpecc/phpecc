@@ -13,6 +13,8 @@ use Mdanter\Ecc\SECcurve;
 use Mdanter\Ecc\Signature;
 use Mdanter\Ecc\EcDH;
 use Mdanter\Ecc\BcMathUtils;
+use Mdanter\Ecc\Math\Gmp;
+use Mdanter\Ecc\Math\BcMath;
 
 /**
  * *********************************************************************
@@ -51,24 +53,24 @@ class TestSuite
     private $START_PRIME = 31;
 
     private $NUM_PRIMES = 10;
-    
+
     private static $useGmp = false;
-    
+
     private static $errors = 0;
-    
+
     private $verbose = false;
-    
+
     public function __construct($verbose = false)
     {
         $this->verbose = $verbose;
     }
-    
+
     public function run($useGmp) {
         self::$useGmp = $useGmp;
         self::$errors = 0;
-        
+
         $verbose = $this->verbose;
-        
+
         if (self::$useGmp && extension_loaded('gmp')) {
             $start_time = microtime(true);
             echo "GMP PHP extension was found and is preferred for performance reasons.<br /><b>Initiating tests.</b><br />\n";
@@ -77,7 +79,7 @@ class TestSuite
             } else {
                 echo "You selected VERBOSE mode. <br /><b>ALL OUTCOMES are REPORTED.</b><br />\n";
             }
-        
+
             echo "<br /><br />--------- START NEXT PRIME TEST ---------<br /><br />\n";
             echo "Test ported to unit tests<br />\n";
             echo "<br /><br />--------- END NEXT PRIME TEST ---------<br /><br />\n";
@@ -88,11 +90,11 @@ class TestSuite
             echo "Test ported to unit tests<br />\n";
             echo "<br /><br />--------- END MULTIPLICATIVE INVERSE TEST ---------<br /><br />\n";
             echo "--------- START ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
-        
+
             self::gmp_EcArithmetic($verbose);
             echo "<br /><br />--------- END ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
             echo "--------- START NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
-        
+
             self::gmp_NISTCurveTest($verbose);
             echo "<br /><br />--------- END NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
             echo "--------- START POINT VALIDITY TEST ---------<br /><br />\n";
@@ -107,9 +109,9 @@ class TestSuite
             self::test_SECGcurve();
             echo "<br /><br />--------- END SECCURVE TEST ---------<br /><br />\n";
             $end_time = microtime(true);
-        
+
             $time_res = $end_time - $start_time;
-        
+
             echo "<br /><h3>TEST SUITE TOTAL TIME : " . $time_res . " seconds. </h3><br />";
         } else
         if (extension_loaded('bcmath')) {
@@ -121,23 +123,23 @@ class TestSuite
                 echo "You selected VERBOSE mode. <br /><b>ALL OUTCOMES are REPORTED.</b><br />\n";
             }
             echo "<br /><br />--------- START NEXT PRIME TEST ---------<br /><br />\n";
-        
+
             self::bcmath_NextPrime($this->START_PRIME, $this->NUM_PRIMES, $verbose);
             echo "<br /><br />--------- END NEXT PRIME TEST ---------<br /><br />\n";
             echo "--------- START SQUARE ROOT MOD P TEST ---------<br /><br />\n";
-        
+
             self::bcmath_squareRootModP($this->START_PRIME, $verbose);
             echo "<br /><br />--------- END SQUARE ROOT MOD P TEST ---------<br /><br />\n";
             echo "--------- START MULTIPLICATIVE INVERSE MOD P TEST ---------<br /><br />\n";
-        
+
             self::bcmath_multInverseModP($verbose);
             echo "<br /><br />--------- END MULTIPLICATIVE INVERSE TEST ---------<br /><br />\n";
             echo "--------- START ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
-        
+
             self::bcmath_EcArithmetic($verbose);
             echo "<br /><br />--------- END ELLIPTIC CURVE ARITHMETIC TEST ---------<br /><br />\n";
             echo "--------- START NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
-        
+
             self::bcmath_NISTCurveTest($verbose);
             echo "<br /><br />--------- END NIST PUBLISHED CURVES TEST ---------<br /><br />\n";
             echo "--------- START POINT VALIDITY TEST ---------<br /><br />\n";
@@ -152,15 +154,15 @@ class TestSuite
             self::test_SECGcurve();
             echo "<br /><br />--------- END SECCURVE TEST ---------<br /><br />\n";
             $end_time = microtime(true);
-        
+
             $time_res = $end_time - $start_time;
-        
+
             echo "<br /><h3>TEST SUITE TOTAL TIME : " . $time_res . " seconds. </h3><br />";
         } else {
             echo "Please install GMP or BCMATH. For higher performance GMP is preferred.";
             self::$errors++;
         }
-        
+
         return self::$errors;
     }
 
@@ -169,7 +171,7 @@ class TestSuite
     public static function gmp_EcArithmetic($verbose = false)
     {
         $start_time = microtime(true);
-        $c = new CurveFp(23, 1, 1);
+        $c = new CurveFp(23, 1, 1, new Gmp());
         if ($verbose)
             echo ">>>>>>>>>>>>>>>>TESTING EC ADD<<<<<<<<<<<<<<<<<<<<<<br />\n";
         self::test_add($c, 3, 10, 9, 7, 17, 20, $verbose);
@@ -502,9 +504,9 @@ class TestSuite
     {
         $start_time = microtime(true);
         $g = NISTcurve::generator192();
-        $alice = new EcDH($g);
+        $alice = new EcDH($g, new Gmp());
 
-        $bob = new EcDH($g);
+        $bob = new EcDH($g, new Gmp());
 
         $pubPointA = $alice->getPublicPoint();
         $pubPointB = $bob->getPublicPoint();
@@ -636,7 +638,7 @@ class TestSuite
     public static function bcmath_EcArithmetic($verbose = false)
     {
         $start_time = microtime(true);
-        $c = new CurveFp(23, 1, 1);
+        $c = new CurveFp(23, 1, 1, new BcMath());
         if ($verbose)
             echo ">>>>>>>>>>>>>>>>TESTING EC ADD<<<<<<<<<<<<<<<<<<<<<<br />\n";
         flush();
@@ -993,9 +995,9 @@ class TestSuite
     {
         $start_time = microtime(true);
         $g = NISTcurve::generator192();
-        $alice = new EcDH($g);
+        $alice = new EcDH($g, new BcMath());
 
-        $bob = new EcDH($g);
+        $bob = new EcDH($g, new BcMath());
 
         $pubPointA = $alice->getPublicPoint();
         $pubPointB = $bob->getPublicPoint();

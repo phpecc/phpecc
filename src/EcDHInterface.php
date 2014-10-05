@@ -34,8 +34,6 @@ namespace Mdanter\Ecc;
 interface EcDHInterface
 {
 
-    public function __construct(Point $g);
-
     public function calculateKey();
 
     public function getPublicPoint();

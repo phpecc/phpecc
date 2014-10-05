@@ -44,7 +44,7 @@ class BcMathUtils
                 $max = $min;
                 $min = 0;
             }
-            
+
             return bcadd(bcmul(bcdiv(mt_rand(0, mt_getrandmax()), mt_getrandmax(), strlen($max)), bcsub(bcadd($max, 1), $min)), $min);
         } else {
             throw new \RuntimeException("Please install BCMATH");
@@ -59,7 +59,7 @@ class BcMathUtils
             for ($i = 1; $i <= $len; $i ++) {
                 $dec = bcadd($dec, bcmul(strval(hexdec($hex[$i - 1])), bcpow('16', strval($len - $i))));
             }
-            
+
             return $dec;
         } else {
             throw new \RuntimeException("Please install BCMATH");
@@ -71,28 +71,28 @@ class BcMathUtils
         if (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
             $hex = '';
             $positive = $dec < 0 ? false : true;
-            
+
             while ($dec) {
                 $hex .= dechex(abs(bcmod($dec, '16')));
                 $dec = bcdiv($dec, '16', 0);
             }
-            
+
             if ($positive) {
                 return strrev($hex);
             }
-            
+
             for ($i = 0; isset($hex[$i]); $i ++) {
                 $hex[$i] = dechex(15 - hexdec($hex[$i]));
             }
-            
+
             for ($i = 0; isset($hex[$i]) && $hex[$i] == 'f'; $i ++) {
                 $hex[$i] = '0';
             }
-            
+
             if (isset($hex[$i])) {
                 $hex[$i] = dechex(hexdec($hex[$i]) + 1);
             }
-            
+
             return strrev($hex);
         } else {
             throw new \RuntimeException("Please install BCMATH");
@@ -107,7 +107,7 @@ class BcMathUtils
             throw new \RuntimeException("Please install BCMATH");
         }
     }
-    
+
     // Bitwise OR
     public static function bcor($x, $y)
     {
@@ -117,7 +117,7 @@ class BcMathUtils
             throw new \RuntimeException("Please install BCMATH");
         }
     }
-    
+
     // Bitwise XOR
     public static function bcxor($x, $y)
     {
@@ -127,7 +127,7 @@ class BcMathUtils
             throw new \RuntimeException("Please install BCMATH");
         }
     }
-    
+
     // Left shift (<<)
     public static function bcleftshift($num, $shift)
     {
@@ -138,7 +138,7 @@ class BcMathUtils
             throw new \RuntimeException("Please install BCMATH");
         }
     }
-    
+
     // Right shift (>>)
     public static function bcrightshift($num, $shift)
     {
@@ -149,7 +149,7 @@ class BcMathUtils
             throw new \RuntimeException("Please install BCMATH");
         }
     }
-    
+
     // // INTERNAL ROUTINES
     // These routines operate on only one byte. They are used to
     // implement internalBitWiseOp.
@@ -167,7 +167,7 @@ class BcMathUtils
     {
         return $x ^ $y;
     }
-    
+
     // internalBitWiseOp - The majority of the code that implements
     // the bitwise functions bcand, bcor, and bcxor.
     //
@@ -182,20 +182,20 @@ class BcMathUtils
     {
         $bx = self::bc2bin($x);
         $by = self::bc2bin($y);
-        
+
         // Pad $bx and $by so that both are the same length.
-        
+
         self::equalbinpad($bx, $by);
-        
+
         $ix = 0;
         $ret = '';
-        
+
         for ($ix = 0; $ix < strlen($bx); $ix ++) {
             $xd = substr($bx, $ix, 1);
             $yd = substr($by, $ix, 1);
             $ret .= call_user_func($op, $xd, $yd);
         }
-        
+
         return self::bin2bc($ret);
     }
 
@@ -215,14 +215,14 @@ class BcMathUtils
             if ($base < 2 or $base > 256) {
                 throw new \RuntimeException("Invalid Base: " . $base);
             }
-            
+
             bcscale(0);
             $value = "";
-            
+
             if (! $digits) {
                 $digits = self::digits($base);
             }
-            
+
             while ($dec > $base - 1) {
                 $rest = bcmod($dec, $base);
                 $dec = bcdiv($dec, $base);
@@ -241,26 +241,26 @@ class BcMathUtils
             if ($base < 2 or $base > 256) {
                 throw new \RuntimeException("Invalid Base: " . $base);
             }
-            
+
             bcscale(0);
-            
+
             if ($base < 37) {
                 $value = strtolower($value);
             }
-            
+
             if (! $digits) {
                 $digits = self::digits($base);
             }
-            
+
             $size = strlen($value);
             $dec = "0";
-            
+
             for ($loop = 0; $loop < $size; $loop ++) {
                 $element = strpos($digits, $value[$loop]);
                 $power = bcpow($base, $size - $loop - 1);
                 $dec = bcadd($dec, bcmul($element, $power));
             }
-            
+
             return (string)$dec;
         } else {
             throw new \RuntimeException("Please install BCMATH");
@@ -275,7 +275,7 @@ class BcMathUtils
                 $digits .= chr($loop);
             }
         } else {
-            $digits = "0123456789abcdefghijklmnopqrstuvwxyz";
+            $digits  = "0123456789abcdefghijklmnopqrstuvwxyz";
             $digits .= "ABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
         }
         $digits = substr($digits, 0, $base);
@@ -286,7 +286,7 @@ class BcMathUtils
     {
         $xlen = strlen($x);
         $ylen = strlen($y);
-        
+
         $length = max($xlen, $ylen);
         self::fixedbinpad($x, $length);
         self::fixedbinpad($y, $length);
@@ -298,7 +298,7 @@ class BcMathUtils
         for ($ii = 0; $ii < $length - strlen($num); $ii ++) {
             $pad .= self::bc2bin('0');
         }
-        
+
         $num = $pad . $num;
     }
 }
