@@ -7,13 +7,11 @@ php:
 
 before_script:
   - composer selfupdate
-  - composer install --prefer-source
-  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - composer install --prefer-source --dev
   - phpenv rehash
 
-script: 
-  - phpunit --coverage-text --coverage-clover "clover"
-  - ./vendor/bin/phpcs --standard=phpcs.xml -n --report=gitblame ./src
+script:
+  - make
 
 after_success:
-  - curl -sL https://bit.ly/artifact-uploader | php
+  - make scrutinizer
