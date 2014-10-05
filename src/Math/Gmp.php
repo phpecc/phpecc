@@ -6,12 +6,12 @@ use Mdanter\Ecc\MathAdapter;
 
 class Gmp implements MathAdapter
 {
-    function cmp($first, $other)
+    public function cmp($first, $other)
     {
         return gmp_cmp($first, $other);
     }
 
-    function mod($number, $modulus)
+    public function mod($number, $modulus)
     {
         $res = gmp_div_r($number, $modulus);
 
@@ -22,32 +22,32 @@ class Gmp implements MathAdapter
         return gmp_strval($res);
     }
 
-    function add($augend, $addend)
+    public function add($augend, $addend)
     {
         return gmp_add($augend, $addend);
     }
 
-    function sub($minuend, $subtrahend)
+    public function sub($minuend, $subtrahend)
     {
         return gmp_sub($minuend, $subtrahend);
     }
 
-    function mul($multiplier, $multiplicand)
+    public function mul($multiplier, $multiplicand)
     {
         return gmp_mul($multiplier, $multiplicand);
     }
 
-    function div($dividend, $divisor)
+    public function div($dividend, $divisor)
     {
         return gmp_div($dividend, $divisor);
     }
 
-    function pow($base, $exponent)
+    public function pow($base, $exponent)
     {
         return gmp_pow($base, $exponent);
     }
 
-    function rand($n)
+    public function rand($n)
     {
         $random = gmp_strval(gmp_random());
         $small_rand = rand();
@@ -59,12 +59,12 @@ class Gmp implements MathAdapter
         return gmp_strval($random);
     }
 
-    function bitwiseAnd($first, $other)
+    public function bitwiseAnd($first, $other)
     {
         return gmp_and($first, $other);
     }
 
-    function toString($value)
+    public function toString($value)
     {
         return gmp_strval($value);
     }
@@ -153,5 +153,16 @@ class Gmp implements MathAdapter
     public function digestInteger($m)
     {
         return $this->stringToInt(hash('sha1', $this->intToString($m), true));
+    }
+
+    public function gcd2($a, $b)
+    {
+        while ($a) {
+            $temp = $a;
+            $a = $this->mod($b, $a);
+            $b = $temp;
+        }
+
+        return gmp_strval($b);
     }
 }

@@ -43,4 +43,6 @@ interface MathAdapter
     function stringToInt($s);
 
     function digestInteger($m);
+
+    function gcd2($a, $m);
 }

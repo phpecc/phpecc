@@ -4,55 +4,79 @@ namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\MathAdapter;
 
+/**
+ * *********************************************************************
+ * Copyright (C) 2012 Matyas Danter
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * ***********************************************************************
+ */
+
 class BcMath implements MathAdapter
 {
 
-    function cmp($first, $other)
+    public function cmp($first, $other)
     {
         return bccomp($first, $other);
     }
 
-    function mod($number, $modulus)
+    public function mod($number, $modulus)
     {
         return bcmod($number, $modulus);
     }
 
-    function add($augend, $addend)
+    public function add($augend, $addend)
     {
         return bcadd($augend, $addend);
     }
 
-    function sub($minuend, $subtrahend)
+    public function sub($minuend, $subtrahend)
     {
         return bcsub($minuend, $subtrahend);
     }
 
-    function mul($multiplier, $multiplicand)
+    public function mul($multiplier, $multiplicand)
     {
         return bcmul($multiplier, $multiplicand);
     }
 
-    function div($dividend, $divisor)
+    public function div($dividend, $divisor)
     {
         return bcdiv($dividend, $divisor);
     }
 
-    function pow($base, $exponent)
+    public function pow($base, $exponent)
     {
         return bcpow($base, $exponent);
     }
 
-    function rand($n)
+    public function rand($n)
     {
         return BcMathUtils::bcrand($n);
     }
 
-    function bitwiseAnd($first, $other)
+    public function bitwiseAnd($first, $other)
     {
         return BcMathUtils::bcand($first, $other);
     }
 
-    function toString($value)
+    public function toString($value)
     {
         return $value;
     }
@@ -252,5 +276,16 @@ class BcMath implements MathAdapter
     public function digestInteger($m)
     {
         return $this->stringToInt(hash('sha1', $this->intToString($m), true));
+    }
+
+    public function gcd2($a, $b)
+    {
+        while ($a) {
+            $temp = $a;
+            $a = bcmod($b, $a);
+            $b = $temp;
+        }
+
+        return $b;
     }
 }

@@ -8,8 +8,6 @@ use Mdanter\Ecc\MathAdapter;
 use Mdanter\Ecc\Point;
 use Mdanter\Ecc\Points;
 use Mdanter\Ecc\CurveFp;
-use Mdanter\Ecc\NumberTheory;
-use Mdanter\Ecc\Theory\Agnostic;
 
 class EcArithmeticTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +37,6 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdd(MathAdapter $math)
     {
-        NumberTheory::setTheoryAdapter(new Agnostic(NumberTheory::$smallprimes, $math));
         $c = new CurveFp(23, 1, 1, $math);
 
         $this->add($math, $c, 3, 10, 9, 7, 17, 20);
@@ -51,7 +48,6 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      */
     public function testDouble(MathAdapter $math)
     {
-        NumberTheory::setTheoryAdapter(new Agnostic(NumberTheory::$smallprimes, $math));
         $c = new CurveFp(23, 1, 1, $math);
         $x1 = 3;
         $y1 = 10;
@@ -72,7 +68,6 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddDouble(MathAdapter $math)
     {
-        NumberTheory::setTheoryAdapter(new Agnostic(NumberTheory::$smallprimes, $math));
         $c = new CurveFp(23, 1, 1, $math);
 
         $this->add($math, $c, 3, 10, 3, 10, 7, 12);
@@ -84,8 +79,6 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      */
     public function testMultiply(MathAdapter $math)
     {
-        NumberTheory::setTheoryAdapter(new Agnostic(NumberTheory::$smallprimes, $math));
-
         $c = new CurveFp(23, 1, 1, $math);
         $x1 = 3;
         $y1 = 10;
@@ -107,8 +100,6 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      */
     public function testInfinity(MathAdapter $math)
     {
-        NumberTheory::setTheoryAdapter(new Agnostic(NumberTheory::$smallprimes, $math));
-
         $c = new CurveFp(23, 1, 1, $math);
         $g = $c->getPoint(13, 7, 7);
 

@@ -96,6 +96,6 @@ class GeneratorPoint implements PointInterface
 
     public function __toString()
     {
-        return (string) $this->point;
+        return (string)$this->point;
     }
 }

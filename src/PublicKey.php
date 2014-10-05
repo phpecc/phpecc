@@ -77,7 +77,7 @@ class PublicKey implements PublicKeyInterface
             return false;
         }
 
-       if ($math->cmp($s, 1) < 1 || $math->cmp($s, $math->sub($n, 1)) > 0) {
+        if ($math->cmp($s, 1) < 1 || $math->cmp($s, $math->sub($n, 1)) > 0) {
             return false;
         }
 
