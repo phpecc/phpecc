@@ -34,5 +34,8 @@ namespace Mdanter\Ecc;
 interface PrivateKeyInterface
 {
 
+    /**
+     * @return Signature
+     */
     public function sign($hash, $random_k);
 }

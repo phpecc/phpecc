@@ -36,15 +36,33 @@ interface EcDHInterface
 
     public function calculateKey();
 
+    /**
+     * @return PointInterface
+     */
     public function getPublicPoint();
 
+    /**
+     * @return void
+     */
     public function setPublicPoint(PointInterface $q);
 
+    /**
+     * @return string
+     */
     public function encrypt($string);
 
+    /**
+     * @return string
+     */
     public function decrypt($string);
 
+    /**
+     * @return string|null
+     */
     public function encryptFile($path);
 
+    /**
+     * @return string|null
+     */
     public function decryptFile($path);
 }

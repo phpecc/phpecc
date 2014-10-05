@@ -14,8 +14,14 @@ interface MathAdapter
 
     function mul($multiplier, $multiplicand);
 
+    /**
+     * @param integer $divisor
+     */
     function div($dividend, $divisor);
 
+    /**
+     * @param integer $exponent
+     */
     function pow($base, $exponent);
 
     function rand($n);
@@ -24,12 +30,18 @@ interface MathAdapter
 
     function toString($value);
 
+    /**
+     * @param string $hexString
+     */
     function hexDec($hexString);
 
     function decHex($decString);
 
     function powmod($base, $exponent, $modulus);
 
+    /**
+     * @return boolean
+     */
     function isPrime($n);
 
     function nextPrime($currentPrime);
@@ -38,6 +50,9 @@ interface MathAdapter
 
     function jacobi($a, $p);
 
+    /**
+     * @return string|null
+     */
     function intToString($x);
 
     function stringToInt($s);

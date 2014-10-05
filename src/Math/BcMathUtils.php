@@ -96,6 +96,11 @@ class BcMathUtils
     }
 
     // Bitwise OR
+
+    /**
+     * @param string $x
+     * @param integer $y
+     */
     public static function bcor($x, $y)
     {
         return self::internalBitWiseOp($x, $y, 'self::internalOr');
@@ -149,6 +154,10 @@ class BcMathUtils
     //
     // see also - The interfaces to this function: bcand, bcor,
     // and bcxor
+
+    /**
+     * @param string $op
+     */
     private static function internalBitWiseOp($x, $y, $op)
     {
         $bx = self::bc2bin($x);
@@ -175,6 +184,9 @@ class BcMathUtils
         return self::dec2base($num, MAX_BASE);
     }
 
+    /**
+     * @param string $num
+     */
     public static function bin2bc($num)
     {
         return self::base2dec($num, MAX_BASE);
@@ -250,6 +262,10 @@ class BcMathUtils
         return (string)$digits;
     }
 
+    /**
+     * @param string $x
+     * @param string $y
+     */
     public static function equalbinpad(&$x, &$y)
     {
         $xlen = strlen($x);
@@ -261,6 +277,9 @@ class BcMathUtils
         self::fixedbinpad($y, $length);
     }
 
+    /**
+     * @param integer $length
+     */
     public static function fixedbinpad(&$num, $length)
     {
         $pad = '';
