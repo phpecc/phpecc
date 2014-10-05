@@ -39,7 +39,7 @@ class PublicKey implements PublicKeyInterface
 
     protected $adapter;
 
-    public function __construct(Point $generator, Point $point, MathAdapter $adapter)
+    public function __construct(PointInterface $generator, PointInterface $point, MathAdapter $adapter)
     {
         $this->curve = $generator->getCurve();
         $this->generator = $generator;

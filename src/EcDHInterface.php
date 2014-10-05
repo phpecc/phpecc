@@ -47,7 +47,7 @@ interface EcDHInterface
     /**
      * @return PointInterface
      */
-    public function getPublicPoint();
+    public function getPublicPoint($regenerate = false);
 
     /**
      * @return void
@@ -55,21 +55,26 @@ interface EcDHInterface
     public function setPublicPoint(PointInterface $q);
 
     /**
+     * 
+     * @param string $string
      * @return string
      */
     public function encrypt($string);
 
     /**
+     * @param string $string
      * @return string
      */
     public function decrypt($string);
 
     /**
+     * @param string $path
      * @return string|null
      */
     public function encryptFile($path);
 
     /**
+     * @param string $path
      * @return string|null
      */
     public function decryptFile($path);

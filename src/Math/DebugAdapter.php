@@ -40,7 +40,7 @@ class DebugAdapter implements MathAdapter
         }, $args);
 
         if (strpos($func, '::')) {
-            list($class, $func) = explode('::', $func);
+            list(, $func) = explode('::', $func);
         }
 
         $res = call_user_func_array([ $this->adapter, $func ], $args);
@@ -133,11 +133,6 @@ class DebugAdapter implements MathAdapter
     function toString($value)
     {
         return $this->adapter->toString($value);
-
-        $func = __METHOD__;
-        $args = func_get_args();
-
-        return call_user_func([ $this, 'call' ], $func, $args);
     }
 
     /**

@@ -97,8 +97,8 @@ class GeneratorPoint implements PointInterface
     {
         $n = $this->getOrder();
         $secret = $this->adapter->rand($n);
-
-        $pubPoint = $this->mul($this->secret);
+        $pubPoint = $this->mul($secret);
+        
         $pubKey = new PublicKey($this, $pubPoint, $this->adapter);
 
         return new PrivateKey($pubKey, $secret, $this->adapter);
