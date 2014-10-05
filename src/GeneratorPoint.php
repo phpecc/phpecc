@@ -74,19 +74,34 @@ class GeneratorPoint implements PointInterface
             return false;
         }
 
-        $point = $curve->getPoint($x, $y);
-        $op = $point->mul($n);
+        $point = $curve->getPoint($x, $y)->mul($n);
 
-        if (! $op->equals(Points::infinity())) {
+        if (! $point->equals(Points::infinity())) {
             return false;
         }
 
         return true;
     }
 
+    public function createKeyExchange()
+    {
+        return new EcDH($this, $this->adapter);
+    }
+
     public function getPublicKey($x, $y, $order = null)
     {
         return new PublicKey($this->point, new Point($this->point->getCurve(), $x, $y, $order, $this->adapter), $this->adapter);
+    }
+
+    public function generatePrivateKey()
+    {
+        $n = $this->getOrder();
+        $secret = $this->adapter->rand($n);
+
+        $pubPoint = $this->mul($this->secret);
+        $pubKey = new PublicKey($this, $pubPoint, $this->adapter);
+
+        return new PrivateKey($pubKey, $secret, $this->adapter);
     }
 
     public function getPrivateKey($x, $y, $secretMultiplier)

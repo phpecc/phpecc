@@ -34,7 +34,15 @@ namespace Mdanter\Ecc;
 interface EcDHInterface
 {
 
+    /**
+     * @return void
+     */
     public function calculateKey();
+
+    /**
+     * @return string
+     */
+    public function getSharedKey();
 
     /**
      * @return PointInterface

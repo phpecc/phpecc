@@ -38,20 +38,49 @@ namespace Mdanter\Ecc;
  */
 class EcDH implements EcDHInterface
 {
-
-    private $generator;
-
-    private $pubPoint = null;
-
-    private $receivedPubPoint;
-
-    private $secret;
-
-    private $agreed_key;
-
+    /**
+     * Adapter used for math calculatioins
+     *
+     * @var MathAdapter
+     */
     private $adapter;
 
-    public function __construct(PointInterface $g, MathAdapter $adapter)
+    /**
+     * Private key generator point
+     *
+     * @var PointInterface
+     */
+    private $generator;
+
+    /**
+     * Public key point derived from generator point
+     *
+     * @var PointInterface
+     */
+    private $pubPoint = null;
+
+    /**
+     * Public key point of other party.
+     *
+     * @var PointInterface
+     */
+    private $receivedPubPoint = null;
+
+    /**
+     * Secret used to derive the public key point.
+     *
+     * @var number|string
+     */
+    private $secret;
+
+    /**
+     * Shared key between the two parties
+     *
+     * @var number|string
+     */
+    private $sharedSecretKey;
+
+    public function __construct(GeneratorPoint $g, MathAdapter $adapter)
     {
         $this->generator = $g;
         $this->adapter = $adapter;
@@ -59,19 +88,31 @@ class EcDH implements EcDHInterface
 
     public function calculateKey()
     {
-        return $this->agreed_key = $this->receivedPubPoint->mul($this->secret)->getX();
+        $this->checkExchangeState();
+
+        $this->sharedSecretKey = $this->receivedPubPoint->mul($this->secret)->getX();
+    }
+
+    public function exchangeKeys(EcDHInterface $other, $forceNewKeys = false)
+    {
+        $this->setPublicPoint($other->getPublicPoint($forceNewKeys));
+        $other->setPublicPoint($this->getPublicPoint($forceNewKeys));
+
+        $this->calculateKey();
+        $other->calculateKey();
+    }
+
+    public function getSharedKey()
+    {
+        $this->checkEncryptionState();
+
+        return $this->sharedSecretKey;
     }
 
     public function getPublicPoint($regenerate = false)
     {
         if ($this->pubPoint == null || $regenerate) {
-            // Alice selects a random number between 1 and the order of the generator point(private)
-            $n = $this->generator->getOrder();
-
-            $this->secret = $this->adapter->rand($n);
-
-            // Alice computes da * generator Qa is public, da is private
-            $this->pubPoint = $this->generator->mul($this->secret);
+            $this->pubPoint = $this->calculatePublicPoint();
         }
 
         return $this->pubPoint;
@@ -84,7 +125,7 @@ class EcDH implements EcDHInterface
 
     public function encrypt($string)
     {
-        $key = hash("sha256", $this->agreed_key, true);
+        $key = hash("sha256", $this->sharedSecretKey, true);
 
         $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string), MCRYPT_MODE_CBC, $key);
 
@@ -93,7 +134,7 @@ class EcDH implements EcDHInterface
 
     public function decrypt($string)
     {
-        $key = hash("sha256", $this->agreed_key, true);
+        $key = hash("sha256", $this->sharedSecretKey, true);
 
         $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
 
@@ -102,25 +143,51 @@ class EcDH implements EcDHInterface
 
     public function encryptFile($path)
     {
-        if (file_exists($path)) {
-            $string = file_get_contents($path);
-            $key = hash("sha256", $this->agreed_key, true);
-
-            $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string), MCRYPT_MODE_CBC, $key);
-
-            return $cypherText;
+        if (file_exists($path) && is_readable($path)) {
+            return $this->encrypt(file_get_contents($path));
         }
+
+        throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");
     }
 
     public function decryptFile($path)
     {
-        if (file_exists($path)) {
-            $string = file_get_contents($path);
-            $key = hash("sha256", $this->agreed_key, true);
+        if (file_exists($path) && is_readable($path)) {
+            return $this->decrypt(file_get_contents($path));
+        }
 
-            $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
+        throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");
+    }
 
-            return $clearText;
+    private function calculatePublicPoint()
+    {
+        if ($this->secret == null) {
+            $this->secret = $this->calculateSecret();
+        }
+
+        // Alice computes da * generator Qa is public, da is private
+        return $this->generator->mul($this->secret);
+    }
+
+    private function calculateSecret()
+    {
+        // Alice selects a random number between 1 and the order of the generator point(private)
+        $n = $this->generator->getOrder();
+
+        return $this->adapter->rand($n);
+    }
+
+    private function checkEncryptionState()
+    {
+        if ($this->sharedSecretKey == null) {
+            throw new \BadMethodCallException('Shared secret is not set, a public key exchange is required first.');
+        }
+    }
+
+    private function checkExchangeState()
+    {
+        if ($this->receivedPubPoint == null) {
+            throw new \BadMethodCallException('Recipient key not set, a public key exchange is required first.');
         }
     }
 }
