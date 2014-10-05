@@ -8,6 +8,7 @@ use Mdanter\Ecc\MathAdapter;
 use Mdanter\Ecc\Point;
 use Mdanter\Ecc\Points;
 use Mdanter\Ecc\CurveFp;
+use Mdanter\Ecc\CurveFpInterface;
 
 class EcArithmeticTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +21,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    private function add($math, $c, $x1, $y1, $x2, $y2, $x3, $y3)
+    private function add(MathAdapter $math, CurveFpInterface $c, $x1, $y1, $x2, $y2, $x3, $y3)
     {
         $p1 = $c->getPoint($x1, $y1);
         $p2 = $c->getPoint($x2, $y2);
@@ -29,6 +30,9 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($math->mod($p3->getX(), 23), $x3);
         $this->assertEquals($math->mod($p3->getY(), 23), $y3);
+
+        $p4 = $p2->add($p1);
+        $this->assertTrue($p3->equals($p4));
     }
 
     /**
