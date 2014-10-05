@@ -8,7 +8,7 @@ use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
 
-class SecCurveTest extends AbstractTestCase
+class SecgCurveTest extends AbstractTestCase
 {
 
     public function getCurveParams()
@@ -26,7 +26,7 @@ class SecCurveTest extends AbstractTestCase
      */
     public function testCurveGeneration(MathAdapter $math, $function, $a, $b, $prime)
     {
-        $factory = EccFactory::getSecCurves($math);
+        $factory = EccFactory::getSecgCurves($math);
         $curve = $factory->{$function}();
 
         $this->assertInstanceOf('\Mdanter\Ecc\CurveFpInterface', $curve);
@@ -50,10 +50,10 @@ class SecCurveTest extends AbstractTestCase
      */
     public function testGeneratorGeneration(MathAdapter $math, $function, $order, $prime)
     {
-        $factory = EccFactory::getSecCurves($math);
+        $factory = EccFactory::getSecgCurves($math);
         $generator = $factory->{$function}();
 
-        $this->assertInstanceOf('\Mdanter\Ecc\GeneratorPoint', $generator);
+        $this->assertInstanceOf('\Mdanter\Ecc\PointInterface', $generator);
         $this->assertEquals($order, $generator->getOrder());
         $this->assertEquals($prime, $generator->getCurve()->getPrime());
     }

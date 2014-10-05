@@ -9,6 +9,7 @@ use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\Point;
 use Mdanter\Ecc\GeneratorPoint;
 use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\Math\BcMathUtils;
 
 /**
  * *********************************************************************
@@ -38,7 +39,7 @@ use Mdanter\Ecc\MathAdapter;
  *
  * @author Jan Moritz Lindemann
  */
-class SecCurve
+class SecgCurve
 {
 
     private $adapter;
@@ -99,7 +100,7 @@ class SecCurve
 
     public function generator384r1()
     {
-        $curve = $this->curve256r1();
+        $curve = $this->curve384r1();
 
         $order = $this->adapter->hexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC7634D81F4372DDF581A0DB248B0A77AECEC196ACCC52973');
         $x = $this->adapter->hexDec('0xAA87CA22BE8B05378EB1C71EF320AD746E1D3B628BA79B9859F741E082542A385502F25DBF55296C3A545E3872760AB7');

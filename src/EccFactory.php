@@ -5,7 +5,7 @@ namespace Mdanter\Ecc;
 use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Curves\NistCurve;
-use Mdanter\Ecc\Curves\SecCurve;
+use Mdanter\Ecc\Curves\SecgCurve;
 
 class EccFactory
 {
@@ -36,11 +36,11 @@ class EccFactory
     /**
      *
      * @param MathAdapter $adapter
-     * @return \Mdanter\Ecc\Curves\SecCurve
+     * @return \Mdanter\Ecc\Curves\SecgCurve
      */
-    public static function getSecCurves(MathAdapter $adapter = null)
+    public static function getSecgCurves(MathAdapter $adapter = null)
     {
-        return new SecCurve($adapter ?: self::getAdapter());
+        return new SecgCurve($adapter ?: self::getAdapter());
     }
 
     /**
