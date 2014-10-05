@@ -66,7 +66,11 @@ class Gmp implements MathAdapter
 
     public function toString($value)
     {
-        return gmp_strval($value);
+        if (is_resource($value)) {
+            return gmp_strval($value);
+        }
+
+        return $value;
     }
 
     public function hexDec($hex)

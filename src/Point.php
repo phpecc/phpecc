@@ -163,6 +163,11 @@ class Point implements PointInterface
         throw new \RuntimeException('Unable to multiply by ' . $multiplier);
     }
 
+    public function montgomeryLadderMul($multiplier)
+    {
+
+    }
+
     private function calcLeftMostBit($x)
     {
         $math = $this->adapter;
@@ -187,7 +192,7 @@ class Point implements PointInterface
 
     public function __toString()
     {
-        return "(" . $this->x . "," . $this->y . ")";
+        return "(" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ")";
     }
 
     public function getDouble()
