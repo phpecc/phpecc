@@ -30,7 +30,7 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         ModuleConfig::useGmp();
-        
+
         $file = TEST_DATA_DIR. '/primes.lst';
 
         if (! file_exists($file)) {
@@ -42,7 +42,10 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
             $this->fail('Empty prime file');
         }
 
-        $this->knownPrimes = $lines;
+        $this->knownPrimes = array_map(function ($i) {
+            return intval($i);
+        }, $lines);
+
         $this->theory = new Gmp(NumberTheory::$smallprimes);
     }
 
@@ -79,6 +82,8 @@ class NumberTheoryTest extends \PHPUnit_Framework_TestCase
         for ($i = 0; $i < $this->primeCount; $i ++) {
             $currentPrime = $this->theory->nextPrime($currentPrime);
             $this->assertTrue($this->theory->isPrime($currentPrime));
+
+            $this->assertContains($currentPrime, $this->knownPrimes);
         }
     }
 

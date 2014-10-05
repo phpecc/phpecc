@@ -34,15 +34,6 @@ namespace Mdanter\Ecc;
 interface PrivateKeyInterface
 {
 
-    public function __construct(PublicKey $public_key, $secret_multiplier);
-
     public function sign($hash, $random_k);
 
-    public static function intToString($x);
-
-    public static function stringToInt($s);
-
-    public static function digestInteger($m);
-
-    public static function pointIsValid(Point $generator, $x, $y);
 }

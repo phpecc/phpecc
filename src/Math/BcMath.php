@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\MathAdapter;
-use Mdanter\Ecc\BcMathUtils;
 
 class BcMath implements MathAdapter
 {
@@ -32,6 +31,11 @@ class BcMath implements MathAdapter
         return bcmul($multiplier, $multiplicand);
     }
 
+    function div($dividend, $divisor)
+    {
+        return bcdiv($dividend, $divisor);
+    }
+
     function pow($base, $exponent)
     {
         return bcpow($base, $exponent);
@@ -40,5 +44,15 @@ class BcMath implements MathAdapter
     function rand($n)
     {
         return BcMathUtils::bcrand($n);
+    }
+
+    function bitwiseAnd($first, $other)
+    {
+        return BcMathUtils::bcand($first, $other);
+    }
+
+    function toString($value)
+    {
+        return (string) $value;
     }
 }

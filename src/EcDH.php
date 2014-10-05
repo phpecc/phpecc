@@ -1,4 +1,5 @@
 <?php
+
 namespace Mdanter\Ecc;
 
 /**
@@ -95,6 +96,7 @@ class EcDH implements EcDHInterface
         $key = hash("sha256", $this->agreed_key, true);
 
         $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
+        
         return $clearText;
     }
 
@@ -102,9 +104,8 @@ class EcDH implements EcDHInterface
     {
         if (file_exists($path)) {
             $string = file_get_contents($path);
-
             $key = hash("sha256", $this->agreed_key, true);
-
+            
             $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string), MCRYPT_MODE_CBC, $key);
 
             return $cypherText;
@@ -115,9 +116,8 @@ class EcDH implements EcDHInterface
     {
         if (file_exists($path)) {
             $string = file_get_contents($path);
-
             $key = hash("sha256", $this->agreed_key, true);
-
+            
             $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
 
             return $clearText;

@@ -51,6 +51,11 @@ class CurveFp implements CurveFpInterface
         $this->adapter = $adapter;
     }
 
+    public function getPoint($x, $y, $order = null)
+    {
+        return new Point($this, $x, $y, $order, $this->adapter);
+    }
+
     public function contains($x, $y)
     {
         $math = $this->adapter;
@@ -90,6 +95,11 @@ class CurveFp implements CurveFpInterface
         }
 
         return 1;
+    }
+
+    public function equals(CurveFpInterface $other)
+    {
+        return $this->cmpWith($other) == 0;
     }
 
     /**
