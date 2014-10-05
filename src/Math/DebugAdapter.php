@@ -23,6 +23,9 @@ class DebugAdapter implements MathAdapter
         $this->writer = $callback;
     }
 
+    /**
+     * @param string $message
+     */
     private function writeln($message)
     {
         call_user_func($this->writer, $message . PHP_EOL);

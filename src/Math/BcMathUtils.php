@@ -49,6 +49,9 @@ class BcMathUtils
         );
     }
 
+    /**
+     * @param string $hex
+     */
     public static function bchexdec($hex)
     {
         $len = strlen($hex);
@@ -216,6 +219,9 @@ class BcMathUtils
         return (string)$value;
     }
 
+    /**
+     * @param string $value
+     */
     public static function base2dec($value, $base, $digits = false)
     {
         if ($base < 2 or $base > 256) {
@@ -279,6 +285,7 @@ class BcMathUtils
 
     /**
      * @param integer $length
+     * @param string $num
      */
     public static function fixedbinpad(&$num, $length)
     {
