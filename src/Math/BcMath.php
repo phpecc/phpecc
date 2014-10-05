@@ -38,7 +38,13 @@ class BcMath implements MathAdapter
 
     public function mod($number, $modulus)
     {
-        return bcmod($number, $modulus);
+        $res = bcmod($number, $modulus);
+
+        if (bccomp(0, $res) > 0) {
+            $res = bcadd($modulus, $res);
+        }
+
+        return gmp_strval($res);
     }
 
     public function add($augend, $addend)
