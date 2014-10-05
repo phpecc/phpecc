@@ -4,7 +4,6 @@ namespace Mdanter\Ecc\Curves;
 
 use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\ModuleConfig;
 use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\Point;
 use Mdanter\Ecc\GeneratorPoint;

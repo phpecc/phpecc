@@ -2,7 +2,8 @@
 
 namespace Mdanter\Ecc;
 
-class Points {
+class Points
+{
 
     /**
      * @return \Mdanter\Ecc\PointInterface
@@ -11,5 +12,4 @@ class Points {
     {
         return Infinity::getInstance();
     }
-
 }

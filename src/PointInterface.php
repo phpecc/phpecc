@@ -90,5 +90,4 @@ interface PointInterface
      * @return string
      */
     public function __toString();
-
 }
