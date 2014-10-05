@@ -6,7 +6,6 @@ use Mdanter\Ecc\CurveFpInterface;
 use Mdanter\Ecc\GeneratorPoint;
 use Mdanter\Ecc\MathAdapter;
 use Mdanter\Ecc\Point;
-use Mdanter\Ecc\PointInterface;
 
 /**
  * *********************************************************************
@@ -92,7 +91,7 @@ class NistCurve
 
     /**
      * Returns an NIST P-224 generator.
-     * @return GeneratorPoint
+     * @return Point
      */
     public function generator224()
     {
@@ -109,7 +108,7 @@ class NistCurve
     /**
      * Returns an NIST P-256 curve.
      *
-     * @return CurveInterface
+     * @return CurveFp
      */
     public function curve256()
     {
@@ -137,7 +136,7 @@ class NistCurve
     /**
      * Returns an NIST P-384 curve.
      *
-     * @return CurveInterface
+     * @return CurveFp
      */
     public function curve384()
     {
@@ -166,7 +165,7 @@ class NistCurve
     /**
      * Returns an NIST P-521 curve.
      *
-     * @return CurveInterface
+     * @return CurveFp
      */
     public function curve521()
     {
