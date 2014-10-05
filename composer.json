@@ -9,19 +9,19 @@
       {
          "name":"Matyas Danter",
          "homepage":"http://matejdanter.com/",
-         "role":"Original developper"
+         "role":"Author"
       },
       {
          "name":"Thibaud Fabre",
          "email":"thibaud@aztech.io",
-         "homepage":"http://www.aztech.io",
-         "role":"OO & PSR-4 migration"
+         "homepage":"http://aztech.io",
+         "role":"Maintainer"
       },
       {
           "name":"Drak",
           "email":"drak@zikula.org",
           "homepage":"http://zikula.org",
-          "role":"OO & PSR-4 migration"
+          "role":"Maintainer"
       }
    ],
    "require":{
