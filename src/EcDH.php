@@ -129,7 +129,7 @@ class EcDH implements EcDHInterface
      */
     public function getPublicPoint($regenerate = false)
     {
-        if ($this->pubPoint == null || $regenerate) {
+        if ($this->pubPoint === null || $regenerate) {
             $this->pubPoint = $this->calculatePublicPoint();
         }
 
@@ -222,14 +222,14 @@ class EcDH implements EcDHInterface
 
     private function checkEncryptionState()
     {
-        if ($this->sharedSecretKey == null) {
+        if ($this->sharedSecretKey === null) {
             throw new \RuntimeException('Shared secret is not set, a public key exchange is required first.');
         }
     }
 
     private function checkExchangeState()
     {
-        if ($this->receivedPubPoint == null) {
+        if ($this->receivedPubPoint === null) {
             throw new \RuntimeException('Recipient key not set, a public key exchange is required first.');
         }
     }
