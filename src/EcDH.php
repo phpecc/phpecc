@@ -71,14 +71,14 @@ class EcDH implements EcDHInterface
      *
      * @var number|string
      */
-    private $secret;
+    private $secret = 0;
 
     /**
      * Shared key between the two parties
      *
      * @var number|string
      */
-    private $sharedSecretKey;
+    private $sharedSecretKey = null;
 
     public function __construct(GeneratorPoint $g, MathAdapter $adapter)
     {
@@ -86,6 +86,10 @@ class EcDH implements EcDHInterface
         $this->adapter = $adapter;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::calculateKey()
+     */
     public function calculateKey()
     {
         $this->checkExchangeState();
@@ -93,6 +97,12 @@ class EcDH implements EcDHInterface
         $this->sharedSecretKey = $this->receivedPubPoint->mul($this->secret)->getX();
     }
 
+    /**
+     * Performs a key exchange with another party and calculates the shared secret for the exchange.
+     *
+     * @param EcDHInterface $other
+     * @param bool $forceNewKeys
+     */
     public function exchangeKeys(EcDHInterface $other, $forceNewKeys = false)
     {
         $this->setPublicPoint($other->getPublicPoint($forceNewKeys));
@@ -102,6 +112,10 @@ class EcDH implements EcDHInterface
         $other->calculateKey();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::getSharedKey()
+     */
     public function getSharedKey()
     {
         $this->checkEncryptionState();
@@ -109,6 +123,10 @@ class EcDH implements EcDHInterface
         return $this->sharedSecretKey;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::getPublicPoint()
+     */
     public function getPublicPoint($regenerate = false)
     {
         if ($this->pubPoint == null || $regenerate) {
@@ -118,11 +136,19 @@ class EcDH implements EcDHInterface
         return $this->pubPoint;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::setPublicPoint()
+     */
     public function setPublicPoint(PointInterface $q)
     {
         $this->receivedPubPoint = $q;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::encrypt()
+     */
     public function encrypt($string)
     {
         $key = hash("sha256", $this->sharedSecretKey, true);
@@ -132,6 +158,10 @@ class EcDH implements EcDHInterface
         return $cypherText;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::decrypt()
+     */
     public function decrypt($string)
     {
         $key = hash("sha256", $this->sharedSecretKey, true);
@@ -141,6 +171,10 @@ class EcDH implements EcDHInterface
         return $clearText;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::encryptFile()
+     */
     public function encryptFile($path)
     {
         if (file_exists($path) && is_readable($path)) {
@@ -150,6 +184,10 @@ class EcDH implements EcDHInterface
         throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::decryptFile()
+     */
     public function decryptFile($path)
     {
         if (file_exists($path) && is_readable($path)) {
@@ -161,7 +199,7 @@ class EcDH implements EcDHInterface
 
     private function calculatePublicPoint()
     {
-        if ($this->secret == null) {
+        if ($this->secret == 0) {
             $this->secret = $this->calculateSecret();
         }
 
@@ -173,21 +211,26 @@ class EcDH implements EcDHInterface
     {
         // Alice selects a random number between 1 and the order of the generator point(private)
         $n = $this->generator->getOrder();
+        $r = $this->adapter->rand($n);
 
-        return $this->adapter->rand($n);
+        while ($r == 0) {
+            $r = $this->adapter->rand($n);
+        }
+
+        return $r;
     }
 
     private function checkEncryptionState()
     {
         if ($this->sharedSecretKey == null) {
-            throw new \BadMethodCallException('Shared secret is not set, a public key exchange is required first.');
+            throw new \RuntimeException('Shared secret is not set, a public key exchange is required first.');
         }
     }
 
     private function checkExchangeState()
     {
         if ($this->receivedPubPoint == null) {
-            throw new \BadMethodCallException('Recipient key not set, a public key exchange is required first.');
+            throw new \RuntimeException('Recipient key not set, a public key exchange is required first.');
         }
     }
 }

@@ -24,6 +24,10 @@ interface MathAdapter
      */
     function pow($base, $exponent);
 
+    /**
+     * Generates a random integer between 0 (inclusive) and $n (inclusive).
+     * @param int $n max
+     */
     function rand($n);
 
     function bitwiseAnd($first, $other);

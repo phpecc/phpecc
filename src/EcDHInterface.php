@@ -45,6 +45,7 @@ interface EcDHInterface
     public function getSharedKey();
 
     /**
+     * @param bool $regenerate
      * @return PointInterface
      */
     public function getPublicPoint($regenerate = false);
@@ -55,7 +56,7 @@ interface EcDHInterface
     public function setPublicPoint(PointInterface $q);
 
     /**
-     * 
+     *
      * @param string $string
      * @return string
      */

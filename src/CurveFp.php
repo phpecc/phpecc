@@ -134,11 +134,7 @@ class CurveFp implements CurveFpInterface
         $equal &= ($math->cmp($this->b, $other->getB()) == 0);
         $equal &= ($math->cmp($this->prime, $other->getPrime()) == 0);
 
-        if ($equal) {
-            return 0;
-        }
-
-        return 1;
+        return ($equal) ? 0 : 1;
     }
 
     /**
