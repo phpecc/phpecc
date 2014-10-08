@@ -4,12 +4,40 @@ namespace Mdanter\Ecc;
 
 interface MathAdapter
 {
+    /**
+     * Compares two numbers
+     *
+     * @param int|string $first
+     * @param int|string $other
+     * @return int less than 0 if first is less than second, 0 if equal, greater than 0 if greater than.
+     */
     function cmp($first, $other);
 
+    /**
+     * Returns the remainder of a division
+     *
+     * @param int|string $number
+     * @param int|string $modulus
+     * @return int|string
+     */
     function mod($number, $modulus);
 
+    /**
+     * Adds two numbers
+     *
+     * @param int|string $augend
+     * @param int|string $addend
+     * @return int|string
+     */
     function add($augend, $addend);
 
+    /**
+     * Substract one number from another
+     *
+     * @param int|string $minuend
+     * @param int|string $subtrahend
+     * @return int|string
+     */
     function sub($minuend, $subtrahend);
 
     /**
@@ -42,7 +70,7 @@ interface MathAdapter
      * Generates a random integer between 0 (inclusive) and $n (inclusive).
      *
      * @param int|string $n Maximum value to return.
-     * @return int|stringeger
+     * @return int|string
      */
     function rand($n);
 
@@ -103,8 +131,18 @@ interface MathAdapter
      */
     function nextPrime($currentPrime);
 
+    /**
+     *
+     * @param int|string $a
+     * @param int|string $m
+     */
     function inverseMod($a, $m);
 
+    /**
+     *
+     * @param int|string $a
+     * @param int|string $p
+     */
     function jacobi($a, $p);
 
     /**
@@ -112,9 +150,25 @@ interface MathAdapter
      */
     function intToString($x);
 
+    /**
+     *
+     * @param int|string $s
+     * @return int|string
+     */
     function stringToInt($s);
 
+    /**
+     *
+     * @param int|string $m
+     * @return int|string
+     */
     function digestInteger($m);
 
+    /**
+     *
+     * @param int|string $a
+     * @param int|string $m
+     * @return int|string
+     */
     function gcd2($a, $m);
 }

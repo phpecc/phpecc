@@ -1,4 +1,5 @@
 <?php
+
 namespace Mdanter\Ecc;
 
 /**
@@ -30,13 +31,28 @@ namespace Mdanter\Ecc;
  */
 class PublicKey implements PublicKeyInterface
 {
-
+    /**
+     *
+     * @var CurveFpInterface
+     */
     protected $curve;
 
+    /**
+     *
+     * @var GeneratorPoint
+     */
     protected $generator;
 
+    /**
+     *
+     * @var PointInterface
+     */
     protected $point;
 
+    /**
+     *
+     * @var MathAdapter
+     */
     protected $adapter;
 
     /**

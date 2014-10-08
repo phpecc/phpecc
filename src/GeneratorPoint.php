@@ -173,7 +173,7 @@ class GeneratorPoint implements PointInterface
 
     public function getPrivateKeyFrom($secretMultiplier, $x, $y, $order = null)
     {
-        return $this->getPublicKeyAt($x, $y, $order)->getPrivateKey($secretMultiplier);
+        return $this->getPublicKeyFrom($x, $y, $order)->getPrivateKey($secretMultiplier);
     }
 
     public function __toString()
