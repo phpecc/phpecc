@@ -52,6 +52,7 @@ interface MathAdapter
     /**
      * Divides a number by another.
      *
+     * @param int|string $dividend
      * @param int|string $divisor
      * @return int|string
      */
@@ -146,6 +147,7 @@ interface MathAdapter
     function jacobi($a, $p);
 
     /**
+     * @param int|string $x
      * @return string|null
      */
     function intToString($x);
