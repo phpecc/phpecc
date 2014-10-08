@@ -25,22 +25,59 @@ namespace Mdanter\Ecc;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-/*
- * This class is where the elliptic curve arithmetic takes place. The important methods are: - add: adds two points according to ec arithmetic - double: doubles a point on the ec field mod p - mul: uses double and add to achieve multiplication The rest of the methods are there for supporting the ones above.
+
+/**
+ * This class is where the elliptic curve arithmetic takes place. The important methods are:
+ * - add: adds two points according to ec arithmetic
+ * - double: doubles a point on the ec field mod p
+ * - mul: uses double and add to achieve multiplication The rest of the methods are there for supporting the ones above.
+ *
+ * @author Matej Danter
  */
 class Point implements PointInterface
 {
 
+    /**
+     *
+     * @var CurveFpInterface
+     */
     private $curve;
 
+    /**
+     *
+     * @var int|string
+     */
     private $x;
 
+    /**
+     *
+     * @var int|string
+     */
     private $y;
 
+    /**
+     *
+     * @var int|string
+     */
     private $order;
 
+    /**
+     *
+     * @var MathAdapter
+     */
     private $adapter;
 
+    /**
+     * Initialize a new instance
+     *
+     * @param CurveFpInterface $curve
+     * @param int|string $x
+     * @param int|string $y
+     * @param int|string $order
+     * @param MathAdapter $adapter
+     * @throws \RuntimeException when either the curve does not contain the given coordinates or
+     * when order is not null and P(x, y) * order is not equal to infinity.
+     */
     public function __construct(CurveFpInterface $curve, $x, $y, $order = null, MathAdapter $adapter)
     {
         $this->curve = $curve;
@@ -60,6 +97,10 @@ class Point implements PointInterface
         }
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::cmp()
+     */
     public function cmp(PointInterface $other)
     {
         if ($other->equals(Points::infinity())) {
@@ -79,11 +120,19 @@ class Point implements PointInterface
         return 1;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::equals()
+     */
     public function equals(PointInterface $other)
     {
         return $this->cmp($other) == 0;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::add()
+     */
     public function add(PointInterface $addend)
     {
         if ($addend->equals(Points::infinity())) {
@@ -120,6 +169,10 @@ class Point implements PointInterface
         return $this->curve->getPoint($x3, $y3);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::mul()
+     */
     public function mul($multiplier)
     {
         $math = $this->adapter;
@@ -163,11 +216,11 @@ class Point implements PointInterface
         throw new \RuntimeException('Unable to multiply by ' . $multiplier);
     }
 
-    public function montgomeryLadderMul($multiplier)
-    {
-
-    }
-
+    /**
+     *
+     * @param int|string $x
+     * @throws \RuntimeException
+     */
     private function calcLeftMostBit($x)
     {
         $math = $this->adapter;
@@ -185,16 +238,28 @@ class Point implements PointInterface
         throw new \RuntimeException('Unable to get leftmost bit of ' . $math->toString($x));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getCurve()
+     */
     public function getCurve()
     {
         return $this->curve;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::__toString()
+     */
     public function __toString()
     {
         return "(" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ")";
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getDouble()
+     */
     public function getDouble()
     {
         $math = $this->adapter;
@@ -216,16 +281,28 @@ class Point implements PointInterface
         return new self($this->curve, $x3, $y3, null, $this->adapter);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getOrder()
+     */
     public function getOrder()
     {
         return $this->order;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getX()
+     */
     public function getX()
     {
         return $this->x;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getY()
+     */
     public function getY()
     {
         return $this->y;

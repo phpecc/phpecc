@@ -6,11 +6,19 @@ use Mdanter\Ecc\MathAdapter;
 
 class Gmp implements MathAdapter
 {
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::cmp()
+     */
     public function cmp($first, $other)
     {
         return gmp_cmp($first, $other);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::mod()
+     */
     public function mod($number, $modulus)
     {
         $res = gmp_div_r($number, $modulus);
@@ -22,31 +30,55 @@ class Gmp implements MathAdapter
         return gmp_strval($res);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::add()
+     */
     public function add($augend, $addend)
     {
         return gmp_add($augend, $addend);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::sub()
+     */
     public function sub($minuend, $subtrahend)
     {
         return gmp_sub($minuend, $subtrahend);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::mul()
+     */
     public function mul($multiplier, $multiplicand)
     {
         return gmp_mul($multiplier, $multiplicand);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::div()
+     */
     public function div($dividend, $divisor)
     {
         return gmp_div($dividend, $divisor);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::pow()
+     */
     public function pow($base, $exponent)
     {
         return gmp_pow($base, $exponent);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rand()
+     */
     public function rand($n)
     {
         $random = gmp_strval(gmp_random());
@@ -59,11 +91,19 @@ class Gmp implements MathAdapter
         return gmp_strval($random);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::bitwiseAnd()
+     */
     public function bitwiseAnd($first, $other)
     {
         return gmp_and($first, $other);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::toString()
+     */
     public function toString($value)
     {
         if (is_resource($value)) {
@@ -73,16 +113,28 @@ class Gmp implements MathAdapter
         return $value;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::hexDec()
+     */
     public function hexDec($hex)
     {
         return gmp_strval(gmp_init($hex, 16), 10);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::decHex()
+     */
     public function decHex($dec)
     {
         return gmp_strval(gmp_init($dec, 10), 16);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::powmod()
+     */
     public function powmod($base, $exponent, $modulus)
     {
         if ($exponent < 0) {
@@ -92,6 +144,10 @@ class Gmp implements MathAdapter
         return gmp_strval(gmp_powm($base, $exponent, $modulus));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::isPrime()
+     */
     public function isPrime($n)
     {
         $prob = gmp_prob_prime($n);
@@ -103,21 +159,37 @@ class Gmp implements MathAdapter
         return false;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::nextPrime()
+     */
     public function nextPrime($starting_value)
     {
         return gmp_strval(gmp_nextprime($starting_value));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::inverseMod()
+     */
     public function inverseMod($a, $m)
     {
         return gmp_strval(gmp_invert($a, $m));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::jacobi()
+     */
     public function jacobi($a, $n)
     {
         return gmp_strval(gmp_jacobi($a, $n));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::intToString()
+     */
     public function intToString($x)
     {
         $math = $this;
@@ -142,6 +214,10 @@ class Gmp implements MathAdapter
         }
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::stringToInt()
+     */
     public function stringToInt($s)
     {
         $math = $this;
@@ -154,11 +230,19 @@ class Gmp implements MathAdapter
         return $result;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::digestInteger()
+     */
     public function digestInteger($m)
     {
         return $this->stringToInt(hash('sha1', $this->intToString($m), true));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::gcd2()
+     */
     public function gcd2($a, $b)
     {
         while ($a) {

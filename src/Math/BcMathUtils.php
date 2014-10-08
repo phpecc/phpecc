@@ -36,6 +36,10 @@ if (! defined('MAX_BASE')) {
 class BcMathUtils
 {
 
+    /**
+     * @param integer $min
+     * @param integer $max
+     */
     public static function bcrand($min, $max = false)
     {
         if (! $max) {
@@ -167,10 +171,8 @@ class BcMathUtils
         $by = self::bc2bin($y);
 
         // Pad $bx and $by so that both are the same length.
-
         self::equalbinpad($bx, $by);
 
-        $ix = 0;
         $ret = '';
 
         for ($ix = 0; $ix < strlen($bx); $ix ++) {

@@ -69,17 +69,23 @@ class EcDH implements EcDHInterface
     /**
      * Secret used to derive the public key point.
      *
-     * @var number|string
+     * @var int|string
      */
     private $secret = 0;
 
     /**
      * Shared key between the two parties
      *
-     * @var number|string
+     * @var int|string
      */
     private $sharedSecretKey = null;
 
+    /**
+     * Initialize a new exchange from a generator point.
+     *
+     * @param GeneratorPoint $g Generator used to create the private key secret.
+     * @param MathAdapter $adapter A math adapter instance.
+     */
     public function __construct(GeneratorPoint $g, MathAdapter $adapter)
     {
         $this->generator = $g;
@@ -197,6 +203,9 @@ class EcDH implements EcDHInterface
         throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");
     }
 
+    /**
+     * Calculates a new public point for the exchange.
+     */
     private function calculatePublicPoint()
     {
         if ($this->secret == 0) {
@@ -207,6 +216,11 @@ class EcDH implements EcDHInterface
         return $this->generator->mul($this->secret);
     }
 
+    /**
+     * Calculates a random value to be used as the private key secret.
+     *
+     * @return int|string
+     */
     private function calculateSecret()
     {
         // Alice selects a random number between 1 and the order of the generator point(private)
@@ -220,6 +234,11 @@ class EcDH implements EcDHInterface
         return $r;
     }
 
+    /**
+     * Verifies that the shared secret key is available.
+     *
+     * @throws \RuntimeException when the key is not available.
+     */
     private function checkEncryptionState()
     {
         if ($this->sharedSecretKey === null) {
@@ -227,6 +246,10 @@ class EcDH implements EcDHInterface
         }
     }
 
+    /**
+     * Verifies that a public key exchange has been made.
+     * @throws \RuntimeException when the exchange has not been made.
+     */
     private function checkExchangeState()
     {
         if ($this->receivedPubPoint === null) {

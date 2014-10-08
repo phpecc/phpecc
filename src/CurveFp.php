@@ -36,19 +36,19 @@ class CurveFp implements CurveFpInterface
     /**
      * Elliptic curve over the field of integers modulo a prime.
      *
-     * @var number|string
+     * @var int|string
      */
     protected $a = 0;
 
     /**
      *
-     * @var number|string
+     * @var int|string
      */
     protected $b = 0;
 
     /**
      *
-     * @var number|string
+     * @var int|string
      */
     protected $prime = 0;
 
@@ -61,9 +61,9 @@ class CurveFp implements CurveFpInterface
     /**
      * Constructor that sets up the instance variables.
      *
-     * @param $prime number|string
-     * @param $a number|string
-     * @param $b number|string
+     * @param $prime int|string
+     * @param $a int|string
+     * @param $b int|string
      */
     public function __construct($prime, $a, $b, MathAdapter $adapter)
     {
@@ -146,6 +146,10 @@ class CurveFp implements CurveFpInterface
         return $this->cmp($other) == 0;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function __toString()
     {
         return 'curve(' . $this->a . ', ' . $this->b . ', ' . $this->prime . ')';

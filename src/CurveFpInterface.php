@@ -35,38 +35,47 @@ interface CurveFpInterface
 {
 
     /**
+     * Returns the point identified by given coordinates.
      *
-     * @param number|string $x
-     * @param number|string $y
-     * @param number|string $order
+     * @param int|string $x
+     * @param int|string $y
+     * @param int|string $order
      * @return PointInterface
      */
     public function getPoint($x, $y, $order = null);
 
     /**
+     * Checks whether the curve contains the given coordinates.
      *
-     * @param number|string $x
-     * @param number|string $y
+     * @param int|string $x
+     * @param int|string $y
      * @return bool
      */
     public function contains($x, $y);
 
     /**
-     * @return number|string
+     * Returns the a parameter of the curve.
+     *
+     * @return int|string
      */
     public function getA();
 
     /**
-     * @return number|string
+     * Returns the b parameter of the curve.
+     *
+     * @return int|string
      */
     public function getB();
 
     /**
-     * @return number|string
+     * Returns the prime associated with the curve.
+     *
+     * @return int|string
      */
     public function getPrime();
 
     /**
+     * Compares the curve to another.
      *
      * @param CurveFpInterface $other
      * @return int < 0 if $this < $other, 0 if $other == $this, > 0 if $this > $other
@@ -74,6 +83,7 @@ interface CurveFpInterface
     public function cmp(CurveFpInterface $other);
 
     /**
+     * Checks whether the curve is equal to another.
      *
      * @param CurveFpInterface $other
      * @return bool

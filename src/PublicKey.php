@@ -39,7 +39,16 @@ class PublicKey implements PublicKeyInterface
 
     protected $adapter;
 
-    public function __construct(PointInterface $generator, PointInterface $point, MathAdapter $adapter)
+    /**
+     * Initialize a new instance.
+     *
+     * @param GeneratorPoint $generator
+     * @param PointInterface $point
+     * @param MathAdapter $adapter
+     * @throws \LogicException
+     * @throws \RuntimeException
+     */
+    public function __construct(GeneratorPoint $generator, PointInterface $point, MathAdapter $adapter)
     {
         $this->curve = $generator->getCurve();
         $this->generator = $generator;
@@ -62,6 +71,10 @@ class PublicKey implements PublicKeyInterface
         }
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PublicKeyInterface::verifies()
+     */
     public function verifies($hash, SignatureInterface $signature)
     {
         $math = $this->adapter;
@@ -90,26 +103,37 @@ class PublicKey implements PublicKeyInterface
         return $math->cmp($v, $r) == 0;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PublicKeyInterface::getCurve()
+     */
     public function getCurve()
     {
         return $this->curve;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PublicKeyInterface::getGenerator()
+     */
     public function getGenerator()
     {
         return $this->generator;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PublicKeyInterface::getPoint()
+     */
     public function getPoint()
     {
         return $this->point;
     }
 
-    public function getPublicKey()
-    {
-        return $this;
-    }
-
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PublicKeyInterface::getPrivateKey()
+     */
     public function getPrivateKey($secretMultiplier)
     {
         return new PrivateKey($this, $secretMultiplier, $this->adapter);

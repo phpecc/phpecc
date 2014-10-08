@@ -197,7 +197,7 @@ class NistCurveTest extends AbstractTestCase
 
         $generator = EccFactory::getNistCurves($math)->generator192();
         $curve = EccFactory::getNistCurves($math)->curve192();
-        $publicKey = $generator->getPublicKey($Qx, $Qy);
+        $publicKey = $generator->getPublicKeyFrom($Qx, $Qy);
 
         $actual = $publicKey->verifies($math->digestInteger($msg), new Signature($R, $S));
 
@@ -223,11 +223,12 @@ class NistCurveTest extends AbstractTestCase
     public function testSignatureValidityWithCorrectHash(MathAdapter $math, array $values)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
-        $publicKey = $generator->getPublicKey($generator->mul($values['d'])
-            ->getX(), $generator->mul($values['d'])
-            ->getY());
-        $privateKey = $publicKey->getPrivateKey($values['d']);
+        $publicKey = $generator->getPublicKeyFrom(
+            $generator->mul($values['d'])->getX(),
+            $generator->mul($values['d'])->getY()
+        );
 
+        $privateKey = $publicKey->getPrivateKey($values['d']);
         $sig = $privateKey->sign($values['e'], $values['k']);
 
         $this->assertEquals($values['R'], $sig->getR());
@@ -243,11 +244,12 @@ class NistCurveTest extends AbstractTestCase
     public function testSignatureValidityWithForgedHash(MathAdapter $math, array $values)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
-        $publicKey = $generator->getPublicKey($generator->mul($values['d'])
-            ->getX(), $generator->mul($values['d'])
-            ->getY());
-        $privateKey = $publicKey->getPrivateKey($values['d']);
+        $publicKey = $generator->getPublicKeyFrom(
+            $generator->mul($values['d'])->getX(),
+            $generator->mul($values['d'])->getY()
+        );
 
+        $privateKey = $publicKey->getPrivateKey($values['d']);
         $sig = $privateKey->sign($values['e'], $values['k']);
 
         $this->assertEquals($values['R'], $sig->getR());
@@ -269,7 +271,7 @@ class NistCurveTest extends AbstractTestCase
         $secretG = $generator->mul($secret);
         $hash = $math->rand($n);
 
-        $publicKey = $generator->getPublicKey($secretG->getX(), $secretG->getY());
+        $publicKey = $generator->getPublicKeyFrom($secretG->getX(), $secretG->getY());
         $privateKey = $publicKey->getPrivateKey($secret);
 
         $signature = $privateKey->sign($hash, $math->rand($n));

@@ -7,10 +7,21 @@ use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
 
+/**
+ * Static factory class providing factory methods to work with NIST and SECG recommended curves.
+ *
+ * @author thibaud
+ *
+ */
 class EccFactory
 {
-
-    private static function getAdapter()
+    /**
+     * Selects and creates the most appropriate adapter for the running environment.
+     *
+     * @throws \RuntimeException
+     * @return \Mdanter\Ecc\MathAdapter
+     */
+    public static function getAdapter()
     {
         if (extension_loaded('gmp')) {
             return new Gmp();
@@ -24,8 +35,9 @@ class EccFactory
     }
 
     /**
+     * Returns a factory to create NIST Recommended curves and generators.
      *
-     * @param MathAdapter $adapter
+     * @param MathAdapter $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return \Mdanter\Ecc\Curves\NistCurve
      */
     public static function getNistCurves(MathAdapter $adapter = null)
@@ -34,8 +46,9 @@ class EccFactory
     }
 
     /**
+     * Returns a factory to return SECG Recommended curves and generators.
      *
-     * @param MathAdapter $adapter
+     * @param MathAdapter $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return \Mdanter\Ecc\Curves\SecgCurve
      */
     public static function getSecgCurves(MathAdapter $adapter = null)
@@ -44,11 +57,12 @@ class EccFactory
     }
 
     /**
+     * Creates a new curve from arbitrary parameters.
      *
-     * @param number|string $prime
-     * @param number|string $a
-     * @param number|string $b
-     * @param MathAdapter $adapter
+     * @param int|string $prime
+     * @param int|string $a
+     * @param int|string $b
+     * @param MathAdapter $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return \Mdanter\Ecc\CurveFpInterface
      */
     public static function createCurve($prime, $a, $b, MathAdapter $adapter = null)

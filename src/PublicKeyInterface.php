@@ -56,4 +56,11 @@ interface PublicKeyInterface
      * @return PointInterface
      */
     public function getPoint();
+
+    /**
+     * Extracts the private key associated with this public key.
+     *
+     * @param int|string $secret The private key's secret.
+     */
+    public function getPrivateKey($secret);
 }

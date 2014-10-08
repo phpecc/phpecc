@@ -44,11 +44,19 @@ class PrivateKey implements PrivateKeyInterface
         $this->adapter = $adapter;
     }
 
+    /**
+     *
+     * @return PublicKeyInterface
+     */
     public function getPublicKey()
     {
         return $this->publicKey;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PrivateKeyInterface::sign()
+     */
     public function sign($hash, $random_k)
     {
         $math = $this->adapter;

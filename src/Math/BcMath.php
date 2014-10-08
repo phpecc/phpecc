@@ -31,11 +31,19 @@ use Mdanter\Ecc\MathAdapter;
 class BcMath implements MathAdapter
 {
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::cmp()
+     */
     public function cmp($first, $other)
     {
         return bccomp($first, $other);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::mod()
+     */
     public function mod($number, $modulus)
     {
         $res = bcmod($number, $modulus);
@@ -44,59 +52,103 @@ class BcMath implements MathAdapter
             $res = bcadd($modulus, $res);
         }
 
-        return gmp_strval($res);
+        return $res;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::add()
+     */
     public function add($augend, $addend)
     {
         return bcadd($augend, $addend);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::sub()
+     */
     public function sub($minuend, $subtrahend)
     {
         return bcsub($minuend, $subtrahend);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::mul()
+     */
     public function mul($multiplier, $multiplicand)
     {
         return bcmul($multiplier, $multiplicand);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::div()
+     */
     public function div($dividend, $divisor)
     {
         return bcdiv($dividend, $divisor);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::pow()
+     */
     public function pow($base, $exponent)
     {
         return bcpow($base, $exponent);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rand()
+     */
     public function rand($n)
     {
         return BcMathUtils::bcrand($n);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::bitwiseAnd()
+     */
     public function bitwiseAnd($first, $other)
     {
         return BcMathUtils::bcand($first, $other);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::toString()
+     */
     public function toString($value)
     {
         return $value;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::hexDec()
+     */
     public function hexDec($hex)
     {
         return BcMathUtils::bchexdec($hex);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::decHex()
+     */
     public function decHex($dec)
     {
         return BcMathUtils::bcdechex($dec);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::powmod()
+     */
     public function powmod($base, $exponent, $modulus)
     {
         if ($exponent < 0) {
@@ -106,6 +158,10 @@ class BcMath implements MathAdapter
         return bcpowmod($base, $exponent, $modulus);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::isPrime()
+     */
     public function isPrime($n)
     {
         $t = 40;
@@ -143,6 +199,10 @@ class BcMath implements MathAdapter
         return true;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::nextPrime()
+     */
     public function nextPrime($starting_value)
     {
         if (bccomp($starting_value, 2) == - 1) {
@@ -158,6 +218,10 @@ class BcMath implements MathAdapter
         return $result;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::inverseMod()
+     */
     public function inverseMod($a, $m)
     {
         while (bccomp($a, 0) == - 1) {
@@ -203,6 +267,10 @@ class BcMath implements MathAdapter
         return $result;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::jacobi()
+     */
     public function jacobi($a, $n)
     {
         if ($n >= 3 && $n % 2 == 1) {
@@ -244,6 +312,10 @@ class BcMath implements MathAdapter
         throw new \RuntimeException('Could not calc Jacobi');
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::intToString()
+     */
     public function intToString($x)
     {
         if (bccomp($x, 0) != - 1) {
@@ -268,6 +340,10 @@ class BcMath implements MathAdapter
         throw new \RuntimeException();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::stringToInt()
+     */
     public function stringToInt($s)
     {
          $result = 0;
@@ -279,11 +355,19 @@ class BcMath implements MathAdapter
         return $result;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::digestInteger()
+     */
     public function digestInteger($m)
     {
         return $this->stringToInt(hash('sha1', $this->intToString($m), true));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::gcd2()
+     */
     public function gcd2($a, $b)
     {
         while ($a) {

@@ -35,6 +35,11 @@ interface PrivateKeyInterface
 {
 
     /**
+     * @return PublicKeyInterface
+     */
+    public function getPublicKey();
+
+    /**
      * @return Signature
      */
     public function sign($hash, $random_k);

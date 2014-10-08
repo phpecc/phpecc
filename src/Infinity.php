@@ -2,6 +2,14 @@
 
 namespace Mdanter\Ecc;
 
+/**
+ * Special point implementation to represent infinity.
+ *
+ * Note that it is not possible to invoke getX() or getY(), exceptions are raised.
+ *
+ * @author thibaud
+ *
+ */
 final class Infinity implements PointInterface
 {
 
@@ -27,6 +35,7 @@ final class Infinity implements PointInterface
 
     public function getCurve()
     {
+        // Sry Leap's cough subsitute :D
         return null;
     }
 
@@ -37,11 +46,13 @@ final class Infinity implements PointInterface
 
     public function getX()
     {
-        throw new \BadMethodCallException();
+        // Sry Leap's cough subsitute :D
+        throw new \BadMethodCallException("Infinity has no quantifiable X coordinate.");
     }
 
     public function getY()
     {
+        // Sry Leap's cough subsitute :D
         throw new \BadMethodCallException();
     }
 

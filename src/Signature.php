@@ -33,22 +33,43 @@ namespace Mdanter\Ecc;
  */
 class Signature implements SignatureInterface
 {
-
+    /**
+     *
+     * @var int|string
+     */
     protected $r;
 
+    /**
+     *
+     * @var int|string
+     */
     protected $s;
 
+    /**
+     * Initialize a new instance with values
+     *
+     * @param int|string $r
+     * @param int|string $s
+     */
     public function __construct($r, $s)
     {
         $this->r = $r;
         $this->s = $s;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\SignatureInterface::getR()
+     */
     public function getR()
     {
         return $this->r;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\SignatureInterface::getS()
+     */
     public function getS()
     {
         return $this->s;

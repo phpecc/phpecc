@@ -10,6 +10,7 @@ use Mdanter\Ecc\Points;
 use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\CurveFpInterface;
 use Mdanter\Ecc\Math\DebugAdapter;
+use Mdanter\Ecc\Math\DebugDecorator;
 
 class EcArithmeticTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,8 +18,8 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
     public function getAdapters()
     {
         return [
-            [ new DebugAdapter(new Gmp(), function ($msg) { /*echo $msg;*/ }) ],
-            [ new DebugAdapter(new BcMath(), function ($msg) { /*echo $msg;*/ }) ]
+            [ new DebugDecorator(new Gmp(), function ($msg) { /*echo $msg;*/ }) ],
+            [ new DebugDecorator(new BcMath(), function ($msg) { /*echo $msg;*/ }) ]
         ];
     }
 

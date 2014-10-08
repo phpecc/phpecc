@@ -33,8 +33,17 @@ namespace Mdanter\Ecc;
  */
 interface SignatureInterface
 {
-
+    /**
+     * Returns the r parameter of the signature.
+     *
+     * @return int|string
+     */
     public function getR();
 
+    /**
+     * Returns the s parameter of the signature.
+     *
+     * @return int|string
+     */
     public function getS();
 }
