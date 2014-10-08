@@ -52,7 +52,7 @@ interface MathAdapter
     /**
      * Divides a number by another.
      *
-     * @param number $divisor
+     * @param int|string $divisor
      * @return int|string
      */
     function div($dividend, $divisor);

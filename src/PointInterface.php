@@ -91,21 +91,21 @@ interface PointInterface
     /**
      * Returns the order of the point.
      *
-     * @return number
+     * @return int|string
      */
     public function getOrder();
 
     /**
      * Returns the X coordinate of the point.
      *
-     * @return number
+     * @return int|string
      */
     public function getX();
 
     /**
      * Returns the Y coordinate of the point.
      *
-     * @return number
+     * @return int|string
      */
     public function getY();
 
