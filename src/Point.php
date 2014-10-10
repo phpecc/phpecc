@@ -1,4 +1,5 @@
 <?php
+
 namespace Mdanter\Ecc;
 
 /**
@@ -25,353 +26,285 @@ namespace Mdanter\Ecc;
  * ***********************************************************************
  */
 
-/*
- * This class is where the elliptic curve arithmetic takes place. The important methods are: - add: adds two points according to ec arithmetic - double: doubles a point on the ec field mod p - mul: uses double and add to achieve multiplication The rest of the methods are there for supporting the ones above.
+/**
+ * This class is where the elliptic curve arithmetic takes place. The important methods are:
+ * - add: adds two points according to ec arithmetic
+ * - double: doubles a point on the ec field mod p
+ * - mul: uses double and add to achieve multiplication The rest of the methods are there for supporting the ones above.
+ *
+ * @author Matej Danter
  */
 class Point implements PointInterface
 {
 
-    public $curve;
+    /**
+     *
+     * @var CurveFpInterface
+     */
+    private $curve;
 
-    public $x;
+    /**
+     *
+     * @var int|string
+     */
+    private $x;
 
-    public $y;
+    /**
+     *
+     * @var int|string
+     */
+    private $y;
 
-    public $order;
+    /**
+     *
+     * @var int|string
+     */
+    private $order;
 
-    public static $infinity = 'infinity';
+    /**
+     *
+     * @var MathAdapter
+     */
+    private $adapter;
 
-    public function __construct(CurveFpInterface $curve, $x, $y, $order = null)
+    /**
+     * Initialize a new instance
+     *
+     * @param CurveFpInterface $curve
+     * @param int|string $x
+     * @param int|string $y
+     * @param int|string $order
+     * @param MathAdapter $adapter
+     * @throws \RuntimeException when either the curve does not contain the given coordinates or
+     * when order is not null and P(x, y) * order is not equal to infinity.
+     */
+    public function __construct(CurveFpInterface $curve, $x, $y, $order = null, MathAdapter $adapter)
     {
         $this->curve = $curve;
         $this->x = $x;
         $this->y = $y;
         $this->order = $order;
-        
+        $this->adapter = $adapter;
+
         if (! $this->curve->contains($this->x, $this->y)) {
-            throw new \RuntimeException("Curve" . print_r($this->curve, true) . " does not contain point ( " . $x . " , " . $y . " )");
+            throw new \RuntimeException(
+                "Curve " . $this->curve . " does not contain point (" . $x . ", " . $y . ")");
         }
-        
+
+        if ($this->order != null && ! $this->mul($order)->equals(Points::infinity())) {
+            throw new \RuntimeException(
+                "SELF * ORDER MUST EQUAL INFINITY. (" . (string)$this->mul($order) . " found instead)");
+        }
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::cmp()
+     */
+    public function cmp(PointInterface $other)
+    {
+        if ($other->equals(Points::infinity())) {
+            return 1;
+        }
+
+        $math = $this->adapter;
+
+        $equal  = ($math->cmp($this->x, $other->getX()) == 0);
+        $equal &= ($math->cmp($this->y, $other->getY()) == 0);
+        $equal &= $this->curve->equals($other->getCurve());
+
+        if ($equal) {
+            return 0;
+        }
+
+        return 1;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::equals()
+     */
+    public function equals(PointInterface $other)
+    {
+        return $this->cmp($other) == 0;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::add()
+     */
+    public function add(PointInterface $addend)
+    {
+        if ($addend->equals(Points::infinity())) {
+            return $this;
+        }
+
+        $math = $this->adapter;
+
+        if (! $this->curve->equals($addend->getCurve())) {
+            throw new \RuntimeException("The Elliptic Curves do not match.");
+        }
+
+        if ($math->mod($math->cmp($this->x, $addend->getX()), $this->curve->getPrime()) == 0) {
+            if ($math->mod($math->add($this->y, $addend->getY()), $this->curve->getPrime()) == 0) {
+                return Points::infinity();
+            }
+            else {
+                return $this->getDouble();
+            }
+        }
+
+        $p = $this->curve->getPrime();
+        $l = $math->mod(
+            $math->mul($math->sub($addend->getY(), $this->y),
+                $math->inverseMod($math->sub($addend->getX(), $this->x), $p)), $p);
+
+        $x3 = $math->mod($math->sub($math->sub($math->pow($l, 2), $this->x), $addend->getX()), $p);
+        $y3 = $math->mod($math->sub($math->mul($l, $math->sub($this->x, $x3)), $this->y), $p);
+
+        if ($math->cmp(0, $y3) > 0) {
+            $y3 = $math->add($p, $y3);
+        }
+
+        return $this->curve->getPoint($x3, $y3);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::mul()
+     */
+    public function mul($multiplier)
+    {
+        $math = $this->adapter;
+        $e = $multiplier;
+
         if ($this->order != null) {
-            if (self::cmp(self::mul($order, $this), self::$infinity) != 0) {
-                throw new \RuntimeException("SELF * ORDER MUST EQUAL INFINITY.");
-            }
+            $e = $math->mod($e, $this->order);
         }
+
+        if ($math->cmp($e, 0) == 0) {
+            return Points::infinity();
+        }
+
+        if ($math->cmp($e, 0) > 0) {
+            $e3 = $math->mul(3, $e);
+
+            $negative_self = $this->curve->getPoint($this->x, $math->sub(0, $this->y), $this->order);
+            $i = $math->div($this->calcleftMostBit($e3), 2);
+
+            $result = $this;
+
+            while ($math->cmp($i, 1) > 0) {
+                $result = $result->getDouble();
+
+                $e3bit = $math->cmp($math->bitwiseAnd($e3, $i), '0');
+                $ebit = $math->cmp($math->bitwiseAnd($e, $i), '0');
+
+                if ($e3bit != 0 && $ebit == 0) {
+                    $result = $result->add($this);
+                }
+                elseif ($e3bit == 0 && $ebit != 0) {
+                    $result = $result->add($negative_self);
+                }
+
+                $i = $math->div($i, 2);
+            }
+
+            return $result;
+        }
+
+        throw new \RuntimeException('Unable to multiply by ' . $multiplier);
     }
 
-    public static function cmp($p1, $p2)
+    /**
+     *
+     * @param int|string $x
+     * @throws \RuntimeException
+     */
+    private function calcLeftMostBit($x)
     {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            if (! ($p1 instanceof Point)) {
-                if (($p2 instanceof Point)) {
-                    return 1;
-                }
-                
-                if (! ($p2 instanceof Point)) {
-                    return 0;
-                }
+        $math = $this->adapter;
+
+        if ($math->cmp($x, 0) > 0) {
+            $result = 1;
+
+            while ($math->cmp($result, $x) <= 0) {
+                $result = $math->mul(2, $result);
             }
-            
-            if (! ($p2 instanceof Point)) {
-                if (($p1 instanceof Point)) {
-                    return 1;
-                }
-                
-                if (! ($p1 instanceof Point)) {
-                    return 0;
-                }
-            }
-            
-            if (gmp_cmp($p1->x, $p2->x) == 0 && gmp_cmp($p1->y, $p2->y) == 0 && CurveFp::cmp($p1->curve, $p2->curve)) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            if (! ($p1 instanceof Point)) {
-                if (($p2 instanceof Point)) {
-                    return 1;
-                }
-                
-                if (! ($p2 instanceof Point)) {
-                    return 0;
-                }
-            }
-            
-            if (! ($p2 instanceof Point)) {
-                if (($p1 instanceof Point)) {
-                    return 1;
-                }
-                
-                if (! ($p1 instanceof Point)) {
-                    return 0;
-                }
-            }
-            
-            if (bccomp($p1->x, $p2->x) == 0 && bccomp($p1->y, $p2->y) == 0 && CurveFp::cmp($p1->curve, $p2->curve)) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
+
+            return $math->div($result, 2);
         }
+
+        throw new \RuntimeException('Unable to get leftmost bit of ' . $math->toString($x));
     }
 
-    public static function add($p1, $p2)
-    {
-        if (self::cmp($p2, self::$infinity) == 0 && ($p1 instanceof Point)) {
-            return $p1;
-        }
-        
-        if (self::cmp($p1, self::$infinity) == 0 && ($p2 instanceof Point)) {
-            return $p2;
-        }
-        
-        if (self::cmp($p1, self::$infinity) == 0 && self::cmp($p2, self::$infinity) == 0) {
-            return self::$infinity;
-        }
-        
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            if (CurveFp::cmp($p1->curve, $p2->curve) == 0) {
-                if (GmpUtils::gmpMod2(gmp_cmp($p1->x, $p2->x), $p1->curve->getPrime()) == 0) {
-                    if (GmpUtils::gmpMod2(gmp_add($p1->y, $p2->y), $p1->curve->getPrime()) == 0) {
-                        return self::$infinity;
-                    } else {
-                        return self::double($p1);
-                    }
-                }
-                
-                $p = $p1->curve->getPrime();
-                $l = gmp_strval(gmp_mul(gmp_sub($p2->y, $p1->y), NumberTheory::inverseMod(gmp_sub($p2->x, $p1->x), $p)));
-                $x3 = gmp_strval(GmpUtils::gmpMod2(gmp_sub(gmp_sub(gmp_pow($l, 2), $p1->x), $p2->x), $p));
-                $y3 = gmp_strval(GmpUtils::gmpMod2(gmp_sub(gmp_mul($l, gmp_sub($p1->x, $x3)), $p1->y), $p));
-                $p3 = new Point($p1->curve, $x3, $y3);
-                
-                return $p3;
-            } else {
-                throw new \RuntimeException("The Elliptic Curves do not match.");
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            
-            if (CurveFp::cmp($p1->curve, $p2->curve) == 0) {
-                if (bcmod(bccomp($p1->x, $p2->x), $p1->curve->getPrime()) == 0) {
-                    if (bcmod(bcadd($p1->y, $p2->y), $p1->curve->getPrime()) == 0) {
-                        return self::$infinity;
-                    } else {
-                        return self::double($p1);
-                    }
-                }
-                
-                $p = $p1->curve->getPrime();
-                $l = bcmod(bcmul(bcsub($p2->y, $p1->y), NumberTheory::inverseMod(bcsub($p2->x, $p1->x), $p)), $p);
-                $x3 = bcmod(bcsub(bcsub(bcpow($l, 2), $p1->x), $p2->x), $p);
-                
-                $step0 = bcsub($p1->x, $x3);
-                $step1 = bcmul($l, $step0);
-                $step2 = bcsub($step1, $p1->y);
-                $step3 = bcmod($step2, $p);
-                
-                $y3 = bcmod(bcsub(bcmul($l, bcsub($p1->x, $x3)), $p1->y), $p);
-                
-                if (bccomp(0, $y3) == 1) {
-                    $y3 = bcadd($p, $y3);
-                }
-                
-                $p3 = new Point($p1->curve, $x3, $y3);
-                
-                return $p3;
-            } else {
-                throw new \RuntimeException("The Elliptic Curves do not match.");
-            }
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
-        }
-    }
-
-    public static function mul($x2, PointInterface $p1)
-    {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            $e = $x2;
-            
-            if (self::cmp($p1, self::$infinity) == 0) {
-                return self::$infinity;
-            }
-            if ($p1->order != null) {
-                $e = gmp_strval(GmpUtils::gmpMod2($e, $p1->order));
-            }
-            if (gmp_cmp($e, 0) == 0) {
-                
-                return self::$infinity;
-            }
-            
-            $e = gmp_strval($e);
-            
-            if (gmp_cmp($e, 0) > 0) {
-                
-                $e3 = gmp_mul(3, $e);
-                
-                $negative_self = new Point($p1->curve, $p1->x, gmp_strval(gmp_sub(0, $p1->y)), $p1->order);
-                $i = gmp_div(self::lefmostBit($e3), 2);
-                
-                $result = $p1;
-                
-                while (gmp_cmp($i, 1) > 0) {
-                    $result = self::double($result);
-                    
-                    $e3bit = gmp_cmp(gmp_and($e3, $i), 0);
-                    $ebit = gmp_cmp(gmp_and($e, $i), 0);
-                    
-                    if ($e3bit != 0 && $ebit == 0) {
-                        $result = self::add($result, $p1);
-                    } elseif ($e3bit == 0 && $ebit != 0) {
-                        $result = self::add($result, $negative_self);
-                    }
-                    
-                    $i = gmp_strval(gmp_div($i, 2));
-                }
-                return $result;
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            $e = $x2;
-            
-            if (self::cmp($p1, self::$infinity) == 0) {
-                return self::$infinity;
-            }
-            
-            if ($p1->order != null) {
-                
-                $e = bcmod($e, $p1->order);
-            }
-            
-            if (bccomp($e, 0) == 0) {
-                return self::$infinity;
-            }
-            
-            if (bccomp($e, 0) == 1) {
-                $e3 = bcmul(3, $e);
-                
-                $negative_self = new Point($p1->curve, $p1->x, bcsub(0, $p1->y), $p1->order);
-                $i = bcdiv(self::lefmostBit($e3), 2);
-                
-                $result = $p1;
-                
-                while (bccomp($i, 1) == 1) {
-                    $result = self::double($result);
-                    
-                    $e3bit = bccomp(BcMathUtils::bcand($e3, $i), '0');
-                    $ebit = bccomp(BcMathUtils::bcand($e, $i), '0');
-                    
-                    if ($e3bit != 0 && $ebit == 0) {
-                        $result = self::add($result, $p1);
-                    } elseif ($e3bit == 0 && $ebit != 0) {
-                        $result = self::add($result, $negative_self);
-                    }
-                    
-                    $i = bcdiv($i, 2);
-                }
-                return $result;
-            }
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
-        }
-    }
-
-    public static function lefmostBit($x)
-    {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            if (gmp_cmp($x, 0) > 0) {
-                $result = 1;
-                while (gmp_cmp($result, $x) < 0 || gmp_cmp($result, $x) == 0) {
-                    $result = gmp_mul(2, $result);
-                }
-                return gmp_strval(gmp_div($result, 2));
-            }
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            if (bccomp($x, 0) == 1) {
-                $result = 1;
-                while (bccomp($result, $x) == - 1 || bccomp($result, $x) == 0) {
-                    $result = bcmul(2, $result);
-                }
-                return bcdiv($result, 2);
-            }
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
-        }
-    }
-
-    public static function rmul(PointInterface $x1, $m)
-    {
-        return self::mul($m, $x1);
-    }
-
-    public function __toString()
-    {
-        if (! ($this instanceof Point) && $this == self::$infinity) {
-            return self::$infinity;
-        }
-        
-        return "(" . $this->x . "," . $this->y . ")";
-    }
-
-    public static function double(PointInterface $p1)
-    {
-        if (\Mdanter\Ecc\ModuleConfig::hasGmp()) {
-            $p = $p1->curve->getPrime();
-            $a = $p1->curve->getA();
-            
-            $inverse = NumberTheory::inverseMod(gmp_strval(gmp_mul(2, $p1->y)), $p);
-            $three_x2 = gmp_mul(3, gmp_pow($p1->x, 2));
-            $l = gmp_strval(GmpUtils::gmpMod2(gmp_mul(gmp_add($three_x2, $a), $inverse), $p));
-            $x3 = gmp_strval(GmpUtils::gmpMod2(gmp_sub(gmp_pow($l, 2), gmp_mul(2, $p1->x)), $p));
-            $y3 = gmp_strval(GmpUtils::gmpMod2(gmp_sub(gmp_mul($l, gmp_sub($p1->x, $x3)), $p1->y), $p));
-            
-            if (gmp_cmp(0, $y3) > 0) {
-                $y3 = gmp_strval(gmp_add($p, $y3));
-            }
-            
-            $p3 = new Point($p1->curve, $x3, $y3);
-            
-            return $p3;
-        } elseif (\Mdanter\Ecc\ModuleConfig::hasBcMath()) {
-            $p = $p1->curve->getPrime();
-            $a = $p1->curve->getA();
-            
-            $inverse = NumberTheory::inverseMod(bcmul(2, $p1->y), $p);
-            $three_x2 = bcmul(3, bcpow($p1->x, 2));
-            $l = bcmod(bcmul(bcadd($three_x2, $a), $inverse), $p);
-            $x3 = bcmod(bcsub(bcpow($l, 2), bcmul(2, $p1->x)), $p);
-            $y3 = bcmod(bcsub(bcmul($l, bcsub($p1->x, $x3)), $p1->y), $p);
-            
-            if (bccomp(0, $y3) == 1) {
-                $y3 = bcadd($p, $y3);
-            }
-            
-            $p3 = new Point($p1->curve, $x3, $y3);
-            
-            return $p3;
-        } else {
-            throw new \RuntimeException("Please install BCMATH or GMP");
-        }
-    }
-
-    public function getX()
-    {
-        return $this->x;
-    }
-
-    public function getY()
-    {
-        return $this->y;
-    }
-
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getCurve()
+     */
     public function getCurve()
     {
         return $this->curve;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::__toString()
+     */
+    public function __toString()
+    {
+        return "(" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ")";
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getDouble()
+     */
+    public function getDouble()
+    {
+        $math = $this->adapter;
+
+        $p = $this->curve->getPrime();
+        $a = $this->curve->getA();
+
+        $inverse = $math->inverseMod($math->mul(2, $this->y), $p);
+        $threeX2 = $math->mul(3, $math->pow($this->x, 2));
+
+        $l = $math->mod($math->mul($math->add($threeX2, $a), $inverse), $p);
+        $x3 = $math->mod($math->sub($math->pow($l, 2), $math->mul(2, $this->x)), $p);
+        $y3 = $math->mod($math->sub($math->mul($l, $math->sub($this->x, $x3)), $this->y), $p);
+
+        if ($math->cmp(0, $y3) > 0) {
+            $y3 = $math->add($p, $y3);
+        }
+
+        return new self($this->curve, $x3, $y3, null, $this->adapter);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getOrder()
+     */
     public function getOrder()
     {
         return $this->order;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getX()
+     */
+    public function getX()
+    {
+        return $this->x;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PointInterface::getY()
+     */
+    public function getY()
+    {
+        return $this->y;
     }
 }

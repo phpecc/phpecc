@@ -28,34 +28,91 @@ namespace Mdanter\Ecc;
 
 /**
  * This is the contract for implementing Point, which encapsulates entities
- * and operations over the points on the Elliptic Curve.
+ * and operations over the points on the Elliptic Curve. Implementations must be immutable.
+ *
+ * Implementors must be wary of the special "Infinity" implementation, which breaks LSP, and should always
+ * be checked against (and properly handled) when receiving a PointInterface as an argument or when a method indicates it can
+ * return infinity.
+ *
+ * @todo Fix LSP break (possibly derive an extra interface, FinitePointInterface from current one, and move
+ * coordinate-related ops to sub-interface).
  *
  * @author Matej Danter
  */
 interface PointInterface
 {
+    /**
+     * Adds another point to the current one and returns the resulting point.
+     *
+     * @param PointInterface $addend
+     * @return PointInterface|Infinity
+     */
+    public function add(PointInterface $addend);
 
-    public function __construct(CurveFpInterface $curve, $x, $y, $order = null);
+    /**
+     * Compares the current instance to another point.
+     *
+     * @param PointInterface|Infinity $other
+     * @return int|string A number less than 0 when current instance is less than the given point, 0 when they are equal,
+     * and greater than 0 when current instance is greater than the given point.
+     */
+    public function cmp(PointInterface $other);
 
-    public static function cmp($p1, $p2);
+    /**
+     * Checks whether the current instance is equal to the given point.
+     *
+     * @param PointInterface|Infinity $other
+     * @return bool true when points are equal, false otherwise.
+     */
+    public function equals(PointInterface $other);
 
-    public static function add($p1, $p2);
+    /**
+     * Multiplies the point by a scalar value and returns the resulting point.
+     *
+     * @param mixed $multiplier
+     * @return PointInterface|Infinity
+     */
+    public function mul($multiplier);
 
-    public static function mul($x2, PointInterface $p1);
-
-    public static function lefmostBit($x);
-
-    public static function rmul(PointInterface $p1, $m);
-
-    public function __toString();
-
-    public static function double(PointInterface $p1);
-
-    public function getX();
-
-    public function getY();
-
+    /**
+     * Returns the curve to which the point belongs.
+     *
+     * @return CurveFpInterface
+     */
     public function getCurve();
 
+    /**
+     * Doubles the current point and returns the resulting point.
+     *
+     * @return PointInterface|Infinity
+     */
+    public function getDouble();
+
+    /**
+     * Returns the order of the point.
+     *
+     * @return int|string
+     */
     public function getOrder();
+
+    /**
+     * Returns the X coordinate of the point.
+     *
+     * @return int|string
+     */
+    public function getX();
+
+    /**
+     * Returns the Y coordinate of the point.
+     *
+     * @return int|string
+     */
+    public function getY();
+
+    /**
+     * Returns the string representation of the point.
+     *
+     * @return string
+     */
+    public function __toString();
 }

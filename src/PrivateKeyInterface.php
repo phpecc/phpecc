@@ -27,22 +27,20 @@ namespace Mdanter\Ecc;
  */
 
 /**
- * This is a contract for the PrivaetKey portion of ECDSA.
+ * This is a contract for the PrivateKey portion of ECDSA.
  *
  * @author Matej Danter
  */
 interface PrivateKeyInterface
 {
 
-    public function __construct(PublicKey $public_key, $secret_multiplier);
+    /**
+     * @return PublicKeyInterface
+     */
+    public function getPublicKey();
 
+    /**
+     * @return Signature
+     */
     public function sign($hash, $random_k);
-
-    public static function intToString($x);
-
-    public static function stringToInt($s);
-
-    public static function digestInteger($m);
-
-    public static function pointIsValid(Point $generator, $x, $y);
 }

@@ -33,16 +33,60 @@ namespace Mdanter\Ecc;
  */
 interface CurveFpInterface
 {
-    // constructor that sets up the instance variables
-    public function __construct($prime, $a, $b);
 
+    /**
+     * Returns the point identified by given coordinates.
+     *
+     * @param int|string $x
+     * @param int|string $y
+     * @param int|string $order
+     * @return PointInterface
+     */
+    public function getPoint($x, $y, $order = null);
+
+    /**
+     * Checks whether the curve contains the given coordinates.
+     *
+     * @param int|string $x
+     * @param int|string $y
+     * @return bool
+     */
     public function contains($x, $y);
 
+    /**
+     * Returns the a parameter of the curve.
+     *
+     * @return int|string
+     */
     public function getA();
 
+    /**
+     * Returns the b parameter of the curve.
+     *
+     * @return int|string
+     */
     public function getB();
 
+    /**
+     * Returns the prime associated with the curve.
+     *
+     * @return int|string
+     */
     public function getPrime();
 
-    public static function cmp(CurveFpInterface $cp1, CurveFpInterface $cp2);
+    /**
+     * Compares the curve to another.
+     *
+     * @param CurveFpInterface $other
+     * @return int < 0 if $this < $other, 0 if $other == $this, > 0 if $this > $other
+     */
+    public function cmp(CurveFpInterface $other);
+
+    /**
+     * Checks whether the curve is equal to another.
+     *
+     * @param CurveFpInterface $other
+     * @return bool
+     */
+    public function equals(CurveFpInterface $other);
 }
