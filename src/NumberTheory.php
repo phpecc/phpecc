@@ -157,7 +157,7 @@ class NumberTheory
                     return $this->adapter->powmod($a, $this->adapter->div($this->adapter->add($p, 3), 8), $p);
                 }
                 if ($d == $p - 1) {
-                    return ($this->adapter->mod($this->adapter->mul($this->adapter->mul(2, $a), $this->math->powmod($this->adapter->mul(4, $a), $this->adapter->div($this->adapter->sub($p, 5), 8), $p)), $p));
+                    return ($this->adapter->mod($this->adapter->mul($this->adapter->mul(2, $a), $this->adapter->powmod($this->adapter->mul(4, $a), $this->adapter->div($this->adapter->sub($p, 5), 8), $p)), $p));
                 }
                 //shouldn't get here
             }
