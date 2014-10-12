@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc;
 
-use Mdanter\Ecc\MathAdapter;
-
 /***********************************************************************
 Copyright (C) 2012 Matyas Danter
 
@@ -104,8 +102,6 @@ class NumberTheory
 
     public function polynomialPowMod($base, $exponent, $polymod, $p)
     {
-        $s = '';
-
         if ($exponent < $p) {
 
             if ($exponent == 0) {
@@ -161,7 +157,7 @@ class NumberTheory
                     return $this->adapter->powmod($a, $this->adapter->div($this->adapter->add($p, 3), 8), $p);
                 }
                 if ($d == $p - 1) {
-                    return ($this->adapter->mod($this->adapter->mul($this->adapter->mul(2, $a), $this->powmod($this->adapter->mul(4, $a), $this->adapter->div($this->adapter->sub($p, 5), 8), $p)), $p));
+                    return ($this->adapter->mod($this->adapter->mul($this->adapter->mul(2, $a), $this->math->powmod($this->adapter->mul(4, $a), $this->adapter->div($this->adapter->sub($p, 5), 8), $p)), $p));
                 }
                 //shouldn't get here
             }
