@@ -28,8 +28,7 @@ class NumberTheoryTest extends AbstractTestCase
 		if (! file_exists($file_sqrt)) {
             $this->fail('Square root input data not found');
         }
-
-        $this->generator = EccFactory::getSecgCurves()->generator256k1();
+		$this->generator = EccFactory::getSecgCurves()->generator256k1();
         $this->compression_data = json_decode(file_get_contents($file_comp));
         
         $this->sqrt_data = json_decode(file_get_contents($file_sqrt));
@@ -46,7 +45,6 @@ class NumberTheoryTest extends AbstractTestCase
 		
 		foreach($this->sqrt_data->no_root as $r)
 		{
-			// $r['a'], $r['p']
 			$this->theory->squareRootModP($r->a, $r->p);	
 		}
 	}
@@ -60,7 +58,6 @@ class NumberTheoryTest extends AbstractTestCase
 		
 		foreach($this->sqrt_data->no_root as $r)
 		{
-			// $r['a'], $r['p']
 			$this->theory->squareRootModP($r->a, $r->p);	
 		}
 	}
@@ -76,7 +73,10 @@ class NumberTheoryTest extends AbstractTestCase
 			$this->theory->squareRootModP($r->a, $r->p);	
 		}
 	}
-	/*public function testSqrtDataWithRootsBcMath()
+	/**
+     * This runs into an error..
+     */
+    /*public function testSqrtDataWithRootsBcMath()
 	{
 		$this->math = new \Mdanter\Ecc\Math\BcMath();
 		$this->theory = new \Mdanter\Ecc\NumberTheory($this->math);
@@ -87,6 +87,7 @@ class NumberTheoryTest extends AbstractTestCase
 			$this->theory->squareRootModP($r->a, $r->p);	
 		}
 	}*/
+	
 	
 	public function testBcmathCompressionConsistency()
 	{
@@ -113,25 +114,25 @@ class NumberTheoryTest extends AbstractTestCase
 			$y_byte = substr($o->compressed, 0, 2);
 			$x_coordinate = substr($o->compressed, 2);
 			
-			$x = gmp_strval(gmp_init($x_coordinate, 16),10);
+			$x = $this->math->hexDec($x_coordinate);
 
 			// x^3 
 			$x3 = $this->math->powmod( $x, 3, $this->generator->getCurve()->getPrime() );
 			
 			// y^2
-			$y2 = gmp_add(
+			$y2 = $this->math->add(
 						$x3,
 						$this->generator->getCurve()->getB()
 					);
 
 			// y0 = sqrt(y^2)
 			$y0 = $theory->squareRootModP(
-						gmp_strval($y2, 10),
+						$y2,
 						$this->generator->getCurve()->getPrime()
 					);
 
 			// y1 = other root = p - y0
-			$y1 = gmp_strval(gmp_sub($this->generator->getCurve()->getPrime(), $y0), 16);
+			$y1 = gmp_strval($this->math->sub($this->generator->getCurve()->getPrime(), $y0), 16);
 
 			if($y_byte == '02')
 			{
@@ -168,7 +169,7 @@ class NumberTheoryTest extends AbstractTestCase
 			$y = substr($o->decompressed, 66, 64);
 
 			// y % 2 == 0       - true: y is even(02) / false: y is odd(03)
-			$mod = $math->mod(gmp_init($y, 16), 2);
+			$mod = $math->mod($math->hexDec($y), 2);
 			$compressed = '0'.(($mod==0) ? '2' : '3').$x;
 			
 			// Check that the mod function reported the parity for the y value.
@@ -178,7 +179,7 @@ class NumberTheoryTest extends AbstractTestCase
 	
 	public function testBcmathModFunction()
 	{
-		$math = new \Mdanter\Ecc\Math\Gmp();
+		$math = new \Mdanter\Ecc\Math\BcMath();
 		
 		// $o->compressed, $o->decompressed public key.
 		// Check that we can compress a key properly (tests $math->mod())
@@ -191,7 +192,7 @@ class NumberTheoryTest extends AbstractTestCase
 			$y = substr($o->decompressed, 66, 64);
 
 			// y % 2 == 0       - true: y is even(02) / false: y is odd(03)
-			$mod = $math->mod(gmp_init($y, 16), 2);
+			$mod = $math->mod($math->hexDec($y), 2);
 			
 			// Prefix x coordinate with 02/03 depending on parity.
 			$compressed = '0'.(($mod==0) ? '2' : '3').$x;

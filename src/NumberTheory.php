@@ -133,7 +133,6 @@ class NumberTheory
     public function squareRootModP($a, $p)
     {
         if (0 <= $a && $a < $p && 1 < $p) {
-
             if ($a == 0) {
                 return 0;
             }
