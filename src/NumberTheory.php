@@ -78,10 +78,12 @@ class NumberTheory
     public function polynomialMultiplyMod($m1, $m2, $polymod, $p)
     {
         $prod = array();
+        $cm1 = count($m1);
+        $cm2 = count($m2);
 
-        for ($i = 0; $i < count($m1); $i++) {
+        for ($i = 0; $i < $cm1; $i++) {
      
-            for ($j = 0; $j < count($m2); $j++) {
+            for ($j = 0; $j < $cm2; $j++) {
      
                 $index = $i + $j;
                 $prod[$index] = 
@@ -157,35 +159,56 @@ class NumberTheory
                 }
                 if ($d == $p - 1) {
                     return $this->adapter->mod(
-						$this->adapter->mul(
-							$this->adapter->mul(
-								2,
-								$a
-							),
-							$this->adapter->powmod(
-								$this->adapter->mul(
-									4,
-									$a
-								),
-								$this->adapter->div(
-									$this->adapter->sub(
-										$p,
-										5
-									),
-									8
-								), 
-								$p
-							)
-						), 
-						$p);
+                        $this->adapter->mul(
+                            $this->adapter->mul(
+                                2,
+                                $a
+                            ),
+                            $this->adapter->powmod(
+                                $this->adapter->mul(
+                                    4,
+                                    $a
+                                ),
+                                $this->adapter->div(
+                                    $this->adapter->sub(
+                                        $p,
+                                        5
+                                    ),
+                                    8
+                                ),
+                                $p
+                            )
+                        ),
+                        $p);
                 }
                 //shouldn't get here
             }
 
             for ($b = 2; $b < $p; $p++) {
-                if ($this->adapter->jacobi($this->adapter->mul($b, $this->adapter->sub($b, $this->adapter->mul(4, $a))), $p) == -1) {
+                if ($this->adapter->jacobi(
+                        $this->adapter->mul(
+                            $b,
+                            $this->adapter->sub(
+                                $b,
+                                $this->adapter->mul(
+                                    4,
+                                    $a
+                                )
+                            )
+                        ),
+                        $p
+                    ) == -1) {
                     $f = array($a, -$b, 1);
-                    $ff = $this->polynomialPowMod(array(0, 1), $this->adapter->div($this->adapter->add($p, 1), 2), $f, $p);
+                    $ff = $this->polynomialPowMod(
+                        array(0, 1),
+                        $this->adapter->div(
+                            $this->adapter->add(
+                                $p,
+                                1
+                            ),
+                            2),
+                        $f,
+                        $p);
 
                     if ($ff[1] == 0) {
                         return $ff[0];
@@ -198,4 +221,7 @@ class NumberTheory
 }
 
 
-class SquareRootException extends \Exception {};
+class SquareRootException extends \Exception
+{
+}
+;

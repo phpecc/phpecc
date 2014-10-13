@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc\Tests;
 
-include('../bootstrap.php');
-
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\BcMath;
