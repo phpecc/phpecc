@@ -67,24 +67,29 @@ class NumberTheoryTest extends AbstractTestCase
 		
 		foreach($this->sqrt_data->has_root as $r)
 		{
-			// $r['a'], $r['p']
-			$this->theory->squareRootModP($r->a, $r->p);	
+			$root1 = $this->theory->squareRootModP($r->a, $r->p);
+			$root2 = $this->math->sub($r->p, $root1);
+			$this->assertTrue(in_array($root1, $r->res));
+			$this->assertTrue(in_array($root1, $r->res));
+			
 		}
 	}
 	/**
      * This runs into an error..
      */
-    /*public function testSqrtDataWithRootsBcMath()
+    public function testSqrtDataWithRootsBcMath()
 	{
 		$this->math = new \Mdanter\Ecc\Math\BcMath();
 		$this->theory = new \Mdanter\Ecc\NumberTheory($this->math);
 		
 		foreach($this->sqrt_data->has_root as $r)
 		{
-			// $r['a'], $r['p']
-			$this->theory->squareRootModP($r->a, $r->p);	
+			$root1 = $this->theory->squareRootModP($r->a, $r->p);
+			$root2 = $this->math->sub($r->p, $root1);
+			$this->assertTrue(in_array($root1, $r->res));
+			$this->assertTrue(in_array($root1, $r->res));
 		}
-	}*/
+	}
 	
 	
 	public function testBcmathCompressionConsistency()
