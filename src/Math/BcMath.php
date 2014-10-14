@@ -274,7 +274,7 @@ class BcMath implements MathAdapter
     public function jacobi($a, $n)
     {
         if ($n >= 3 && $n % 2 == 1) {
-            $a = bcmod($a, $n);
+            $a = $this->mod($a, $n);
 
             if ($a == 0) {
                 return 0;
@@ -287,12 +287,12 @@ class BcMath implements MathAdapter
             $a1 = $a;
             $e = 0;
 
-            while (bcmod($a1, 2) == 0) {
+            while ($this->mod($a1, 2) == 0) {
                 $a1 = bcdiv($a1, 2);
                 $e = bcadd($e, 1);
             }
 
-            if (bcmod($e, 2) == 0 || bcmod($n, 8) == 1 || bcmod($n, 8) == 7) {
+            if ($this->mod($e, 2) == 0 || $this->mod($n, 8) == 1 || $this->mod($n, 8) == 7) {
                 $s = 1;
             } else {
                 $s = - 1;
