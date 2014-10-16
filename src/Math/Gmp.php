@@ -36,7 +36,7 @@ class Gmp implements MathAdapter
      */
     public function add($augend, $addend)
     {
-        return gmp_add($augend, $addend);
+        return gmp_strval(gmp_add($augend, $addend));
     }
 
     /**
@@ -45,7 +45,7 @@ class Gmp implements MathAdapter
      */
     public function sub($minuend, $subtrahend)
     {
-        return gmp_sub($minuend, $subtrahend);
+        return gmp_strval(gmp_sub($minuend, $subtrahend));
     }
 
     /**
@@ -54,7 +54,7 @@ class Gmp implements MathAdapter
      */
     public function mul($multiplier, $multiplicand)
     {
-        return gmp_mul($multiplier, $multiplicand);
+        return gmp_strval(gmp_mul($multiplier, $multiplicand));
     }
 
     /**
@@ -63,7 +63,7 @@ class Gmp implements MathAdapter
      */
     public function div($dividend, $divisor)
     {
-        return gmp_div($dividend, $divisor);
+        return gmp_strval(gmp_div($dividend, $divisor));
     }
 
     /**
