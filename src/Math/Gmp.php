@@ -45,7 +45,7 @@ class Gmp implements MathAdapter
      */
     public function sub($minuend, $subtrahend)
     {
-        return gmp_sub($minuend, $subtrahend);
+        return gmp_strval(gmp_sub($minuend, $subtrahend));
     }
 
     /**
@@ -54,7 +54,7 @@ class Gmp implements MathAdapter
      */
     public function mul($multiplier, $multiplicand)
     {
-        return gmp_mul($multiplier, $multiplicand);
+        return gmp_strval(gmp_mul($multiplier, $multiplicand));
     }
 
     /**
@@ -72,7 +72,7 @@ class Gmp implements MathAdapter
      */
     public function pow($base, $exponent)
     {
-        return gmp_pow($base, $exponent);
+        return gmp_strval(gmp_pow($base, $exponent));
     }
 
     /**
@@ -97,7 +97,7 @@ class Gmp implements MathAdapter
      */
     public function bitwiseAnd($first, $other)
     {
-        return gmp_and($first, $other);
+        return gmp_strval(gmp_and($first, $other));
     }
 
     /**
