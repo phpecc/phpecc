@@ -6,6 +6,7 @@ use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
+use Mdanter\Ecc\NumberTheory;
 
 /**
  * Static factory class providing factory methods to work with NIST and SECG recommended curves.
@@ -32,6 +33,18 @@ class EccFactory
         }
 
         throw new \RuntimeException('Please install either GMP or BCMath extensions.');
+    }
+
+    /**
+     * Returns a number theory library initialized with the respective math adaptor.
+     * Contains useful modular/polynomial functions
+     *
+     * @param MathAdapter $adapter [optional] Defaults to the return value EccFactory::getAdapter().
+     * @return \Mdanter\Ecc\NumberTheory
+     */
+    public static function getNumberTheory(MathAdapter $adapter = null)
+    {
+        return new NumberTheory($adapter ?: self::getAdapter());
     }
 
     /**
