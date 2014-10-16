@@ -74,7 +74,7 @@ class MathTest extends AbstractTestCase
 
         $dechex = $math->hexDec($hexdec);
         $this->assertTrue(is_string($dechex) AND ! is_resource($dechex));
-        
+
     }
     /**
      * @dataProvider getAdapters
