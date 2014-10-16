@@ -72,7 +72,7 @@ class Gmp implements MathAdapter
      */
     public function pow($base, $exponent)
     {
-        return gmp_pow($base, $exponent);
+        return gmp_strval(gmp_pow($base, $exponent));
     }
 
     /**
@@ -97,7 +97,7 @@ class Gmp implements MathAdapter
      */
     public function bitwiseAnd($first, $other)
     {
-        return gmp_and($first, $other);
+        return gmp_strval(gmp_and($first, $other));
     }
 
     /**
