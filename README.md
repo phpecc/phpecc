@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/mdanter/phpecc.svg?branch=master)](https://travis-ci.org/mdanter/phpecc)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mdanter/phpecc/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mdanter/phpecc?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/mdanter/phpecc/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mdanter/phpecc/?branch=master)
 
 ### Information
 
