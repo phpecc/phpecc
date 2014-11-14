@@ -6,7 +6,7 @@
 
 ### Information
 
-This library is a rewrite/update of Matys Danter's ECC library. All credit goes to him.
+This library is a rewrite/update of Matyas Danter's ECC library. All credit goes to him.
 
 For more information on Elliptic Curve Cryptography please read http://matejdanter.com/?cat=14
 
