@@ -28,7 +28,7 @@ class GeneratorPoint implements PointInterface
      * Initialize a new instance using an existing curve point and a math adapter.
      *
      * @param PointInterface $wrapped
-     * @param MathAdapter $adapter
+     * @param MathAdapter    $adapter
      */
     public function __construct(PointInterface $wrapped, MathAdapter $adapter)
     {
@@ -121,8 +121,8 @@ class GeneratorPoint implements PointInterface
      * Verifies validity of given coordinates against the current point and its point.
      *
      * @todo Check if really necessary here (only used for testing in lib)
-     * @param int|string $x
-     * @param int|string $y
+     * @param  int|string $x
+     * @param  int|string $y
      * @return boolean
      */
     public function isValid($x, $y)
@@ -178,6 +178,6 @@ class GeneratorPoint implements PointInterface
 
     public function __toString()
     {
-        return (string)$this->point;
+        return (string) $this->point;
     }
 }

@@ -40,7 +40,6 @@ use Mdanter\Ecc\Point;
  */
 class NistCurve
 {
-
     private $adapter;
 
     public function __construct(MathAdapter $adapter)
@@ -104,7 +103,6 @@ class NistCurve
         return $curve->getPoint($x, $y, $order);
     }
 
-
     /**
      * Returns an NIST P-256 curve.
      *
@@ -160,7 +158,6 @@ class NistCurve
 
         return new GeneratorPoint($curve->getPoint($x, $y, $order), $this->adapter);
     }
-
 
     /**
      * Returns an NIST P-521 curve.

@@ -12,7 +12,6 @@ use Mdanter\Ecc\MathAdapter;
  */
 class DebugDecorator implements MathAdapter
 {
-
     private $adapter;
 
     private $writer;
@@ -31,7 +30,7 @@ class DebugDecorator implements MathAdapter
      */
     private function writeln($message)
     {
-        call_user_func($this->writer, $message . PHP_EOL);
+        call_user_func($this->writer, $message.PHP_EOL);
     }
 
     /**
@@ -45,8 +44,8 @@ class DebugDecorator implements MathAdapter
 
     /**
      *
-     * @param string $func
-     * @param array $args
+     * @param  string $func
+     * @param  array  $args
      * @return mixed
      */
     private function call($func, $args)
@@ -61,7 +60,7 @@ class DebugDecorator implements MathAdapter
 
         $res = call_user_func_array([ $this->adapter, $func ], $args);
 
-        $this->writeln($func . '(' . implode(', ', $strArgs) . ') => ' . var_export($this->adapter->toString($res), true));
+        $this->writeln($func.'('.implode(', ', $strArgs).') => '.var_export($this->adapter->toString($res), true));
 
         return $res;
     }

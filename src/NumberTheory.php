@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc;
 
-    /***********************************************************************
+/***********************************************************************
      * Copyright (C) 2012 Matyas Danter
      *
      * Permission is hereby granted, free of charge, to any person obtaining
@@ -50,9 +50,7 @@ class NumberTheory
     {
         $count_polymod = count($polymod);
         if (end($polymod) == 1 && $count_polymod > 1) {
-
             while (count($poly) >= $count_polymod) {
-
                 if (end($poly) != 0) {
                     for ($i = 2; $i < $count_polymod + 1; $i++) {
                         $poly[count($poly) - $i] =
@@ -82,9 +80,7 @@ class NumberTheory
         $cm2 = count($m2);
 
         for ($i = 0; $i < $cm1; $i++) {
-
             for ($j = 0; $j < $cm2; $j++) {
-
                 $index = $i + $j;
                 if (!isset($prod[$index])) {
                     $prod[$index] = 0;
@@ -99,7 +95,6 @@ class NumberTheory
                             )
                         ),
                         $p);
-
             }
         }
 
@@ -130,6 +125,7 @@ class NumberTheory
                     $s = $this->polynomialMultiplyMod($G, $s, $polymod, $p);
                 }
             }
+
             return $s;
         }
     }
@@ -147,7 +143,7 @@ class NumberTheory
             $jac = $this->adapter->jacobi($a, $p);
 
             if ($jac == -1) {
-                throw new SquareRootException($a . " has no square root modulo " . $p);
+                throw new \LogicException($a." has no square root modulo ".$p);
             }
 
             if ($this->adapter->mod($p, 4) == 3) {
@@ -194,7 +190,6 @@ class NumberTheory
                         ),
                         $p) == -1
                 ) {
-
                     $f = array($a, -$b, 1);
 
                     $ff = $this->polynomialPowMod(
@@ -217,10 +212,3 @@ class NumberTheory
         }
     }
 }
-
-
-class SquareRootException extends \Exception
-{
-}
-
-;

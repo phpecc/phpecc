@@ -7,7 +7,6 @@ use Mdanter\Ecc\Points;
 
 class InfinityTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testInfinityEqualsItself()
     {
         $infinity = Infinity::getInstance();

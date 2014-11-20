@@ -33,7 +33,6 @@ namespace Mdanter\Ecc;
  */
 interface EcDHInterface
 {
-
     /**
      * Calculate the shared key between the local public point and the received public point.
      *
@@ -51,7 +50,7 @@ interface EcDHInterface
     /**
      * Returns the local public point, generating one if it does not exist.
      *
-     * @param bool $regenerate Forces calculation of a new public point when set to true.
+     * @param  bool           $regenerate Forces calculation of a new public point when set to true.
      * @return PointInterface
      */
     public function getPublicPoint($regenerate = false);
@@ -67,7 +66,7 @@ interface EcDHInterface
      * Generates an encrypted version of the given text, that can be decoded by the other
      * party.
      *
-     * @param string $string
+     * @param  string $string
      * @return string
      */
     public function encrypt($string);
@@ -75,7 +74,7 @@ interface EcDHInterface
     /**
      * Decrypts a string that was encrypted by the other party.
      *
-     * @param string $string The encrypted string.
+     * @param  string $string The encrypted string.
      * @return string
      */
     public function decrypt($string);
@@ -84,7 +83,7 @@ interface EcDHInterface
      * Generates an encrypted version of the given file, that can be decoded by the other
      * party.
      *
-     * @param string $path
+     * @param  string      $path
      * @return string|null
      */
     public function encryptFile($path);
@@ -92,7 +91,7 @@ interface EcDHInterface
     /**
      * Decrypts a file that was encrypted by the other party.
      *
-     * @param string $path
+     * @param  string      $path
      * @return string|null
      */
     public function decryptFile($path);

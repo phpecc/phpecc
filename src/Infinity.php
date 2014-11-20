@@ -12,7 +12,6 @@ namespace Mdanter\Ecc;
  */
 final class Infinity implements PointInterface
 {
-
     private static $instance = null;
 
     /**
@@ -30,7 +29,6 @@ final class Infinity implements PointInterface
 
     private function __construct()
     {
-
     }
 
     public function getCurve()

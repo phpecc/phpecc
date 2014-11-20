@@ -30,7 +30,6 @@ use Mdanter\Ecc\MathAdapter;
 
 class BcMath implements MathAdapter
 {
-
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapter::cmp()
@@ -330,7 +329,7 @@ class BcMath implements MathAdapter
                 $r = bcmod($x, 256);
                 $ascii = chr($r);
 
-                $result = $ascii . $result;
+                $result = $ascii.$result;
                 $x = $q;
             }
 
@@ -346,7 +345,7 @@ class BcMath implements MathAdapter
      */
     public function stringToInt($s)
     {
-         $result = 0;
+        $result = 0;
 
         for ($c = 0; $c < strlen($s); $c ++) {
             $result = bcadd(bcmul(256, $result), ord($s[$c]));

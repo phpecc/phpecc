@@ -33,13 +33,12 @@ namespace Mdanter\Ecc;
  */
 interface CurveFpInterface
 {
-
     /**
      * Returns the point identified by given coordinates.
      *
-     * @param int|string $x
-     * @param int|string $y
-     * @param int|string $order
+     * @param  int|string     $x
+     * @param  int|string     $y
+     * @param  int|string     $order
      * @return PointInterface
      */
     public function getPoint($x, $y, $order = null);
@@ -47,8 +46,8 @@ interface CurveFpInterface
     /**
      * Checks whether the curve contains the given coordinates.
      *
-     * @param int|string $x
-     * @param int|string $y
+     * @param  int|string $x
+     * @param  int|string $y
      * @return bool
      */
     public function contains($x, $y);
@@ -77,15 +76,15 @@ interface CurveFpInterface
     /**
      * Compares the curve to another.
      *
-     * @param CurveFpInterface $other
-     * @return int < 0 if $this < $other, 0 if $other == $this, > 0 if $this > $other
+     * @param  CurveFpInterface $other
+     * @return int              < 0 if $this < $other, 0 if $other == $this, > 0 if $this > $other
      */
     public function cmp(CurveFpInterface $other);
 
     /**
      * Checks whether the curve is equal to another.
      *
-     * @param CurveFpInterface $other
+     * @param  CurveFpInterface $other
      * @return bool
      */
     public function equals(CurveFpInterface $other);

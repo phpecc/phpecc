@@ -206,7 +206,7 @@ class Gmp implements MathAdapter
                 $r = $math->mod($x, 256);
                 $ascii = chr($r);
 
-                $result = $ascii . $result;
+                $result = $ascii.$result;
                 $x = $q;
             }
 
@@ -226,6 +226,7 @@ class Gmp implements MathAdapter
         for ($c = 0; $c < strlen($s); $c ++) {
             $result = $math->add($math->mul(256, $result), ord($s[$c]));
         }
+
         return $result;
     }
 

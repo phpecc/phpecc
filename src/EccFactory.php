@@ -6,7 +6,6 @@ use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
-use Mdanter\Ecc\NumberTheory;
 
 /**
  * Static factory class providing factory methods to work with NIST and SECG recommended curves.
@@ -39,7 +38,7 @@ class EccFactory
      * Returns a number theory library initialized with the respective math adaptor.
      * Contains useful modular/polynomial functions
      *
-     * @param MathAdapter $adapter [optional] Defaults to the return value EccFactory::getAdapter().
+     * @param  MathAdapter               $adapter [optional] Defaults to the return value EccFactory::getAdapter().
      * @return \Mdanter\Ecc\NumberTheory
      */
     public static function getNumberTheory(MathAdapter $adapter = null)
@@ -50,7 +49,7 @@ class EccFactory
     /**
      * Returns a factory to create NIST Recommended curves and generators.
      *
-     * @param MathAdapter $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
+     * @param  MathAdapter                   $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return \Mdanter\Ecc\Curves\NistCurve
      */
     public static function getNistCurves(MathAdapter $adapter = null)
@@ -61,7 +60,7 @@ class EccFactory
     /**
      * Returns a factory to return SECG Recommended curves and generators.
      *
-     * @param MathAdapter $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
+     * @param  MathAdapter                   $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return \Mdanter\Ecc\Curves\SecgCurve
      */
     public static function getSecgCurves(MathAdapter $adapter = null)
@@ -72,10 +71,10 @@ class EccFactory
     /**
      * Creates a new curve from arbitrary parameters.
      *
-     * @param int|string $prime
-     * @param int|string $a
-     * @param int|string $b
-     * @param MathAdapter $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
+     * @param  int|string                    $prime
+     * @param  int|string                    $a
+     * @param  int|string                    $b
+     * @param  MathAdapter                   $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return \Mdanter\Ecc\CurveFpInterface
      */
     public static function createCurve($prime, $a, $b, MathAdapter $adapter = null)

@@ -58,9 +58,9 @@ class PublicKey implements PublicKeyInterface
     /**
      * Initialize a new instance.
      *
-     * @param GeneratorPoint $generator
-     * @param PointInterface $point
-     * @param MathAdapter $adapter
+     * @param  GeneratorPoint    $generator
+     * @param  PointInterface    $point
+     * @param  MathAdapter       $adapter
      * @throws \LogicException
      * @throws \RuntimeException
      */

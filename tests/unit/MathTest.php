@@ -2,15 +2,10 @@
 
 namespace Mdanter\Ecc\Tests;
 
-use Mdanter\Ecc\CurveFp;
-use Mdanter\Ecc\Point;
 use Mdanter\Ecc\MathAdapter;
-use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\Math\BcMath;
 
 class MathTest extends AbstractTestCase
 {
-
     private $knownPrimes;
 
     private $startPrime = 31;
@@ -19,7 +14,7 @@ class MathTest extends AbstractTestCase
 
     protected function setUp()
     {
-        $file = TEST_DATA_DIR. '/primes.lst';
+        $file = TEST_DATA_DIR.'/primes.lst';
 
         if (! file_exists($file)) {
             $this->fail('Primes not found');
@@ -43,38 +38,37 @@ class MathTest extends AbstractTestCase
         $y = 4;
 
         $mod = $math->mod($x, $y);
-        $this->assertTrue(is_string($mod) AND ! is_resource($mod));
+        $this->assertTrue(is_string($mod) && ! is_resource($mod));
 
         $add = $math->add($x, $y);
-        $this->assertTrue(is_string($add) AND ! is_resource($add));
+        $this->assertTrue(is_string($add) && ! is_resource($add));
 
         $sub = $math->sub($add, $y);
-        $this->assertTrue(is_string($sub) AND ! is_resource($sub));
+        $this->assertTrue(is_string($sub) && ! is_resource($sub));
 
         $mul = $math->mul($x, $y);
-        $this->assertTrue(is_string($mul) AND ! is_resource($mul));
+        $this->assertTrue(is_string($mul) && ! is_resource($mul));
 
         $div = $math->div($mul, $y);
-        $this->assertTrue(is_string($div) AND ! is_resource($div));
+        $this->assertTrue(is_string($div) && ! is_resource($div));
 
         $pow = $math->pow($x, $y);
-        $this->assertTrue(is_string($pow) AND ! is_resource($div));
+        $this->assertTrue(is_string($pow) && ! is_resource($div));
 
         $rand = $math->rand($x);
-        $this->assertTrue(is_string($rand) AND ! is_resource($rand));
+        $this->assertTrue(is_string($rand) && ! is_resource($rand));
 
         $powmod = $math->powmod($x, $y, $y);
-        $this->assertTrue(is_string($powmod) AND ! is_resource($powmod));
+        $this->assertTrue(is_string($powmod) && ! is_resource($powmod));
 
         $bitwiseand = $math->bitwiseAnd($x, $y);
-        $this->assertTrue(is_string($bitwiseand) AND ! is_resource($bitwiseand));
+        $this->assertTrue(is_string($bitwiseand) && ! is_resource($bitwiseand));
 
         $hexdec = $math->decHex($x);
-        $this->assertTrue(is_string($hexdec) AND ! is_resource($hexdec));
+        $this->assertTrue(is_string($hexdec) && ! is_resource($hexdec));
 
         $dechex = $math->hexDec($hexdec);
-        $this->assertTrue(is_string($dechex) AND ! is_resource($dechex));
-
+        $this->assertTrue(is_string($dechex) && ! is_resource($dechex));
     }
     /**
      * @dataProvider getAdapters
@@ -83,10 +77,10 @@ class MathTest extends AbstractTestCase
     {
         foreach ($this->knownPrimes as $key => $prime) {
             if (trim($prime) == '') {
-                user_error('Empty prime number detected from line #' . ($key + 1), E_USER_WARNING);
+                user_error('Empty prime number detected from line #'.($key + 1), E_USER_WARNING);
             }
 
-            $this->assertTrue($math->isPrime($prime), 'Prime "' . $prime . '" is not detected as prime.');
+            $this->assertTrue($math->isPrime($prime), 'Prime "'.$prime.'" is not detected as prime.');
         }
     }
 

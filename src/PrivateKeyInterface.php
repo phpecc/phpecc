@@ -33,7 +33,6 @@ namespace Mdanter\Ecc;
  */
 interface PrivateKeyInterface
 {
-
     /**
      * @return PublicKeyInterface
      */

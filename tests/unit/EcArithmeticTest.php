@@ -9,12 +9,10 @@ use Mdanter\Ecc\Point;
 use Mdanter\Ecc\Points;
 use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\CurveFpInterface;
-use Mdanter\Ecc\Math\DebugAdapter;
 use Mdanter\Ecc\Math\DebugDecorator;
 
 class EcArithmeticTest extends \PHPUnit_Framework_TestCase
 {
-
     public function getAdapters()
     {
         return [
@@ -68,7 +66,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
 
         $check = Points::infinity();
 
-        for ($i = 0; $i < 8; $i++){
+        for ($i = 0; $i < 8; $i++) {
             $p = $g->mul($i % 7);
 
             $a = $check->add($g);
@@ -143,7 +141,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
 
         $check = Points::infinity();
 
-        for ($i = 0; $i < 8; $i++){
+        for ($i = 0; $i < 8; $i++) {
             $p = $g->mul($i % 7);
 
             $this->assertEquals($check, $p, "$g * $i = $p, expected $check");

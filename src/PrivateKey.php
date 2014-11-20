@@ -30,7 +30,6 @@ namespace Mdanter\Ecc;
  */
 class PrivateKey implements PrivateKeyInterface
 {
-
     private $publicKey;
 
     private $secretMultiplier;

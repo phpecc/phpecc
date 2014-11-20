@@ -36,7 +36,6 @@ namespace Mdanter\Ecc;
  */
 class Point implements PointInterface
 {
-
     /**
      *
      * @var CurveFpInterface
@@ -70,13 +69,13 @@ class Point implements PointInterface
     /**
      * Initialize a new instance
      *
-     * @param CurveFpInterface $curve
-     * @param int|string $x
-     * @param int|string $y
-     * @param int|string $order
-     * @param MathAdapter $adapter
+     * @param  CurveFpInterface  $curve
+     * @param  int|string        $x
+     * @param  int|string        $y
+     * @param  int|string        $order
+     * @param  MathAdapter       $adapter
      * @throws \RuntimeException when either the curve does not contain the given coordinates or
-     * when order is not null and P(x, y) * order is not equal to infinity.
+     *                                   when order is not null and P(x, y) * order is not equal to infinity.
      */
     public function __construct(CurveFpInterface $curve, $x, $y, $order = null, MathAdapter $adapter)
     {
@@ -88,12 +87,12 @@ class Point implements PointInterface
 
         if (! $this->curve->contains($this->x, $this->y)) {
             throw new \RuntimeException(
-                "Curve " . $this->curve . " does not contain point (" . $x . ", " . $y . ")");
+                "Curve ".$this->curve." does not contain point (".$x.", ".$y.")");
         }
 
         if ($this->order != null && ! $this->mul($order)->equals(Points::infinity())) {
             throw new \RuntimeException(
-                "SELF * ORDER MUST EQUAL INFINITY. (" . (string)$this->mul($order) . " found instead)");
+                "SELF * ORDER MUST EQUAL INFINITY. (".(string) $this->mul($order)." found instead)");
         }
     }
 
@@ -148,8 +147,7 @@ class Point implements PointInterface
         if ($math->mod($math->cmp($this->x, $addend->getX()), $this->curve->getPrime()) == 0) {
             if ($math->mod($math->add($this->y, $addend->getY()), $this->curve->getPrime()) == 0) {
                 return Points::infinity();
-            }
-            else {
+            } else {
                 return $this->getDouble();
             }
         }
@@ -202,8 +200,7 @@ class Point implements PointInterface
 
                 if ($e3bit != 0 && $ebit == 0) {
                     $result = $result->add($this);
-                }
-                elseif ($e3bit == 0 && $ebit != 0) {
+                } elseif ($e3bit == 0 && $ebit != 0) {
                     $result = $result->add($negative_self);
                 }
 
@@ -213,12 +210,12 @@ class Point implements PointInterface
             return $result;
         }
 
-        throw new \RuntimeException('Unable to multiply by ' . $multiplier);
+        throw new \RuntimeException('Unable to multiply by '.$multiplier);
     }
 
     /**
      *
-     * @param int|string $x
+     * @param  int|string        $x
      * @throws \RuntimeException
      */
     private function calcLeftMostBit($x)
@@ -235,7 +232,7 @@ class Point implements PointInterface
             return $math->div($result, 2);
         }
 
-        throw new \RuntimeException('Unable to get leftmost bit of ' . $math->toString($x));
+        throw new \RuntimeException('Unable to get leftmost bit of '.$math->toString($x));
     }
 
     /**
@@ -253,7 +250,7 @@ class Point implements PointInterface
      */
     public function __toString()
     {
-        return "(" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ")";
+        return "(".$this->adapter->toString($this->x).",".$this->adapter->toString($this->y).")";
     }
 
     /**
