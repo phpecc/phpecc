@@ -35,7 +35,6 @@ if (! defined('MAX_BASE')) {
 
 class BcMathUtils
 {
-
     /**
      * @param integer $min
      * @param integer $max
@@ -105,7 +104,7 @@ class BcMathUtils
     // Bitwise OR
 
     /**
-     * @param string $x
+     * @param string  $x
      * @param integer $y
      */
     public static function bcor($x, $y)
@@ -123,6 +122,7 @@ class BcMathUtils
     public static function bcleftshift($num, $shift)
     {
         bcscale(0);
+
         return bcmul($num, bcpow(2, $shift));
     }
 
@@ -130,6 +130,7 @@ class BcMathUtils
     public static function bcrightshift($num, $shift)
     {
         bcscale(0);
+
         return bcdiv($num, bcpow(2, $shift));
     }
 
@@ -200,7 +201,7 @@ class BcMathUtils
     public static function dec2base($dec, $base, $digits = false)
     {
         if ($base < 2 or $base > 256) {
-            throw new \RuntimeException("Invalid Base: " . $base);
+            throw new \RuntimeException("Invalid Base: ".$base);
         }
 
         bcscale(0);
@@ -213,12 +214,12 @@ class BcMathUtils
         while ($dec > $base - 1) {
             $rest = bcmod($dec, $base);
             $dec = bcdiv($dec, $base);
-            $value = $digits[$rest] . $value;
+            $value = $digits[$rest].$value;
         }
 
-        $value = $digits[intval($dec)] . $value;
+        $value = $digits[intval($dec)].$value;
 
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -227,7 +228,7 @@ class BcMathUtils
     public static function base2dec($value, $base, $digits = false)
     {
         if ($base < 2 or $base > 256) {
-            throw new \RuntimeException("Invalid Base: " . $base);
+            throw new \RuntimeException("Invalid Base: ".$base);
         }
 
         bcscale(0);
@@ -249,7 +250,7 @@ class BcMathUtils
             $dec = bcadd($dec, bcmul($element, $power));
         }
 
-        return (string)$dec;
+        return (string) $dec;
     }
 
     public static function digits($base)
@@ -267,7 +268,7 @@ class BcMathUtils
 
         $digits = substr($digits, 0, $base);
 
-        return (string)$digits;
+        return (string) $digits;
     }
 
     /**
@@ -287,7 +288,7 @@ class BcMathUtils
 
     /**
      * @param integer $length
-     * @param string $num
+     * @param string  $num
      */
     public static function fixedbinpad(&$num, $length)
     {
@@ -297,6 +298,6 @@ class BcMathUtils
             $pad .= self::bc2bin('0');
         }
 
-        $num = $pad . $num;
+        $num = $pad.$num;
     }
 }

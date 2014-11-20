@@ -4,7 +4,6 @@ namespace Mdanter\Ecc;
 
 class Points
 {
-
     /**
      * Returns the special "infinity" point.
      *

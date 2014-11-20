@@ -83,8 +83,8 @@ class EcDH implements EcDHInterface
     /**
      * Initialize a new exchange from a generator point.
      *
-     * @param GeneratorPoint $g Generator used to create the private key secret.
-     * @param MathAdapter $adapter A math adapter instance.
+     * @param GeneratorPoint $g       Generator used to create the private key secret.
+     * @param MathAdapter    $adapter A math adapter instance.
      */
     public function __construct(GeneratorPoint $g, MathAdapter $adapter)
     {
@@ -107,7 +107,7 @@ class EcDH implements EcDHInterface
      * Performs a key exchange with another party and calculates the shared secret for the exchange.
      *
      * @param EcDHInterface $other
-     * @param bool $forceNewKeys
+     * @param bool          $forceNewKeys
      */
     public function exchangeKeys(EcDHInterface $other, $forceNewKeys = false)
     {

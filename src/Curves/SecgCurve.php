@@ -36,7 +36,6 @@ use Mdanter\Ecc\MathAdapter;
  */
 class SecgCurve
 {
-
     private $adapter;
 
     public function __construct(MathAdapter $adapter)

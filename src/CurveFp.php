@@ -32,7 +32,6 @@ namespace Mdanter\Ecc;
  */
 class CurveFp implements CurveFpInterface
 {
-
     /**
      * Elliptic curve over the field of integers modulo a prime.
      *
@@ -152,6 +151,6 @@ class CurveFp implements CurveFpInterface
      */
     public function __toString()
     {
-        return 'curve(' . $this->a . ', ' . $this->b . ', ' . $this->prime . ')';
+        return 'curve('.$this->a.', '.$this->b.', '.$this->prime.')';
     }
 }

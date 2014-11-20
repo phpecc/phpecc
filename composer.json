@@ -37,8 +37,12 @@
    },
    "autoload":{
       "psr-4":{
-         "Mdanter\\Ecc\\Tests\\":"tests/unit",
          "Mdanter\\Ecc\\":"src/"
+      }
+   },
+   "autoload-dev":{
+      "psr-4":{
+         "Mdanter\\Ecc\\Tests\\":"tests/unit"
       }
    }
 }

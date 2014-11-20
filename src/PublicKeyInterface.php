@@ -33,11 +33,10 @@ namespace Mdanter\Ecc;
  */
 interface PublicKeyInterface
 {
-
     /**
      *
-     * @param string $hash
-     * @param SignatureInterface $signature
+     * @param  string             $hash
+     * @param  SignatureInterface $signature
      * @return bool
      */
     public function verifies($hash, SignatureInterface $signature);

@@ -3,16 +3,12 @@
 namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Math\BcMath;
-use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\MathAdapter;
 use Mdanter\Ecc\PublicKey;
 use Mdanter\Ecc\Signature;
-use Mdanter\Ecc\EcDH;
 
 class NistCurveTest extends AbstractTestCase
 {
-
     /**
      * @dataProvider getAdapters
      * @testdox Test 192-bit generated curves against ANSI X9.62 specifications
@@ -48,7 +44,7 @@ class NistCurveTest extends AbstractTestCase
         return $this->_getAdapters(
             [
                 [ 'cd6d0f029a023e9aaca429615b8f577abee685d8257cc83a',
-                    '0x00019c410987680e9fb6c0b6ecc01d9a2647c8bae27721bacdfc', false ],
+                    '0x00019c410987680e9fb6c0b6ecc01d9a2647c8bae27721bacdfc', false, ],
                 [ '00017f2fce203639e9eaf9fb50b81fc32776b30e3b02af16c73b',
                     '0x95da95c5e72dd48e229d4748d4eee658a9a54111b23b2adb', false ],
                 [ '0x4f77f8bc7fccbadd5760f4938746d5f253ee2168c1cf2792',
@@ -70,7 +66,7 @@ class NistCurveTest extends AbstractTestCase
                 [ '0x146479d944e6bda87e5b35818aa666a4c998a71f4e95edbc',
                     '0xa86d6fe62bc8fbd88139693f842635f687f132255858e7f6', false ],
                 [ '0xe594d4a598046f3598243f50fd2c7bd7d380edb055802253',
-                    '0x509014c0c4d6b536e3ca750ec09066af39b4c8616a53a923', false ] ]);
+                    '0x509014c0c4d6b536e3ca750ec09066af39b4c8616a53a923', false ], ]);
     }
 
     /**
@@ -96,7 +92,7 @@ class NistCurveTest extends AbstractTestCase
                     '0xd9dbfb332aa8e5ff091e8ce535857c37c73f6250ffb2e7ac',
                     '0x282102e364feded3ad15ddf968f88d8321aa268dd483ebc4',
                     '0x64dca58a20787c488d11d6dd96313f1b766f2d8efe122916',
-                    '0x1ecba28141e84ab4ecad92f56720e2cc83eb3d22dec72479', true ],
+                    '0x1ecba28141e84ab4ecad92f56720e2cc83eb3d22dec72479', true, ],
                 [
                     '0x94bb5bacd5f8ea765810024db87f4224ad71362a3c28284b2b9f39fab86db12e8beb94aae899768229be8fdb6c4f12f28912bb604703a79ccff769c1607f5a91450f30ba0460d359d9126cbd6296be6d9c4bb96c0ee74cbb44197c207f6db326ab6f5a659113a9034e54be7b041ced9dcf6458d7fb9cbfb2744d999f7dfd63f4',
                     '0x3e53ef8d3112af3285c0e74842090712cd324832d4277ae7',
@@ -180,7 +176,7 @@ class NistCurveTest extends AbstractTestCase
                     '0xbcfacf45139b6f5f690a4c35a5fffa498794136a2353fc77',
                     '0x6f4a6c906316a6afc6d98fe1f0399d056f128fe0270b0f22',
                     '0x9db679a3dafe48f7ccad122933acfe9da0970b71c94c21c1',
-                    '0x984c2db99827576c0a41a5da41e07d8cc768bc82f18c9da9', false ] ]);
+                    '0x984c2db99827576c0a41a5da41e07d8cc768bc82f18c9da9', false ], ]);
     }
 
     /**
@@ -213,7 +209,7 @@ class NistCurveTest extends AbstractTestCase
             'k' => '6140507067065001063065065565667405560006161556565665656654',
             'e' => '968236873715988614170569073515315707566766479517',
             'R' => '3342403536405981729393488334694600415596881826869351677613',
-            'S' => '5735822328888155254683894997897571951568553642892029982342' ] ] ]);
+            'S' => '5735822328888155254683894997897571951568553642892029982342', ], ], ]);
     }
 
     /**

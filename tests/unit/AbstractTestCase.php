@@ -7,7 +7,6 @@ use Mdanter\Ecc\Math\BcMath;
 
 abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {
-
     protected function _getAdapters(array $extra = null)
     {
         if ($extra == null) {
