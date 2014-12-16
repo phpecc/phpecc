@@ -128,7 +128,13 @@ class Gmp implements MathAdapter
      */
     public function decHex($dec)
     {
-        return gmp_strval(gmp_init($dec, 10), 16);
+        $hex = gmp_strval(gmp_init($dec, 10), 16);
+
+        if (strlen($hex) % 2 != 0) {
+        	$hex = '0' . $hex;
+        }
+
+        return $hex;
     }
 
     /**
