@@ -26,7 +26,8 @@ This package is released under the MIT license.
 
 You can install this library via Composer :
 
-`composer require mdanter/ecc:~0.1`
+=======
+`composer require mdanter/ecc`
 
 ### Contribute
 
