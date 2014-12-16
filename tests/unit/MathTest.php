@@ -30,7 +30,7 @@ class MathTest extends AbstractTestCase
         }, $lines);
     }
 
-    private $hexDecMap = [
+    private $decHexMap = [
     	'00' => 0,
 		'01' => 1,
 		'02' => 2,
@@ -54,7 +54,7 @@ class MathTest extends AbstractTestCase
      */
     public function testDecHex(MathAdapter $adapter)
     {
-    	foreach ($this->hexDecMap as $hex => $dec) {
+    	foreach ($this->decHexMap as $hex => $dec) {
     		$actual = $adapter->decHex($dec);
     		$this->assertTrue($hex === $actual, "$hex === $actual");
     	}
@@ -65,9 +65,9 @@ class MathTest extends AbstractTestCase
      */
     public function testHexDec(MathAdapter $adapter)
     {
-    	foreach ($this->hexDecMap as $hex => $dec) {
+    	foreach ($this->decHexMap as $hex => $dec) {
     		$actual = $adapter->hexDec($hex);
-    		$this->assertTrue($dec === $actual, "$dec === $actual");
+    		$this->assertEquals($actual, $dec);
     	}
     }
 
