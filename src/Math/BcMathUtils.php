@@ -158,8 +158,9 @@ class BcMathUtils
         self::equalbinpad($bx, $by);
 
         $ret = '';
+        $bxLen = strlen($bx);
 
-        for ($ix = 0; $ix < strlen($bx); $ix ++) {
+        for ($ix = 0; $ix < $bxLen; $ix ++) {
             $xd = substr($bx, $ix, 1);
             $yd = substr($by, $ix, 1);
             $ret .= call_user_func($op, $xd, $yd);
@@ -276,8 +277,9 @@ class BcMathUtils
     public static function fixedbinpad(&$num, $length)
     {
         $pad = '';
+        $len = $length - strlen($num);
 
-        for ($ii = 0; $ii < $length - strlen($num); $ii ++) {
+        for ($ii = 0; $ii < $len; $ii ++) {
             $pad .= self::bc2bin('0');
         }
 

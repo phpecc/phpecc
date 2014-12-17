@@ -360,8 +360,9 @@ class BcMath implements MathAdapterInterface
     public function stringToInt($s)
     {
         $result = 0;
+        $sLen = strlen($s);
 
-        for ($c = 0; $c < strlen($s); $c ++) {
+        for ($c = 0; $c < $sLen; $c ++) {
             $result = bcadd(bcmul(256, $result), ord($s[$c]));
         }
 
