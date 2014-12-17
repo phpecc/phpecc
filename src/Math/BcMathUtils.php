@@ -69,31 +69,14 @@ class BcMathUtils
 
     public static function bcdechex($dec)
     {
-        $hex = '';
-        $positive = $dec < 0 ? false : true;
+    	$last = bcmod($dec, 16);
+        $remain = bcdiv(bcsub($dec, $last), 16);
 
-        while ($dec) {
-            $hex .= dechex(abs(bcmod($dec, '16')));
-            $dec = bcdiv($dec, '16', 0);
+        if($remain == 0) {
+            return dechex($last);
+        } else {
+            return self::bcdechex($remain) . dechex($last);
         }
-
-        if ($positive) {
-            return strrev($hex);
-        }
-
-        for ($i = 0; isset($hex[$i]); $i ++) {
-            $hex[$i] = dechex(15 - hexdec($hex[$i]));
-        }
-
-        for ($i = 0; isset($hex[$i]) && $hex[$i] == 'f'; $i ++) {
-            $hex[$i] = '0';
-        }
-
-        if (isset($hex[$i])) {
-            $hex[$i] = dechex(hexdec($hex[$i]) + 1);
-        }
-
-        return strrev($hex);
     }
 
     public static function bcand($x, $y)
