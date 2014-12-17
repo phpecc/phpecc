@@ -44,13 +44,13 @@ class BcMath implements MathAdapterInterface
      */
     public function mod($number, $modulus)
     {
-        $res = bcmod($number, $modulus);
+        $res = [];
+        $res[0] = bcmod($number, $modulus);
+        $res[1] = bcadd($modulus, $res[0]);
 
-        if (bccomp(0, $res) > 0) {
-            $res = bcadd($modulus, $res);
-        }
+        $idx = (int)(bccomp(0, $res[0]) > 0);
 
-        return $res;
+        return $res[$idx];
     }
 
     /**
