@@ -27,7 +27,8 @@ namespace Mdanter\Ecc;
  */
 
 /**
- * This class is where the elliptic curve arithmetic takes place. The important methods are:
+ * This class is where the elliptic curve arithmetic takes place.
+ * The important methods are:
  * - add: adds two points according to ec arithmetic
  * - double: doubles a point on the ec field mod p
  * - mul: uses double and add to achieve multiplication The rest of the methods are there for supporting the ones above.
@@ -36,6 +37,7 @@ namespace Mdanter\Ecc;
  */
 class Point implements PointInterface
 {
+
     /**
      *
      * @var CurveFpInterface
@@ -86,20 +88,17 @@ class Point implements PointInterface
         $this->adapter = $adapter;
 
         if (! $this->curve->contains($this->x, $this->y)) {
-            throw new \RuntimeException(
-                "Curve ".$this->curve." does not contain point (".$x.", ".$y.")"
-            );
+            throw new \RuntimeException("Curve " . $this->curve . " does not contain point (" . $x . ", " . $y . ")");
         }
 
         if ($this->order != null && ! $this->mul($order)->equals(Points::infinity())) {
-            throw new \RuntimeException(
-                "SELF * ORDER MUST EQUAL INFINITY. (".(string) $this->mul($order)." found instead)"
-            );
+            throw new \RuntimeException("SELF * ORDER MUST EQUAL INFINITY. (" . (string) $this->mul($order) . " found instead)");
         }
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::cmp()
      */
     public function cmp(PointInterface $other)
@@ -110,7 +109,7 @@ class Point implements PointInterface
 
         $math = $this->adapter;
 
-        $equal  = ($math->cmp($this->x, $other->getX()) == 0);
+        $equal = ($math->cmp($this->x, $other->getX()) == 0);
         $equal &= ($math->cmp($this->y, $other->getY()) == 0);
         $equal &= $this->curve->equals($other->getCurve());
 
@@ -123,6 +122,7 @@ class Point implements PointInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::equals()
      */
     public function equals(PointInterface $other)
@@ -132,6 +132,7 @@ class Point implements PointInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::add()
      */
     public function add(PointInterface $addend)
@@ -155,13 +156,7 @@ class Point implements PointInterface
         }
 
         $p = $this->curve->getPrime();
-        $l = $math->mod(
-            $math->mul(
-                $math->sub($addend->getY(), $this->y),
-                $math->inverseMod($math->sub($addend->getX(), $this->x), $p)
-            ), $p
-        );
-
+        $l = $math->mod($math->mul($math->sub($addend->getY(), $this->y), $math->inverseMod($math->sub($addend->getX(), $this->x), $p)), $p);
         $x3 = $math->mod($math->sub($math->sub($math->pow($l, 2), $this->x), $addend->getX()), $p);
         $y3 = $math->mod($math->sub($math->mul($l, $math->sub($this->x, $x3)), $this->y), $p);
 
@@ -174,74 +169,40 @@ class Point implements PointInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::mul()
      */
-    public function mul($multiplier)
+    public function mul($n)
     {
-        $math = $this->adapter;
-        $e = $multiplier;
-
         if ($this->order != null) {
-            $e = $math->mod($e, $this->order);
+            $n = $this->adapter->mod($n, $this->order);
         }
 
-        if ($math->cmp($e, 0) == 0) {
+        if ($this->adapter->cmp($n, 0) == 0) {
             return Points::infinity();
         }
 
-        if ($math->cmp($e, 0) > 0) {
-            $e3 = $math->mul(3, $e);
+        $r = [
+            new NullPoint($this->curve, $this->order),
+            $this
+        ];
+        $k = (strlen($n) * 8) - 1;
 
-            $negative_self = $this->curve->getPoint($this->x, $math->sub(0, $this->y), $this->order);
-            $i = $math->div($this->calcleftMostBit($e3), 2);
+        for ($i = $k - 1; $i > 0; $i--) {
+            // Value of n[i]
+            $b = $this->adapter->rightShift($n, $i - 1);
+            $b = $this->adapter->bitwiseAnd($b, '1');
 
-            $result = $this;
-
-            while ($math->cmp($i, 1) > 0) {
-                $result = $result->getDouble();
-
-                $e3bit = $math->cmp($math->bitwiseAnd($e3, $i), '0');
-                $ebit = $math->cmp($math->bitwiseAnd($e, $i), '0');
-
-                if ($e3bit != 0 && $ebit == 0) {
-                    $result = $result->add($this);
-                } elseif ($e3bit == 0 && $ebit != 0) {
-                    $result = $result->add($negative_self);
-                }
-
-                $i = $math->div($i, 2);
-            }
-
-            return $result;
+            $r[1 - $b] = $r[0]->add($r[1]);
+            $r[$b] = $r[$b]->getDouble();
         }
 
-        throw new \RuntimeException('Unable to multiply by '.$multiplier);
-    }
-
-    /**
-     *
-     * @param  int|string        $x
-     * @throws \RuntimeException
-     */
-    private function calcLeftMostBit($x)
-    {
-        $math = $this->adapter;
-
-        if ($math->cmp($x, 0) > 0) {
-            $result = 1;
-
-            while ($math->cmp($result, $x) <= 0) {
-                $result = $math->mul(2, $result);
-            }
-
-            return $math->div($result, 2);
-        }
-
-        throw new \RuntimeException('Unable to get leftmost bit of '.$math->toString($x));
+        return $r[0];
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::getCurve()
      */
     public function getCurve()
@@ -251,15 +212,17 @@ class Point implements PointInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::__toString()
      */
     public function __toString()
     {
-        return "(".$this->adapter->toString($this->x).",".$this->adapter->toString($this->y).")";
+        return "(" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ")";
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::getDouble()
      */
     public function getDouble()
@@ -285,6 +248,7 @@ class Point implements PointInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::getOrder()
      */
     public function getOrder()
@@ -294,6 +258,7 @@ class Point implements PointInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::getX()
      */
     public function getX()
@@ -303,6 +268,7 @@ class Point implements PointInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\PointInterface::getY()
      */
     public function getY()
@@ -313,5 +279,113 @@ class Point implements PointInterface
     protected function getAdapter()
     {
         return $this->adapter;
+    }
+}
+
+/**
+ * RESERVED IMPLEMENTATION DETAIL !
+ *
+ * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+ * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+ * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+ * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+ *
+ * @author thibaud
+ *
+ */
+class NullPoint implements PointInterface
+{
+
+    private $curve;
+
+    private $order;
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function __construct($curve, $order)
+    {
+        $this->curve = $curve;
+        $this->order = $order;
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function add(PointInterface $addend)
+    {
+        return $addend;
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function cmp(PointInterface $other)
+    {
+        throw new \LogicException('I said, DO NOT USE THIS CLASS !');
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function equals(PointInterface $other)
+    {
+        throw new \LogicException('I said, DO NOT USE THIS CLASS !');
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function mul($multiplier)
+    {
+        throw new \LogicException('I said, DO NOT USE THIS CLASS !');
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function getCurve()
+    {
+        return $this->curve;
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function getDouble()
+    {
+        return $this;
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function getX()
+    {
+        throw new \LogicException('I said, DO NOT USE THIS CLASS !');
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function getY()
+    {
+        throw new \LogicException('I said, DO NOT USE THIS CLASS !');
+    }
+
+    /**
+     * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
+     */
+    public function __toString()
+    {
+        throw new \LogicException('I said, DO NOT USE THIS CLASS !');
     }
 }

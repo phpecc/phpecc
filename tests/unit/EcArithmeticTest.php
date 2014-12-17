@@ -119,6 +119,39 @@ class EcArithmeticTest extends AbstractTestCase
         $this->assertEquals($math->mod($p3->getY(), 23), $y3);
     }
 
+    public function getMultAdapters()
+    {
+        // https://www.certicom.com/index.php/52-the-elliptic-curve-discrete-logarithm-problem
+        return $this->_getAdapters([
+            [ 23, 9, 17, 16, 5, 9, 4, 5 ],
+            [ 23, 9, 17, 16, 5, 8, 12, 17 ],
+            [ 23, 9, 17, 16, 5, 7, 8, 7 ],
+            [ 23, 9, 17, 16, 5, 6, 7, 3 ],
+            [ 23, 9, 17, 16, 5, 5, 13, 10 ],
+            [ 23, 9, 17, 16, 5, 4, 19, 20 ],
+            [ 23, 9, 17, 16, 5, 3, 14, 14 ],
+            [ 23, 9, 17, 16, 5, 2, 20, 20 ],
+            [ 23, 9, 17, 16, 5, 1, 16, 5 ],
+            [ 2111, 20, 13, 3, 10, 57, 470, 1757]
+        ]);
+    }
+
+    /**
+     *
+     * @dataProvider getMultAdapters
+     */
+    public function testMultiply2(MathAdapter $math, $p, $a, $b, $x, $y, $m, $ex, $ey)
+    {
+        $c = new CurveFp($p, $a, $b, $math);
+
+        $p1 = $c->getPoint($x, $y);
+        $p3 = $p1->mul($m);
+
+        $this->assertFalse($p3->equals(Points::infinity()));
+        $this->assertEquals($math->mod($p3->getX(), $p), $ex);
+        $this->assertEquals($math->mod($p3->getY(), $p), $ey);
+    }
+
     /**
      *
      * @dataProvider getAdapters

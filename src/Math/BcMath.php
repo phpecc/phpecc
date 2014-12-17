@@ -127,7 +127,7 @@ class BcMath implements MathAdapterInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapterInterface::toString()
+     * @see \Mdanter\Ecc\MathAdapter::toString()
      */
     public function toString($value)
     {
