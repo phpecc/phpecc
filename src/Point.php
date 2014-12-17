@@ -290,7 +290,7 @@ class Point implements PointInterface
  * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
  *
  */
-class NullPoint implements PointInterface
+final class NullPoint implements PointInterface
 {
 
     private $curve;
