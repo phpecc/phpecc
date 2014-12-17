@@ -33,7 +33,6 @@ namespace Mdanter\Ecc;
  * - double: doubles a point on the ec field mod p
  * - mul: uses double and add to achieve multiplication The rest of the methods are there for supporting the ones above.
  *
- * @author Matej Danter
  */
 class Point implements PointInterface
 {
@@ -289,8 +288,6 @@ class Point implements PointInterface
  * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
  * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
  * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
- *
- * @author thibaud
  *
  */
 class NullPoint implements PointInterface

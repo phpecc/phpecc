@@ -34,7 +34,6 @@ namespace Mdanter\Ecc;
  * a dual encryption scheme, along with AES for faster
  * two- way encryption.
  *
- * @author Matej Danter
  */
 class EcDH implements EcDHInterface
 {

@@ -31,7 +31,6 @@ use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 /**
  *
- * @author Jan Moritz Lindemann
  */
 class SecgCurve
 {

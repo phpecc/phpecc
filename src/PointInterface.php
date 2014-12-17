@@ -37,7 +37,6 @@ namespace Mdanter\Ecc;
  * @todo Fix LSP break (possibly derive an extra interface, FinitePointInterface from current one, and move
  * coordinate-related ops to sub-interface).
  *
- * @author Matej Danter
  */
 interface PointInterface
 {

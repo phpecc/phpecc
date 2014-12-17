@@ -29,7 +29,6 @@ namespace Mdanter\Ecc;
 /**
  * This is the contract for implementing CurveFp (EC prime finite-field).
  *
- * @author Matej Danter
  */
 interface CurveFpInterface
 {

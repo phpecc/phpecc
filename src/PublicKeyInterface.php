@@ -29,7 +29,6 @@ namespace Mdanter\Ecc;
 /**
  * This is the contract for the PublicKey portion of ECDSA.
  *
- * @author Matej Danter
  */
 interface PublicKeyInterface
 {

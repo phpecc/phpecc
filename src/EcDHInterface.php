@@ -29,7 +29,6 @@ namespace Mdanter\Ecc;
 /**
  * This is the contract for implementing EcDH (EC Diffie Hellman).
  *
- * @author Matej Danter
  */
 interface EcDHInterface
 {
