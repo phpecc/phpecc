@@ -7,7 +7,7 @@ namespace Mdanter\Ecc;
  * @package Mdanter\Ecc
  * @author Thomas Kerin
  */
-class EcMath
+class EcMath implements EcMathInterface
 {
     /**
      * @var int|PointInterface
@@ -33,6 +33,7 @@ class EcMath
      * @param int|PointInterface $input
      * @param GeneratorPoint $g
      * @param MathAdapter $math
+     * @return this
      */
     public function __construct($input, GeneratorPoint $g, MathAdapter $math)
     {
@@ -46,6 +47,7 @@ class EcMath
     /**
      * @param $input
      * @return string
+     * @throws \LogicException
      */
     public function identify($input)
     {
@@ -56,20 +58,6 @@ class EcMath
         }
 
         throw new \LogicException('Must provide a point or integer');
-    }
-
-    /**
-     * @return $this
-     */
-    public function toPoint()
-    {
-        if ($this->dataType == 'point') {
-            return $this;
-        }
-
-        $this->mul($this->generator);
-        $this->dataType = 'point';
-        return $this;
     }
 
     /**
@@ -203,6 +191,20 @@ class EcMath
         }
 
         throw new \LogicException('Cannot compare values of different types');
+    }
+
+    /**
+     * @return $this
+     */
+    public function toPoint()
+    {
+        if ($this->dataType == 'point') {
+            return $this;
+        }
+
+        $this->mul($this->generator);
+        $this->dataType = 'point';
+        return $this;
     }
 
     /**
