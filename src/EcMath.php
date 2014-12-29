@@ -53,17 +53,23 @@ class EcMath
             return 'point';
         } else if (is_numeric($input)) {
             return 'int';
-        } else {
-            throw new \LogicException('Must provide a point or integer');
         }
+
+        throw new \LogicException('Must provide a point or integer');
     }
 
     /**
-     * @return GeneratorPoint
+     * @return $this
      */
-    public function getGenerator()
+    public function toPoint()
     {
-        return $this->generator;
+        if ($this->dataType == 'point') {
+            return $this;
+        }
+
+        $this->mul($this->generator);
+        $this->dataType = 'point';
+        return $this;
     }
 
     /**
@@ -113,7 +119,7 @@ class EcMath
 
         $this->handleOppositeTypes($addend,
             function (PointInterface $data, $addendInt) {
-                $point = $this->getGenerator()->mul($addendInt);
+                $point = $this->generator->mul($addendInt);
                 return $data->add($point);
             }
         );
@@ -130,7 +136,7 @@ class EcMath
         $type = $this->identify($multiplicand);
 
         if ($this->dataType == 'point' && $type == 'point') {
-            throw new \RuntimeException('Cannot multiply two points together');
+            throw new \LogicException('Cannot multiply two points together');
         }
 
         if ($this->dataType == 'int' && $type == 'int') {
@@ -157,14 +163,10 @@ class EcMath
         if ($this->dataType == 'point') {
             $this->data = $data->getDouble();
             return $this;
-        }
-
-        if ($this->dataType == 'int') {
+        } else {
             $this->data = $this->math->mul($data, '2');
             return $this;
         }
-
-        return $this;
     }
 
     /**
@@ -200,15 +202,7 @@ class EcMath
             return $this->math->cmp($this->data, $input);
         }
 
-        $data = $this->data;
-
-        // Data should become the point
-        if ($this->dataType == 'int') {
-            list ($data, $input) = array($input, $data);
-        }
-
-        $point = $this->getGenerator()->mul($input);
-        return $data->cmp($point);
+        throw new \LogicException('Cannot compare values of different types');
     }
 
     /**
@@ -224,17 +218,32 @@ class EcMath
     }
 
     /**
-     * @return int|GeneratorPoint|Infinity|PointInterface
+     * @return int|PointInterface
      */
     public function getPoint()
     {
-        $point = $this->data;
+        if ($this->dataType == 'point') {
+            $point = $this->data;
+            return $point;
 
-        if ($this->dataType == 'int') {
-            $point = $this->getGenerator()->mul($point);
+        } else {
+            $self = $this;
+            $self->handleOppositeTypes($this->generator,
+                function (PointInterface $data, $multiplicandInt) {
+                    return $data->mul($multiplicandInt);
+                }
+            );
+
+            $point = $self->result();
+            return $point;
         }
+    }
 
-        return $point;
-
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->dataType;
     }
 };
