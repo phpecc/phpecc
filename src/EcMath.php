@@ -30,10 +30,9 @@ class EcMath implements EcMathInterface
     private $generator;
 
     /**
-     * @param int|PointInterface $input
+     * @param $input
      * @param GeneratorPoint $g
      * @param MathAdapter $math
-     * @return this
      */
     public function __construct($input, GeneratorPoint $g, MathAdapter $math)
     {
@@ -229,12 +228,8 @@ class EcMath implements EcMathInterface
             return $point;
 
         } else {
-            $self = $this;
-            $self->handleOppositeTypes($this->generator,
-                function (PointInterface $data, $multiplicandInt) {
-                    return $data->mul($multiplicandInt);
-                }
-            );
+            $self = new EcMath($this->data, $this->generator, $this->math);
+            $self->mul($this->generator);
 
             $point = $self->result();
             return $point;
