@@ -9,4 +9,5 @@ interface EcMathInterface {
     public function getDouble();
     public function mod($int);
     public function cmp($n);
+    public function result();
 }
