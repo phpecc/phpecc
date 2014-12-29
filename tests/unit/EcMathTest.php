@@ -91,8 +91,8 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
     public function testAddIntAndInt(MathAdapter $math)
     {
         $G  = EccFactory::getSecgCurves($math)->generator256k1();
-        $ec = (new EcMath('2', $G, $math))
-            ->add('2');
+        $ec = new EcMath('2', $G, $math);
+        $ec->add('2');
 
         $this->assertSame('4', $ec->result());
 
@@ -108,12 +108,14 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
     public function testAddPointAndPoint(MathAdapter $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
-        $p = (new EcMath('2', $G, $math))
+
+        $p2= new EcMath('2', $G, $math);
+        $p2= $p2->getPoint();
+
+        $p = new EcMath('2', $G, $math);
+        $p = $p
             ->toPoint()
-            ->add(
-                (new EcMath('2', $G, $math))
-                    ->getPoint()
-            )
+            ->add($p2)
             ->result();
 
         $this->assertInstanceOf('Mdanter\Ecc\PointInterface', $p);
@@ -129,12 +131,12 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
-        $p = (new EcMath('2', $G, $math))
-            ->add(
-                (new EcMath('2', $G, $math))
-                    ->getPoint()
-            )
-        ->result();
+        $p2 = new EcMath('2', $G, $math);
+        $p2 = $p2->getPoint();
+
+        $p = new EcMath('2', $G, $math);
+        $p = $p->add($p2)
+            ->result();
 
         $this->assertInstanceOf('Mdanter\Ecc\PointInterface', $p);
         $this->assertEquals('103388573995635080359749164254216598308788835304023601477803095234286494993683', $p->getX());
@@ -151,7 +153,8 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
         $P = new Point($G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder(), $math);
-        $fail = (new EcMath($P, $G, $math))->mul($P);
+        $fail = new EcMath($P, $G, $math);
+        $fail->mul($P);
     }
 
     /**
@@ -161,8 +164,8 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
-        $x = (new EcMath('2', $G, $math))
-            ->mul('2')
+        $x = new EcMath('2', $G, $math);
+        $x = $x->mul('2')
             ->result();
 
         $this->assertEquals('4', $x);
@@ -191,22 +194,19 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
-        $this->assertSame(
-            '2',
-            (new EcMath('2', $G, $math))
-                ->mod($G->getOrder())
-                ->result()
-        );
+        $m1 = new EcMath('2', $G, $math);
+        $m1 = $m1
+            ->mod($G->getOrder())
+            ->result();
+        $this->assertSame('2', $m1);
 
-        $this->assertSame(
-            '2',
-            (new EcMath('2', $G, $math))
-                ->add($G->getOrder())
-                ->mod($G->getOrder())
-                ->result()
-        );
+        $m2 = new EcMath('2', $G, $math);
+        $m2 = $m2
+            ->add($G->getOrder())
+            ->mod($G->getOrder())
+            ->result();
+        $this->assertSame('2', $m2);
     }
-
 
     /**
      * @dataProvider getAdapters
@@ -231,12 +231,15 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
-        $int = (new EcMath('2', $G, $math))
+        $int = new EcMath('2', $G, $math);
+        $int = $int
             ->getDouble()
             ->toPoint();
-        $p   = (new EcMath('2', $G, $math))
-            ->toPoint()
+
+        $p   = new EcMath('2', $G, $math);
+        $p   = $p->toPoint()
             ->getDouble();
+
         $this->assertInstanceOf('Mdanter\Ecc\PointInterface', $p->result());
         $this->assertEquals('103388573995635080359749164254216598308788835304023601477803095234286494993683', $p->result()->getX());
         $this->assertEquals('37057141145242123013015316630864329550140216928701153669873286428255828810018', $p->result()->getY());
@@ -263,7 +266,7 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
      */
     public function testCmp(MathAdapter $math)
     {
-        $G = EccFactory::getSecgCurves($math)->generator256k1();
+        $G  = EccFactory::getSecgCurves($math)->generator256k1();
         $ec = new EcMath('2', $G, $math);
 
         $this->assertTrue($ec->cmp('3') == -1);
@@ -287,7 +290,7 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
     public function testCmpDifferentTypes(MathAdapter $math)
     {
         $G  = EccFactory::getSecgCurves($math)->generator256k1();
-        $ec  = new EcMath('2', $G, $math);
+        $ec = new EcMath('2', $G, $math);
         $ec ->toPoint();
         $ec->cmp('2');
 
