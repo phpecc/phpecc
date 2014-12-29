@@ -178,13 +178,12 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
-        $p = (new EcMath('2', $G, $math))
-            ->mul($G)
-            ->result();
+        $p = new EcMath('2', $G, $math);
+        $p->mul($G);
 
-        $this->assertInstanceOf('Mdanter\Ecc\PointInterface', $p);
-        $this->assertEquals('89565891926547004231252920425935692360644145829622209833684329913297188986597', $p->getX());
-        $this->assertEquals('12158399299693830322967808612713398636155367887041628176798871954788371653930', $p->getY());
+        $this->assertInstanceOf('Mdanter\Ecc\PointInterface', $p->result());
+        $this->assertEquals('89565891926547004231252920425935692360644145829622209833684329913297188986597', $p->result()->getX());
+        $this->assertEquals('12158399299693830322967808612713398636155367887041628176798871954788371653930', $p->result()->getY());
     }
 
     /**
@@ -219,8 +218,8 @@ class EcMathTest extends \PHPUnit_Framework_TestCase
 
         $P = new Point($G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder(), $math);
 
-        $e = (new EcMath('2', $G, $math))
-            ->mod($P);
+        $e = new EcMath('2', $G, $math);
+        $e->mod($P);
 
     }
 
