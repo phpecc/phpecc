@@ -8,28 +8,35 @@ use Mdanter\Ecc\EccFactory;
 $math = EccFactory::getAdapter();
 $g    = EccFactory::getSecgCurves()->generator256k1();
 $secret    = 2;
-
-echo "Using private key : ".str_pad($secret, 64, '0', STR_PAD_LEFT)."\n";
-echo "Get the public key: ".((new EcMath($secret, $g, $math))->getPoint())."\n";
+$public = (new EcMath($secret, $g, $math))->getPoint();
+echo "Using private key : ".$secret."\n";
+echo "Get the public key: ".$public."\n";
 
 
 // Add
 $ec = (new EcMath($secret, $g, $math))
     ->add($secret)
     ->mul($g);
-echo "Add (prv) : ".$ec->result()."\n";
+echo "Add (k+k)*G  : ".$ec->result()."\n";
 
 $ec = (new EcMath($secret, $g, $math))
     ->mul($g)
     ->add($secret);
-echo "Add (pub) : ".$ec->result()."\n\n";
+echo "Add (k*G)+k  : ".$ec->result()."\n";
+
+$ec = (new EcMath($secret, $g, $math))
+    ->mul($g)
+    ->add($public);
+echo "Add (k*G)+Q  : ".$ec->result()."\n\n";
+
 
 
 // Mod
 $ec = (new EcMath($secret, $g, $math))
     ->add($g->getOrder())
     ->mod($g->getOrder());
-echo "Mod: ".$ec->result()."\n\n";
+echo "Mod (k+n)%n  : ".$ec->result()."\n\n";
+
 
 
 
@@ -37,12 +44,12 @@ echo "Mod: ".$ec->result()."\n\n";
 $ec = (new EcMath($secret, $g, $math))
     ->getDouble()
     ->mul($g);
-echo "Double (prv) : ".$ec->result()."\n";
+echo "Dbl dbl(k)*G : ".$ec->result()."\n";
 
 $ec = (new EcMath($secret, $g, $math))
     ->mul($g)
     ->getDouble();
-echo "Double (pub) : ".$ec->result()."\n\n";
+echo "Dbl dbl(k*G) : ".$ec->result()."\n\n";
 
 
 
@@ -51,12 +58,12 @@ echo "Double (pub) : ".$ec->result()."\n\n";
 $ec = (new EcMath($secret, $g, $math))
     ->mul($g)
     ->mul(2);
-echo "Mul (prv) : ".$ec->result()."\n";
+echo "Mul (k*G)*2 : ".$ec->result()."\n";
 
 $ec2 = (new EcMath($secret, $g, $math))
     ->mul(2)
     ->mul($g);
-echo "Mul (pub) : ".$ec2->result()."\n\n";
+echo "Mul (k*2)*G : ".$ec2->result()."\n\n";
 
 /**
  * I want to replace a block like this:
@@ -102,6 +109,7 @@ $offset = '2';
 $pubkey = (new EcMath($secret, $g, $math))->getPoint();
 
 $pub = (new EcMath($pubkey, $g, $math))
+//$pub = (new EcMath($secret, $g, $math))   // or
     ->add($offset)
     ->mod($g->getOrder());
 
@@ -109,6 +117,9 @@ $prv = (new EcMath($secret, $g, $math))
     ->add($offset)
     ->mod($g->getOrder());
 
-echo "Final pubkey: ".$pub->result()."\n";
-echo "Final prvkey: ".$prv->result()."\n";
-echo "    ==> pub : ".$prv->getPoint()."\n";
+echo "Deterministic: \n";
+echo " | k    : ".$secret."\n";
+echo " | o    : ".$offset."\n";
+echo " | key  : (k+o)%n  : ".$prv->result()."\n";
+echo "            ...*G  : ".$prv->getPoint()."\n";
+echo " | Q    : (Q+o)%n: : ".$pub->result()."\n";
