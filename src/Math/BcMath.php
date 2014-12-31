@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Math;
 
-use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\MathAdapterInterface;
 
 /**
  * *********************************************************************
@@ -28,11 +28,11 @@ use Mdanter\Ecc\MathAdapter;
  * ***********************************************************************
  */
 
-class BcMath implements MathAdapter
+class BcMath implements MathAdapterInterface
 {
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::cmp()
+     * @see \Mdanter\Ecc\MathAdapterInterface::cmp()
      */
     public function cmp($first, $other)
     {
@@ -41,7 +41,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::mod()
+     * @see \Mdanter\Ecc\MathAdapterInterface::mod()
      */
     public function mod($number, $modulus)
     {
@@ -56,7 +56,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::add()
+     * @see \Mdanter\Ecc\MathAdapterInterface::add()
      */
     public function add($augend, $addend)
     {
@@ -65,7 +65,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::sub()
+     * @see \Mdanter\Ecc\MathAdapterInterface::sub()
      */
     public function sub($minuend, $subtrahend)
     {
@@ -74,7 +74,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::mul()
+     * @see \Mdanter\Ecc\MathAdapterInterface::mul()
      */
     public function mul($multiplier, $multiplicand)
     {
@@ -83,7 +83,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::div()
+     * @see \Mdanter\Ecc\MathAdapterInterface::div()
      */
     public function div($dividend, $divisor)
     {
@@ -92,7 +92,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::pow()
+     * @see \Mdanter\Ecc\MathAdapterInterface::pow()
      */
     public function pow($base, $exponent)
     {
@@ -101,7 +101,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::rand()
+     * @see \Mdanter\Ecc\MathAdapterInterface::rand()
      */
     public function rand($n)
     {
@@ -110,7 +110,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::bitwiseAnd()
+     * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseAnd()
      */
     public function bitwiseAnd($first, $other)
     {
@@ -119,7 +119,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::toString()
+     * @see \Mdanter\Ecc\MathAdapterInterface::toString()
      */
     public function toString($value)
     {
@@ -128,7 +128,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::hexDec()
+     * @see \Mdanter\Ecc\MathAdapterInterface::hexDec()
      */
     public function hexDec($hex)
     {
@@ -137,7 +137,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::decHex()
+     * @see \Mdanter\Ecc\MathAdapterInterface::decHex()
      */
     public function decHex($dec)
     {
@@ -152,7 +152,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::powmod()
+     * @see \Mdanter\Ecc\MathAdapterInterface::powmod()
      */
     public function powmod($base, $exponent, $modulus)
     {
@@ -165,7 +165,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::isPrime()
+     * @see \Mdanter\Ecc\MathAdapterInterface::isPrime()
      */
     public function isPrime($n)
     {
@@ -206,7 +206,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::nextPrime()
+     * @see \Mdanter\Ecc\MathAdapterInterface::nextPrime()
      */
     public function nextPrime($starting_value)
     {
@@ -225,7 +225,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::inverseMod()
+     * @see \Mdanter\Ecc\MathAdapterInterface::inverseMod()
      */
     public function inverseMod($a, $m)
     {
@@ -274,7 +274,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::jacobi()
+     * @see \Mdanter\Ecc\MathAdapterInterface::jacobi()
      */
     public function jacobi($a, $n)
     {
@@ -319,7 +319,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::intToString()
+     * @see \Mdanter\Ecc\MathAdapterInterface::intToString()
      */
     public function intToString($x)
     {
@@ -347,7 +347,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::stringToInt()
+     * @see \Mdanter\Ecc\MathAdapterInterface::stringToInt()
      */
     public function stringToInt($s)
     {
@@ -362,7 +362,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::digestInteger()
+     * @see \Mdanter\Ecc\MathAdapterInterface::digestInteger()
      */
     public function digestInteger($m)
     {
@@ -371,7 +371,7 @@ class BcMath implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::gcd2()
+     * @see \Mdanter\Ecc\MathAdapterInterface::gcd2()
      */
     public function gcd2($a, $b)
     {

@@ -4,7 +4,7 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\BcMath;
-use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Point;
 use Mdanter\Ecc\Points;
 use Mdanter\Ecc\CurveFp;
@@ -21,7 +21,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    private function add(MathAdapter $math, CurveFpInterface $c, $x1, $y1, $x2, $y2, $x3, $y3)
+    private function add(MathAdapterInterface $math, CurveFpInterface $c, $x1, $y1, $x2, $y2, $x3, $y3)
     {
         $p1 = $c->getPoint($x1, $y1);
         $p2 = $c->getPoint($x2, $y2);
@@ -37,7 +37,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getAdapters
      * @testdox Test point additions yield expected results
      */
-    public function testAdditions(MathAdapter $math)
+    public function testAdditions(MathAdapterInterface $math)
     {
         $curve = new CurveFp(23, 1, 1, $math);
 
@@ -49,7 +49,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getAdapters
      * @testdox Test point additions are associative
      */
-    public function testAdditionCommutativity(MathAdapter $math)
+    public function testAdditionCommutativity(MathAdapterInterface $math)
     {
         $curve = new CurveFp(23, 1, 1, $math);
 
@@ -82,7 +82,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider getAdapters
      */
-    public function testDouble(MathAdapter $math)
+    public function testDouble(MathAdapterInterface $math)
     {
         $c = new CurveFp(23, 1, 1, $math);
         $x1 = 3;
@@ -102,7 +102,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider getAdapters
      */
-    public function testAddDouble(MathAdapter $math)
+    public function testAddDouble(MathAdapterInterface $math)
     {
         $c = new CurveFp(23, 1, 1, $math);
 
@@ -113,7 +113,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider getAdapters
      */
-    public function testMultiply(MathAdapter $math)
+    public function testMultiply(MathAdapterInterface $math)
     {
         $c = new CurveFp(23, 1, 1, $math);
         $x1 = 3;
@@ -134,7 +134,7 @@ class EcArithmeticTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider getAdapters
      */
-    public function testInfinity(MathAdapter $math)
+    public function testInfinity(MathAdapterInterface $math)
     {
         $c = new CurveFp(23, 1, 1, $math);
         $g = $c->getPoint(13, 7, 7);

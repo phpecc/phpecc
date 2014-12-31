@@ -36,7 +36,7 @@ class PrivateKey implements PrivateKeyInterface
 
     private $adapter;
 
-    public function __construct(PublicKeyInterface $publicKey, $secretMultiplier, MathAdapter $adapter)
+    public function __construct(PublicKeyInterface $publicKey, $secretMultiplier, MathAdapterInterface $adapter)
     {
         $this->publicKey = $publicKey;
         $this->secretMultiplier = $secretMultiplier;

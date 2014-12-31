@@ -3,7 +3,7 @@
 namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\PublicKey;
 use Mdanter\Ecc\Signature;
 
@@ -13,7 +13,7 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getAdapters
      * @testdox Test 192-bit generated curves against ANSI X9.62 specifications
      */
-    public function testP192CurveAnsiX962ValidityTest(MathAdapter $math)
+    public function testP192CurveAnsiX962ValidityTest(MathAdapterInterface $math)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
 
@@ -73,7 +73,7 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getB22Params
      * @testdox Test 192-bit generated curve points against ECDSAVS section B2.2 samples
      */
-    public function testP192CurveEcdsavsB22PointValidityTest(MathAdapter $math, $x, $y, $expected)
+    public function testP192CurveEcdsavsB22PointValidityTest(MathAdapterInterface $math, $x, $y, $expected)
     {
         $x = $math->hexDec($x);
         $y = $math->hexDec($y);
@@ -183,7 +183,7 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getB24Params
      * @testdox Test 192-bit generated curve points against ECDSAVS section B2.4 samples
      */
-    public function testP192CurveEcdsavsB24SignatureValidityTest(MathAdapter $math, $msg, $Qx, $Qy, $R, $S, $expected)
+    public function testP192CurveEcdsavsB24SignatureValidityTest(MathAdapterInterface $math, $msg, $Qx, $Qy, $R, $S, $expected)
     {
         $msg = $math->hexDec($msg);
         $Qx = $math->hexDec($Qx);
@@ -216,7 +216,7 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getSignatureValidityAdapters
      * @testdox Valid hashes are correctly validated.
      */
-    public function testSignatureValidityWithCorrectHash(MathAdapter $math, array $values)
+    public function testSignatureValidityWithCorrectHash(MathAdapterInterface $math, array $values)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
         $publicKey = $generator->getPublicKeyFrom(
@@ -237,7 +237,7 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getSignatureValidityAdapters
      * @testdox Forged hashes are correctly rejected.
      */
-    public function testSignatureValidityWithForgedHash(MathAdapter $math, array $values)
+    public function testSignatureValidityWithForgedHash(MathAdapterInterface $math, array $values)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
         $publicKey = $generator->getPublicKeyFrom(
@@ -257,7 +257,7 @@ class NistCurveTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testSignatureValidityWithGeneratedKeys(MathAdapter $math)
+    public function testSignatureValidityWithGeneratedKeys(MathAdapterInterface $math)
     {
         $curve = EccFactory::getNistCurves($math)->curve192();
         $generator = EccFactory::getNistCurves($math)->generator192();
@@ -280,7 +280,7 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getAdapters
      * @testdox Test Diffie-Hellman key exchange and message encryption/decryption
      */
-    public function testDiffieHellman(MathAdapter $math)
+    public function testDiffieHellman(MathAdapterInterface $math)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
         $alice = $generator->createKeyExchange();

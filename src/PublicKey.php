@@ -51,7 +51,7 @@ class PublicKey implements PublicKeyInterface
 
     /**
      *
-     * @var MathAdapter
+     * @var MathAdapterInterface
      */
     protected $adapter;
 
@@ -60,11 +60,11 @@ class PublicKey implements PublicKeyInterface
      *
      * @param  GeneratorPoint    $generator
      * @param  PointInterface    $point
-     * @param  MathAdapter       $adapter
+     * @param  MathAdapterInterface       $adapter
      * @throws \LogicException
      * @throws \RuntimeException
      */
-    public function __construct(GeneratorPoint $generator, PointInterface $point, MathAdapter $adapter)
+    public function __construct(GeneratorPoint $generator, PointInterface $point, MathAdapterInterface $adapter)
     {
         $this->curve = $generator->getCurve();
         $this->generator = $generator;

@@ -4,7 +4,7 @@ namespace Mdanter\Ecc\Curves;
 use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\CurveFpInterface;
 use Mdanter\Ecc\GeneratorPoint;
-use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Point;
 
 /**
@@ -42,7 +42,7 @@ class NistCurve
 {
     private $adapter;
 
-    public function __construct(MathAdapter $adapter)
+    public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;
     }

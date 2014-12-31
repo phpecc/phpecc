@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc;
 
-interface MathAdapter
+interface MathAdapterInterface
 {
     /**
      * Compares two numbers
