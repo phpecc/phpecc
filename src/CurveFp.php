@@ -78,7 +78,7 @@ class CurveFp implements CurveFpInterface
      */
     public function getPoint($x, $y, $order = null)
     {
-        return new Point($this, $x, $y, $order, $this->adapter);
+        return new Point($this->adapter, $this, $x, $y, $order);
     }
 
     /**

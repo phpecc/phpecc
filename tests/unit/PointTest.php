@@ -17,7 +17,7 @@ class PointTest extends \PHPUnit_Framework_TestCase
             ->method('contains')
             ->willReturn(true);
 
-        $point = new Point($curve, 0, 0, null, $adapter);
+        $point = new Point($adapter, $curve, 0, 0, null);
         $sum = $point->add(Points::infinity());
 
         $this->assertSame($point, $sum);

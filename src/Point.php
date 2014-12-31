@@ -77,7 +77,7 @@ class Point implements PointInterface
      * @throws \RuntimeException when either the curve does not contain the given coordinates or
      *                                   when order is not null and P(x, y) * order is not equal to infinity.
      */
-    public function __construct(CurveFpInterface $curve, $x, $y, $order = null, MathAdapterInterface $adapter)
+    public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order = null)
     {
         $this->curve = $curve;
         $this->x = $x;
@@ -275,7 +275,7 @@ class Point implements PointInterface
             $y3 = $math->add($p, $y3);
         }
 
-        return new self($this->curve, $x3, $y3, null, $this->adapter);
+        return new self($this->adapter, $this->curve, $x3, $y3, null);
     }
 
     /**
