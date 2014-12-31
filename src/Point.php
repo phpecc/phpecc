@@ -189,14 +189,42 @@ class Point implements PointInterface
 
         for ($i = $k - 1; $i > 0; $i--) {
             // Value of n[i]
-            $b = $this->adapter->rightShift($n, $i - 1);
-            $b = $this->adapter->bitwiseAnd($b, '1');
+            $b = $this->bitAt($n, $i - 1);
+
+
 
             $r[1 - $b] = $r[0]->add($r[1]);
             $r[$b] = $r[$b]->getDouble();
         }
 
         return $r[0];
+    }
+
+    private function conditionalSwap(& $c, & $a, $digits, $cond)
+    {
+        $cond *= -1;
+        $t = null;
+
+        for ($i = 0; $i < $digits; $i++) {
+            $t = ($this->bitAt($a, $i) ^ $this->bitAt($c, $i)) & $cond;
+
+            $this->xorBitAt($a, $i, $t);
+            $this->xorBitAt($c, $i, $t);
+        }
+    }
+
+    private function bitAt($digit, $i)
+    {
+        $b = $this->adapter->rightShift($digit, $i);
+        $b = $this->adapter->bitwiseAnd($b, '1');
+
+        return $b;
+    }
+
+    private function xorBitAt(& $digit, $i, $t)
+    {
+        $mask = $this->adapter->rightShift($digit, $i);
+        $mask = $this->adapter->leftShift($digit, 8 - $i);
     }
 
     /**
@@ -297,6 +325,10 @@ final class NullPoint implements PointInterface
 
     private $order;
 
+    private $x;
+
+    private $y;
+
     /**
      * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
      */
@@ -304,6 +336,8 @@ final class NullPoint implements PointInterface
     {
         $this->curve = $curve;
         $this->order = $order;
+        $this->x = 0;
+        $this->y = 0;
     }
 
     /**
@@ -367,7 +401,7 @@ final class NullPoint implements PointInterface
      */
     public function getX()
     {
-        throw new \LogicException('I said, DO NOT USE THIS CLASS !');
+        return $this->x;
     }
 
     /**
@@ -375,7 +409,7 @@ final class NullPoint implements PointInterface
      */
     public function getY()
     {
-        throw new \LogicException('I said, DO NOT USE THIS CLASS !');
+        return $this->y;
     }
 
     /**
