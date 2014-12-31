@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
-use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
 
@@ -21,7 +21,7 @@ class SecCurveTest extends AbstractTestCase
      *
      * @dataProvider getCurveParams
      */
-    public function testCurveGeneration(MathAdapter $math, $function, $a, $b, $prime)
+    public function testCurveGeneration(MathAdapterInterface $math, $function, $a, $b, $prime)
     {
         $factory = EccFactory::getSecgCurves($math);
         $curve = $factory->{$function}();
@@ -45,7 +45,7 @@ class SecCurveTest extends AbstractTestCase
      *
      * @dataProvider getGeneratorParams
      */
-    public function testGeneratorGeneration(MathAdapter $math, $function, $order, $prime)
+    public function testGeneratorGeneration(MathAdapterInterface $math, $function, $order, $prime)
     {
         $factory = EccFactory::getSecgCurves($math);
         $generator = $factory->{$function}();

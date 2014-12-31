@@ -62,7 +62,7 @@ class Point implements PointInterface
 
     /**
      *
-     * @var MathAdapter
+     * @var MathAdapterInterface
      */
     private $adapter;
 
@@ -73,11 +73,11 @@ class Point implements PointInterface
      * @param  int|string        $x
      * @param  int|string        $y
      * @param  int|string        $order
-     * @param  MathAdapter       $adapter
+     * @param  MathAdapterInterface       $adapter
      * @throws \RuntimeException when either the curve does not contain the given coordinates or
      *                                   when order is not null and P(x, y) * order is not equal to infinity.
      */
-    public function __construct(CurveFpInterface $curve, $x, $y, $order = null, MathAdapter $adapter)
+    public function __construct(CurveFpInterface $curve, $x, $y, $order = null, MathAdapterInterface $adapter)
     {
         $this->curve = $curve;
         $this->x = $x;

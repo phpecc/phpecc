@@ -53,7 +53,7 @@ class CurveFp implements CurveFpInterface
 
     /**
      *
-     * @var MathAdapter
+     * @var MathAdapterInterface
      */
     protected $adapter = null;
 
@@ -64,7 +64,7 @@ class CurveFp implements CurveFpInterface
      * @param $a int|string
      * @param $b int|string
      */
-    public function __construct($prime, $a, $b, MathAdapter $adapter)
+    public function __construct($prime, $a, $b, MathAdapterInterface $adapter)
     {
         $this->a = $a;
         $this->b = $b;

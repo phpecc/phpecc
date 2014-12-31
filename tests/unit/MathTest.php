@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Tests;
 
-use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\MathAdapterInterface;
 
 class MathTest extends AbstractTestCase
 {
@@ -52,7 +52,7 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testDecHex(MathAdapter $adapter)
+    public function testDecHex(MathAdapterInterface $adapter)
     {
     	foreach ($this->decHexMap as $hex => $dec) {
     		$actual = $adapter->decHex($dec);
@@ -63,7 +63,7 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testHexDec(MathAdapter $adapter)
+    public function testHexDec(MathAdapterInterface $adapter)
     {
     	foreach ($this->decHexMap as $hex => $dec) {
     		$actual = $adapter->hexDec($hex);
@@ -74,7 +74,7 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testStrictIntegerReturnValues(MathAdapter $math)
+    public function testStrictIntegerReturnValues(MathAdapterInterface $math)
     {
         $x = 10;
         $y = 4;
@@ -115,7 +115,7 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testKnownPrimesAreCorrectlyDetected(MathAdapter $math)
+    public function testKnownPrimesAreCorrectlyDetected(MathAdapterInterface $math)
     {
         foreach ($this->knownPrimes as $key => $prime) {
             if (trim($prime) == '') {
@@ -129,7 +129,7 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testGetNextPrimes(MathAdapter $math)
+    public function testGetNextPrimes(MathAdapterInterface $math)
     {
         $currentPrime = $math->nextPrime($this->startPrime);
 
@@ -144,7 +144,7 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testMultInverseModP(MathAdapter $math)
+    public function testMultInverseModP(MathAdapterInterface $math)
     {
         for ($i = 0; $i < 100; $i ++) {
             $m = rand(20, 10000);

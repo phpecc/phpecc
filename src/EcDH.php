@@ -41,7 +41,7 @@ class EcDH implements EcDHInterface
     /**
      * Adapter used for math calculatioins
      *
-     * @var MathAdapter
+     * @var MathAdapterInterface
      */
     private $adapter;
 
@@ -84,9 +84,9 @@ class EcDH implements EcDHInterface
      * Initialize a new exchange from a generator point.
      *
      * @param GeneratorPoint $g       Generator used to create the private key secret.
-     * @param MathAdapter    $adapter A math adapter instance.
+     * @param MathAdapterInterface    $adapter A math adapter instance.
      */
-    public function __construct(GeneratorPoint $g, MathAdapter $adapter)
+    public function __construct(GeneratorPoint $g, MathAdapterInterface $adapter)
     {
         $this->generator = $g;
         $this->adapter = $adapter;
