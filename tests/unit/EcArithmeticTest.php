@@ -4,7 +4,6 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Point;
-use Mdanter\Ecc\Points;
 use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\CurveFpInterface;
 
@@ -52,12 +51,9 @@ class EcArithmeticTest extends AbstractTestCase
 
         $c = new CurveFp(23, 1, 1, $math);
         $g = $c->getPoint(13, 7, 7);
-
-        $check = Points::infinity();
+        $check = $c->getInfinity();
 
         for ($i = 0; $i < 8; $i++) {
-            $p = $g->mul($i % 7);
-
             $a = $check->add($g);
             $b = $g->add($check);
 
@@ -114,9 +110,9 @@ class EcArithmeticTest extends AbstractTestCase
         $p1 = $c->getPoint($x1, $y1);
         $p3 = $p1->mul($m);
 
-        $this->assertFalse($p3->equals(Points::infinity()));
-        $this->assertEquals($math->mod($p3->getX(), 23), $x3);
-        $this->assertEquals($math->mod($p3->getY(), 23), $y3);
+        $this->assertFalse($p3->isInfinity());
+        $this->assertEquals($x3, $math->mod($p3->getX(), 23));
+        $this->assertEquals($y3, $math->mod($p3->getY(), 23));
     }
 
     public function getMultAdapters()
@@ -140,16 +136,16 @@ class EcArithmeticTest extends AbstractTestCase
      *
      * @dataProvider getMultAdapters
      */
-    public function testMultiply2(MathAdapter $math, $p, $a, $b, $x, $y, $m, $ex, $ey)
+    public function testMultiply2(MathAdapterInterface $math, $p, $a, $b, $x, $y, $m, $ex, $ey)
     {
         $c = new CurveFp($p, $a, $b, $math);
 
         $p1 = $c->getPoint($x, $y);
         $p3 = $p1->mul($m);
 
-        $this->assertFalse($p3->equals(Points::infinity()));
-        $this->assertEquals($math->mod($p3->getX(), $p), $ex);
-        $this->assertEquals($math->mod($p3->getY(), $p), $ey);
+        $this->assertFalse($p3->isInfinity());
+        $this->assertEquals($ex, $math->mod($p3->getX(), $p));
+        $this->assertEquals($ey, $math->mod($p3->getY(), $p));
     }
 
     /**
@@ -161,7 +157,7 @@ class EcArithmeticTest extends AbstractTestCase
         $c = new CurveFp(23, 1, 1, $math);
         $g = $c->getPoint(13, 7, 7);
 
-        $check = Points::infinity();
+        $check = $c->getInfinity();
 
         for ($i = 0; $i < 8; $i++) {
             $p = $g->mul($i % 7);

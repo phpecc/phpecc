@@ -195,10 +195,18 @@ class BcMathUtils
             $digits = self::digits($base);
         }
 
+        if ($base < 37) {
+            $value = strtolower($value);
+        }
+
         while ($dec > $base - 1) {
             $rest = bcmod($dec, $base);
             $dec = bcdiv($dec, $base);
             $value = $digits[$rest].$value;
+        }
+
+        if (intval($dec) < 0) {
+            var_dump($dec);
         }
 
         $value = $digits[intval($dec)].$value;

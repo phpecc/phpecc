@@ -40,6 +40,12 @@ namespace Mdanter\Ecc;
  */
 interface PointInterface
 {
+
+    /**
+     * Returns true if instance is an non-finite point.
+     */
+    public function isInfinity();
+
     /**
      * Adds another point to the current one and returns the resulting point.
      *

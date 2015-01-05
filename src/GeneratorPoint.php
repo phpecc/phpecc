@@ -46,7 +46,7 @@ class GeneratorPoint extends Point
 
         $point = $curve->getPoint($x, $y)->mul($n);
 
-        if (! $point->equals(Points::infinity())) {
+        if (! $point->isInfinity()) {
             return false;
         }
 

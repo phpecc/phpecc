@@ -16,6 +16,8 @@ class EccFactory
     /**
      * Selects and creates the most appropriate adapter for the running environment.
      *
+     * @param $debug [optional] Set to true to get a trace of all mathematical operations
+     *
      * @throws \RuntimeException
      * @return \Mdanter\Ecc\MathAdapterInterface
      */

@@ -42,6 +42,8 @@ interface CurveFpInterface
      */
     public function getPoint($x, $y, $order = null);
 
+    public function getInfinity();
+
     /**
      *
      * @param  int|string     $x

@@ -56,12 +56,11 @@ class DebugDecorator implements MathAdapterInterface
             list(, $func) = explode('::', $func);
         }
 
-        $res = call_user_func_array(array(
-            $this->adapter,
-            $func,
-        ), $args);
+        $this->write($func.'('.implode(', ', $strArgs).')');
 
-        $this->writeln($func.'('.implode(', ', $strArgs).') => '.var_export($this->adapter->toString($res), true));
+        $res = call_user_func_array([ $this->adapter, $func ], $args);
+
+        $this->write(' => ' . var_export($this->adapter->toString($res), true) . PHP_EOL);
 
         return $res;
     }

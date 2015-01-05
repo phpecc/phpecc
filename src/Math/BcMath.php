@@ -118,7 +118,25 @@ class BcMath implements MathAdapterInterface
 
     /**
      * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::bitwiseXor()
+     */
+    public function bitwiseXor($first, $other)
+    {
+        return BcMathUtils::bcxor($first, $other);
+    }
+
+    /**
+     * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     */
+    public function leftShift($number, $positions)
+    {
+        return BcMathUtils::bcleftshift($number, $positions);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::leftShift()
      */
     public function leftShift($number, $positions)
     {

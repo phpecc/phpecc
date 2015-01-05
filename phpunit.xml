@@ -2,7 +2,7 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true"
   convertErrorsToExceptions="true" convertNoticesToExceptions="true"
   convertWarningsToExceptions="true" processIsolation="false"
-  stopOnFailure="true">
+  stopOnFailure="false">
   <php>
     <const name="PHPUNIT_DEBUG" value="false" />
     <ini name="display_errors" value="On" />
