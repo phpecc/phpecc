@@ -6,7 +6,6 @@ namespace Mdanter\Ecc;
  * Curve point from which public and private keys can be derived.
  *
  * @author thibaud
- *
  */
 class GeneratorPoint implements PointInterface
 {
@@ -27,8 +26,8 @@ class GeneratorPoint implements PointInterface
     /**
      * Initialize a new instance using an existing curve point and a math adapter.
      *
-     * @param PointInterface $wrapped
-     * @param MathAdapterInterface    $adapter
+     * @param PointInterface       $wrapped
+     * @param MathAdapterInterface $adapter
      */
     public function __construct(PointInterface $wrapped, MathAdapterInterface $adapter)
     {
@@ -120,7 +119,7 @@ class GeneratorPoint implements PointInterface
     /**
      * Verifies validity of given coordinates against the current point and its point.
      *
-     * @todo Check if really necessary here (only used for testing in lib)
+     * @todo   Check if really necessary here (only used for testing in lib)
      * @param  int|string $x
      * @param  int|string $y
      * @return boolean
@@ -158,10 +157,7 @@ class GeneratorPoint implements PointInterface
     {
         $secret = $this->adapter->rand($this->getOrder());
 
-        $pubPoint = $this->mul($secret);
-        $pubKey = $this->getPublicKeyFrom($pubPoint->getX(), $pubPoint->getY(), $pubPoint->getOrder());
-
-        return new PrivateKey($pubKey, $secret, $this->adapter);
+        return new PrivateKey($this->adapter, $this, $secret);
     }
 
     public function getPublicKeyFrom($x, $y, $order = null)
@@ -171,9 +167,9 @@ class GeneratorPoint implements PointInterface
         return new PublicKey($this, $pubPoint, $this->adapter);
     }
 
-    public function getPrivateKeyFrom($secretMultiplier, $x, $y, $order = null)
+    public function getPrivateKeyFrom($secretMultiplier)
     {
-        return $this->getPublicKeyFrom($x, $y, $order)->getPrivateKey($secretMultiplier);
+        return new PrivateKey($this->adapter, $this, $secretMultiplier);
     }
 
     public function __toString()

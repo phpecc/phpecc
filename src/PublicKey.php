@@ -58,9 +58,9 @@ class PublicKey implements PublicKeyInterface
     /**
      * Initialize a new instance.
      *
-     * @param  GeneratorPoint    $generator
-     * @param  PointInterface    $point
-     * @param  MathAdapterInterface       $adapter
+     * @param  GeneratorPoint       $generator
+     * @param  PointInterface       $point
+     * @param  MathAdapterInterface $adapter
      * @throws \LogicException
      * @throws \RuntimeException
      */
@@ -81,42 +81,11 @@ class PublicKey implements PublicKeyInterface
             throw new \RuntimeException("Generator point order is bad.");
         }
 
-        if ($adapter->cmp($point->getX(), 0) < 0 || $adapter->cmp($n, $point->getX()) <= 0 ||
-            $adapter->cmp($point->getY(), 0) < 0 || $adapter->cmp($n, $point->getY()) <= 0) {
+        if ($adapter->cmp($point->getX(), 0) < 0 || $adapter->cmp($n, $point->getX()) <= 0 
+            || $adapter->cmp($point->getY(), 0) < 0 || $adapter->cmp($n, $point->getY()) <= 0
+        ) {
             throw new \RuntimeException("Generator point has x and y out of range.");
         }
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PublicKeyInterface::verifies()
-     */
-    public function verifies($hash, SignatureInterface $signature)
-    {
-        $math = $this->adapter;
-
-        $G = $this->generator;
-        $n = $this->generator->getOrder();
-        $point = $this->point;
-
-        $r = $signature->getR();
-        $s = $signature->getS();
-
-        if ($math->cmp($r, 1) < 1 || $math->cmp($r, $math->sub($n, 1)) > 0) {
-            return false;
-        }
-
-        if ($math->cmp($s, 1) < 1 || $math->cmp($s, $math->sub($n, 1)) > 0) {
-            return false;
-        }
-
-        $c = $math->inverseMod($s, $n);
-        $u1 = $math->mod($math->mul($hash, $c), $n);
-        $u2 = $math->mod($math->mul($r, $c), $n);
-        $xy = $G->mul($u1)->add($point->mul($u2));
-        $v = $math->mod($xy->getX(), $n);
-
-        return $math->cmp($v, $r) == 0;
     }
 
     /**
@@ -127,11 +96,7 @@ class PublicKey implements PublicKeyInterface
     {
         return $this->curve;
     }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PublicKeyInterface::getGenerator()
-     */
+    
     public function getGenerator()
     {
         return $this->generator;
@@ -144,14 +109,5 @@ class PublicKey implements PublicKeyInterface
     public function getPoint()
     {
         return $this->point;
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PublicKeyInterface::getPrivateKey()
-     */
-    public function getPrivateKey($secretMultiplier)
-    {
-        return new PrivateKey($this, $secretMultiplier, $this->adapter);
     }
 }

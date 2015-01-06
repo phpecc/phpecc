@@ -8,7 +8,6 @@ use Mdanter\Ecc\MathAdapterInterface;
  * Debug helper class to trace all calls to math functions along with the provided params and result.
  *
  * @author thibaud
- *
  */
 class DebugDecorator implements MathAdapterInterface
 {
@@ -50,9 +49,11 @@ class DebugDecorator implements MathAdapterInterface
      */
     private function call($func, $args)
     {
-        $strArgs = array_map(function ($arg) {
-            return var_export($this->adapter->toString($arg), true);
-        }, $args);
+        $strArgs = array_map(
+            function ($arg) {
+                return var_export($this->adapter->toString($arg), true);
+            }, $args
+        );
 
         if (strpos($func, '::')) {
             list(, $func) = explode('::', $func);

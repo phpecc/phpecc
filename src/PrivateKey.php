@@ -1,7 +1,9 @@
 <?php
+
 namespace Mdanter\Ecc;
 
 use Mdanter\Ecc\EcMath;
+use Mdanter\Ecc\Signature\Signer;
 
 /**
  * *********************************************************************
@@ -32,53 +34,37 @@ use Mdanter\Ecc\EcMath;
  */
 class PrivateKey implements PrivateKeyInterface
 {
-    private $publicKey;
+    private $generator;
 
     private $secretMultiplier;
 
     private $adapter;
 
-    public function __construct(PublicKeyInterface $publicKey, $secretMultiplier, MathAdapterInterface $adapter)
+    public function __construct(MathAdapterInterface $adapter, GeneratorPoint $generator, $secretMultiplier)
     {
-        $this->publicKey = $publicKey;
-        $this->secretMultiplier = $secretMultiplier;
         $this->adapter = $adapter;
+        $this->generator = $generator;
+        $this->secretMultiplier = $secretMultiplier;
     }
 
-    /**
-     *
-     * @return PublicKeyInterface
-     */
     public function getPublicKey()
     {
-        return $this->publicKey;
+        return new PublicKey($this->generator, $this->generator->mul($this->secretMultiplier), $this->adapter);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PrivateKeyInterface::sign()
-     */
-    public function sign($hash, $random_k)
+    public function getPoint()
     {
-        $math = $this->adapter;
+        return $this->generator;
+    }
 
-        $G = $this->publicKey->getGenerator();
-        $n = $G->getOrder();
-        $k = $math->mod($random_k, $n);
-        $p1 = $G->mul($k);
-        $r = $p1->getX();
+    public function getSecret()
+    {
+        return $this->secretMultiplier;
+    }
 
-        if ($math->cmp($r, 0) == 0) {
-            throw new \RuntimeException("error: random number R = 0 <br />");
-        }
-
-        $s = $math->mod($math->mul($math->inverseMod($k, $n), $math->mod($math->add($hash, $math->mul($this->secretMultiplier, $r)), $n)), $n);
-
-        if ($math->cmp($s, 0) == 0) {
-            throw new \RuntimeException("error: random number S = 0<br />");
-        }
-
-        return new Signature($r, $s);
+    public function establishSharedKey(PublicKeyInterface $key)
+    {
+        return $key->getPoint()->mul($this->secretMultiplier)->getX();
     }
 
 }

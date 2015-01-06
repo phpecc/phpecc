@@ -5,7 +5,8 @@ namespace Mdanter\Ecc\Tests;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\PublicKey;
-use Mdanter\Ecc\Signature;
+use Mdanter\Ecc\Signature\Signature;
+use Mdanter\Ecc\Signature\Signer;
 
 class NistCurveTest extends AbstractTestCase
 {
@@ -176,7 +177,8 @@ class NistCurveTest extends AbstractTestCase
                     '0xbcfacf45139b6f5f690a4c35a5fffa498794136a2353fc77',
                     '0x6f4a6c906316a6afc6d98fe1f0399d056f128fe0270b0f22',
                     '0x9db679a3dafe48f7ccad122933acfe9da0970b71c94c21c1',
-                    '0x984c2db99827576c0a41a5da41e07d8cc768bc82f18c9da9', false ], ]);
+                    '0x984c2db99827576c0a41a5da41e07d8cc768bc82f18c9da9', false ]
+            ]);
     }
 
     /**
@@ -194,8 +196,9 @@ class NistCurveTest extends AbstractTestCase
         $generator = EccFactory::getNistCurves($math)->generator192();
         $curve = EccFactory::getNistCurves($math)->curve192();
         $publicKey = $generator->getPublicKeyFrom($Qx, $Qy);
+        $signer = new Signer($math);
 
-        $actual = $publicKey->verifies($math->digestInteger($msg), new Signature($R, $S));
+        $actual = $signer->verify($publicKey, new Signature($R, $S), $math->digestInteger($msg));
 
         $this->assertEquals($expected, $actual);
     }
@@ -203,13 +206,13 @@ class NistCurveTest extends AbstractTestCase
     public function getSignatureValidityAdapters()
     {
         return $this->_getAdapters(
-            [
-            [
-            [ 'd' => '651056770906015076056810763456358567190100156695615665659',
-            'k' => '6140507067065001063065065565667405560006161556565665656654',
-            'e' => '968236873715988614170569073515315707566766479517',
-            'R' => '3342403536405981729393488334694600415596881826869351677613',
-            'S' => '5735822328888155254683894997897571951568553642892029982342', ], ], ]);
+            [ [ [ 
+                'd' => '651056770906015076056810763456358567190100156695615665659',
+                'k' => '6140507067065001063065065565667405560006161556565665656654',
+                'e' => '968236873715988614170569073515315707566766479517',
+                'R' => '3342403536405981729393488334694600415596881826869351677613',
+                'S' => '5735822328888155254683894997897571951568553642892029982342' 
+            ] ] ]);
     }
 
     /**
@@ -219,18 +222,17 @@ class NistCurveTest extends AbstractTestCase
     public function testSignatureValidityWithCorrectHash(MathAdapterInterface $math, array $values)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
-        $publicKey = $generator->getPublicKeyFrom(
-            $generator->mul($values['d'])->getX(),
-            $generator->mul($values['d'])->getY()
-        );
+        
+        $privateKey = $generator->getPrivateKeyFrom($values['d']);
+        $publicKey = $privateKey->getPublicKey();
+        $signer = new Signer($math);
 
-        $privateKey = $publicKey->getPrivateKey($values['d']);
-        $sig = $privateKey->sign($values['e'], $values['k']);
+        $sig = $signer->sign($privateKey, $values['e'], $values['k']);
 
         $this->assertEquals($values['R'], $sig->getR());
         $this->assertEquals($values['S'], $sig->getS());
 
-        $this->assertTrue($publicKey->verifies($values['e'], $sig));
+        $this->assertTrue($signer->verify($publicKey, $sig, $values['e']));
     }
 
     /**
@@ -240,18 +242,17 @@ class NistCurveTest extends AbstractTestCase
     public function testSignatureValidityWithForgedHash(MathAdapterInterface $math, array $values)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
-        $publicKey = $generator->getPublicKeyFrom(
-            $generator->mul($values['d'])->getX(),
-            $generator->mul($values['d'])->getY()
-        );
-
-        $privateKey = $publicKey->getPrivateKey($values['d']);
-        $sig = $privateKey->sign($values['e'], $values['k']);
+        
+        $privateKey = $generator->getPrivateKeyFrom($values['d']);
+        $publicKey = $privateKey->getPublicKey();
+        $signer = new Signer($math);
+        
+        $sig = $signer->sign($privateKey, $values['e'], $values['k']);
 
         $this->assertEquals($values['R'], $sig->getR());
         $this->assertEquals($values['S'], $sig->getS());
 
-        $this->assertFalse($publicKey->verifies($math->sub($values['e'], 1), $sig));
+        $this->assertFalse($signer->verify($publicKey, $sig, $math->sub($values['e'], 1)));
     }
 
     /**
@@ -262,18 +263,17 @@ class NistCurveTest extends AbstractTestCase
         $curve = EccFactory::getNistCurves($math)->curve192();
         $generator = EccFactory::getNistCurves($math)->generator192();
 
-        $n = $generator->getOrder();
-        $secret = $math->rand($n);
-        $secretG = $generator->mul($secret);
-        $hash = $math->rand($n);
+        $signer = new Signer($math);
+        
+        $privateKey = $generator->createPrivateKey();
+        $publicKey = $privateKey->getPublicKey();
+        $randomK = $math->rand($privateKey->getPoint()->getOrder());
+        
+        $hash = $math->rand($generator->getOrder());
+        $signature = $signer->sign($privateKey, $hash, $randomK);
 
-        $publicKey = $generator->getPublicKeyFrom($secretG->getX(), $secretG->getY());
-        $privateKey = $publicKey->getPrivateKey($secret);
-
-        $signature = $privateKey->sign($hash, $math->rand($n));
-
-        $this->assertTrue($publicKey->verifies($hash, $signature), 'Correctly validates valid hash.');
-        $this->assertFalse($publicKey->verifies($math->sub($hash, 1), $signature), 'Correctly rejects tampered hash.');
+        $this->assertTrue($signer->verify($publicKey, $signature, $hash), 'Correctly validates valid hash.');
+        $this->assertFalse($signer->verify($publicKey, $signature, $math->sub($hash, 1)), 'Correctly rejects tampered hash.');
     }
 
     /**

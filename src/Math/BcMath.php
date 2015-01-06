@@ -144,7 +144,7 @@ class BcMath implements MathAdapterInterface
         $hex = BcMathUtils::bcdechex($dec);
 
         if (strlen($hex) % 2 !== 0) {
-        	$hex = '0' . $hex;
+            $hex = '0' . $hex;
         }
 
         return $hex;

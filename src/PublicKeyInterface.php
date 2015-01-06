@@ -33,13 +33,6 @@ namespace Mdanter\Ecc;
  */
 interface PublicKeyInterface
 {
-    /**
-     *
-     * @param  string             $hash
-     * @param  SignatureInterface $signature
-     * @return bool
-     */
-    public function verifies($hash, SignatureInterface $signature);
 
     /**
      * @return CurveFpInterface
@@ -49,17 +42,10 @@ interface PublicKeyInterface
     /**
      * @return PointInterface
      */
-    public function getGenerator();
+    public function getPoint();
 
     /**
      * @return PointInterface
      */
-    public function getPoint();
-
-    /**
-     * Extracts the private key associated with this public key.
-     *
-     * @param int|string $secret The private key's secret.
-     */
-    public function getPrivateKey($secret);
+    public function getGenerator();
 }
