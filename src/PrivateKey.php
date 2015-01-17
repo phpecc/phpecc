@@ -81,31 +81,4 @@ class PrivateKey implements PrivateKeyInterface
         return new Signature($r, $s);
     }
 
-    public function sign2($hash, $random_k)
-    {
-        $G    = $this->publicKey->getGenerator();
-        $n    = $G->getOrder();
-        $math = $this->adapter;
-        $k    = $math->mod($random_k, $n);
-
-        $r = (new EcMath($k, $G, $math))
-            ->mul($G)->result()->getX();
-
-        if ($math->cmp($r, 0) == 0) {
-            throw new \RuntimeException("error: random number R = 0 <br />");
-        }
-
-        $s = (new EcMath($math->inverseMod($k, $n), $G, $math))
-            ->mul(
-                (new EcMath($this->secretMultiplier, $G, $math))
-                    ->mul($r)->add($hash)->mod($n)->result()
-            )
-            ->mod($n)->result();
-
-        if ($s->cmp($s, 0) == 0) {
-            throw new \RuntimeException("error: random number S = 0<br />");
-        }
-
-        return new Signature($r, $s);
-    }
 }
