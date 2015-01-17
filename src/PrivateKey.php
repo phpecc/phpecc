@@ -1,6 +1,8 @@
 <?php
 namespace Mdanter\Ecc;
 
+use Mdanter\Ecc\EcMath;
+
 /**
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter
@@ -78,4 +80,5 @@ class PrivateKey implements PrivateKeyInterface
 
         return new Signature($r, $s);
     }
+
 }
