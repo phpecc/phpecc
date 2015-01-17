@@ -243,7 +243,7 @@ class EcMath implements EcMathInterface
 
     /**
      * Return the type of the value in the instance.
-     * 
+     *
      * @return string
      */
     public function getType()

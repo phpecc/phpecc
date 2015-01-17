@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Tests;
 
-use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\EcMath;
 use Mdanter\Ecc\Point;
@@ -15,7 +15,7 @@ class EcMathTest extends AbstractTestCase
      * @dataProvider getAdapters
      * @testdox Test point additions yield expected results
      */
-    public function testCreateNew(MathAdapter $math)
+    public function testCreateNew(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
         $ecInt = new EcMath(1, $G, $math);
@@ -37,7 +37,7 @@ class EcMathTest extends AbstractTestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Must provide a point or integer
      */
-    public function testCreateFails(MathAdapter $math)
+    public function testCreateFails(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
         $fail = new EcMath('string', $G, $math);
@@ -46,7 +46,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testToPoint(MathAdapter $math)
+    public function testToPoint(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
         $ecInt = new EcMath(2, $G, $math);
@@ -60,7 +60,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testToPointAlreadyAPoint(MathAdapter $math)
+    public function testToPointAlreadyAPoint(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -73,7 +73,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testAddIntAndInt(MathAdapter $math)
+    public function testAddIntAndInt(MathAdapterInterface $math)
     {
         $G  = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -91,7 +91,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testAddPointAndPoint(MathAdapter $math)
+    public function testAddPointAndPoint(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -113,7 +113,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testAddIntAndPoint(MathAdapter $math)
+    public function testAddIntAndPoint(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -135,7 +135,7 @@ class EcMathTest extends AbstractTestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot multiply two points together
      */
-    public function testMulPointByPointFails(MathAdapter $math)
+    public function testMulPointByPointFails(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
         $P = new Point($G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder(), $math);
@@ -146,7 +146,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testMulIntByInt(MathAdapter $math)
+    public function testMulIntByInt(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -160,7 +160,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testMulIntByPoint(MathAdapter $math)
+    public function testMulIntByPoint(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -175,7 +175,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testMod(MathAdapter $math)
+    public function testMod(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -198,7 +198,7 @@ class EcMathTest extends AbstractTestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Parameter for mod() must be an integer
      */
-    public function testModFail(MathAdapter $math)
+    public function testModFail(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -212,7 +212,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testAddEcAndIntEquivalent(MathAdapter $math)
+    public function testAddEcAndIntEquivalent(MathAdapterInterface $math)
     {
         $G  = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -244,7 +244,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testMulEcAndIntEquivalent(MathAdapter $math)
+    public function testMulEcAndIntEquivalent(MathAdapterInterface $math)
     {
         $G  = EccFactory::getSecgCurves($math)->generator256k1();
         $secret = '2';
@@ -266,7 +266,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testGetDoubleEquivalent(MathAdapter $math)
+    public function testGetDoubleEquivalent(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -291,7 +291,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testGetType(MathAdapter $math)
+    public function testGetType(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
@@ -305,7 +305,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testCmp(MathAdapter $math)
+    public function testCmp(MathAdapterInterface $math)
     {
         $G  = EccFactory::getSecgCurves($math)->generator256k1();
         $ec = new EcMath('2', $G, $math);
@@ -328,7 +328,7 @@ class EcMathTest extends AbstractTestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot compare values of different types
      */
-    public function testCmpDifferentTypes(MathAdapter $math)
+    public function testCmpDifferentTypes(MathAdapterInterface $math)
     {
         $G  = EccFactory::getSecgCurves($math)->generator256k1();
         $ec = new EcMath('2', $G, $math);
@@ -339,7 +339,7 @@ class EcMathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testSimpleDeterministicAlgorithm(MathAdapter $math)
+    public function testSimpleDeterministicAlgorithm(MathAdapterInterface $math)
     {
 
         // Set $offset to '0' to confirm it matches with the first output of this program
