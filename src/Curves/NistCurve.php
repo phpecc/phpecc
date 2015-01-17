@@ -90,7 +90,7 @@ class NistCurve
 
     /**
      * Returns an NIST P-224 generator.
-     * @return Point
+     * @return Generator
      */
     public function generator224()
     {

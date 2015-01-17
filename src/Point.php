@@ -91,11 +91,9 @@ class Point implements PointInterface
             );
         }
 
-        $mult = $this->mul($order);
-
-        if ($this->order != null && ! $mult->equals(Points::infinity())) {
+        if ($this->order != null && ! $this->mul($order)->equals(Points::infinity())) {
             throw new \RuntimeException(
-                "SELF * ORDER MUST EQUAL INFINITY. (".(string)$mult." found instead)"
+                "SELF * ORDER MUST EQUAL INFINITY. (".(string) $this->mul($order)." found instead)"
             );
         }
     }
@@ -312,10 +310,6 @@ class Point implements PointInterface
         return $this->y;
     }
 
-    /**
-     *
-     * @return \Mdanter\Ecc\MathAdapterInterface
-     */
     protected function getAdapter()
     {
         return $this->adapter;
