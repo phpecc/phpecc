@@ -26,7 +26,7 @@ class EcMathTest extends AbstractTestCase
         $this->assertInstanceOf('Mdanter\Ecc\EcMath', $ecInt);
         $this->assertSame('1', $ecInt->result());
 
-        $point = new Point($G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder(), $math);
+        $point = new Point($math, $G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder());
         $ecPoint = new EcMath($point, $G, $math);
         $this->assertInstanceOf('Mdanter\Ecc\EcMath', $ecPoint);
         $this->assertSame($point, $ecPoint->result());
@@ -138,7 +138,7 @@ class EcMathTest extends AbstractTestCase
     public function testMulPointByPointFails(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
-        $P = new Point($G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder(), $math);
+        $P = new Point($math, $G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder());
         $fail = new EcMath($P, $G, $math);
         $fail->mul($P);
     }
@@ -202,7 +202,7 @@ class EcMathTest extends AbstractTestCase
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
-        $P = new Point($G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder(), $math);
+        $P = new Point($math, $G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder());
 
         $e = new EcMath('2', $G, $math);
         $e->mod($P);
