@@ -20,7 +20,7 @@ class GeneratorPoint implements PointInterface
     /**
      * Math adapter used for calculations.
      *
-     * @var MathAdapter
+     * @var MathAdapterInterface
      */
     private $adapter;
 
@@ -28,9 +28,9 @@ class GeneratorPoint implements PointInterface
      * Initialize a new instance using an existing curve point and a math adapter.
      *
      * @param PointInterface $wrapped
-     * @param MathAdapter    $adapter
+     * @param MathAdapterInterface    $adapter
      */
-    public function __construct(PointInterface $wrapped, MathAdapter $adapter)
+    public function __construct(PointInterface $wrapped, MathAdapterInterface $adapter)
     {
         $this->point = $wrapped;
         $this->adapter = $adapter;

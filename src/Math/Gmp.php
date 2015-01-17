@@ -2,13 +2,13 @@
 
 namespace Mdanter\Ecc\Math;
 
-use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\MathAdapterInterface;
 
-class Gmp implements MathAdapter
+class Gmp implements MathAdapterInterface
 {
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::cmp()
+     * @see \Mdanter\Ecc\MathAdapterInterface::cmp()
      */
     public function cmp($first, $other)
     {
@@ -17,7 +17,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::mod()
+     * @see \Mdanter\Ecc\MathAdapterInterface::mod()
      */
     public function mod($number, $modulus)
     {
@@ -32,7 +32,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::add()
+     * @see \Mdanter\Ecc\MathAdapterInterface::add()
      */
     public function add($augend, $addend)
     {
@@ -41,7 +41,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::sub()
+     * @see \Mdanter\Ecc\MathAdapterInterface::sub()
      */
     public function sub($minuend, $subtrahend)
     {
@@ -50,7 +50,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::mul()
+     * @see \Mdanter\Ecc\MathAdapterInterface::mul()
      */
     public function mul($multiplier, $multiplicand)
     {
@@ -59,7 +59,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::div()
+     * @see \Mdanter\Ecc\MathAdapterInterface::div()
      */
     public function div($dividend, $divisor)
     {
@@ -68,7 +68,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::pow()
+     * @see \Mdanter\Ecc\MathAdapterInterface::pow()
      */
     public function pow($base, $exponent)
     {
@@ -77,7 +77,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::rand()
+     * @see \Mdanter\Ecc\MathAdapterInterface::rand()
      */
     public function rand($n)
     {
@@ -93,7 +93,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::bitwiseAnd()
+     * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseAnd()
      */
     public function bitwiseAnd($first, $other)
     {
@@ -102,7 +102,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::toString()
+     * @see \Mdanter\Ecc\MathAdapterInterface::toString()
      */
     public function toString($value)
     {
@@ -115,7 +115,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::hexDec()
+     * @see \Mdanter\Ecc\MathAdapterInterface::hexDec()
      */
     public function hexDec($hex)
     {
@@ -124,7 +124,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::decHex()
+     * @see \Mdanter\Ecc\MathAdapterInterface::decHex()
      */
     public function decHex($dec)
     {
@@ -139,7 +139,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::powmod()
+     * @see \Mdanter\Ecc\MathAdapterInterface::powmod()
      */
     public function powmod($base, $exponent, $modulus)
     {
@@ -152,7 +152,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::isPrime()
+     * @see \Mdanter\Ecc\MathAdapterInterface::isPrime()
      */
     public function isPrime($n)
     {
@@ -167,7 +167,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::nextPrime()
+     * @see \Mdanter\Ecc\MathAdapterInterface::nextPrime()
      */
     public function nextPrime($starting_value)
     {
@@ -176,7 +176,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::inverseMod()
+     * @see \Mdanter\Ecc\MathAdapterInterface::inverseMod()
      */
     public function inverseMod($a, $m)
     {
@@ -185,7 +185,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::jacobi()
+     * @see \Mdanter\Ecc\MathAdapterInterface::jacobi()
      */
     public function jacobi($a, $n)
     {
@@ -194,7 +194,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::intToString()
+     * @see \Mdanter\Ecc\MathAdapterInterface::intToString()
      */
     public function intToString($x)
     {
@@ -222,7 +222,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::stringToInt()
+     * @see \Mdanter\Ecc\MathAdapterInterface::stringToInt()
      */
     public function stringToInt($s)
     {
@@ -238,7 +238,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::digestInteger()
+     * @see \Mdanter\Ecc\MathAdapterInterface::digestInteger()
      */
     public function digestInteger($m)
     {
@@ -247,7 +247,7 @@ class Gmp implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::gcd2()
+     * @see \Mdanter\Ecc\MathAdapterInterface::gcd2()
      */
     public function gcd2($a, $b)
     {

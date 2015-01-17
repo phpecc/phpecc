@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Math;
 
-use Mdanter\Ecc\MathAdapter;
+use Mdanter\Ecc\MathAdapterInterface;
 
 /**
  * Debug helper class to trace all calls to math functions along with the provided params and result.
@@ -10,13 +10,13 @@ use Mdanter\Ecc\MathAdapter;
  * @author thibaud
  *
  */
-class DebugDecorator implements MathAdapter
+class DebugDecorator implements MathAdapterInterface
 {
     private $adapter;
 
     private $writer;
 
-    public function __construct(MathAdapter $adapter, $callback = null)
+    public function __construct(MathAdapterInterface $adapter, $callback = null)
     {
         $this->adapter = $adapter;
         $this->writer = $callback ?: function ($message) {
@@ -67,7 +67,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::cmp()
+     * @see \Mdanter\Ecc\MathAdapterInterface::cmp()
      */
     public function cmp($first, $other)
     {
@@ -79,7 +79,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::mod()
+     * @see \Mdanter\Ecc\MathAdapterInterface::mod()
      */
     public function mod($number, $modulus)
     {
@@ -91,7 +91,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::add()
+     * @see \Mdanter\Ecc\MathAdapterInterface::add()
      */
     public function add($augend, $addend)
     {
@@ -103,7 +103,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::sub()
+     * @see \Mdanter\Ecc\MathAdapterInterface::sub()
      */
     public function sub($minuend, $subtrahend)
     {
@@ -115,7 +115,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::mul()
+     * @see \Mdanter\Ecc\MathAdapterInterface::mul()
      */
     public function mul($multiplier, $multiplicand)
     {
@@ -127,7 +127,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::div()
+     * @see \Mdanter\Ecc\MathAdapterInterface::div()
      */
     public function div($dividend, $divisor)
     {
@@ -139,7 +139,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::pow()
+     * @see \Mdanter\Ecc\MathAdapterInterface::pow()
      */
     public function pow($base, $exponent)
     {
@@ -151,7 +151,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::rand()
+     * @see \Mdanter\Ecc\MathAdapterInterface::rand()
      */
     public function rand($n)
     {
@@ -163,7 +163,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::bitwiseAnd()
+     * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseAnd()
      */
     public function bitwiseAnd($first, $other)
     {
@@ -175,7 +175,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::toString()
+     * @see \Mdanter\Ecc\MathAdapterInterface::toString()
      */
     public function toString($value)
     {
@@ -184,7 +184,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::hexDec()
+     * @see \Mdanter\Ecc\MathAdapterInterface::hexDec()
      */
     public function hexDec($hexString)
     {
@@ -196,7 +196,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::decHex()
+     * @see \Mdanter\Ecc\MathAdapterInterface::decHex()
      */
     public function decHex($decString)
     {
@@ -208,7 +208,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::powmod()
+     * @see \Mdanter\Ecc\MathAdapterInterface::powmod()
      */
     public function powmod($base, $exponent, $modulus)
     {
@@ -220,7 +220,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::isPrime()
+     * @see \Mdanter\Ecc\MathAdapterInterface::isPrime()
      */
     public function isPrime($n)
     {
@@ -232,7 +232,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::nextPrime()
+     * @see \Mdanter\Ecc\MathAdapterInterface::nextPrime()
      */
     public function nextPrime($currentPrime)
     {
@@ -244,7 +244,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::inverseMod()
+     * @see \Mdanter\Ecc\MathAdapterInterface::inverseMod()
      */
     public function inverseMod($a, $m)
     {
@@ -256,7 +256,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::jacobi()
+     * @see \Mdanter\Ecc\MathAdapterInterface::jacobi()
      */
     public function jacobi($a, $p)
     {
@@ -268,7 +268,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::intToString()
+     * @see \Mdanter\Ecc\MathAdapterInterface::intToString()
      */
     public function intToString($x)
     {
@@ -280,7 +280,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::stringToInt()
+     * @see \Mdanter\Ecc\MathAdapterInterface::stringToInt()
      */
     public function stringToInt($s)
     {
@@ -292,7 +292,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::digestInteger()
+     * @see \Mdanter\Ecc\MathAdapterInterface::digestInteger()
      */
     public function digestInteger($m)
     {
@@ -304,7 +304,7 @@ class DebugDecorator implements MathAdapter
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::gcd2()
+     * @see \Mdanter\Ecc\MathAdapterInterface::gcd2()
      */
     public function gcd2($a, $m)
     {
