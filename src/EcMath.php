@@ -20,7 +20,7 @@ class EcMath implements EcMathInterface
     private $dataType;
 
     /**
-     * @var MathAdapter
+     * @var MathAdapterInterface
      */
     private $math;
 
@@ -31,15 +31,15 @@ class EcMath implements EcMathInterface
 
     /**
      * @param $input
-     * @param GeneratorPoint $g
-     * @param MathAdapter $math
+     * @param GeneratorPoint $G
+     * @param MathAdapterInterface $math
      */
-    public function __construct($input, GeneratorPoint $g, MathAdapter $math)
+    public function __construct($input, GeneratorPoint $G, MathAdapterInterface $math)
     {
         $this->dataType  = $this->identify($input);
         $this->data      = $input;
         $this->math      = $math;
-        $this->generator = $g;
+        $this->generator = $G;
         return $this;
     }
 
@@ -83,12 +83,13 @@ class EcMath implements EcMathInterface
         // handler (currentData, operand):
         //   <operation> (point, int) -> point
         $this->data = $handler($data, $operand);
+
         return $this;
     }
 
     /**
-     * @param $addend
-     * @return $this
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcMathInterface::add()
      */
     public function add($addend)
     {
@@ -117,8 +118,8 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * @param $multiplicand
-     * @return $this
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcMathInterface::mul()
      */
     public function mul($multiplicand)
     {
@@ -143,7 +144,8 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * @return $this
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcMathInterface::getDouble()
      */
     public function getDouble()
     {
@@ -159,8 +161,8 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * @param $n
-     * @return $this
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcMathInterface::mod()
      */
     public function mod($n)
     {
@@ -176,8 +178,8 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * @param $input
-     * @return int|string
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcMathInterface::cmp()
      */
     public function cmp($input)
     {
@@ -208,11 +210,10 @@ class EcMath implements EcMathInterface
         return $this;
     }
 
+
     /**
-     * Calculate the result of this computation, and update subject with the
-     * result of the calculation to avoid recomputing it.
-     *
-     * @return int|PointInterface
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcMathInterface::result()
      */
     public function result()
     {
@@ -221,6 +222,8 @@ class EcMath implements EcMathInterface
     }
 
     /**
+     * Return the point associated with the value in the instance.
+     *
      * @return int|PointInterface
      */
     public function getPoint()
@@ -239,10 +242,12 @@ class EcMath implements EcMathInterface
     }
 
     /**
+     * Return the type of the value in the instance.
+     * 
      * @return string
      */
     public function getType()
     {
         return $this->dataType;
     }
-};
+}
