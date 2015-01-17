@@ -69,11 +69,11 @@ class Point implements PointInterface
     /**
      * Initialize a new instance
      *
-     * @param  CurveFpInterface  $curve
-     * @param  int|string        $x
-     * @param  int|string        $y
-     * @param  int|string        $order
-     * @param  MathAdapterInterface       $adapter
+     * @param  CurveFpInterface     $curve
+     * @param  int|string           $x
+     * @param  int|string           $y
+     * @param  int|string           $order
+     * @param  MathAdapterInterface $adapter
      * @throws \RuntimeException when either the curve does not contain the given coordinates or
      *                                   when order is not null and P(x, y) * order is not equal to infinity.
      */
@@ -87,12 +87,14 @@ class Point implements PointInterface
 
         if (! $this->curve->contains($this->x, $this->y)) {
             throw new \RuntimeException(
-                "Curve ".$this->curve." does not contain point (".$x.", ".$y.")");
+                "Curve ".$this->curve." does not contain point (".$x.", ".$y.")"
+            );
         }
 
         if ($this->order != null && ! $this->mul($order)->equals(Points::infinity())) {
             throw new \RuntimeException(
-                "SELF * ORDER MUST EQUAL INFINITY. (".(string) $this->mul($order)." found instead)");
+                "SELF * ORDER MUST EQUAL INFINITY. (".(string) $this->mul($order)." found instead)"
+            );
         }
     }
 
@@ -154,8 +156,11 @@ class Point implements PointInterface
 
         $p = $this->curve->getPrime();
         $l = $math->mod(
-            $math->mul($math->sub($addend->getY(), $this->y),
-                $math->inverseMod($math->sub($addend->getX(), $this->x), $p)), $p);
+            $math->mul(
+                $math->sub($addend->getY(), $this->y),
+                $math->inverseMod($math->sub($addend->getX(), $this->x), $p)
+            ), $p
+        );
 
         $x3 = $math->mod($math->sub($math->sub($math->pow($l, 2), $this->x), $addend->getX()), $p);
         $y3 = $math->mod($math->sub($math->mul($l, $math->sub($this->x, $x3)), $this->y), $p);
@@ -215,7 +220,7 @@ class Point implements PointInterface
 
     /**
      *
-     * @param  int|string        $x
+     * @param  int|string $x
      * @throws \RuntimeException
      */
     private function calcLeftMostBit($x)
@@ -303,5 +308,10 @@ class Point implements PointInterface
     public function getY()
     {
         return $this->y;
+    }
+
+    protected function getAdapter()
+    {
+        return $this->adapter;
     }
 }

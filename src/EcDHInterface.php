@@ -50,7 +50,7 @@ interface EcDHInterface
     /**
      * Returns the local public point, generating one if it does not exist.
      *
-     * @param  bool           $regenerate Forces calculation of a new public point when set to true.
+     * @param  bool $regenerate Forces calculation of a new public point when set to true.
      * @return PointInterface
      */
     public function getPublicPoint($regenerate = false);
@@ -83,7 +83,7 @@ interface EcDHInterface
      * Generates an encrypted version of the given file, that can be decoded by the other
      * party.
      *
-     * @param  string      $path
+     * @param  string $path
      * @return string|null
      */
     public function encryptFile($path);
@@ -91,7 +91,7 @@ interface EcDHInterface
     /**
      * Decrypts a file that was encrypted by the other party.
      *
-     * @param  string      $path
+     * @param  string $path
      * @return string|null
      */
     public function decryptFile($path);

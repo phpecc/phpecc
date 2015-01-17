@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php" colors="true"
-	convertErrorsToExceptions="true" convertNoticesToExceptions="true"
-	convertWarningsToExceptions="true" processIsolation="false"
 	stopOnFailure="false">
+	<php>
+	   <ini name="display_errors" value="On" />
+	   <ini name="error_reporting" value="32767" />
+	</php>
 	<testsuites>
 		<testsuite name="All">
 			<directory suffix="Test.php">./tests/unit</directory>

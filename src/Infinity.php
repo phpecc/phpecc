@@ -8,7 +8,6 @@ namespace Mdanter\Ecc;
  * Note that it is not possible to invoke getX() or getY(), exceptions are raised.
  *
  * @author thibaud
- *
  */
 final class Infinity implements PointInterface
 {

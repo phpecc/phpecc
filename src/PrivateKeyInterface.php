@@ -33,13 +33,24 @@ namespace Mdanter\Ecc;
  */
 interface PrivateKeyInterface
 {
+    
     /**
      * @return PublicKeyInterface
      */
     public function getPublicKey();
-
+    
     /**
-     * @return Signature
+     * @return PointInterface
      */
-    public function sign($hash, $random_k);
+    public function getPoint();
+    
+    /**
+     * @return int|string
+     */
+    public function getSecret();
+    
+    /**
+     * @return int|string
+     */
+    public function establishSharedKey(PublicKeyInterface $key);
 }

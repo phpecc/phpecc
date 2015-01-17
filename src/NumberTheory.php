@@ -62,7 +62,8 @@ class NumberTheory
                                         $polymod[$count_polymod - $i]
                                     )
                                 ),
-                                $p);
+                                $p
+                            );
                     }
                 }
 
@@ -94,7 +95,8 @@ class NumberTheory
                                 $m2[$j]
                             )
                         ),
-                        $p);
+                        $p
+                    );
             }
         }
 
@@ -177,18 +179,20 @@ class NumberTheory
                                 $p
                             )
                         ),
-                        $p);
+                        $p
+                    );
                 }
                 //shouldn't get here
             }
 
             for ($b = 2; $b < $p; $b++) {
                 if ($this->adapter->jacobi(
-                        $this->adapter->sub(
-                            $this->adapter->mul($b, $b),
-                            $this->adapter->mul(4, $a)
-                        ),
-                        $p) == -1
+                    $this->adapter->sub(
+                        $this->adapter->mul($b, $b),
+                        $this->adapter->mul(4, $a)
+                    ),
+                    $p
+                ) == -1
                 ) {
                     $f = array($a, -$b, 1);
 
@@ -199,14 +203,16 @@ class NumberTheory
                                 $p,
                                 1
                             ),
-                            2),
+                            2
+                        ),
                         $f,
-                        $p);
+                        $p
+                    );
 
                     if ($ff[1] == 0) {
                         return $ff[0];
                     }
-                    // if we got here no b was found
+                            // if we got here no b was found
                 }
             }
         }
