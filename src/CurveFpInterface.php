@@ -44,6 +44,15 @@ interface CurveFpInterface
     public function getPoint($x, $y, $order = null);
 
     /**
+     *
+     * @param int|string $x
+     * @param int|string $y
+     * @param string $order
+     * @return GeneratorPoint
+     */
+    public function getGenerator($x, $y, $order = null);
+
+    /**
      * Checks whether the curve contains the given coordinates.
      *
      * @param  int|string $x

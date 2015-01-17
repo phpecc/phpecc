@@ -7,114 +7,8 @@ namespace Mdanter\Ecc;
  *
  * @author thibaud
  */
-class GeneratorPoint implements PointInterface
+class GeneratorPoint extends Point
 {
-    /**
-     * Point instance to which core point features are delegated.
-     *
-     * @var PointInterface
-     */
-    private $point;
-
-    /**
-     * Math adapter used for calculations.
-     *
-     * @var MathAdapterInterface
-     */
-    private $adapter;
-
-    /**
-     * Initialize a new instance using an existing curve point and a math adapter.
-     *
-     * @param PointInterface       $wrapped
-     * @param MathAdapterInterface $adapter
-     */
-    public function __construct(PointInterface $wrapped, MathAdapterInterface $adapter)
-    {
-        $this->point = $wrapped;
-        $this->adapter = $adapter;
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::add()
-     */
-    public function add(PointInterface $addend)
-    {
-        return new self($this->point->add($addend), $this->adapter);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::cmp()
-     */
-    public function cmp(PointInterface $other)
-    {
-        return $this->point->cmp($other);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::equals()
-     */
-    public function equals(PointInterface $other)
-    {
-        return $this->point->equals($other);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getCurve()
-     */
-    public function getCurve()
-    {
-        return $this->point->getCurve();
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getDouble()
-     */
-    public function getDouble()
-    {
-        return new self($this->point->getDouble(), $this->adapter);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getOrder()
-     */
-    public function getOrder()
-    {
-        return $this->point->getOrder();
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getX()
-     */
-    public function getX()
-    {
-        return $this->point->getX();
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getY()
-     */
-    public function getY()
-    {
-        return $this->point->getY();
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::mul()
-     */
-    public function mul($multiplier)
-    {
-        return new self($this->point->mul($multiplier), $this->adapter);
-    }
 
     /**
      * Verifies validity of given coordinates against the current point and its point.
@@ -126,10 +20,10 @@ class GeneratorPoint implements PointInterface
      */
     public function isValid($x, $y)
     {
-        $math = $this->adapter;
+        $math = $this->getAdapter();
 
-        $n = $this->point->getOrder();
-        $curve = $this->point->getCurve();
+        $n = $this->getOrder();
+        $curve = $this->getCurve();
 
         if ($math->cmp($x, 0) < 0 || $math->cmp($n, $x) <= 0 || $math->cmp($y, 0) < 0 || $math->cmp($n, $y) <= 0) {
             return false;
@@ -150,30 +44,25 @@ class GeneratorPoint implements PointInterface
 
     public function createKeyExchange()
     {
-        return new EcDH($this, $this->adapter);
+        return new EcDH($this, $this->getAdapter());
     }
 
     public function createPrivateKey()
     {
-        $secret = $this->adapter->rand($this->getOrder());
+        $secret = $this->getAdapter()->rand($this->getOrder());
 
-        return new PrivateKey($this->adapter, $this, $secret);
+        return new PrivateKey($this->getAdapter(), $this, $secret);
     }
 
     public function getPublicKeyFrom($x, $y, $order = null)
     {
         $pubPoint = $this->getCurve()->getPoint($x, $y, $order);
 
-        return new PublicKey($this, $pubPoint, $this->adapter);
+        return new PublicKey($this->getAdapter(), $this, $pubPoint);
     }
 
     public function getPrivateKeyFrom($secretMultiplier)
     {
-        return new PrivateKey($this->adapter, $this, $secretMultiplier);
-    }
-
-    public function __toString()
-    {
-        return (string) $this->point;
+        return new PrivateKey($this->getAdapter(), $this, $secretMultiplier);
     }
 }

@@ -64,7 +64,7 @@ class PublicKey implements PublicKeyInterface
      * @throws \LogicException
      * @throws \RuntimeException
      */
-    public function __construct(GeneratorPoint $generator, PointInterface $point, MathAdapterInterface $adapter)
+    public function __construct(MathAdapterInterface $adapter, GeneratorPoint $generator, PointInterface $point)
     {
         $this->curve = $generator->getCurve();
         $this->generator = $generator;
@@ -81,7 +81,7 @@ class PublicKey implements PublicKeyInterface
             throw new \RuntimeException("Generator point order is bad.");
         }
 
-        if ($adapter->cmp($point->getX(), 0) < 0 || $adapter->cmp($n, $point->getX()) <= 0 
+        if ($adapter->cmp($point->getX(), 0) < 0 || $adapter->cmp($n, $point->getX()) <= 0
             || $adapter->cmp($point->getY(), 0) < 0 || $adapter->cmp($n, $point->getY()) <= 0
         ) {
             throw new \RuntimeException("Generator point has x and y out of range.");
@@ -96,7 +96,7 @@ class PublicKey implements PublicKeyInterface
     {
         return $this->curve;
     }
-    
+
     public function getGenerator()
     {
         return $this->generator;

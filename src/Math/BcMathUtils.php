@@ -202,7 +202,7 @@ class BcMathUtils
 
         $value = $digits[intval($dec)].$value;
 
-        return (string) $value;
+        return (string)$value;
     }
 
     /**
@@ -233,7 +233,7 @@ class BcMathUtils
             $dec = bcadd($dec, bcmul($element, $power));
         }
 
-        return (string) $dec;
+        return (string)$dec;
     }
 
     public static function digits($base)
@@ -251,7 +251,7 @@ class BcMathUtils
 
         $digits = substr($digits, 0, $base);
 
-        return (string) $digits;
+        return (string)$digits;
     }
 
     /**

@@ -83,6 +83,15 @@ class CurveFp implements CurveFpInterface
 
     /**
      * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getGenerator()
+     */
+    public function getGenerator($x, $y, $order = null)
+    {
+        return new GeneratorPoint($this->adapter, $this, $x, $y, $order);
+    }
+
+    /**
+     * (non-PHPdoc)
      * @see \Mdanter\Ecc\CurveFpInterface::contains()
      */
     public function contains($x, $y)

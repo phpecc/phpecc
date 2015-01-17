@@ -21,6 +21,9 @@ phpcs: pretest
 		vendor/bin/phpcs --standard=phpcs.xml -n src
 endif
 
+phpcbf: pretest
+		vendor/bin/phpcbf --standard=phpcs.xml -n src
+
 ifdef OCULAR_TOKEN
 scrutinizer: ocular
 		@php ocular.phar code-coverage:upload --format=php-clover tests/output/coverage.clover --access-token=$(OCULAR_TOKEN);

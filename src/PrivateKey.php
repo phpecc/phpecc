@@ -49,7 +49,7 @@ class PrivateKey implements PrivateKeyInterface
 
     public function getPublicKey()
     {
-        return new PublicKey($this->generator, $this->generator->mul($this->secretMultiplier), $this->adapter);
+        return new PublicKey($this->adapter, $this->generator, $this->generator->mul($this->secretMultiplier));
     }
 
     public function getPoint()

@@ -72,7 +72,7 @@ class NistCurve
         $x = $this->adapter->hexDec('0x188da80eb03090f67cbf20eb43a18800f4ff0afd82ff1012');
         $y = $this->adapter->hexDec('0x07192b95ffc8da78631011ed6b24cdd573f977a11e794811');
 
-        return new GeneratorPoint($curve->getPoint($x, $y, $order), $this->adapter);
+        return $curve->getGenerator($x, $y, $order);
     }
 
     /**
@@ -100,7 +100,7 @@ class NistCurve
         $x = $this->adapter->hexDec('0xb70e0cbd6bb4bf7f321390b94a03c1d356c21122343280d6115c1d21');
         $y = $this->adapter->hexDec('0xbd376388b5f723fb4c22dfe6cd4375a05a07476444d5819985007e34');
 
-        return $curve->getPoint($x, $y, $order);
+        return $curve->getGenerator($x, $y, $order);
     }
 
     /**
@@ -128,7 +128,7 @@ class NistCurve
         $x = $this->adapter->hexDec('0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296');
         $y = $this->adapter->hexDec('0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5');
 
-        return new GeneratorPoint($curve->getPoint($x, $y, $order), $this->adapter);
+        return $curve->getGenerator($x, $y, $order);
     }
 
     /**
@@ -156,7 +156,7 @@ class NistCurve
         $x = $this->adapter->hexDec('0xaa87ca22be8b05378eb1c71ef320ad746e1d3b628ba79b9859f741e082542a385502f25dbf55296c3a545e3872760ab7');
         $y = $this->adapter->hexDec('0x3617de4a96262c6f5d9e98bf9292dc29f8f41dbd289a147ce9da3113b5f0b8c00a60b1ce1d7e819d7a431d7c90ea0e5f');
 
-        return new GeneratorPoint($curve->getPoint($x, $y, $order), $this->adapter);
+        return $curve->getGenerator($x, $y, $order);
     }
 
     /**
@@ -184,6 +184,6 @@ class NistCurve
         $x = $this->adapter->hexDec('0xc6858e06b70404e9cd9e3ecb662395b4429c648139053fb521f828af606b4d3dbaa14b5e77efe75928fe1dc127a2ffa8de3348b3c1856a429bf97e7e31c2e5bd66');
         $y = $this->adapter->hexDec('0x11839296a789a3bc0045c8a5fb42c7d1bd998f54449579b446817afbd17273e662c97ee72995ef42640c550b9013fad0761353c7086a272c24088be94769fd16650');
 
-        return new GeneratorPoint($curve->getPoint($x, $y, $order), $this->adapter);
+        return $curve->getGenerator($x, $y, $order);
     }
 }
