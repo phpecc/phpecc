@@ -44,35 +44,7 @@ class EcDH implements EcDHInterface
      * @var MathAdapterInterface
      */
     private $adapter;
-
-    /**
-     * Private key generator point
-     *
-     * @var PointInterface
-     */
-    private $generator;
-
-    /**
-     * Public key point derived from generator point
-     *
-     * @var PointInterface
-     */
-    private $pubPoint = null;
-
-    /**
-     * Public key point of other party.
-     *
-     * @var PointInterface
-     */
-    private $receivedPubPoint = null;
-
-    /**
-     * Secret used to derive the public key point.
-     *
-     * @var int|string
-     */
-    private $secret = 0;
-
+    
     /**
      * Shared key between the two parties
      *
@@ -81,76 +53,57 @@ class EcDH implements EcDHInterface
     private $sharedSecretKey = null;
 
     /**
+     * 
+     * @var PublicKeyInterface
+     */
+    private $recipientKey;
+    
+    /**
+     * 
+     * @var PrivateKeyInterface
+     */
+    private $senderKey;
+    
+    /**
      * Initialize a new exchange from a generator point.
      *
      * @param GeneratorPoint       $g       Generator used to create the private key secret.
      * @param MathAdapterInterface $adapter A math adapter instance.
      */
-    public function __construct(GeneratorPoint $g, MathAdapterInterface $adapter)
+    public function __construct(MathAdapterInterface $adapter)
     {
-        $this->generator = $g;
         $this->adapter = $adapter;
     }
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\EcDHInterface::calculateKey()
+     * @see \Mdanter\Ecc\EcDHInterface::calculateSharedKey()
      */
-    public function calculateKey()
-    {
-        $this->checkExchangeState();
-
-        $this->sharedSecretKey = $this->receivedPubPoint->mul($this->secret)->getX();
-    }
-
-    /**
-     * Performs a key exchange with another party and calculates the shared secret for the exchange.
-     *
-     * @param EcDHInterface $other
-     * @param bool          $forceNewKeys
-     */
-    public function exchangeKeys(EcDHInterface $other, $forceNewKeys = false)
-    {
-        $this->setPublicPoint($other->getPublicPoint($forceNewKeys));
-        $other->setPublicPoint($this->getPublicPoint($forceNewKeys));
-
-        $this->calculateKey();
-        $other->calculateKey();
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\EcDHInterface::getSharedKey()
-     */
-    public function getSharedKey()
+    public function calculateSharedKey()
     {
         $this->checkEncryptionState();
 
         return $this->sharedSecretKey;
     }
-
+    
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\EcDHInterface::getPublicPoint()
+     * @see \Mdanter\Ecc\EcDHInterface::setRecipientKey()
      */
-    public function getPublicPoint($regenerate = false)
+    public function setRecipientKey(PublicKeyInterface $key)
     {
-        if ($this->pubPoint === null || $regenerate) {
-            $this->pubPoint = $this->calculatePublicPoint();
-        }
-
-        return $this->pubPoint;
+        $this->recipientKey = $key;
     }
-
+    
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\EcDHInterface::setPublicPoint()
+     * @see \Mdanter\Ecc\EcDHInterface::setSenderKey()
      */
-    public function setPublicPoint(PointInterface $q)
+    public function setSenderKey(PrivateKeyInterface $key)
     {
-        $this->receivedPubPoint = $q;
+        $this->senderKey = $key;
     }
-
+    
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\EcDHInterface::encrypt()
@@ -204,34 +157,21 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * Calculates a new public point for the exchange.
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::calculateKey()
      */
-    private function calculatePublicPoint()
+    private function calculateKey()
     {
-        if ($this->secret == 0) {
-            $this->secret = $this->calculateSecret();
-        }
-
-        // Alice computes da * generator Qa is public, da is private
-        return $this->generator->mul($this->secret);
-    }
-
-    /**
-     * Calculates a random value to be used as the private key secret.
-     *
-     * @return int|string
-     */
-    private function calculateSecret()
-    {
-        // Alice selects a random number between 1 and the order of the generator point(private)
-        $n = $this->generator->getOrder();
-        $r = $this->adapter->rand($n);
-
-        while ($r == 0) {
-            $r = $this->adapter->rand($n);
-        }
-
-        return $r;
+        $this->checkExchangeState();
+    
+        $pubPoint = $this->recipientKey->getPoint();
+       $secret->mul($this>senderKey->)getSecret()); 
+        
+        $this->sharedSecretKey = 
+            $this->recipientKey->getPoint()
+                 ->mul($this->senderKey->getSecret())->getX();
+        
+        return $this->sharedSecretKey;
     }
 
     /**
