@@ -2,27 +2,13 @@
 
 namespace Mdanter\Ecc\Tests;
 
-use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\MathAdapter;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\EcMath;
 use Mdanter\Ecc\Point;
-use Mdanter\Ecc\Points;
-use Mdanter\Ecc\CurveFp;
-use Mdanter\Ecc\CurveFpInterface;
-use Mdanter\Ecc\Math\DebugDecorator;
 
-class EcMathTest extends \PHPUnit_Framework_TestCase
+class EcMathTest extends AbstractTestCase
 {
-
-    public function getAdapters()
-    {
-        return [
-            [ new DebugDecorator(new Gmp(), function ($msg) { /*echo $msg;*/ }) ],
-            [ new DebugDecorator(new BcMath(), function ($msg) { /*echo $msg;*/ }) ]
-        ];
-    }
 
     /**
      *
