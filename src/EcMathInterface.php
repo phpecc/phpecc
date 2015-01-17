@@ -3,7 +3,8 @@
 namespace Mdanter\Ecc;
 
 
-interface EcMathInterface {
+interface EcMathInterface
+{
     public function add($addend);
     public function mul($multiplicand);
     public function getDouble();
