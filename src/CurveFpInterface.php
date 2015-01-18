@@ -50,7 +50,7 @@ interface CurveFpInterface
      * @param string $order
      * @return GeneratorPoint
      */
-    public function getGenerator($x, $y, $order = null);
+    public function getGenerator($x, $y, $order = null, RandomNumberGeneratorInterface $randomGenerator = null);
 
     /**
      * Checks whether the curve contains the given coordinates.

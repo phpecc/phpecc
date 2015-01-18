@@ -30,7 +30,7 @@ class MathTest extends AbstractTestCase
         }, $lines);
     }
 
-    private $decHexMap = [
+    private $decHexMap = array(
     	'00' => 0,
 		'01' => 1,
 		'02' => 2,
@@ -47,7 +47,7 @@ class MathTest extends AbstractTestCase
 		'0d' => 13,
 		'0e' => 14,
 		'0f' => 15
-    ];
+    );
 
     /**
      * @dataProvider getAdapters
@@ -96,9 +96,6 @@ class MathTest extends AbstractTestCase
 
         $pow = $math->pow($x, $y);
         $this->assertTrue(is_string($pow) && ! is_resource($div));
-
-        $rand = $math->rand($x);
-        $this->assertTrue(is_string($rand) && ! is_resource($rand));
 
         $powmod = $math->powmod($x, $y, $y);
         $this->assertTrue(is_string($powmod) && ! is_resource($powmod));

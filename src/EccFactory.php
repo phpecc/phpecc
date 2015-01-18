@@ -6,6 +6,11 @@ use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
+use Mdanter\Ecc\Math\DebugDecorator;
+use Mdanter\Ecc\Random\GmpRandomNumberGenerator;
+use Mdanter\Ecc\Random\BcMathRandomNumberGenerator;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
+use Mdanter\Ecc\Math\MathAdapterFactory;
 
 /**
  * Static factory class providing factory methods to work with NIST and SECG recommended curves.
@@ -20,19 +25,11 @@ class EccFactory
      * @throws \RuntimeException
      * @return \Mdanter\Ecc\MathAdapterInterface
      */
-    public static function getAdapter()
+    public static function getAdapter($debug = false)
     {
-        if (extension_loaded('gmp')) {
-            return new Gmp();
-        }
-
-        if (extension_loaded('bcmath')) {
-            return new BcMath();
-        }
-
-        throw new \RuntimeException('Please install either GMP or BCMath extensions.');
+        return MathAdapterFactory::getAdapter($debug);
     }
-
+    
     /**
      * Returns a number theory library initialized with the respective math adaptor.
      * Contains useful modular/polynomial functions

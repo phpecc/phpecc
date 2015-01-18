@@ -101,20 +101,29 @@ class BcMath implements MathAdapterInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapterInterface::rand()
-     */
-    public function rand($n)
-    {
-        return BcMathUtils::bcrand($n);
-    }
-
-    /**
-     * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseAnd()
      */
     public function bitwiseAnd($first, $other)
     {
         return BcMathUtils::bcand($first, $other);
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     */
+    public function rightShift($number, $positions)
+    {
+        return BcMathUtils::bcrightshift($number, $positions);
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     */
+    public function leftShift($number, $positions)
+    {
+        return BcMathUtils::bcleftshift($number, $positions);
     }
 
     /**

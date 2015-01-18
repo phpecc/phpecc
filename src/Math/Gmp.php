@@ -77,22 +77,6 @@ class Gmp implements MathAdapterInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapterInterface::rand()
-     */
-    public function rand($n)
-    {
-        $random = gmp_strval(gmp_random());
-        $small_rand = rand();
-
-        while (gmp_cmp($random, $n) > 0) {
-            $random = gmp_div($random, $small_rand, GMP_ROUND_ZERO);
-        }
-
-        return gmp_strval($random);
-    }
-
-    /**
-     * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseAnd()
      */
     public function bitwiseAnd($first, $other)
@@ -100,6 +84,26 @@ class Gmp implements MathAdapterInterface
         return gmp_strval(gmp_and($first, $other));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     */
+    public function rightShift($number, $positions)
+    {
+        // Shift 1 right = div / 2
+        return gmp_strval(gmp_div($number, gmp_pow(2, $positions)));
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     */
+    public function leftShift($number, $positions)
+    {
+        // Shift 1 right = mul * 2
+        return gmp_strval(gmp_mul($number, gmp_pow(2, $positions)));
+    }
+    
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapterInterface::toString()

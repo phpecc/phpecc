@@ -93,7 +93,7 @@ class Point implements PointInterface
 
         if ($this->order != null && ! $this->mul($order)->equals(Points::infinity())) {
             throw new \RuntimeException(
-                "SELF * ORDER MUST EQUAL INFINITY. (".(string) $this->mul($order)." found instead)"
+                "SELF * ORDER MUST EQUAL INFINITY. (".(string)$this->mul($order)." found instead)"
             );
         }
     }

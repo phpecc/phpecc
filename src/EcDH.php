@@ -44,120 +44,73 @@ class EcDH implements EcDHInterface
      * @var MathAdapterInterface
      */
     private $adapter;
-
+    
     /**
-     * Private key generator point
+     * Secret key between the two parties
      *
      * @var PointInterface
      */
-    private $generator;
+    private $secretKey = null;
 
     /**
-     * Public key point derived from generator point
-     *
-     * @var PointInterface
+     * 
+     * @var PublicKeyInterface
      */
-    private $pubPoint = null;
-
+    private $recipientKey;
+    
     /**
-     * Public key point of other party.
-     *
-     * @var PointInterface
+     * 
+     * @var PrivateKeyInterface
      */
-    private $receivedPubPoint = null;
-
-    /**
-     * Secret used to derive the public key point.
-     *
-     * @var int|string
-     */
-    private $secret = 0;
-
-    /**
-     * Shared key between the two parties
-     *
-     * @var int|string
-     */
-    private $sharedSecretKey = null;
-
+    private $senderKey;
+    
     /**
      * Initialize a new exchange from a generator point.
      *
      * @param GeneratorPoint       $g       Generator used to create the private key secret.
      * @param MathAdapterInterface $adapter A math adapter instance.
      */
-    public function __construct(GeneratorPoint $g, MathAdapterInterface $adapter)
+    public function __construct(MathAdapterInterface $adapter)
     {
-        $this->generator = $g;
         $this->adapter = $adapter;
     }
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\EcDHInterface::calculateKey()
+     * @see \Mdanter\Ecc\EcDHInterface::calculateSharedKey()
      */
-    public function calculateKey()
-    {
-        $this->checkExchangeState();
-
-        $this->sharedSecretKey = $this->receivedPubPoint->mul($this->secret)->getX();
-    }
-
-    /**
-     * Performs a key exchange with another party and calculates the shared secret for the exchange.
-     *
-     * @param EcDHInterface $other
-     * @param bool          $forceNewKeys
-     */
-    public function exchangeKeys(EcDHInterface $other, $forceNewKeys = false)
-    {
-        $this->setPublicPoint($other->getPublicPoint($forceNewKeys));
-        $other->setPublicPoint($this->getPublicPoint($forceNewKeys));
-
+    public function calculateSharedKey()
+    {   
         $this->calculateKey();
-        $other->calculateKey();
+        
+        return $this->secretKey->getX();
     }
-
+    
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\EcDHInterface::getSharedKey()
+     * @see \Mdanter\Ecc\EcDHInterface::setRecipientKey()
      */
-    public function getSharedKey()
+    public function setRecipientKey(PublicKeyInterface $key)
     {
-        $this->checkEncryptionState();
-
-        return $this->sharedSecretKey;
+        $this->recipientKey = $key;
     }
-
+    
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\EcDHInterface::getPublicPoint()
+     * @see \Mdanter\Ecc\EcDHInterface::setSenderKey()
      */
-    public function getPublicPoint($regenerate = false)
+    public function setSenderKey(PrivateKeyInterface $key)
     {
-        if ($this->pubPoint === null || $regenerate) {
-            $this->pubPoint = $this->calculatePublicPoint();
-        }
-
-        return $this->pubPoint;
+        $this->senderKey = $key;
     }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\EcDHInterface::setPublicPoint()
-     */
-    public function setPublicPoint(PointInterface $q)
-    {
-        $this->receivedPubPoint = $q;
-    }
-
+    
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\EcDHInterface::encrypt()
      */
     public function encrypt($string)
     {
-        $key = hash("sha256", $this->sharedSecretKey, true);
+        $key = hash("sha256", $this->secretKey->getX(), true);
 
         $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string), MCRYPT_MODE_CBC, $key);
 
@@ -170,7 +123,7 @@ class EcDH implements EcDHInterface
      */
     public function decrypt($string)
     {
-        $key = hash("sha256", $this->sharedSecretKey, true);
+        $key = hash("sha256", $this->secretKey->getX(), true);
 
         $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
 
@@ -204,56 +157,38 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * Calculates a new public point for the exchange.
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\EcDHInterface::calculateKey()
      */
-    private function calculatePublicPoint()
+    private function calculateKey()
     {
-        if ($this->secret == 0) {
-            $this->secret = $this->calculateSecret();
-        }
-
-        // Alice computes da * generator Qa is public, da is private
-        return $this->generator->mul($this->secret);
-    }
-
-    /**
-     * Calculates a random value to be used as the private key secret.
-     *
-     * @return int|string
-     */
-    private function calculateSecret()
-    {
-        // Alice selects a random number between 1 and the order of the generator point(private)
-        $n = $this->generator->getOrder();
-        $r = $this->adapter->rand($n);
-
-        while ($r == 0) {
-            $r = $this->adapter->rand($n);
-        }
-
-        return $r;
-    }
-
-    /**
-     * Verifies that the shared secret key is available.
-     *
-     * @throws \RuntimeException when the key is not available.
-     */
-    private function checkEncryptionState()
-    {
-        if ($this->sharedSecretKey === null) {
-            throw new \RuntimeException('Shared secret is not set, a public key exchange is required first.');
+        $this->checkExchangeState();
+        
+        if ($this->secretKey === null) {
+            $pubPoint = $this->recipientKey->getPoint();
+            $secret = $this->senderKey->getSecret(); 
+        
+            $this->secretKey = $pubPoint->mul($secret);
         }
     }
 
     /**
-     * Verifies that a public key exchange has been made.
+     * Verifies that the shared secret is known, or that the required keys are available 
+     * to calculate the shared secret.
      * @throws \RuntimeException when the exchange has not been made.
      */
     private function checkExchangeState()
     {
-        if ($this->receivedPubPoint === null) {
-            throw new \RuntimeException('Recipient key not set, a public key exchange is required first.');
+        if ($this->secretKey !== null) {
+            return;
+        }
+        
+        if ($this->senderKey === null) {
+            throw new \RuntimeException('Sender key not set.');
+        }
+        
+        if ($this->recipientKey === null) {
+            throw new \RuntimeException('Recipient key not set.');
         }
     }
 }

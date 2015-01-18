@@ -33,34 +33,27 @@ namespace Mdanter\Ecc;
  */
 interface EcDHInterface
 {
-    /**
-     * Calculate the shared key between the local public point and the received public point.
-     *
-     * @return void
-     */
-    public function calculateKey();
 
     /**
-     * Returns the shared key if it is available.
+     * Calculates and returns the shared key for the exchange.
      *
      * @return string
      */
-    public function getSharedKey();
+    public function calculateSharedKey();
 
     /**
-     * Returns the local public point, generating one if it does not exist.
-     *
-     * @param  bool $regenerate Forces calculation of a new public point when set to true.
-     * @return PointInterface
+     * Sets the sender's key.
+     * 
+     * @param PrivateKeyInterface $key
      */
-    public function getPublicPoint($regenerate = false);
-
+    public function setSenderKey(PrivateKeyInterface $key);
+    
     /**
-     * Sets public point of the exchange's other party.
+     * Sets the recipient key.
      *
      * @return void
      */
-    public function setPublicPoint(PointInterface $q);
+    public function setRecipientKey(PublicKeyInterface $key);
 
     /**
      * Generates an encrypted version of the given text, that can be decoded by the other
