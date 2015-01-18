@@ -68,14 +68,6 @@ interface MathAdapterInterface
     public function pow($base, $exponent);
 
     /**
-     * Generates a random integer between 0 (inclusive) and $n (inclusive).
-     *
-     * @param  int|string $n Maximum value to return.
-     * @return int|string
-     */
-    public function rand($n);
-
-    /**
      * Performs a logical AND between two values.
      *
      * @param  int|string $first
@@ -83,7 +75,22 @@ interface MathAdapterInterface
      * @return int|string
      */
     public function bitwiseAnd($first, $other);
+    
+    /**
+     * Shifts bits to the right
+     * @param int|string $number Number to shift
+     * @param int|string $positions Number of positions to shift
+     */
+    public function rightShift($number, $positions);
 
+
+    /**
+     * Shifts bits to the left
+     * @param int|string $number Number to shift
+     * @param int|string $positions Number of positions to shift
+     */
+    public function leftShift($number, $positions);
+    
     /**
      * Returns the string representation of a returned value.
      *

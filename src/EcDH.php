@@ -110,7 +110,7 @@ class EcDH implements EcDHInterface
      */
     public function encrypt($string)
     {
-        $key = hash("sha256", $this->sharedSecretKey, true);
+        $key = hash("sha256", $this->secretKey->getX(), true);
 
         $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string), MCRYPT_MODE_CBC, $key);
 
@@ -123,7 +123,7 @@ class EcDH implements EcDHInterface
      */
     public function decrypt($string)
     {
-        $key = hash("sha256", $this->sharedSecretKey, true);
+        $key = hash("sha256", $this->secretKey->getX(), true);
 
         $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
 

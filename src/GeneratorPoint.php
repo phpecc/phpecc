@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc;
 
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
 /**
  * Curve point from which public and private keys can be derived.
  *
@@ -9,6 +10,16 @@ namespace Mdanter\Ecc;
  */
 class GeneratorPoint extends Point
 {
+    
+    private $generator;
+    
+    public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order = null,
+                                RandomNumberGeneratorInterface $generator = null)
+    {
+        $this->generator = $generator ?: RandomGeneratorFactory::getRandomGenerator();
+        
+        parent::__construct($adapter, $curve, $x, $y, $order);
+    }
 
     /**
      * Verifies validity of given coordinates against the current point and its point.
@@ -44,7 +55,7 @@ class GeneratorPoint extends Point
 
     public function createPrivateKey()
     {
-        $secret = $this->getAdapter()->rand($this->getOrder());
+        $secret = $this->generator->generate($this->getOrder());
 
         return new PrivateKey($this->getAdapter(), $this, $secret);
     }

@@ -8,29 +8,29 @@ use Mdanter\Ecc\Random\RandomGeneratorFactory;
 
 class MathAdapterFactory
 {
-    public static function getAdapter(RandomNumberGeneratorInterface $generator = null, $debug = false)
+    public static function getAdapter($debug = false)
     {
         $adapter = null;
         $adapterClass = self::getAdapterClass();
         
-        $adapter = new $adapterClass($generator);
+        $adapter = new $adapterClass();
         
         return self::wrapAdapter($adapter, (bool)$debug);
     }
     
-    public static function getBcMathAdapter(RandomNumberGeneratorInterface $generator = null, $debug = false)
+    public static function getBcMathAdapter($debug = false)
     {
         if (self::canLoad('bcmath')) {
-            return self::wrapAdapter(new BcMath($generator), $debug);
+            return self::wrapAdapter(new BcMath(), $debug);
         }
     
         throw new \RuntimeException('Please install either GMP extension.');
     }
     
-    public static function getGmpAdapter(RandomNumberGeneratorInterface $generator = null, $debug = false)
+    public static function getGmpAdapter($debug = false)
     {
         if (self::canLoad('gmp')) {
-            return self::wrapAdapter(new Gmp($generator), $debug);
+            return self::wrapAdapter(new Gmp(), $debug);
         }
         
         throw new \RuntimeException('Please install either GMP extension.');

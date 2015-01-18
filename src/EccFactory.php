@@ -25,9 +25,9 @@ class EccFactory
      * @throws \RuntimeException
      * @return \Mdanter\Ecc\MathAdapterInterface
      */
-    public static function getAdapter(RandomNumberGeneratorInterface $generator = null, $debug = false)
+    public static function getAdapter($debug = false)
     {
-        return MathAdapterFactory::getAdapter($generator, $debug);
+        return MathAdapterFactory::getAdapter($debug);
     }
     
     /**

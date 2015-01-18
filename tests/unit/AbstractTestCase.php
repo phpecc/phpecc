@@ -13,8 +13,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     {
         if ($extra == null) {
             return [
-                [ MathAdapterFactory::getGmpAdapter(RandomGeneratorFactory::getGmpRandomGenerator(true)) ],
-                [ MathAdapterFactory::getBcMathAdapter(RandomGeneratorFactory::getBcMathRandomGenerator(true)) ]
+                [ MathAdapterFactory::getGmpAdapter() ],
+                [ MathAdapterFactory::getBcMathAdapter() ]
             ];
         }
 

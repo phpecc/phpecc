@@ -3,12 +3,25 @@
 namespace Mdanter\Ecc\Random;
 
 use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class RandomGeneratorFactory
 {
 
+    private static $adapter;
+    
+    public static function setMathAdapter(MathAdapterInterface $adapter)
+    {
+        self::$adapter = $adapter;
+    }
+    
     public static function getRandomGenerator($debug = false)
     {
+        if (extension_loaded('mcrypt')) {
+            return self::getURandomGenerator($debug);
+        }
+        
         if (extension_loaded('gmp')) {
             return self::getGmpRandomGenerator($debug);
         }
@@ -16,6 +29,15 @@ class RandomGeneratorFactory
         if (extension_loaded('bcmath')) {
             return self::getBcMathRandomGenerator($debug);
         }
+    }
+    
+    public static function getURandomGenerator($debug = false)
+    {
+        return self::wrapAdapter(
+            new URandomNumberGenerator(self::$adapter ?: MathAdapterFactory::getAdapter($debug)),
+            'urandom',
+            $debug
+        );
     }
     
     public static function getGmpRandomGenerator($debug = false)

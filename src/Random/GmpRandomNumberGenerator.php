@@ -6,6 +6,11 @@ use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 class GmpRandomNumberGenerator implements RandomNumberGeneratorInterface
 {
+    public function __construct()
+    {
+        trigger_error('Using non-secure random number generator.', E_USER_WARNING);
+    }
+    
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\RandomNumberGeneratorInterface::generate()

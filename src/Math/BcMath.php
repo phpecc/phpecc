@@ -28,7 +28,7 @@ use Mdanter\Ecc\MathAdapterInterface;
  * ***********************************************************************
  */
 
-class BcMath extends AbstractAdapter
+class BcMath implements MathAdapterInterface
 {
     /**
      * (non-PHPdoc)
@@ -106,6 +106,24 @@ class BcMath extends AbstractAdapter
     public function bitwiseAnd($first, $other)
     {
         return BcMathUtils::bcand($first, $other);
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     */
+    public function rightShift($number, $positions)
+    {
+        return BcMathUtils::bcrightshift($number, $positions);
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     */
+    public function leftShift($number, $positions)
+    {
+        return BcMathUtils::bcleftshift($number, $positions);
     }
 
     /**

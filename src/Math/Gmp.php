@@ -4,7 +4,7 @@ namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\MathAdapterInterface;
 
-class Gmp extends AbstractAdapter
+class Gmp implements MathAdapterInterface
 {
     /**
      * (non-PHPdoc)
@@ -84,6 +84,26 @@ class Gmp extends AbstractAdapter
         return gmp_strval(gmp_and($first, $other));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     */
+    public function rightShift($number, $positions)
+    {
+        // Shift 1 right = div / 2
+        return gmp_strval(gmp_div($number, gmp_pow(2, $positions)));
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     */
+    public function leftShift($number, $positions)
+    {
+        // Shift 1 right = mul * 2
+        return gmp_strval(gmp_mul($number, gmp_pow(2, $positions)));
+    }
+    
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapterInterface::toString()

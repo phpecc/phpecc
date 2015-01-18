@@ -298,6 +298,6 @@ class NistCurveTest extends AbstractTestCase
         $this->assertEquals($unencrypted, $bob->decrypt($encrypted));
 
         $encrypted = $bob->encrypt($unencrypted);
-        $this->assertEquals($unencrypted, $aliceX->decrypt($encrypted));
+        $this->assertEquals($unencrypted, $alice->decrypt($encrypted));
     }
 }
