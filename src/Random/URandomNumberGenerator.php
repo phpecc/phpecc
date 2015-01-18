@@ -32,6 +32,6 @@ class URandomNumberGenerator implements RandomNumberGeneratorInterface
             $log2++;
         }
         
-        return floor($log2++ / 8);
+        return floor($log2 / 8);
     }
 }
