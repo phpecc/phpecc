@@ -259,11 +259,16 @@ class NistCurveTest extends AbstractTestCase
     
     public function getAdaptersWithRand()
     {
-        return $this->_getAdapters([
+        $rngs = [
     	    [ RandomGeneratorFactory::getUrandomGenerator() ],
-            [ RandomGeneratorFactory::getGmpRandomGenerator(false, true) ],
             [ RandomGeneratorFactory::getBcMathRandomGenerator(false, true) ]
-        ]);
+        ];
+        
+        if (! defined('HHVM_VERSION')) {
+            $rngs[] = [ RandomGeneratorFactory::getGmpRandomGenerator(false, true) ];
+        }
+        
+        return $this->_getAdapters($rngs);
     }
 
     /**

@@ -22,7 +22,7 @@ class RandomGeneratorFactory
             return self::getUrandomGenerator($debug);
         }
         
-        if (extension_loaded('gmp')) {
+        if (extension_loaded('gmp') && ! defined('HHVM_VERSION')) {
             return self::getGmpRandomGenerator($debug);
         }
         
