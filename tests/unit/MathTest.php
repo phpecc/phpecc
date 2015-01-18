@@ -30,7 +30,7 @@ class MathTest extends AbstractTestCase
         }, $lines);
     }
 
-    private $decHexMap = [
+    private $decHexMap = array(
     	'00' => 0,
 		'01' => 1,
 		'02' => 2,
@@ -47,7 +47,7 @@ class MathTest extends AbstractTestCase
 		'0d' => 13,
 		'0e' => 14,
 		'0f' => 15
-    ];
+    );
 
     /**
      * @dataProvider getAdapters
