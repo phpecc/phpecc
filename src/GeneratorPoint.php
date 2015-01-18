@@ -42,11 +42,6 @@ class GeneratorPoint extends Point
         return true;
     }
 
-    public function createKeyExchange()
-    {
-        return new EcDH($this, $this->getAdapter());
-    }
-
     public function createPrivateKey()
     {
         $secret = $this->getAdapter()->rand($this->getOrder());

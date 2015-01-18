@@ -52,5 +52,5 @@ interface PrivateKeyInterface
     /**
      * @return int|string
      */
-    public function establishSharedKey(PublicKeyInterface $key);
+    public function createExchange(PublicKeyInterface $recipient);
 }

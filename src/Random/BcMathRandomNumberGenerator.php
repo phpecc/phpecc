@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Random;
 
+use Mdanter\Ecc\Math\BcMathUtils;
 use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 class BcMathRandomNumberGenerator implements RandomNumberGeneratorInterface
@@ -12,6 +13,6 @@ class BcMathRandomNumberGenerator implements RandomNumberGeneratorInterface
      */
     public function generate($max)
     {
-        return BcMathUtils::bcrand($n);
+        return (string) BcMathUtils::bcrand($max);
     }    
 }

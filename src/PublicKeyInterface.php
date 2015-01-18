@@ -48,5 +48,4 @@ interface PublicKeyInterface
      * @return PointInterface
      */
     public function getGenerator();
-    
 }

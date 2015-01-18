@@ -4,7 +4,7 @@ namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\MathAdapterInterface;
 
-class Gmp implements MathAdapterInterface
+class Gmp extends AbstractAdapter
 {
     /**
      * (non-PHPdoc)
@@ -73,22 +73,6 @@ class Gmp implements MathAdapterInterface
     public function pow($base, $exponent)
     {
         return gmp_strval(gmp_pow($base, $exponent));
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapterInterface::rand()
-     */
-    public function rand($n)
-    {
-        $random = gmp_strval(gmp_random());
-        $small_rand = rand();
-
-        while (gmp_cmp($random, $n) > 0) {
-            $random = gmp_div($random, $small_rand, GMP_ROUND_ZERO);
-        }
-
-        return gmp_strval($random);
     }
 
     /**

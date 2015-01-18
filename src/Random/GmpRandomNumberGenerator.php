@@ -15,7 +15,7 @@ class GmpRandomNumberGenerator implements RandomNumberGeneratorInterface
         $random = gmp_strval(gmp_random());
         $small_rand = rand();
     
-        while (gmp_cmp($random, $n) > 0) {
+        while (gmp_cmp($random, $max) > 0) {
             $random = gmp_div($random, $small_rand, GMP_ROUND_ZERO);
         }
     

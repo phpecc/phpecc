@@ -4,6 +4,8 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\BcMath;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
+use Mdanter\Ecc\Math\MathAdapterFactory;
 
 abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -11,8 +13,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     {
         if ($extra == null) {
             return [
-            [ new Gmp() ],
-            [ new BcMath() ]
+                [ MathAdapterFactory::getGmpAdapter(RandomGeneratorFactory::getGmpRandomGenerator(true)) ],
+                [ MathAdapterFactory::getBcMathAdapter(RandomGeneratorFactory::getBcMathRandomGenerator(true)) ]
             ];
         }
 

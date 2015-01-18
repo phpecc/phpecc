@@ -46,11 +46,11 @@ class EcDH implements EcDHInterface
     private $adapter;
     
     /**
-     * Shared key between the two parties
+     * Secret key between the two parties
      *
-     * @var int|string
+     * @var PointInterface
      */
-    private $sharedSecretKey = null;
+    private $secretKey = null;
 
     /**
      * 
@@ -81,9 +81,11 @@ class EcDH implements EcDHInterface
      */
     public function calculateSharedKey()
     {
-        $this->checkEncryptionState();
+        $this->calculateKey();
 
-        return $this->sharedSecretKey;
+        var_dump($this->secretKey);
+        
+        return $this->secretKey->getX();
     }
     
     /**
@@ -164,36 +166,31 @@ class EcDH implements EcDHInterface
     {
         $this->checkExchangeState();
     
-        $pubPoint = $this->recipientKey->getPoint();
-       $secret->mul($this>senderKey->)getSecret()); 
+        if ($this->secretKey === null) {
+            $pubPoint = $this->recipientKey->getPoint();
+            $secret = $this->senderKey->getSecret(); 
         
-        $this->sharedSecretKey = 
-            $this->recipientKey->getPoint()
-                 ->mul($this->senderKey->getSecret())->getX();
-        
-        return $this->sharedSecretKey;
-    }
-
-    /**
-     * Verifies that the shared secret key is available.
-     *
-     * @throws \RuntimeException when the key is not available.
-     */
-    private function checkEncryptionState()
-    {
-        if ($this->sharedSecretKey === null) {
-            throw new \RuntimeException('Shared secret is not set, a public key exchange is required first.');
+            $this->secretKey = $pubPoint->mul($secret);
         }
     }
 
     /**
-     * Verifies that a public key exchange has been made.
+     * Verifies that the shared secret is known, or that the required keys are available 
+     * to calculate the shared secret.
      * @throws \RuntimeException when the exchange has not been made.
      */
     private function checkExchangeState()
     {
-        if ($this->receivedPubPoint === null) {
-            throw new \RuntimeException('Recipient key not set, a public key exchange is required first.');
+        if ($this->secretKey !== null) {
+            return;
+        }
+        
+        if ($this->senderKey === null) {
+            throw new \RuntimeException('Sender key not set.');
+        }
+        
+        if ($this->recipientKey === null) {
+            throw new \RuntimeException('Recipient key not set.');
         }
     }
 }

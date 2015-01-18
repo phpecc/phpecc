@@ -283,13 +283,13 @@ class NistCurveTest extends AbstractTestCase
     public function testDiffieHellman(MathAdapterInterface $math)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
-        $alice = $generator->createKeyExchange();
-        $bob = $generator->createKeyExchange();
+        $alicePrivKey = $generator->createPrivateKey();
+        $bobPrivKey = $generator->createPrivateKey();
 
-        $alice->exchangeKeys($bob);
-        $this->assertFalse($alice->getPublicPoint()
-            ->equals($bob->getPublicPoint()));
-        $this->assertTrue($alice->calculateKey() == $bob->calculateKey());
+        $alice = $alicePrivKey->createExchange($bobPrivKey->getPublicKey());
+        $bob = $alicePrivKey->createExchange($alicePrivKey->getPublicKey());
+        
+        $this->assertEquals($alice->calculateSharedKey(), $bob->calculateSharedKey());
 
         // Test encrypt/decrypt by both parties
         $unencrypted = 'This is some text';
@@ -298,6 +298,6 @@ class NistCurveTest extends AbstractTestCase
         $this->assertEquals($unencrypted, $bob->decrypt($encrypted));
 
         $encrypted = $bob->encrypt($unencrypted);
-        $this->assertEquals($unencrypted, $alice->decrypt($encrypted));
+        $this->assertEquals($unencrypted, $aliceX->decrypt($encrypted));
     }
 }

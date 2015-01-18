@@ -11,16 +11,8 @@ use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\CurveFpInterface;
 use Mdanter\Ecc\Math\DebugDecorator;
 
-class EcArithmeticTest extends \PHPUnit_Framework_TestCase
+class EcArithmeticTest extends AbstractTestCase
 {
-    public function getAdapters()
-    {
-        return [
-            [ new DebugDecorator(new Gmp(), function ($msg) { /*echo $msg;*/ }) ],
-            [ new DebugDecorator(new BcMath(), function ($msg) { /*echo $msg;*/ }) ]
-        ];
-    }
-
     private function add(MathAdapterInterface $math, CurveFpInterface $c, $x1, $y1, $x2, $y2, $x3, $y3)
     {
         $p1 = $c->getPoint($x1, $y1);

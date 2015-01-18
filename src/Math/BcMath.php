@@ -28,7 +28,7 @@ use Mdanter\Ecc\MathAdapterInterface;
  * ***********************************************************************
  */
 
-class BcMath implements MathAdapterInterface
+class BcMath extends AbstractAdapter
 {
     /**
      * (non-PHPdoc)
@@ -97,15 +97,6 @@ class BcMath implements MathAdapterInterface
     public function pow($base, $exponent)
     {
         return bcpow($base, $exponent);
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapterInterface::rand()
-     */
-    public function rand($n)
-    {
-        return BcMathUtils::bcrand($n);
     }
 
     /**

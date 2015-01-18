@@ -62,9 +62,12 @@ class PrivateKey implements PrivateKeyInterface
         return $this->secretMultiplier;
     }
 
-    public function establishSharedKey(PublicKeyInterface $key)
+    public function createExchange(PublicKeyInterface $recipientKey = null)
     {
-        return $key->getPoint()->mul($this->secretMultiplier)->getX();
+        $exchange = new EcDH($this->adapter);
+        $exchange->setSenderKey($this);
+        $exchange->setRecipientKey($recipientKey);
+        
+        return $exchange;
     }
-
 }
