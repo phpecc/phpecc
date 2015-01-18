@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc;
 
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
+
 /**
  * Curve point from which public and private keys can be derived.
  *

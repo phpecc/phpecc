@@ -7,6 +7,8 @@ use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\PublicKey;
 use Mdanter\Ecc\Signature\Signature;
 use Mdanter\Ecc\Signature\Signer;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
+use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 class NistCurveTest extends AbstractTestCase
 {
@@ -254,22 +256,30 @@ class NistCurveTest extends AbstractTestCase
 
         $this->assertFalse($signer->verify($publicKey, $sig, $math->sub($values['e'], 1)));
     }
+    
+    public function getAdaptersWithRand()
+    {
+        return $this->_getAdapters([
+    	    [ RandomGeneratorFactory::getUrandomGenerator() ],
+            [ RandomGeneratorFactory::getGmpRandomGenerator(false, true) ],
+            [ RandomGeneratorFactory::getBcMathRandomGenerator(false, true) ]
+        ]);
+    }
 
     /**
-     * @dataProvider getAdapters
+     * @dataProvider getAdaptersWithRand
      */
-    public function testSignatureValidityWithGeneratedKeys(MathAdapterInterface $math)
+    public function testSignatureValidityWithGeneratedKeys(MathAdapterInterface $math, RandomNumberGeneratorInterface $rng)
     {
-        $curve = EccFactory::getNistCurves($math)->curve192();
         $generator = EccFactory::getNistCurves($math)->generator192();
 
         $signer = new Signer($math);
         
         $privateKey = $generator->createPrivateKey();
         $publicKey = $privateKey->getPublicKey();
-        $randomK = $math->rand($privateKey->getPoint()->getOrder());
+        $randomK = $rng->generate($privateKey->getPoint()->getOrder());
         
-        $hash = $math->rand($generator->getOrder());
+        $hash = $rng->generate($generator->getOrder());
         $signature = $signer->sign($privateKey, $hash, $randomK);
 
         $this->assertTrue($signer->verify($publicKey, $signature, $hash), 'Correctly validates valid hash.');
@@ -277,12 +287,12 @@ class NistCurveTest extends AbstractTestCase
     }
 
     /**
-     * @dataProvider getAdapters
+     * @dataProvider getAdaptersWithRand
      * @testdox Test Diffie-Hellman key exchange and message encryption/decryption
      */
-    public function testDiffieHellman(MathAdapterInterface $math)
+    public function testDiffieHellman(MathAdapterInterface $math, RandomNumberGeneratorInterface $rng)
     {
-        $generator = EccFactory::getNistCurves($math)->generator192();
+        $generator = EccFactory::getNistCurves($math)->generator192($rng);
         $alicePrivKey = $generator->createPrivateKey();
         $bobPrivKey = $generator->createPrivateKey();
 

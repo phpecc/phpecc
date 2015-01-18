@@ -7,10 +7,11 @@ use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 class BcMathRandomNumberGenerator implements RandomNumberGeneratorInterface
 {
-    
-    public function __construct()
+    public function __construct($noWarn = false)
     {
-        trigger_error('Using non-secure random number generator.', E_USER_WARNING);
+        if ($noWarn !== true) {
+            trigger_error('Using non-secure random number generator.', E_USER_WARNING);
+        }
     }
     
     /**
@@ -19,6 +20,6 @@ class BcMathRandomNumberGenerator implements RandomNumberGeneratorInterface
      */
     public function generate($max)
     {
-        return (string) BcMathUtils::bcrand($max);
+        return (string)BcMathUtils::bcrand($max);
     }    
 }

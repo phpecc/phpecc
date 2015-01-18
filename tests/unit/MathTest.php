@@ -97,9 +97,6 @@ class MathTest extends AbstractTestCase
         $pow = $math->pow($x, $y);
         $this->assertTrue(is_string($pow) && ! is_resource($div));
 
-        $rand = $math->rand($x);
-        $this->assertTrue(is_string($rand) && ! is_resource($rand));
-
         $powmod = $math->powmod($x, $y, $y);
         $this->assertTrue(is_string($powmod) && ! is_resource($powmod));
 

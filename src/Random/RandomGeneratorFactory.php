@@ -19,7 +19,7 @@ class RandomGeneratorFactory
     public static function getRandomGenerator($debug = false)
     {
         if (extension_loaded('mcrypt')) {
-            return self::getURandomGenerator($debug);
+            return self::getUrandomGenerator($debug);
         }
         
         if (extension_loaded('gmp')) {
@@ -31,7 +31,7 @@ class RandomGeneratorFactory
         }
     }
     
-    public static function getURandomGenerator($debug = false)
+    public static function getUrandomGenerator($debug = false)
     {
         return self::wrapAdapter(
             new URandomNumberGenerator(self::$adapter ?: MathAdapterFactory::getAdapter($debug)),
@@ -40,19 +40,19 @@ class RandomGeneratorFactory
         );
     }
     
-    public static function getGmpRandomGenerator($debug = false)
+    public static function getGmpRandomGenerator($debug = false, $noWarn = false)
     {
         return self::wrapAdapter(
-            new GmpRandomNumberGenerator(),
+            new GmpRandomNumberGenerator($noWarn),
             'gmp',
             $debug
         );
     }
     
-    public static function getBcMathRandomGenerator($debug = false)
+    public static function getBcMathRandomGenerator($debug = false, $noWarn = false)
     {
         return self::wrapAdapter(
-            new BcMathRandomNumberGenerator(),
+            new BcMathRandomNumberGenerator($noWarn),
             'bcmath',
             $debug
         );
