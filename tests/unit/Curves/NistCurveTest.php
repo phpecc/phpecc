@@ -287,7 +287,7 @@ class NistCurveTest extends AbstractTestCase
         $bobPrivKey = $generator->createPrivateKey();
 
         $alice = $alicePrivKey->createExchange($bobPrivKey->getPublicKey());
-        $bob = $alicePrivKey->createExchange($alicePrivKey->getPublicKey());
+        $bob = $bobPrivKey->createExchange($alicePrivKey->getPublicKey());
         
         $this->assertEquals($alice->calculateSharedKey(), $bob->calculateSharedKey());
 

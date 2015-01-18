@@ -80,10 +80,8 @@ class EcDH implements EcDHInterface
      * @see \Mdanter\Ecc\EcDHInterface::calculateSharedKey()
      */
     public function calculateSharedKey()
-    {
+    {   
         $this->calculateKey();
-
-        var_dump($this->secretKey);
         
         return $this->secretKey->getX();
     }
@@ -165,7 +163,7 @@ class EcDH implements EcDHInterface
     private function calculateKey()
     {
         $this->checkExchangeState();
-    
+        
         if ($this->secretKey === null) {
             $pubPoint = $this->recipientKey->getPoint();
             $secret = $this->senderKey->getSecret(); 
