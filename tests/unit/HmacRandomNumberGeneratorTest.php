@@ -4,7 +4,7 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\PrivateKey;
-use Mdanter\Ecc\Random\HmacRandomNumberGenerator;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Signature\Signer;
 
 class HmacRandomNumberGeneratorTest extends AbstractTestCase
@@ -24,6 +24,17 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
         $this->G = EccFactory::getSecgCurves()->generator256k1();
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage HMACDRGB: Hashing algorithm not found
+     */
+    public function testRequireValidAlgorithm()
+    {
+        $privateKey  = new PrivateKey($this->math, $this->G, 1);
+        $hash = hash('sha256', 'message');
+        $drbg = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $hash, 'sha256a');
+    }
+
     public function testDeterministicSign()
     {
 
@@ -37,7 +48,7 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
             $messageHash = $this->math->hexDec(hash('sha256', $test->message));
 
             // Derive K
-            $drbg = new HmacRandomNumberGenerator($this->math, $privateKey, $messageHash, 'sha256');
+            $drbg = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $messageHash, 'sha256');
             $k    = $drbg->generate($this->G->getOrder());
 
             $signer = new Signer($this->math);
