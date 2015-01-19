@@ -61,7 +61,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      * @param $algo
      * @internal param string $personalString
      */
-    public function __construct(MathAdapterInterface $math, PrivateKeyInterface $privateKey = null, $messageHash, $algo)
+    public function __construct(MathAdapterInterface $math, PrivateKeyInterface $privateKey, $messageHash, $algo)
     {
         if (!in_array($algo, hash_algos())) {
             throw new \RuntimeException('HMACDRGB: Hashing algorithm not found');
