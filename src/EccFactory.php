@@ -15,7 +15,6 @@ use Mdanter\Ecc\Math\MathAdapterFactory;
 /**
  * Static factory class providing factory methods to work with NIST and SECG recommended curves.
  *
- * @author thibaud
  */
 class EccFactory
 {

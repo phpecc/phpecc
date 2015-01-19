@@ -21,7 +21,6 @@ use Mdanter\Ecc\Serializer\Util\ASN\ASNContext;
 /**
  * PEM Private key formatter 
  *  
- * @author thibaud
  * @link https://tools.ietf.org/html/rfc5915
  */
 class PemPrivateKeySerializer implements PrivateKeySerializerInterface
