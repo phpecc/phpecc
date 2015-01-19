@@ -37,6 +37,11 @@ class CurveOidMapper
         SecgCurve::NAME_SECP_384R1 => self::SECP_384R1_OID
     );
     
+    public static function getNames()
+    {
+        return array_keys(self::$oidMap);
+    }
+    
     public static function getCurveOid(NamedCurveFp $curve)
     {
         if (array_key_exists($curve->getName(), self::$oidMap)) {

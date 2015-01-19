@@ -26,61 +26,31 @@ use Mdanter\Ecc\Serializer\Util\ASN\ASNContext;
 class PemPrivateKeySerializer implements PrivateKeySerializerInterface
 {
     
-    const VERSION = 1;
+    private $derSerializer;
     
-    private $adapter;
-    
-    private $pubKeySerializer;
-    
-    public function __construct(MathAdapterInterface $adapter = null, PemPublicKeySerializer $pubKeySerializer = null)
+    public function __construct(DerPrivateKeySerializer $derSerializer)
     {
-        $this->adapter = $adapter ?: MathAdapterFactory::getAdapter();
-        $this->pubKeySerializer = $pubKeySerializer ?: new PemPublicKeySerializer($this->adapter);
+        $this->derSerializer = $derSerializer;
     }
     
     public function serialize(PrivateKeyInterface $key)
     {
-        $privateKeyInfo = new ASN_Sequence(
-            new ASN_Integer(self::VERSION),
-            new ASN_OctetString($this->formatKey($key)),
-            new ASNContext(160, CurveOidMapper::getCurveOid($key->getPoint()->getCurve())),
-            new ASNContext(161, $this->encodePubKey($key))
-        );
+        $privateKeyInfo = $this->derSerializer->serialize($key);
         
-        return base64_encode($privateKeyInfo->getBinary());
-    }
-    
-    private function encodePubKey(PrivateKeyInterface $key)
-    {
-        return new ASN_BitString(
-            $this->pubKeySerializer->getUncompressedKey($key->getPublicKey())
-        );
-    } 
-    
-    private function formatKey(PrivateKeyInterface $key)
-    {        
-        return $this->adapter->decHex($key->getSecret());
+        $content  = '-----BEGIN EC PRIVATE KEY-----' . PHP_EOL;
+        $content .= trim(chunk_split(base64_encode($privateKeyInfo), 64, PHP_EOL)) . PHP_EOL;
+        $content .= '-----END EC PRIVATE KEY-----';
+        
+        return $content;
     }
     
     public function parse($formattedKey)
     {
+        $formattedKey = str_replace('-----BEGIN EC PRIVATE KEY-----', '', $formattedKey);
+        $formattedKey = str_replace('-----END EC PRIVATE KEY-----', '', $formattedKey);
+        
         $data = base64_decode($formattedKey);
-        $asnObject = ASN_Object::fromBinary($data);
         
-        if (! ($asnObject instanceof ASN_Sequence) || $asnObject->getNumberofChildren() !== 4) {
-            throw new \RuntimeException('Invalid data.');
-        }
-        
-        $children = $asnObject->getChildren();
-        
-        $version = $children[0];
-        $key = $this->adapter->hexDec($children[1]->getContent());
-        $oid = $children[2]->getFirstChild();
-        
-        //var_dump($children[1], $children[2]);
-        
-        $generator = CurveOidMapper::getGeneratorFromOid($oid);
-        
-        return $generator->getPrivateKeyFrom($key);
+        return $this->derSerializer->parse($data);
     }
 }

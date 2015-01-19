@@ -17,26 +17,46 @@ use Mdanter\Ecc\PointInterface;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\GeneratorPoint;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
-use Mdanter\Ecc\Serializer\PublicKey\Pem\Formatter;
-use Mdanter\Ecc\Serializer\PublicKey\Pem\Parser;
-use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
+use Mdanter\Ecc\Serializer\PublicKey\Der\Formatter;
+use Mdanter\Ecc\Serializer\PublicKey\Der\Parser;
 
 /**
  * 
  * @link https://tools.ietf.org/html/rfc5480#page-3
  */
-class PemPublicKeySerializer implements PublicKeySerializerInterface
+class DerPublicKeySerializer implements PublicKeySerializerInterface
 {
 
-    private $derSerializer;
+    const X509_ECDSA_OID = '1.2.840.10045.2.1';
+    
+    /**
+     * 
+     * @var MathAdapterInterface
+     */
+    private $adapter;
+    
+    /**
+     * 
+     * @var Formatter
+     */
+    private $formatter;
+    
+    /**
+     * 
+     * @var Parser
+     */
+    private $parser;
     
     /**
      * 
      * @param MathAdapterInterface $adapter
      */
-    public function __construct(DerPublicKeySerializer $serializer)
+    public function __construct(MathAdapterInterface $adapter = null)
     {
-        $this->derSerializer = $serializer;
+        $this->adapter = $adapter ?: MathAdapterFactory::getAdapter();
+        
+        $this->formatter = new Formatter($this->adapter);
+        $this->parser = new Parser($this->adapter);
     }
     
     /**
@@ -46,19 +66,9 @@ class PemPublicKeySerializer implements PublicKeySerializerInterface
      */
     public function serialize(PublicKeyInterface $key)
     {
-        $publicKeyInfo = $this->derSerializer->serialize($key);
-        
-        $content  = '-----BEGIN PUBLIC KEY-----' . PHP_EOL;
-        $content .= trim(chunk_split(base64_encode($publicKeyInfo), 64, PHP_EOL)) . PHP_EOL;
-        $content .= '-----END PUBLIC KEY-----';
-        
-        return $content;
+        return $this->formatter->format($key);
     }
     
-    /**
-     * 
-     * @param PublicKeyInterface $key
-     */
     public function getUncompressedKey(PublicKeyInterface $key)
     {
         return $this->formatter->encodePoint($key->getPoint());
@@ -68,13 +78,8 @@ class PemPublicKeySerializer implements PublicKeySerializerInterface
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\Serializer\PublicKey\PublicKeySerializerInterface::parse()
      */
-    public function parse($formattedKey)
+    public function parse($string)
     {
-        $formattedKey = str_replace('-----BEGIN PUBLIC KEY-----', '', $formattedKey);
-        $formattedKey = str_replace('-----END PUBLIC KEY-----', '', $formattedKey);
-        
-        $data = base64_decode($formattedKey);
-        
-        return $this->derSerializer->parse($data);
+        return $this->parser->parse($string);
     }
 }

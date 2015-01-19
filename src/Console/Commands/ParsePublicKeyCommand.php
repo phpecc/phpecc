@@ -12,32 +12,33 @@ use Mdanter\Ecc\KeyFormat\X509PublicKeyFormatter;
 use Mdanter\Ecc\KeyFormat\PemPrivateKeyFormatter;
 use Mdanter\Ecc\KeyFormat\PemPublicKeyFormatter;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
+use Mdanter\Ecc\File\PemLoader;
+use Symfony\Component\Console\Input\InputArgument;
+use Mdanter\Ecc\Console\Commands\Helper\KeyTextDumper;
+use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 
-class ParsePublicKeyCommand extends Command
+class ParsePublicKeyCommand extends AbstractCommand
 {
 
     protected function configure()
     {
         $this->setName('parse-pubkey')->setDescription('Parse a PEM encoded public key, without its delimiters.')
-            ->addArgument('data');
+            ->addArgument('data', InputArgument::OPTIONAL)
+            ->addOption('infile', null, InputOption::VALUE_OPTIONAL)
+            ->addOption('in', null, InputOption::VALUE_OPTIONAL,
+                'Input format (der or pem). Defaults to pem.', 'pem');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $parser = new PemPublicKeySerializer();
+        $parser = $this->getPublicKeySerializer($input, 'in');
+        $loader = $this->getLoader($input, 'in');
         
-        $data = $input->getArgument('data');
+        $data = $this->getPublicKeyData($input, 'infile', 'data');
         $key = $parser->parse($data);
         
         $output->writeln('');
-        
-        $output->writeln('<comment>Public key information</comment>');
-        $output->writeln('');
-        $output->writeln('<info>Curve type</info> : ' . $key->getCurve()->getName());
-        $output->writeln('<info>X</info>          : ' . $key->getPoint()->getX());
-        $output->writeln('<info>Y</info>          : ' . $key->getPoint()->getY());
-        $output->writeln('<info>Order</info>      : ' . (empty($key->getPoint()->getOrder()) ? '<null>' : $key->getPoint()->getOrder()));
-        
+        KeyTextDumper::dumpPublicKey($output, $key);
         $output->writeln('');
     }
 }
