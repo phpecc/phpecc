@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: thomas
- * Date: 19/01/15
- * Time: 01:34
- */
 
 namespace Mdanter\Ecc\Tests;
 
@@ -13,9 +7,15 @@ use Mdanter\Ecc\PrivateKey;
 use Mdanter\Ecc\Random\HmacRandomNumberGenerator;
 use Mdanter\Ecc\Signature\Signer;
 
-class HMACRandomNumberGeneratorTest extends AbstractTestCase
+class HmacRandomNumberGeneratorTest extends AbstractTestCase
 {
+    /**
+     * @var \Mdanter\Ecc\MathAdapterInterface
+     */
     protected $math;
+    /**
+     * @var \Mdanter\Ecc\GeneratorPoint
+     */
     protected $G;
 
     public function setUp()
