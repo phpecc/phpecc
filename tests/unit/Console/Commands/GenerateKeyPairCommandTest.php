@@ -29,7 +29,7 @@ class GenerateKeyPairCommandTest extends AbstractCommandTest
         MathAdapterFactory::forceAdapter($adapter);
         RandomGeneratorFactory::forceGenerator($randomGenerator);
         
-        $commandTester->execute(array());
+        $commandTester->execute(array('--curve' => 'nist-p256'));
         
         $this->assertEquals($this->normalize($expected), $this->normalize($commandTester->getDisplay()));
         
