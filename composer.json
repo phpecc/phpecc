@@ -26,7 +26,7 @@
    ],
    "require":{
        "php": ">=5.3.3",
-       "fgrosse/phpasn1": "dev-master",
+       "fgrosse/phpasn1": "dev-master#1033ca99966ee75b957d6f923dc21f4dad9b334b",
        "symfony/console": "~2.6"
    },
    "require-dev":{
@@ -51,7 +51,7 @@
    "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:aztech-digital/PHPASN1.git"
+            "url": "git@github.com:aztech-digital/php-asn1.git"
         }
     ]
 }
