@@ -41,6 +41,6 @@ class GeneratePublicKeyCommand extends Command
     
     protected function formatBase64($string)
     {
-        return trim(chunk_split($string, 64));
+        return trim(chunk_split($string, 64, PHP_EOL));
     }
 }

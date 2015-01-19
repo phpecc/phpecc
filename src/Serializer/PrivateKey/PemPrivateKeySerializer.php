@@ -59,12 +59,7 @@ class PemPrivateKeySerializer implements PrivateKeySerializerInterface
     } 
     
     private function formatKey(PrivateKeyInterface $key)
-    {
-        $len = NumberSize::getCeiledByteSize($this->adapter, $key->getPoint()->getOrder());
-        $os = OctetStringConverter::i2osp($this->adapter, $key->getSecret(), $len);
-        
-        var_dump($os);
-        
+    {        
         return $this->adapter->decHex($key->getSecret());
     }
     

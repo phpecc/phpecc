@@ -11,6 +11,13 @@ class RandomGeneratorFactory
 
     private static $adapter;
     
+    private static $forcedGenerator = null;
+    
+    public static function forceGenerator(RandomNumberGeneratorInterface $generator)
+    {
+        self::$forcedGenerator = $generator;
+    }
+    
     public static function setMathAdapter(MathAdapterInterface $adapter)
     {
         self::$adapter = $adapter;
@@ -18,6 +25,10 @@ class RandomGeneratorFactory
     
     public static function getRandomGenerator($debug = false)
     {
+        if (self::$forcedGenerator !== null) {
+            return self::$forcedGenerator;
+        }
+        
         if (extension_loaded('mcrypt')) {
             return self::getUrandomGenerator($debug);
         }

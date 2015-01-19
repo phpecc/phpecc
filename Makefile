@@ -7,7 +7,7 @@ pretest:
 
 phpunit: pretest
 		mkdir -p tests/output
-		vendor/bin/phpunit --coverage-text --coverage-clover=tests/output/coverage.clover
+		vendor/bin/phpunit --coverage-text --coverage-clover=tests/output/coverage.clover --coverage-html=tests/output/Results
 
 ifndef STRICT
 STRICT = 0

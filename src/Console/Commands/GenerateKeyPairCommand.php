@@ -26,8 +26,8 @@ class GenerateKeyPairCommand extends Command
         $generator = EccFactory::getNistCurves()->generator256();
         
         $privKeySerializer = new PemPrivateKeySerializer();
-        $privKey = $generator->getPrivateKeyFrom('94010543252973375011478777931386941744199411766479080318775126715287144413397');
-
+        $privKey = $generator->createPrivateKey();
+        
         $output->writeln(array(
             '-----BEGIN EC PRIVATE KEY-----',
             $this->formatBase64($privKeySerializer->serialize($privKey)),

@@ -9,7 +9,8 @@ use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
 
 class CurveOidMapper
-{   
+{
+   
     const NIST_P192_OID = '1.2.840.10045.3.1.1';
     
     const NIST_P224_OID = '1.3.132.0.33';
@@ -33,7 +34,7 @@ class CurveOidMapper
         NistCurve::NAME_P384 => self::NIST_P384_OID,
         NistCurve::NAME_P521 => self::NIST_P521_OID,
         SecgCurve::NAME_SECP_256K1 => self::SECP_256K1_OID,
-        SecgCurve::NAME_SECP_384r1 => self::SECP_384R1_OID
+        SecgCurve::NAME_SECP_384R1 => self::SECP_384R1_OID
     );
     
     public static function getCurveOid(NamedCurveFp $curve)

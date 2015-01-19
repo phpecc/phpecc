@@ -20,7 +20,11 @@ use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Serializer\PublicKey\Pem\Formatter;
 use Mdanter\Ecc\Serializer\PublicKey\Pem\Parser;
 
-
+/**
+ * 
+ * @author thibaud
+ * @link https://tools.ietf.org/html/rfc5480#page-3
+ */
 class PemPublicKeySerializer implements PublicKeySerializerInterface
 {
 
