@@ -8,16 +8,20 @@ use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class RandomGeneratorFactory
 {
-
-    private static $adapter;
     
-    public static function setMathAdapter(MathAdapterInterface $adapter)
+    private static $forcedGenerator = null;
+    
+    public static function forceGenerator(RandomNumberGeneratorInterface $generator = null)
     {
-        self::$adapter = $adapter;
+        self::$forcedGenerator = $generator;
     }
     
     public static function getRandomGenerator($debug = false)
     {
+        if (self::$forcedGenerator !== null) {
+            return self::$forcedGenerator;
+        }
+        
         if (extension_loaded('mcrypt')) {
             return self::getUrandomGenerator($debug);
         }
@@ -34,7 +38,7 @@ class RandomGeneratorFactory
     public static function getUrandomGenerator($debug = false)
     {
         return self::wrapAdapter(
-            new URandomNumberGenerator(self::$adapter ?: MathAdapterFactory::getAdapter($debug)),
+            new URandomNumberGenerator(MathAdapterFactory::getAdapter($debug)),
             'urandom',
             $debug
         );

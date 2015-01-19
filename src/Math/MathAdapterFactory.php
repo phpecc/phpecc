@@ -8,8 +8,19 @@ use Mdanter\Ecc\Random\RandomGeneratorFactory;
 
 class MathAdapterFactory
 {
+    private static $forcedAdapter = null;
+    
+    public static function forceAdapter(MathAdapterInterface $adapter = null)
+    {
+        self::$forcedAdapter = $adapter;
+    }
+    
     public static function getAdapter($debug = false)
     {
+        if (self::$forcedAdapter !== null) {
+            return self::$forcedAdapter;
+        }
+        
         $adapter = null;
         $adapterClass = self::getAdapterClass();
         

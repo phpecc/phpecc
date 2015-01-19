@@ -1,6 +1,4 @@
 bin/
-src/Console/
-src/KeyFormat/
 tests/output
 vendor/
 

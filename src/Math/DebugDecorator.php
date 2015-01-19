@@ -7,7 +7,6 @@ use Mdanter\Ecc\MathAdapterInterface;
 /**
  * Debug helper class to trace all calls to math functions along with the provided params and result.
  *
- * @author thibaud
  */
 class DebugDecorator implements MathAdapterInterface
 {

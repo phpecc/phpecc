@@ -52,9 +52,18 @@ class PrivateKey implements PrivateKeyInterface
         return new PublicKey($this->adapter, $this->generator, $this->generator->mul($this->secretMultiplier));
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PrivateKeyInterface::getPoint()
+     */
     public function getPoint()
     {
         return $this->generator;
+    }
+    
+    public function getCurve()
+    {
+        return $this->generator->getCurve();
     }
 
     public function getSecret()
