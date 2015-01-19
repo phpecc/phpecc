@@ -11,6 +11,7 @@ use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use PHPASN1\ASN_Sequence;
 use PHPASN1\ASN_ObjectIdentifier;
 use PHPASN1\ASN_BitString;
+use Mdanter\Ecc\Util\NumberSize;
 
 class Formatter
 {
@@ -41,8 +42,8 @@ class Formatter
     
     public function encodePoint(PointInterface $point)
     {
-        $xLength = $this->getByteSize($point->getX());
-        $yLength = $this->getByteSize($point->getY());
+        $xLength = NumberSize::getCeiledByteSize($this->adapter, $point->getX()) + 1;
+        $yLength = NumberSize::getCeiledByteSize($this->adapter, $point->getY()) + 1;
         
         $length = max($xLength, $yLength);
         
@@ -51,17 +52,5 @@ class Formatter
         $hexString .= str_pad($this->adapter->decHex($point->getY()), $length, '0');
         
         return $hexString;
-    }
-
-    private function getByteSize($number)
-    {
-        // Shameless rip of https://github.com/ircmaxell/RandomLib/blob/master/lib/RandomLib/Generator.php#L307-L311
-        $log2 = 0;
-        
-        while ($number = $this->adapter->rightShift($number, 1)) {
-            $log2 ++;
-        }
-        
-        return floor($log2 ++ / 8);
     }
 }

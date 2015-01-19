@@ -10,7 +10,7 @@ class MathAdapterFactory
 {
     private static $forcedAdapter = null;
     
-    public static function forceAdapter(MathAdapterInterface $adapter)
+    public static function forceAdapter(MathAdapterInterface $adapter = null)
     {
         self::$forcedAdapter = $adapter;
     }

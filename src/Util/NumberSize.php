@@ -16,7 +16,7 @@ class NumberSize
             $log2++;
         }
         
-        return ceil($log2 / 2);
+        return ceil($log2 / 8);
     }
     
     public static function getFlooredByteSize(MathAdapterInterface $adapter, $x)
@@ -27,6 +27,6 @@ class NumberSize
             $log2++;
         }
     
-        return floor($log2 / 2);
+        return floor($log2 / 8);
     }
 }

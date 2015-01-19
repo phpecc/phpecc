@@ -6,9 +6,11 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Console\Application;
 use Mdanter\Ecc\Tests\AbstractTestCase;
+use Mdanter\Ecc\Math\MathAdapterFactory;
 
 abstract class AbstractCommandTest extends AbstractTestCase
 {
+    
     /**
      * 
      * @param Command $command

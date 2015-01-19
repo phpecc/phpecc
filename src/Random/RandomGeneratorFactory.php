@@ -8,19 +8,12 @@ use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class RandomGeneratorFactory
 {
-
-    private static $adapter;
     
     private static $forcedGenerator = null;
     
-    public static function forceGenerator(RandomNumberGeneratorInterface $generator)
+    public static function forceGenerator(RandomNumberGeneratorInterface $generator = null)
     {
         self::$forcedGenerator = $generator;
-    }
-    
-    public static function setMathAdapter(MathAdapterInterface $adapter)
-    {
-        self::$adapter = $adapter;
     }
     
     public static function getRandomGenerator($debug = false)
@@ -45,7 +38,7 @@ class RandomGeneratorFactory
     public static function getUrandomGenerator($debug = false)
     {
         return self::wrapAdapter(
-            new URandomNumberGenerator(self::$adapter ?: MathAdapterFactory::getAdapter($debug)),
+            new URandomNumberGenerator(MathAdapterFactory::getAdapter($debug)),
             'urandom',
             $debug
         );

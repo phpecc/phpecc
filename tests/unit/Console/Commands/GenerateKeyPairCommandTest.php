@@ -10,6 +10,7 @@ use Mdanter\Ecc\Random\RandomGeneratorFactory;
 
 class GenerateKeyPairCommandTest extends AbstractCommandTest
 {
+    
     /**
      * @dataProvider getAdapters
      */    
@@ -31,5 +32,8 @@ class GenerateKeyPairCommandTest extends AbstractCommandTest
         $commandTester->execute(array());
         
         $this->assertEquals($this->normalize($expected), $this->normalize($commandTester->getDisplay()));
+        
+        MathAdapterFactory::forceAdapter(null);
+        RandomGeneratorFactory::forceGenerator(null);
     }
 }
