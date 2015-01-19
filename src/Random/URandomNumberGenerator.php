@@ -23,16 +23,4 @@ class URandomNumberGenerator implements RandomNumberGeneratorInterface
         
         return $this->adapter->hexDec(bin2hex($iv));
     }
-    
-    private function getByteSize($number)
-    {
-        // Shameless rip of https://github.com/ircmaxell/RandomLib/blob/master/lib/RandomLib/Generator.php#L307-L311
-        $log2 = 0;
-        
-        while ($number = $this->adapter->rightShift($number, 1)) {
-            $log2++;
-        }
-        
-        return floor($log2 / 8);
-    }
 }
