@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Serializer\PublicKey\Pem;
+namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
@@ -9,6 +9,7 @@ use PHPASN1\ASN_ObjectIdentifier;
 use PHPASN1\ASN_Sequence;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\GeneratorPoint;
+use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 
 class Parser
 {
@@ -20,9 +21,8 @@ class Parser
         $this->adapter = $adapter;
     }
 
-    public function parse($string)
+    public function parse($binaryData)
     {
-        $binaryData = base64_decode($string);
         $asnObject = ASN_Object::fromBinary($binaryData);
         
         if (! ($asnObject instanceof ASN_Sequence) || $asnObject->getNumberofChildren() != 2) {
@@ -35,7 +35,7 @@ class Parser
         $curveOid = $children[0]->getChildren()[1];
         $encodedKey = $children[1];
         
-        if ($oid->getContent() !== PemPublicKeySerializer::X509_ECDSA_OID) {
+        if ($oid->getContent() !== DerPublicKeySerializer::X509_ECDSA_OID) {
             throw new \RuntimeException('Invalid data: non X509 data.');
         }
         

@@ -16,42 +16,33 @@ use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Symfony\Component\Console\Input\InputArgument;
 use Mdanter\Ecc\File\PemLoader;
+use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
+use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 
-class GeneratePublicKeyCommand extends Command
+class GeneratePublicKeyCommand extends AbstractCommand
 {
 
     protected function configure()
     {
         $this->setName('encode-pubkey')->setDescription('Encodes the public key from a PEM encoded private key to PEM format.')
             ->addArgument('data', InputArgument::OPTIONAL)
-            ->addOption('infile', null, InputOption::VALUE_OPTIONAL);
+            ->addOption('infile', null, InputOption::VALUE_OPTIONAL)
+            ->addOption('in', null, InputOption::VALUE_OPTIONAL,
+                'Input format (der or pem). Defaults to pem.', 'pem')
+            ->addOption('out', null, InputOption::VALUE_OPTIONAL,
+                'Output format (der or pem). Defaults to pem.', 'pem');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $pubKeySerializer = new PemPublicKeySerializer();
-        $privKeySerializer = new PemPrivateKeySerializer(MathAdapterFactory::getAdapter(), $pubKeySerializer);
+        $pubKeySerializer = $this->getPublicKeySerializer($input, 'out');
+        $privKeySerializer = $this->getPrivateKeySerializer($input, 'in');
+        $loader = $this->getLoader($input, 'in');
         
-        if ($infile = $input->getOption('infile')) {
-            $loader = new PemLoader();
-            
-            if (! file_exists($infile)) {
-                $infile = getcwd() . '/' . $infile;
-            }
-            
-            $data = $loader->loadPrivateKeyData(realpath($infile));
-        }
-        else {
-            $data = $input->getArgument('data');
-        }
-        
+        $data = $this->getPrivateKeyData($input, $loader, 'infile', 'data');
         $key = $privKeySerializer->parse($data);
         
-        $output->writeln(array(
-            '-----BEGIN PUBLIC KEY-----',
-            $this->formatBase64($pubKeySerializer->serialize($key->getPublicKey())),
-            '-----END PUBLIC KEY-----'
-        ));
+        $output->writeln($pubKeySerializer->serialize($key->getPublicKey()));
     }
     
     protected function formatBase64($string)

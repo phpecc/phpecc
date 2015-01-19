@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Serializer\PublicKey\Pem;
+namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 
 use Mdanter\Ecc\PointInterface;
 use Mdanter\Ecc\PublicKeyInterface;
@@ -12,6 +12,7 @@ use PHPASN1\ASN_Sequence;
 use PHPASN1\ASN_ObjectIdentifier;
 use PHPASN1\ASN_BitString;
 use Mdanter\Ecc\Util\NumberSize;
+use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 
 class Formatter
 {
@@ -31,13 +32,13 @@ class Formatter
         
         $sequence = new ASN_Sequence(
             new ASN_Sequence(
-                new ASN_ObjectIdentifier(PemPublicKeySerializer::X509_ECDSA_OID),
+                new ASN_ObjectIdentifier(DerPublicKeySerializer::X509_ECDSA_OID),
                 CurveOidMapper::getCurveOid($key->getCurve())
             ),
             new ASN_BitString($this->encodePoint($key->getPoint()))
         );
         
-        return base64_encode($sequence->getBinary());
+        return $sequence->getBinary();
     }
     
     public function encodePoint(PointInterface $point)

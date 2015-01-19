@@ -11,8 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Curves\CurveFactory;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
+use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 
-class GenerateKeyPairCommand extends Command
+class GenerateKeyPairCommand extends AbstractCommand
 {
 
     protected function configure()
@@ -20,7 +23,9 @@ class GenerateKeyPairCommand extends Command
         $this
             ->setName('genkey')->setDescription('Generate a new keypair.')
             ->addOption('curve', 'c', InputOption::VALUE_REQUIRED, 
-                        'Curve name. Use \'list-curves\' for available names.');
+                        'Curve name. Use \'list-curves\' for available names.')
+            ->addOption('out', 'p', InputOption::VALUE_OPTIONAL,
+                        'Output format (der or pem). Defaults to pem.', 'pem');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -33,27 +38,17 @@ class GenerateKeyPairCommand extends Command
         
         $generator = CurveFactory::getGeneratorByName($curveName);
         
-        $privKeySerializer = new PemPrivateKeySerializer();
+        if ($output instanceof ConsoleOutputInterface) {
+            $output->getErrorOutput()->writeln('Using curve "' . $curveName . "'" );
+        }
+        
+        $privKeySerializer = $this->getPrivateKeySerializer($input, 'out');
+        $pubKeySerializer = $this->getPublicKeySerializer($input, 'out');
+        
         $privKey = $generator->createPrivateKey();
+        $output->writeln($privKeySerializer->serialize($privKey));
         
-        $output->writeln(array(
-            '-----BEGIN EC PRIVATE KEY-----',
-            $this->formatBase64($privKeySerializer->serialize($privKey)),
-            '-----END EC PRIVATE KEY-----'
-        ));
-        
-        $pubKeySerializer = new PemPublicKeySerializer();
         $pubKey = $privKey->getPublicKey();
-        
-        $output->writeln(array(
-            '-----BEGIN PUBLIC KEY-----',
-            $this->formatBase64($pubKeySerializer->serialize($pubKey)),
-            '-----END PUBLIC KEY-----'
-        ));
-    }
-    
-    protected function formatBase64($string)
-    {
-        return trim(chunk_split($string, 64));
+        $output->writeln($pubKeySerializer->serialize($pubKey));
     }
 }

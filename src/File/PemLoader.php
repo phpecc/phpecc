@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\File;
 
-class PemLoader
+class PemLoader implements FileLoader
 {
     
     const PEM_PRIVATE_KEY_HEADER = 'EC PRIVATE KEY';
