@@ -4,6 +4,7 @@ namespace Mdanter\Ecc\Random;
 
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\PrivateKeyInterface;
+use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 /**
  * Class HMACRandomNumberGenerator
@@ -18,7 +19,7 @@ use Mdanter\Ecc\PrivateKeyInterface;
  * which would require locking when reseed counter exceeds 10,000,
  * until it is reseeded again.
  */
-class HmacRandomNumberGenerator
+class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 {
     /**
      * @var string
@@ -108,7 +109,7 @@ class HmacRandomNumberGenerator
             "%s%s%s",
             $this->V,
             chr(0x00),
-            $data ?: ''
+            $data
         ));
 
         $this->V = $this->hash($this->V);
@@ -194,7 +195,7 @@ class HmacRandomNumberGenerator
                 $hex   = bin2hex($bytes);
                 $rand  = $this->math->hexDec($hex);
 
-                // Check k is between [1, ... Q]
+                // Check k is between [1, ... $max]
                 if ($this->math->cmp(1, $rand) <= 0
                     and $this->math->cmp($rand, $max) < 0) {
                     break;

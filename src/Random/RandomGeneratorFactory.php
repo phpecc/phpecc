@@ -59,11 +59,11 @@ class RandomGeneratorFactory
         );
     }
 
-    public static function getHmacRandomGenerator($math, PrivateKeyInterface $privateKey, $algo, $messageHash, $debug = false)
+    public static function getHmacRandomGenerator(PrivateKeyInterface $privateKey, $algo, $messageHash, $debug = false)
     {
         return self::wrapAdapter(
             new HmacRandomNumberGenerator(self::$adapter ?: MathAdapterFactory::getAdapter($debug), $privateKey, $messageHash, $algo),
-            'bcmath',
+            'rfc6979',
             $debug
         );
     }
