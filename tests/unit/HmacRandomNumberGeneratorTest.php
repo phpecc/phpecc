@@ -49,13 +49,15 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
 
             // Derive K
             $drbg = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $messageHash, 'sha256');
-            $k    = $drbg->generate($this->G->getOrder());
-
-            $signer = new Signer($this->math);
-            $sig    = $signer->sign($privateKey, $messageHash, $k);
 
             // K must be correct (from privatekey and message hash)
+            $k    = $drbg->generate($this->G->getOrder());
             $this->assertEquals(strtolower($test->expectedK), $this->math->decHex($k));
+
+
+
+            $signer = new Signer($this->math);
+            $sig    = $signer->sign($privateKey, $messageHash, $drbg);
 
             // R and S should be correct
             $rHex = $this->math->dechex($sig->getR());
