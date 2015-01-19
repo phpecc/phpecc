@@ -129,17 +129,6 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * Reseed the DRBG with new entropy, and reset the counter.
-     *
-     * @param $entropy
-     */
-    private function reseed($entropy)
-    {
-        $this->update($entropy);
-        $this->reseedCounter = 1;
-    }
-
-    /**
      * Load $numBytes bytes from the DRBG
      *
      * @param int $numNumBytes
@@ -203,6 +192,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
                 // Otherwise derive another and try again.
                 $this->update(null);
+
             }
 
             $this->result = $rand;
