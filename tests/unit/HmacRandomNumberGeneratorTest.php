@@ -57,7 +57,7 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
 
 
             $signer = new Signer($this->math);
-            $sig    = $signer->sign($privateKey, $messageHash, $drbg);
+            $sig    = $signer->sign($privateKey, $messageHash, $k);
 
             // R and S should be correct
             $rHex = $this->math->dechex($sig->getR());
