@@ -66,7 +66,12 @@ class RandomGeneratorFactory
     public static function getHmacRandomGenerator(PrivateKeyInterface $privateKey, $messageHash, $algo, $debug = false)
     {
         return self::wrapAdapter(
-            new HmacRandomNumberGenerator(self::$adapter ?: MathAdapterFactory::getAdapter($debug), $privateKey, $messageHash, $algo),
+            new HmacRandomNumberGenerator(
+                self::$adapter ?: MathAdapterFactory::getAdapter($debug),
+                $privateKey,
+                $messageHash,
+                $algo
+            ),
             'rfc6979',
             $debug
         );
