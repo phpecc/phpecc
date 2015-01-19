@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Random;
 
+use Mdanter\Ecc\PrivateKeyInterface;
 use Mdanter\Ecc\RandomNumberGeneratorInterface;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
@@ -57,6 +58,15 @@ class RandomGeneratorFactory
     {
         return self::wrapAdapter(
             new BcMathRandomNumberGenerator($noWarn),
+            'bcmath',
+            $debug
+        );
+    }
+
+    public static function getHmacRandomGenerator($math, PrivateKeyInterface $privateKey, $algo, $messageHash, $debug = false)
+    {
+        return self::wrapAdapter(
+            new HmacRandomNumberGenerator(self::$adapter ?: MathAdapterFactory::getAdapter($debug), $privateKey, $messageHash, $algo),
             'bcmath',
             $debug
         );
