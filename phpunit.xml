@@ -17,15 +17,11 @@
 			logIncompleteSkipped="true" />
 	</logging>
 	<filter>
-		<blacklist>
-			<exclude>
-				<directory suffix=".php">./vendor</directory>
-			</exclude>
-		</blacklist>
-		<whitelist processUncoveredFilesFromWhitelist="true">
-			<exclude>
-				<directory suffix=".php">./vendor</directory>
-			</exclude>
-		</whitelist>
-	</filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/</directory>
+            <exclude>
+
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
