@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\Signature;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\PrivateKeyInterface;
 use Mdanter\Ecc\PublicKeyInterface;
+use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 class Signer
 {
@@ -24,13 +25,13 @@ class Signer
         $this->adapter = $adapter;
     }
     
-    public function sign(PrivateKeyInterface $key, $hash, $randomK)
+    public function sign(PrivateKeyInterface $key, $hash, RandomNumberGeneratorInterface $randomK)
     {
         $math = $this->adapter;
         $generator = $key->getPoint();
         
         $n = $generator->getOrder();
-        $k = $math->mod($randomK, $n);
+        $k = $math->mod($randomK->generate($n), $n);
         $p1 = $generator->mul($k);
         $r = $p1->getX();
         
