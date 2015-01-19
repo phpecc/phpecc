@@ -25,13 +25,13 @@ class Signer
         $this->adapter = $adapter;
     }
     
-    public function sign(PrivateKeyInterface $key, $hash, RandomNumberGeneratorInterface $randomK)
+    public function sign(PrivateKeyInterface $key, $hash, $randomK)
     {
         $math = $this->adapter;
         $generator = $key->getPoint();
         
         $n = $generator->getOrder();
-        $k = $math->mod($randomK->generate($n), $n);
+        $k = $math->mod($randomK, $n);
         $p1 = $generator->mul($k);
         $r = $p1->getX();
         
