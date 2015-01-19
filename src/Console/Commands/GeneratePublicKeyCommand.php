@@ -14,6 +14,8 @@ use Mdanter\Ecc\KeyFormat\PemPublicKeyFormatter;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
 use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Math\MathAdapterFactory;
+use Symfony\Component\Console\Input\InputArgument;
+use Mdanter\Ecc\File\PemLoader;
 
 class GeneratePublicKeyCommand extends Command
 {
@@ -21,7 +23,8 @@ class GeneratePublicKeyCommand extends Command
     protected function configure()
     {
         $this->setName('encode-pubkey')->setDescription('Encodes the public key from a PEM encoded private key to PEM format.')
-            ->addArgument('data');
+            ->addArgument('data', InputArgument::OPTIONAL)
+            ->addOption('infile', null, InputOption::VALUE_OPTIONAL);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -29,7 +32,19 @@ class GeneratePublicKeyCommand extends Command
         $pubKeySerializer = new PemPublicKeySerializer();
         $privKeySerializer = new PemPrivateKeySerializer(MathAdapterFactory::getAdapter(), $pubKeySerializer);
         
-        $data = $input->getArgument('data');
+        if ($infile = $input->getOption('infile')) {
+            $loader = new PemLoader();
+            
+            if (! file_exists($infile)) {
+                $infile = getcwd() . '/' . $infile;
+            }
+            
+            $data = $loader->loadPrivateKeyData(realpath($infile));
+        }
+        else {
+            $data = $input->getArgument('data');
+        }
+        
         $key = $privKeySerializer->parse($data);
         
         $output->writeln(array(

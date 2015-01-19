@@ -9,6 +9,7 @@ use Mdanter\Ecc\Console\Commands\DecHexCommand;
 use Mdanter\Ecc\Console\Commands\ParsePublicKeyCommand;
 use Mdanter\Ecc\Console\Commands\ParsePrivateKeyCommand;
 use Mdanter\Ecc\Console\Commands\GeneratePublicKeyCommand;
+use Mdanter\Ecc\Console\Commands\ListCurvesCommand;
 
 class Application extends ConsoleApplication
 {
@@ -19,6 +20,7 @@ class Application extends ConsoleApplication
         
         $commands[] = new GenerateKeyPairCommand();
         $commands[] = new GeneratePublicKeyCommand();
+        $commands[] = new ListCurvesCommand();
         $commands[] = new ParsePrivateKeyCommand();
         $commands[] = new ParsePublicKeyCommand();
         $commands[] = new HexDecCommand();

@@ -9,6 +9,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
+use Mdanter\Ecc\Curves\CurveFactory;
 
 class GenerateKeyPairCommand extends Command
 {
@@ -23,7 +25,13 @@ class GenerateKeyPairCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $generator = EccFactory::getNistCurves()->generator256();
+        $curveName = $input->getOption('curve');
+        
+        if (! $curveName) {
+            throw new \InvalidArgumentException('Curve name is required. Use "list-curves" to get available names.');
+        }
+        
+        $generator = CurveFactory::getGeneratorByName($curveName);
         
         $privKeySerializer = new PemPrivateKeySerializer();
         $privKey = $generator->createPrivateKey();

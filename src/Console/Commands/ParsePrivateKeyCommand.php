@@ -8,6 +8,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Mdanter\Ecc\File\PemLoader;
 
 class ParsePrivateKeyCommand extends Command
 {
@@ -15,14 +17,28 @@ class ParsePrivateKeyCommand extends Command
     protected function configure()
     {
         $this->setName('parse-privkey')->setDescription('Parse a PEM encoded private key (without its delimiters).')
-            ->addArgument('data');
+            ->addArgument('data', InputArgument::OPTIONAL)
+            ->addOption('infile', null, InputOption::VALUE_OPTIONAL);
+        
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $parser = new PemPrivateKeySerializer();
         
-        $data = $input->getArgument('data');
+        if ($infile = $input->getOption('infile')) {
+            $loader = new PemLoader();
+            
+            if (! file_exists($infile)) {
+                $infile = getcwd() . '/' . $infile;
+            }
+            
+            $data = $loader->loadPrivateKeyData(realpath($infile));
+        }
+        else {
+            $data = $input->getArgument('data');
+        }
+        
         $key = $parser->parse($data);
         
         $output->writeln('');

@@ -12,6 +12,8 @@ use Mdanter\Ecc\KeyFormat\X509PublicKeyFormatter;
 use Mdanter\Ecc\KeyFormat\PemPrivateKeyFormatter;
 use Mdanter\Ecc\KeyFormat\PemPublicKeyFormatter;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
+use Mdanter\Ecc\File\PemLoader;
+use Symfony\Component\Console\Input\InputArgument;
 
 class ParsePublicKeyCommand extends Command
 {
@@ -19,14 +21,27 @@ class ParsePublicKeyCommand extends Command
     protected function configure()
     {
         $this->setName('parse-pubkey')->setDescription('Parse a PEM encoded public key, without its delimiters.')
-            ->addArgument('data');
+            ->addArgument('data', InputArgument::OPTIONAL)
+            ->addOption('infile', null, InputOption::VALUE_OPTIONAL);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $parser = new PemPublicKeySerializer();
         
-        $data = $input->getArgument('data');
+        if ($infile = $input->getOption('infile')) {
+            $loader = new PemLoader();
+        
+            if (! file_exists($infile)) {
+                $infile = getcwd() . '/' . $infile;
+            }
+        
+            $data = $loader->loadPublicKeyData(realpath($infile));
+        }
+        else {
+            $data = $input->getArgument('data');
+        }
+        
         $key = $parser->parse($data);
         
         $output->writeln('');

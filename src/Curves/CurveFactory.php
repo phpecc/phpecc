@@ -50,7 +50,7 @@ class CurveFactory
             case NistCurve::NAME_P384:
                 return $nistFactory->generator384();
             case NistCurve::NAME_P521:
-                return $nistFactory->generator384();
+                return $nistFactory->generator521();
             case SecgCurve::NAME_SECP_256K1:
                 return $secpFactory->generator256k1();
             case SecgCurve::NAME_SECP_256R1:
