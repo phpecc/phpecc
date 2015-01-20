@@ -8,8 +8,6 @@ use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 /**
  * Class HMACRandomNumberGenerator
- * @package Mdanter\Ecc\Random\HMACRandomNumberGenerator
- * @author Thomas Kerin
  *
  * RFC6979 https://tools.ietf.org/html/rfc6979
  * Instance saves result for later accesses once called,
@@ -185,8 +183,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
                 $rand  = $this->math->hexDec($hex);
 
                 // Check k is between [1, ... $max]
-                if ($this->math->cmp(1, $rand) <= 0
-                    and $this->math->cmp($rand, $max) < 0) {
+                if ($this->math->cmp(1, $rand) <= 0 && $this->math->cmp($rand, $max) < 0) {
                     break;
                 }
 
