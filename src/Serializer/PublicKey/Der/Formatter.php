@@ -18,40 +18,47 @@ class Formatter
 {
 
     private $adapter;
-    
+
     public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;
     }
-    
+
     public function format(PublicKeyInterface $key)
     {
         if (! ($key->getCurve() instanceof NamedCurveFp)) {
             throw new \RuntimeException('Not implemented for unnamed curves');
         }
-        
+
         $sequence = new ASN_Sequence(
             new ASN_Sequence(
                 new ASN_ObjectIdentifier(DerPublicKeySerializer::X509_ECDSA_OID),
                 CurveOidMapper::getCurveOid($key->getCurve())
             ),
-            new ASN_BitString($this->encodePoint($key->getPoint()))
+            new ASN_BitString($this->encodePoint($key))
         );
-        
+
         return $sequence->getBinary();
     }
-    
-    public function encodePoint(PointInterface $point)
+
+    public function encodePoint(PublicKeyInterface $key)
     {
-        $xLength = NumberSize::getCeiledByteSize($this->adapter, $point->getX()) + 1;
-        $yLength = NumberSize::getCeiledByteSize($this->adapter, $point->getY()) + 1;
-        
-        $length = max($xLength, $yLength);
-        
+        $length = CurveOidMapper::getByteSize($key->getCurve()) * 2;
+
+        $point = $key->getPoint();
+
+        //error_log('Detected length: ' . $length);
+        //error_log('Unpadded:' . $this->adapter->decHex($point->getX()));
+        //error_log('Unpadded len:' . strlen($this->adapter->decHex($point->getX())));
+        //error_log('Padded: ' . str_pad($this->adapter->decHex($point->getX()), $length, '0', STR_PAD_LEFT));
+
         $hexString = '04';
-        $hexString .= str_pad($this->adapter->decHex($point->getX()), $length, '0');
-        $hexString .= str_pad($this->adapter->decHex($point->getY()), $length, '0');
-        
+        $hexString .= str_pad($this->adapter->decHex($point->getX()), $length, '0', STR_PAD_LEFT);
+        $hexString .= str_pad($this->adapter->decHex($point->getY()), $length, '0', STR_PAD_LEFT);
+
+        //error_log('Resulting length: ' . strlen($hexString));
+        //error_log('Hex: ' . $hexString);
+
         return $hexString;
     }
 }
