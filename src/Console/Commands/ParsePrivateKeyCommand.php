@@ -22,24 +22,29 @@ class ParsePrivateKeyCommand extends AbstractCommand
             ->addArgument('data', InputArgument::OPTIONAL)
             ->addOption('infile', null, InputOption::VALUE_OPTIONAL)
             ->addOption('in', null, InputOption::VALUE_OPTIONAL,
-                'Input format (der or pem). Defaults to pem.', 'pem');
-        
+                'Input format (der or pem). Defaults to pem.', 'pem')
+            ->addOption('rewrite', null, InputOption::VALUE_NONE, 'Regenerate and output the PEM data from the parsed key.', null);
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $parser = $this->getPrivateKeySerializer($input, 'in');
         $loader = $this->getLoader($input, 'in');
-        
+
         $data = $this->getPrivateKeyData($input, $loader, 'infile', 'data');
         $key = $parser->parse($data);
-        
+
         $output->writeln('');
         KeyTextDumper::dumpPrivateKey($output, $key);
         $output->writeln('');
-        
+
         $output->writeln('');
         KeyTextDumper::dumpPublicKey($output, $key->getPublicKey());
         $output->writeln('');
+
+        if ($input->getOption('rewrite')) {
+            $output->writeln($parser->serialize($key));
+        }
     }
 }

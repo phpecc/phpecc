@@ -10,6 +10,7 @@ use Mdanter\Ecc\Console\Commands\ParsePublicKeyCommand;
 use Mdanter\Ecc\Console\Commands\ParsePrivateKeyCommand;
 use Mdanter\Ecc\Console\Commands\GeneratePublicKeyCommand;
 use Mdanter\Ecc\Console\Commands\ListCurvesCommand;
+use Mdanter\Ecc\Console\Commands\DumpAsnCommand;
 
 class Application extends ConsoleApplication
 {
@@ -17,7 +18,8 @@ class Application extends ConsoleApplication
     protected function getDefaultCommands()
     {
         $commands = parent::getDefaultCommands();
-        
+
+        //$commands[] = new DumpAsnCommand();
         $commands[] = new GenerateKeyPairCommand();
         $commands[] = new GeneratePublicKeyCommand();
         $commands[] = new ListCurvesCommand();
@@ -25,7 +27,7 @@ class Application extends ConsoleApplication
         $commands[] = new ParsePublicKeyCommand();
         $commands[] = new HexDecCommand();
         $commands[] = new DecHexCommand();
-        
+
         return $commands;
     }
 }

@@ -13,23 +13,28 @@ use PHPASN1\ASN_ObjectIdentifier;
 use PHPASN1\ASN_BitString;
 use Mdanter\Ecc\Util\NumberSize;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
+use Mdanter\Ecc\Serializer\Point\PointSerializerInterface;
+use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 
 class Formatter
 {
 
     private $adapter;
-    
-    public function __construct(MathAdapterInterface $adapter)
+
+    private $pointSerializer;
+
+    public function __construct(MathAdapterInterface $adapter, PointSerializerInterface $pointSerializer = null)
     {
         $this->adapter = $adapter;
+        $this->pointSerializer = $pointSerializer ?: new UncompressedPointSerializer($adapter);
     }
-    
+
     public function format(PublicKeyInterface $key)
     {
         if (! ($key->getCurve() instanceof NamedCurveFp)) {
             throw new \RuntimeException('Not implemented for unnamed curves');
         }
-        
+
         $sequence = new ASN_Sequence(
             new ASN_Sequence(
                 new ASN_ObjectIdentifier(DerPublicKeySerializer::X509_ECDSA_OID),
@@ -37,21 +42,12 @@ class Formatter
             ),
             new ASN_BitString($this->encodePoint($key->getPoint()))
         );
-        
+
         return $sequence->getBinary();
     }
-    
+
     public function encodePoint(PointInterface $point)
     {
-        $xLength = NumberSize::getCeiledByteSize($this->adapter, $point->getX()) + 1;
-        $yLength = NumberSize::getCeiledByteSize($this->adapter, $point->getY()) + 1;
-        
-        $length = max($xLength, $yLength);
-        
-        $hexString = '04';
-        $hexString .= str_pad($this->adapter->decHex($point->getX()), $length, '0');
-        $hexString .= str_pad($this->adapter->decHex($point->getY()), $length, '0');
-        
-        return $hexString;
+        return $this->pointSerializer->serialize($point);
     }
 }
