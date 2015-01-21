@@ -13,15 +13,20 @@ use PHPASN1\ASN_ObjectIdentifier;
 use PHPASN1\ASN_BitString;
 use Mdanter\Ecc\Util\NumberSize;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
+use Mdanter\Ecc\Serializer\Point\PointSerializerInterface;
+use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 
 class Formatter
 {
 
     private $adapter;
 
-    public function __construct(MathAdapterInterface $adapter)
+    private $pointSerializer;
+
+    public function __construct(MathAdapterInterface $adapter, PointSerializerInterface $pointSerializer = null)
     {
         $this->adapter = $adapter;
+        $this->pointSerializer = $pointSerializer ?: new UncompressedPointSerializer($adapter);
     }
 
     public function format(PublicKeyInterface $key)
@@ -35,30 +40,14 @@ class Formatter
                 new ASN_ObjectIdentifier(DerPublicKeySerializer::X509_ECDSA_OID),
                 CurveOidMapper::getCurveOid($key->getCurve())
             ),
-            new ASN_BitString($this->encodePoint($key))
+            new ASN_BitString($this->encodePoint($key->getPoint()))
         );
 
         return $sequence->getBinary();
     }
 
-    public function encodePoint(PublicKeyInterface $key)
+    public function encodePoint(PointInterface $point)
     {
-        $length = CurveOidMapper::getByteSize($key->getCurve()) * 2;
-
-        $point = $key->getPoint();
-
-        //error_log('Detected length: ' . $length);
-        //error_log('Unpadded:' . $this->adapter->decHex($point->getX()));
-        //error_log('Unpadded len:' . strlen($this->adapter->decHex($point->getX())));
-        //error_log('Padded: ' . str_pad($this->adapter->decHex($point->getX()), $length, '0', STR_PAD_LEFT));
-
-        $hexString = '04';
-        $hexString .= str_pad($this->adapter->decHex($point->getX()), $length, '0', STR_PAD_LEFT);
-        $hexString .= str_pad($this->adapter->decHex($point->getY()), $length, '0', STR_PAD_LEFT);
-
-        //error_log('Resulting length: ' . strlen($hexString));
-        //error_log('Hex: ' . $hexString);
-
-        return $hexString;
+        return $this->pointSerializer->serialize($point);
     }
 }

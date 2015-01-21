@@ -23,7 +23,7 @@ class ParsePrivateKeyCommand extends AbstractCommand
             ->addOption('infile', null, InputOption::VALUE_OPTIONAL)
             ->addOption('in', null, InputOption::VALUE_OPTIONAL,
                 'Input format (der or pem). Defaults to pem.', 'pem')
-            ->addOption('rewrite', null, InputOption::VENUE_NONE, 'Regenerate and output the PEM data from the parsed key.', null);
+            ->addOption('rewrite', null, InputOption::VALUE_NONE, 'Regenerate and output the PEM data from the parsed key.', null);
 
     }
 
@@ -43,7 +43,7 @@ class ParsePrivateKeyCommand extends AbstractCommand
         KeyTextDumper::dumpPublicKey($output, $key->getPublicKey());
         $output->writeln('');
 
-        if ($input->hasOption('rewrite')) {
+        if ($input->getOption('rewrite')) {
             $output->writeln($parser->serialize($key));
         }
     }

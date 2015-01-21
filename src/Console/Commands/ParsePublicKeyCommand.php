@@ -43,7 +43,7 @@ class ParsePublicKeyCommand extends AbstractCommand
         $output->writeln('');
 
 
-        if ($input->hasOption('rewrite')) {
+        if ($input->getOption('rewrite')) {
             $output->writeln($parser->serialize($key));
         }
     }
