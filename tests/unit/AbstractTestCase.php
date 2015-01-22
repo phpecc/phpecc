@@ -11,10 +11,14 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {
     protected function _getAdapters(array $extra = null)
     {
+        if (! defined('PHPUNIT_DEBUG')) {
+            define('PHPUNIT_DEBUG', false);
+        }
+
         if ($extra == null) {
             return array(
-                array(MathAdapterFactory::getGmpAdapter()),
-                array(MathAdapterFactory::getBcMathAdapter())
+                array(MathAdapterFactory::getGmpAdapter(PHPUNIT_DEBUG)),
+                array(MathAdapterFactory::getBcMathAdapter(PHPUNIT_DEBUG))
             );
         }
 
