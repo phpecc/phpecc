@@ -15,10 +15,18 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
             define('PHPUNIT_DEBUG', false);
         }
 
+        switch (MATH_LIB) {
+            case 'bcmath':
+                $adapter = MathAdapterFactory::getBcMathAdapter(PHPUNIT_DEBUG);
+                break;
+            case 'gmp':
+            default:
+                $adapter = MathAdapterFactory::getGmpAdapter(PHPUNIT_DEBUG);
+        }
+
         if ($extra == null) {
             return array(
-                array(MathAdapterFactory::getGmpAdapter(PHPUNIT_DEBUG)),
-                array(MathAdapterFactory::getBcMathAdapter(PHPUNIT_DEBUG))
+                array($adapter)
             );
         }
 

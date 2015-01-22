@@ -6,6 +6,10 @@ php:
     - 5.6
     - hhvm
 
+env:
+    - MATH_LIB=gmp
+    - MATH_LIB=bcmath
+
 before_script:
     - composer selfupdate
     - composer install --prefer-source --dev
