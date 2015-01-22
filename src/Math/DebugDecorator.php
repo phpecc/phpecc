@@ -6,10 +6,10 @@ use Mdanter\Ecc\MathAdapterInterface;
 
 /**
  * Debug helper class to trace all calls to math functions along with the provided params and result.
- *
  */
 class DebugDecorator implements MathAdapterInterface
 {
+
     private $adapter;
 
     private $writer;
@@ -17,7 +17,8 @@ class DebugDecorator implements MathAdapterInterface
     public function __construct(MathAdapterInterface $adapter, $callback = null)
     {
         $this->adapter = $adapter;
-        $this->writer = $callback ?: function ($message) {
+        $this->writer = $callback ?  : function ($message)
+        {
             echo $message;
         };
     }
@@ -28,7 +29,7 @@ class DebugDecorator implements MathAdapterInterface
      */
     private function writeln($message)
     {
-        call_user_func($this->writer, $message.PHP_EOL);
+        call_user_func($this->writer, $message . PHP_EOL);
     }
 
     /**
@@ -42,31 +43,34 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      *
-     * @param  string $func
-     * @param  array  $args
+     * @param string $func
+     * @param array $args
      * @return mixed
      */
     private function call($func, $args)
     {
-        $strArgs = array_map(
-            function ($arg) {
-                return var_export($this->adapter->toString($arg), true);
-            }, $args
-        );
+        $strArgs = array_map(function ($arg)
+        {
+            return var_export($this->adapter->toString($arg), true);
+        }, $args);
 
         if (strpos($func, '::')) {
-            list(, $func) = explode('::', $func);
+            list (, $func) = explode('::', $func);
         }
 
-        $res = call_user_func_array(array($this->adapter, $func), $args);
+        $res = call_user_func_array(array(
+            $this->adapter,
+            $func
+        ), $args);
 
-        $this->writeln($func.'('.implode(', ', $strArgs).') => '.var_export($this->adapter->toString($res), true));
+        $this->writeln($func . '(' . implode(', ', $strArgs) . ') => ' . var_export($this->adapter->toString($res), true));
 
         return $res;
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::cmp()
      */
     public function cmp($first, $other)
@@ -74,11 +78,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::mod()
      */
     public function mod($number, $modulus)
@@ -86,11 +94,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::add()
      */
     public function add($augend, $addend)
@@ -98,11 +110,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::sub()
      */
     public function sub($minuend, $subtrahend)
@@ -110,11 +126,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::mul()
      */
     public function mul($multiplier, $multiplicand)
@@ -122,11 +142,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::div()
      */
     public function div($dividend, $divisor)
@@ -134,11 +158,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::pow()
      */
     public function pow($base, $exponent)
@@ -146,11 +174,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::rand()
      */
     public function rand($n)
@@ -158,11 +190,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseAnd()
      */
     public function bitwiseAnd($first, $other)
@@ -170,11 +206,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::toString()
      */
     public function toString($value)
@@ -184,6 +224,7 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::hexDec()
      */
     public function hexDec($hexString)
@@ -191,11 +232,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::decHex()
      */
     public function decHex($decString)
@@ -203,11 +248,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::powmod()
      */
     public function powmod($base, $exponent, $modulus)
@@ -215,11 +264,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::isPrime()
      */
     public function isPrime($n)
@@ -227,11 +280,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::nextPrime()
      */
     public function nextPrime($currentPrime)
@@ -239,11 +296,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::inverseMod()
      */
     public function inverseMod($a, $m)
@@ -251,11 +312,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::jacobi()
      */
     public function jacobi($a, $p)
@@ -263,11 +328,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::intToString()
      */
     public function intToString($x)
@@ -275,11 +344,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::stringToInt()
      */
     public function stringToInt($s)
@@ -287,11 +360,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::digestInteger()
      */
     public function digestInteger($m)
@@ -299,11 +376,15 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapterInterface::gcd2()
      */
     public function gcd2($a, $m)
@@ -311,6 +392,36 @@ class DebugDecorator implements MathAdapterInterface
         $func = __METHOD__;
         $args = func_get_args();
 
-        return call_user_func(array($this, 'call'), $func, $args);
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
+    }
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\MathAdapterInterface::rightShift()
+     */
+    public function rightShift($number, $positions)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
+    }
+
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\MathAdapterInterface::leftShift()
+     */
+    public function leftShift($number, $positions)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
     }
 }

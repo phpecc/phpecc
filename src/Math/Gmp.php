@@ -21,13 +21,7 @@ class Gmp implements MathAdapterInterface
      */
     public function mod($number, $modulus)
     {
-        $res = gmp_div_r($number, $modulus);
-
-        if (gmp_cmp(0, $res) > 0) {
-            $res = gmp_add($modulus, $res);
-        }
-
-        return gmp_strval($res);
+        return gmp_strval(gmp_mod($number, $modulus));
     }
 
     /**
@@ -93,7 +87,7 @@ class Gmp implements MathAdapterInterface
         // Shift 1 right = div / 2
         return gmp_strval(gmp_div($number, gmp_pow(2, $positions)));
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapter::rightShift()
@@ -103,7 +97,7 @@ class Gmp implements MathAdapterInterface
         // Shift 1 right = mul * 2
         return gmp_strval(gmp_mul($number, gmp_pow(2, $positions)));
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapterInterface::toString()
