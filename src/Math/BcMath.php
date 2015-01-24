@@ -136,15 +136,6 @@ class BcMath implements MathAdapterInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::leftShift()
-     */
-    public function leftShift($number, $positions)
-    {
-        return BcMathUtils::bcleftshift($number, $positions);
-    }
-
-    /**
-     * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapter::toString()
      */
     public function toString($value)
