@@ -17,7 +17,7 @@ class UnsafePoint implements PointInterface
 
     private $infinity = false;
 
-    public function __construct(MathAdapter $adapter, CurveFpInterface $curve, $x, $y, $order, $infinity = false)
+    public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order, $infinity = false)
     {
         $this->adapter  = $adapter;
         $this->curve    = $curve;
@@ -25,6 +25,11 @@ class UnsafePoint implements PointInterface
         $this->y        = (string) $y;
         $this->order    = $order;
         $this->infinity = (bool) $infinity;
+    }
+
+    public function getAdapter()
+    {
+        return $this->adapter;
     }
 
     public function isInfinity()
@@ -84,6 +89,10 @@ class UnsafePoint implements PointInterface
      */
     public function add(PointInterface $addend)
     {
+        if (! $this->curve->equals($addend->getCurve())) {
+            throw new \RuntimeException("The Elliptic Curves do not match.");
+        }
+
         if ($addend->isInfinity()) {
             return $this;
         }
@@ -93,10 +102,6 @@ class UnsafePoint implements PointInterface
         }
 
         $math = $this->adapter;
-
-        if (! $this->curve->equals($addend->getCurve())) {
-            throw new \RuntimeException("The Elliptic Curves do not match.");
-        }
 
         if ($math->mod($math->cmp($this->x, $addend->getX()), $this->curve->getPrime()) == 0) {
             if ($math->mod($math->add($this->y, $addend->getY()), $this->curve->getPrime()) == 0) {
@@ -124,6 +129,10 @@ class UnsafePoint implements PointInterface
      */
     public function cmp(PointInterface $other)
     {
+        if ($other->isInfinity() && $this->isInfinity()) {
+            return 0;
+        }
+
         if ($other->isInfinity() || $this->isInfinity()) {
             return 1;
         }
@@ -131,6 +140,7 @@ class UnsafePoint implements PointInterface
         $math = $this->adapter;
         $equal = ($math->cmp($this->x, $other->getX()) == 0);
         $equal &= ($math->cmp($this->y, $other->getY()) == 0);
+        $equal &= $this->isInfinity() == $other->isInfinity();
         $equal &= $this->curve->equals($other->getCurve());
 
         if ($equal) {
@@ -166,39 +176,22 @@ class UnsafePoint implements PointInterface
             $this
         ];
 
-        $k = strlen($n) * 8;
+        $k = (strlen($n) * 8);
 
-        for ($i = $k - 1; $i > 0; $i--) {
+        for ($i = $k; $i > 0; $i--) {
             // Value of n[i]
-            $j = $this->getBitAt($n, $i);
+            $j = $this->getBitAt($n, $i - 1);
             $b = $this->adapter->bitwiseXor($j, 1);
-/*
-            echo 'before 1 :' . PHP_EOL;
-            echo (string) $r[0] . PHP_EOL;
-            echo (string) $r[1] . PHP_EOL;
-*/
-            $this->cswap($r[0], $r[1], $k, $b);
-/*
-            echo 'after 1 :' . PHP_EOL;
-            echo (string) $r[0] . PHP_EOL;
-            echo (string) $r[1] . PHP_EOL;
-*/
+
+            $this->cswap($r[0], $r[1], $k - 1, $b);
+
             $r[0] = $r[0]->add($r[1]);
             $r[1] = $r[1]->getDouble();
-/*
-            echo 'before 2 :' . PHP_EOL;
-            echo (string) $r[0] . PHP_EOL;
-            echo (string) $r[1] . PHP_EOL;
-*/
+
             $this->cswap($r[0], $r[1], $k, $b);
-/*
-            echo 'after 2 :' . PHP_EOL;
-            echo (string) $r[0] . PHP_EOL;
-            echo (string) $r[1] . PHP_EOL;
-*/
         }
 
-        return $r[1 - $b];
+        return $r[0];
     }
 
     private function cswap(self $a, self $b, $size, $cond)
@@ -211,7 +204,7 @@ class UnsafePoint implements PointInterface
 
     private function cswapValue(& $a, & $b, $size, $cond)
     {
-        $len = max(strlen($a), strlen($b), 1);
+        $len = max(strlen($a), strlen($b), 0);
         $a = str_pad($a, $len, '0', STR_PAD_LEFT);
         $b = str_pad($b, $len, '0', STR_PAD_LEFT);
 
@@ -253,8 +246,8 @@ class UnsafePoint implements PointInterface
      */
     public function getDouble()
     {
-        if ($this->infinity) {
-            return clone $this;
+        if ($this->isInfinity()) {
+            return $this->curve->getInfinity();
         }
 
         $math = $this->adapter;

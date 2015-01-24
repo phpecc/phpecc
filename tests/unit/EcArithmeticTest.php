@@ -6,6 +6,7 @@ use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Point;
 use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\CurveFpInterface;
+use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class EcArithmeticTest extends AbstractTestCase
 {
@@ -144,8 +145,21 @@ class EcArithmeticTest extends AbstractTestCase
         $p3 = $p1->mul($m);
 
         $this->assertFalse($p3->isInfinity());
+
         $this->assertEquals($ex, $math->mod($p3->getX(), $p));
         $this->assertEquals($ey, $math->mod($p3->getY(), $p));
+    }
+
+    /**
+     *
+     * @dataProvider getAdapters
+     */
+    public function testMulInfinity(MathAdapterInterface $math)
+    {
+        $c = new CurveFp(23, 1, 1, $math);
+        $i = $c->getInfinity();
+
+        $this->assertTrue($i->mul(1)->isInfinity());
     }
 
     /**
@@ -160,9 +174,10 @@ class EcArithmeticTest extends AbstractTestCase
         $check = $c->getInfinity();
 
         for ($i = 0; $i < 8; $i++) {
-            $p = $g->mul($i % 7);
+            $mul = $i % 7;
+            $p = $g->mul($mul);
 
-            $this->assertEquals($check, $p, "$g * $i = $p, expected $check");
+            $this->assertTrue($check->equals($p), "$g * $mul = $p, expected $check");
 
             $check = $g->add($check);
         }

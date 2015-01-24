@@ -211,6 +211,7 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * (non-PHPdoc)
+     *
      * @see \Mdanter\Ecc\MathAdapter::toString()
      */
     public function toString($value)
@@ -418,6 +419,20 @@ class DebugDecorator implements MathAdapterInterface
         return call_user_func(array(
             $this,
             'call',
+        ), $func, $args);
+    }
+
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\MathAdapterInterface::bitwiseXor()
+     */
+    public function bitwiseXor($first, $other)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(array(
+            $this,
+            'call'
         ), $func, $args);
     }
 }

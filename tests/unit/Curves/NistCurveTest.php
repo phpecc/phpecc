@@ -213,7 +213,7 @@ class NistCurveTest extends AbstractTestCase
                 'k' => '6140507067065001063065065565667405560006161556565665656654',
                 'e' => '968236873715988614170569073515315707566766479517',
                 'R' => '3342403536405981729393488334694600415596881826869351677613',
-                'S' => '5735822328888155254683894997897571951568553642892029982342',
+                'S' => '5735822328888155254683894997897571951568553642892029982342'
             ))));
     }
 
@@ -260,8 +260,8 @@ class NistCurveTest extends AbstractTestCase
     public function getAdaptersWithRand()
     {
         $rngs = array(
-            array(RandomGeneratorFactory::getUrandomGenerator()),
-            array(RandomGeneratorFactory::getBcMathRandomGenerator(false, true)),
+          array(RandomGeneratorFactory::getUrandomGenerator()),
+            array(RandomGeneratorFactory::getBcMathRandomGenerator(false, true))
         );
 
         if (! defined('HHVM_VERSION')) {
