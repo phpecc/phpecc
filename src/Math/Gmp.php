@@ -21,7 +21,7 @@ class Gmp implements MathAdapterInterface
      */
     public function mod($number, $modulus)
     {
-        return gmp_strval(gmp_mod($number, $modulus));
+        return gmp_strval(gmp_mod(gmp_init($number, 10), gmp_init($modulus, 10)));
     }
 
     /**
@@ -75,7 +75,7 @@ class Gmp implements MathAdapterInterface
      */
     public function bitwiseAnd($first, $other)
     {
-        return gmp_strval(gmp_and($first, $other));
+        return gmp_strval(gmp_and(gmp_init($first, 10), gmp_init($other, 10)));
     }
 
     /**
@@ -206,18 +206,17 @@ class Gmp implements MathAdapterInterface
     public function intToString($x)
     {
         $x = gmp_init($x, 10);
-        $math = $this;
 
         if (gmp_cmp($x, 0) == 0) {
             return chr(0);
         }
 
-        if ($math->cmp($x, 0) > 0) {
+        if (gmp_cmp($x, 0) > 0) {
             $result = "";
 
             while (gmp_cmp($x, 0) > 0) {
                 $q = gmp_div($x, 256, 0);
-                $r = $math->mod($x, 256);
+                $r = gmp_mod($x, 256);
                 $ascii = chr($r);
 
                 $result = $ascii.$result;
@@ -267,5 +266,10 @@ class Gmp implements MathAdapterInterface
         }
 
         return gmp_strval($b);
+    }
+
+    public function baseConvert($number, $from, $to)
+    {
+        return gmp_strval(gmp_init($number, $from), $to);
     }
 }

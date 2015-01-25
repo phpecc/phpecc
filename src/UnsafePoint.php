@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc;
 
+use Mdanter\Ecc\Util\NumberSize;
 class UnsafePoint implements PointInterface
 {
 
@@ -23,7 +24,7 @@ class UnsafePoint implements PointInterface
         $this->curve    = $curve;
         $this->x        = (string) $x;
         $this->y        = (string) $y;
-        $this->order    = $order;
+        $this->order    = $order !== null ? (string) $order : '0';
         $this->infinity = (bool) $infinity;
     }
 
@@ -50,7 +51,7 @@ class UnsafePoint implements PointInterface
     */
     public function getOrder()
     {
-        return $this->order;
+        return (string) $this->order;
     }
 
     public function setOrder($order)
@@ -94,11 +95,11 @@ class UnsafePoint implements PointInterface
         }
 
         if ($addend->isInfinity()) {
-            return $this;
+            return clone $this;
         }
 
         if ($this->isInfinity()) {
-            return $addend;
+            return clone $addend;
         }
 
         $math = $this->adapter;
@@ -163,82 +164,62 @@ class UnsafePoint implements PointInterface
      */
     public function mul($n)
     {
-        if ($this->order != null) {
+        if ($this->isInfinity()) {
+            return $this->curve->getInfinity();
+        }
+
+        if ($this->adapter->cmp($this->order, '0') > 0) {
             $n = $this->adapter->mod($n, $this->order);
         }
 
-        if ($this->adapter->cmp($n, 0) == 0) {
-            return new self($this->adapter, $this->curve, 0, 0, 0, true);
+        if ($this->adapter->cmp($n, '0') == 0) {
+            return $this->curve->getInfinity();
         }
 
         $r = [
-            new self($this->adapter, $this->curve, 0, 0, 0, true),
-            $this
+            $this->curve->getInfinity(),
+            clone $this
         ];
 
-        $k = (strlen($n) * 8);
+        $n = $this->adapter->baseConvert($n, 10, 2);
+        $k = strlen($n);
 
-        for ($i = $k; $i > 0; $i--) {
-            // Value of n[i]
-            $j = $this->getBitAt($n, $i - 1);
-            $b = $this->adapter->bitwiseXor($j, 1);
+        for ($i = 0; $i < $k; $i++) {
+            $j = $n[$i];
 
-            $this->cswap($r[0], $r[1], $k - 1, $b);
+            $this->cswap($r[0], $r[1], $j ^ 1);
 
             $r[0] = $r[0]->add($r[1]);
             $r[1] = $r[1]->getDouble();
 
-            $this->cswap($r[0], $r[1], $k, $b);
+            $this->cswap($r[0], $r[1], $j ^ 1);
         }
 
         return $r[0];
     }
 
-    private function cswap(self $a, self $b, $size, $cond)
+    private function cswap(self $a, self $b, $cond)
     {
-        $this->cswapValue($a->x, $b->x, $size, $cond);
-        $this->cswapValue($a->y, $b->y, $size, $cond);
-        $this->cswapValue($a->order, $b->order, $size, $cond);
-        $this->cswapValue($a->infinity, $b->infinity, $size, $cond);
+        $this->cswapValue($a->x, $b->x, $cond);
+        $this->cswapValue($a->y, $b->y, $cond);
+        $this->cswapValue($a->order, $b->order, $cond);
+        $this->cswapValue($a->infinity, $b->infinity, $cond);
     }
 
-    private function cswapValue(& $a, & $b, $size, $cond)
+    public function cswapValue(& $a, & $b, $cond)
     {
-        $len = max(strlen($a), strlen($b), 0);
-        $a = str_pad($a, $len, '0', STR_PAD_LEFT);
-        $b = str_pad($b, $len, '0', STR_PAD_LEFT);
+        $size = max(strlen($this->adapter->baseConvert($a, 10, 2)), strlen($this->adapter->baseConvert($b, 10, 2)));
 
-        $mask = $this->adapter->sub(0, $cond);
+        $mask = 1 - intval($cond);
+        $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
+        $mask = $this->adapter->baseConvert($mask, 2, 10);
 
-        for ($i = 0; $i < $size; $i++) {
-            $ba = $this->getBitAt($a, $i);
-            $bb = $this->getBitAt($b, $i);
+        $tA = $this->adapter->bitwiseAnd($a, $mask);
+        $tB = $this->adapter->bitwiseAnd($b, $mask);
 
-            $t = $this->adapter->bitwiseAnd($this->adapter->bitwiseXor($ba, $bb), $mask);
-
-            $a = $this->setBitAt($a, $i, $this->adapter->bitwiseXor($t, $ba));
-            $b = $this->setBitAt($b, $i, $this->adapter->bitwiseXor($t, $bb));
-        }
-    }
-
-    private function getBitAt($value, $position)
-    {
-        $value = $this->adapter->rightShift($value, $position);
-
-        return $this->adapter->bitwiseAnd($value, '1');
-    }
-
-    private function setBitAt($value, $position, $bitValue)
-    {
-        $mask = $this->adapter->leftShift(1, $position);
-        $bitValue = $this->adapter->leftShift($bitValue, $position);
-
-        return $this->adapter->bitwiseXor(
-            $value,
-            $this->adapter->bitwiseAnd(
-                $this->adapter->bitwiseXor($value, $bitValue),
-                $mask
-        ));
+        $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
+        $b = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tA);
+        $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
     }
 
     /*
@@ -271,23 +252,23 @@ class UnsafePoint implements PointInterface
 
     /*
      * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::__toString()
-     */
+    */
     public function __toString()
     {
         if ($this->infinity) {
-            return '(infinity)';
+            return '[ (infinity) on ' . (string) $this->curve . ' ]';
         }
 
-        return "(" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ")";
+        return "[ (" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ') on ' . (string) $this->curve . ' ]';
     }
 
     public function __debugInfo()
     {
         if ($this->infinity) {
             return [
-                'x' => 'inf',
-                'y' => 'inf',
-                'z' => 'inf',
+                'x' => 'inf (' . $this->x . ')',
+                'y' => 'inf (' . $this->y . ')',
+                'z' => 'inf (' . $this->order . ')',
                 'curve' => $this->curve
             ];
         }

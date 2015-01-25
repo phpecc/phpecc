@@ -435,4 +435,15 @@ class DebugDecorator implements MathAdapterInterface
             'call'
         ), $func, $args);
     }
+
+    public function baseConvert($value, $fromBase, $toBase)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
+    }
 }

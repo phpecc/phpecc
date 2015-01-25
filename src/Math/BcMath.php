@@ -401,4 +401,9 @@ class BcMath implements MathAdapterInterface
 
         return $b;
     }
+
+    public function baseConvert($number, $from, $to)
+    {
+        return BcMathUtils::dec2base(BcMathUtils::base2dec($number, $from), $to);
+    }
 }

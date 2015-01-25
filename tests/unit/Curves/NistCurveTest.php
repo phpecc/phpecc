@@ -196,9 +196,11 @@ class NistCurveTest extends AbstractTestCase
         $S = $math->hexDec($S);
 
         $generator = EccFactory::getNistCurves($math)->generator192();
-        $curve = EccFactory::getNistCurves($math)->curve192();
+
         $publicKey = $generator->getPublicKeyFrom($Qx, $Qy);
         $signer = new Signer($math);
+
+        $int = $math->digestInteger($msg);
 
         $actual = $signer->verify($publicKey, new Signature($R, $S), $math->digestInteger($msg));
 

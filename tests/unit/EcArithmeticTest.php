@@ -154,12 +154,15 @@ class EcArithmeticTest extends AbstractTestCase
      *
      * @dataProvider getAdapters
      */
-    public function testMulInfinity(MathAdapterInterface $math)
+    public function testMultiplyAssociative(MathAdapterInterface $math)
     {
         $c = new CurveFp(23, 1, 1, $math);
-        $i = $c->getInfinity();
+        $g = $c->getPoint(13, 7, null);
 
-        $this->assertTrue($i->mul(1)->isInfinity());
+        $a = $g->mul('1234564564564564564564564564564564646')->mul(10);
+        $b = $g->mul(10)->mul('1234564564564564564564564564564564646');
+
+        $this->assertTrue($a->equals($b));
     }
 
     /**

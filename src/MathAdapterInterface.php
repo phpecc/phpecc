@@ -188,4 +188,6 @@ interface MathAdapterInterface
      * @return int|string
      */
     public function gcd2($a, $m);
+
+    public function baseConvert($value, $fromBase, $toBase);
 }
