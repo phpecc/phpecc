@@ -4,7 +4,7 @@
   convertWarningsToExceptions="true" processIsolation="false"
   stopOnFailure="false">
   <php>
-    <const name="PHPUNIT_DEBUG" value="0" />
+    <const name="PHPUNIT_DEBUG" value="false" />
     <ini name="display_errors" value="On" />
     <ini name="error_reporting" value="32767" />
   </php>

@@ -217,9 +217,10 @@ class Gmp implements MathAdapterInterface
             while (gmp_cmp($x, 0) > 0) {
                 $q = gmp_div($x, 256, 0);
                 $r = gmp_mod($x, 256);
-                $ascii = chr($r);
 
-                $result = $ascii.$result;
+                $ascii = chr(gmp_strval($r));
+
+                $result = $ascii . $result;
                 $x = $q;
             }
 

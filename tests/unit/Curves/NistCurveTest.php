@@ -200,8 +200,6 @@ class NistCurveTest extends AbstractTestCase
         $publicKey = $generator->getPublicKeyFrom($Qx, $Qy);
         $signer = new Signer($math);
 
-        $int = $math->digestInteger($msg);
-
         $actual = $signer->verify($publicKey, new Signature($R, $S), $math->digestInteger($msg));
 
         $this->assertEquals($expected, $actual);
