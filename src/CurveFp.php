@@ -74,7 +74,7 @@ class CurveFp implements CurveFpInterface
 
     public function getInfinity()
     {
-        return new UnsafePoint($this->adapter, $this, 0, 0, 0, true);
+        return new Point($this->adapter, $this, 0, 0, 0, true);
     }
 
     /**
