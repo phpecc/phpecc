@@ -67,7 +67,7 @@ class RandomGeneratorFactory
     {
         return self::wrapAdapter(
             new HmacRandomNumberGenerator(
-                self::$adapter ?: MathAdapterFactory::getAdapter($debug),
+                MathAdapterFactory::getAdapter($debug),
                 $privateKey,
                 $messageHash,
                 $algo
