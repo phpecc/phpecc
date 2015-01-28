@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\Random;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\PrivateKeyInterface;
 use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Util\NumberSize;
 
 /**
  * Class HMACRandomNumberGenerator
@@ -149,24 +150,6 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * Get the byte size for a number
-     *
-     * @param $number
-     * @return float
-     */
-    private function getRoundedByteSize($number)
-    {
-        // Shameless rip of https://github.com/ircmaxell/RandomLib/blob/master/lib/RandomLib/Generator.php#L307-L311
-        $log2 = 0;
-
-        while ($number = $this->math->rightShift($number, 1)) {
-            $log2++;
-        }
-
-        return ceil($log2 / 8);
-    }
-
-    /**
      * Generate a nonce based on the given $max
      *
      * @param $max
@@ -175,7 +158,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     public function generate($max)
     {
         if (is_null($this->result)) {
-            $v     = 8 * ceil($this->getRoundedByteSize($max) / 8);
+            $v     = NumberSize::getCeiledByteSize($this->math, $max);
 
             while (true) {
                 $bytes = $this->bytes($v);
