@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\Signature;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\PrivateKeyInterface;
 use Mdanter\Ecc\PublicKeyInterface;
+use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 class Signer
 {
