@@ -4,7 +4,6 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\BcMath;
-use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 
 abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
@@ -26,7 +25,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 
         if ($extra == null) {
             return array(
-                array($adapter)
+                array($adapter),
             );
         }
 

@@ -3,20 +3,8 @@
 namespace Mdanter\Ecc\Serializer\PublicKey;
 
 use Mdanter\Ecc\PublicKeyInterface;
-use PHPASN1\ASN_Sequence;
-use PHPASN1\ASN_Integer;
-use Mdanter\Ecc\Curves\NamedCurveFp;
-use PHPASN1\ASN_ObjectIdentifier;
-use PHPASN1\ASN_BitString;
-use PHPASN1\ASN_Object;
-use Mdanter\Ecc\Curves\NistCurve;
-use Mdanter\Ecc\Curves\SecgCurve;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
-use Mdanter\Ecc\PointInterface;
-use Mdanter\Ecc\Curves\CurveFactory;
-use Mdanter\Ecc\GeneratorPoint;
-use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Serializer\PublicKey\Der\Formatter;
 use Mdanter\Ecc\Serializer\PublicKey\Der\Parser;
 
@@ -61,7 +49,7 @@ class DerPublicKeySerializer implements PublicKeySerializerInterface
 
     /**
      *
-     * @param PublicKeyInterface $key
+     * @param  PublicKeyInterface $key
      * @return string
      */
     public function serialize(PublicKeyInterface $key)

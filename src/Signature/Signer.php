@@ -5,59 +5,58 @@ namespace Mdanter\Ecc\Signature;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\PrivateKeyInterface;
 use Mdanter\Ecc\PublicKeyInterface;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 class Signer
 {
 
     /**
-     * 
+     *
      * @var MathAdapterInterface
      */
     private $adapter;
-    
+
     /**
-     * 
+     *
      * @param MathAdapterInterface $adapter
      */
     public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;
     }
-    
+
     public function sign(PrivateKeyInterface $key, $hash, $randomK)
     {
         $math = $this->adapter;
         $generator = $key->getPoint();
-        
+
         $n = $generator->getOrder();
         $k = $math->mod($randomK, $n);
         $p1 = $generator->mul($k);
         $r = $p1->getX();
-        
+
         if ($math->cmp($r, 0) == 0) {
             throw new \RuntimeException("Error: random number R = 0");
         }
-        
+
         $s = $math->mod(
             $math->mul(
-                $math->inverseMod($k, $n), 
+                $math->inverseMod($k, $n),
                 $math->mod($math->add($hash, $math->mul($key->getSecret(), $r)), $n)
-            ), 
+            ),
             $n
         );
-        
+
         if ($math->cmp($s, 0) == 0) {
             throw new \RuntimeException("Error: random number S = 0");
         }
-        
+
         return new Signature($r, $s);
     }
-    
+
     public function verify(PublicKeyInterface $key, SignatureInterface $signature, $hash)
     {
         $math = $this->adapter;
-        
+
         $generator = $key->getGenerator();
         $n = $generator->getOrder();
         $point = $key->getPoint();

@@ -50,13 +50,12 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      */
     private $result;
 
-
     /**
      * Construct a HMAC deterministic byte generator.
      *
      * @param MathAdapterInterface $math
-     * @param PrivateKeyInterface $privateKey
-     * @param string $messageHash
+     * @param PrivateKeyInterface  $privateKey
+     * @param string               $messageHash
      * @param $algo
      * @internal param string $personalString
      */
@@ -79,27 +78,29 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
         // Encode the private key and hash as binary, a seed for the DRBG
         $hex     = str_pad($math->decHex($privateKey->getSecret()), $hlen * 2, '0', STR_PAD_LEFT);
         $hash    = str_pad($math->decHex($messageHash), $hlen * 2, '0', STR_PAD_LEFT);
-        $entropy = pack("H*", $hex . $hash);
+        $entropy = pack("H*", $hex.$hash);
 
         $this->update($entropy);
+
         return $this;
     }
 
     /**
      * Return the hash of the given binary $data
-     * @param string $data
+     * @param  string $data
      * @return string
      */
     private function hash($data)
     {
         $hash = hash_hmac($this->algorithm, $data, $this->K, true);
+
         return $hash;
     }
 
     /**
      * Update the K and V values.
      *
-     * @param null|string $data
+     * @param  null|string $data
      * @return $this
      */
     private function update($data = null)
@@ -130,7 +131,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     /**
      * Load $numBytes bytes from the DRBG
      *
-     * @param int $numNumBytes
+     * @param  int    $numNumBytes
      * @return string
      */
     private function bytes($numNumBytes)
@@ -172,7 +173,6 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
                 // Otherwise derive another and try again.
                 $this->update(null);
-
             }
 
             $this->result = $rand;

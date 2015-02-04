@@ -8,10 +8,9 @@ function buildPath()
 define('TEST_DATA_DIR', buildPath(__DIR__, 'data'));
 
 if (getenv('MATH_LIB') === false) {
-    echo 'MATH_LIB env var is not defined, defaulting to GMP' . PHP_EOL;
+    echo 'MATH_LIB env var is not defined, defaulting to GMP'.PHP_EOL;
     define('MATH_LIB', 'gmp');
-}
-else {
+} else {
     define('MATH_LIB', getenv('MATH_LIB'));
 }
 

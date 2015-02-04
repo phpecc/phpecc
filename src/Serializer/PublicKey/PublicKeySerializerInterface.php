@@ -7,15 +7,15 @@ use Mdanter\Ecc\PublicKeyInterface;
 interface PublicKeySerializerInterface
 {
     /**
-     * 
-     * @param PublicKeyInterface $key
+     *
+     * @param  PublicKeyInterface $key
      * @return string
      */
     public function serialize(PublicKeyInterface $key);
-    
+
     /**
-     * 
-     * @param string $formattedKey
+     *
+     * @param  string             $formattedKey
      * @return PublicKeyInterface
      */
     public function parse($formattedKey);

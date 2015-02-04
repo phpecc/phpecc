@@ -2,16 +2,11 @@
 
 namespace Mdanter\Ecc\Console\Commands;
 
-use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Mdanter\Ecc\File\PemLoader;
 use Mdanter\Ecc\Console\Commands\Helper\KeyTextDumper;
-use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
 
 class ParsePrivateKeyCommand extends AbstractCommand
 {
@@ -24,7 +19,6 @@ class ParsePrivateKeyCommand extends AbstractCommand
             ->addOption('in', null, InputOption::VALUE_OPTIONAL,
                 'Input format (der or pem). Defaults to pem.', 'pem')
             ->addOption('rewrite', null, InputOption::VALUE_NONE, 'Regenerate and output the PEM data from the parsed key.', null);
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

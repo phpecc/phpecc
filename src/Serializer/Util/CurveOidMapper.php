@@ -2,8 +2,8 @@
 
 namespace Mdanter\Ecc\Serializer\Util;
 
+use FG\ASN1\Universal\ObjectIdentifier;
 use Mdanter\Ecc\Curves\NamedCurveFp;
-use PHPASN1\ASN_ObjectIdentifier;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
@@ -35,7 +35,7 @@ class CurveOidMapper
         NistCurve::NAME_P384 => self::NIST_P384_OID,
         NistCurve::NAME_P521 => self::NIST_P521_OID,
         SecgCurve::NAME_SECP_256K1 => self::SECP_256K1_OID,
-        SecgCurve::NAME_SECP_384R1 => self::SECP_384R1_OID
+        SecgCurve::NAME_SECP_384R1 => self::SECP_384R1_OID,
     );
 
     private static $sizeMap = array(
@@ -45,7 +45,7 @@ class CurveOidMapper
         NistCurve::NAME_P384 => 48,
         NistCurve::NAME_P521 => 66,
         SecgCurve::NAME_SECP_256K1 => 28,
-        SecgCurve::NAME_SECP_384R1 => 48
+        SecgCurve::NAME_SECP_384R1 => 48,
     );
 
     public static function getNames()
@@ -67,13 +67,13 @@ class CurveOidMapper
         if (array_key_exists($curve->getName(), self::$oidMap)) {
             $oidString = self::$oidMap[$curve->getName()];
 
-            return new ASN_ObjectIdentifier($oidString);
+            return new ObjectIdentifier($oidString);
         }
 
         throw new \RuntimeException('Unsupported curve type.');
     }
 
-    public static function getCurveFromOid(ASN_ObjectIdentifier $oid)
+    public static function getCurveFromOid(ObjectIdentifier $oid)
     {
         $oidString = $oid->getContent();
         $invertedMap = array_flip(self::$oidMap);
@@ -85,7 +85,7 @@ class CurveOidMapper
         throw new \RuntimeException('Invalid data: unsupported curve.');
     }
 
-    public static function getGeneratorFromOid(ASN_ObjectIdentifier $oid)
+    public static function getGeneratorFromOid(ObjectIdentifier $oid)
     {
         $oidString = $oid->getContent();
         $invertedMap = array_flip(self::$oidMap);

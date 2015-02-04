@@ -8,7 +8,7 @@ class DerFileLoader implements FileLoader
     {
         return file_get_contents($file);
     }
-    
+
     public function loadPrivateKeyData($file)
     {
         return file_get_contents($file);

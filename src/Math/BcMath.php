@@ -27,7 +27,6 @@ use Mdanter\Ecc\MathAdapterInterface;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-
 class BcMath implements MathAdapterInterface
 {
     /**
@@ -107,7 +106,7 @@ class BcMath implements MathAdapterInterface
     {
         return BcMathUtils::bcand($first, $other);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapter::rightShift()
@@ -116,7 +115,7 @@ class BcMath implements MathAdapterInterface
     {
         return BcMathUtils::bcrightshift($number, $positions);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\MathAdapter::rightShift()
@@ -153,7 +152,7 @@ class BcMath implements MathAdapterInterface
         $hex = BcMathUtils::bcdechex($dec);
 
         if (strlen($hex) % 2 !== 0) {
-            $hex = '0' . $hex;
+            $hex = '0'.$hex;
         }
 
         return $hex;

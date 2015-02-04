@@ -14,13 +14,13 @@ class DecHexCommand extends Command
     {
         $this->setName('dechex')
             ->addArgument('dec', InputArgument::REQUIRED, 'Decimal value');
-    }    
-    
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $hex = $input->getArgument('dec');
         $adapter = MathAdapterFactory::getAdapter();
-        
+
         $output->writeln($adapter->decHex($hex));
     }
 }

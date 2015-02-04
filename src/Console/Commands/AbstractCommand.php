@@ -18,62 +18,60 @@ abstract class AbstractCommand extends Command
     {
         if ($infile = $input->getOption($fileOptionName)) {
             if (! file_exists($infile)) {
-                $infile = getcwd() . '/' . $infile;
+                $infile = getcwd().'/'.$infile;
             }
-        
+
             $data = $loader->loadPrivateKeyData(realpath($infile));
-        }
-        else {
+        } else {
             $data = $input->getArgument($dataOptionName);
         }
-        
+
         return $data;
-    }    
-    
+    }
+
     protected function getPublicKeyData(InputInterface $input, FileLoader $loader, $fileOptionName, $dataOptionName)
     {
         if ($infile = $input->getOption($fileOptionName)) {
             if (! file_exists($infile)) {
-                $infile = getcwd() . '/' . $infile;
+                $infile = getcwd().'/'.$infile;
             }
-    
+
             $data = $loader->loadPublicKeyData(realpath($infile));
-        }
-        else {
+        } else {
             $data = $input->getArgument($dataOptionName);
         }
-    
+
         return $data;
     }
-    
+
     protected function getLoader(InputInterface $input, $formatOptionName)
     {
         if ($input->getOption($formatOptionName) == 'der') {
             return new DerFileLoader();
         }
-        
+
         return new PemLoader();
     }
-    
+
     protected function getPrivateKeySerializer(InputInterface $input, $formatOptionName)
     {
         $serializer = new DerPrivateKeySerializer();
-        
+
         if ($input->getOption($formatOptionName) == 'pem') {
             $serializer = new PemPrivateKeySerializer($serializer);
         }
-        
+
         return $serializer;
     }
-    
+
     protected function getPublicKeySerializer(InputInterface $input, $formatOptionName)
     {
         $serializer = new DerPublicKeySerializer();
-        
+
         if ($input->getOption($formatOptionName) == 'pem') {
             $serializer = new PemPublicKeySerializer($serializer);
         }
-        
+
         return $serializer;
     }
 }

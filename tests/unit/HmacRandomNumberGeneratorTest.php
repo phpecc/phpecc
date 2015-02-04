@@ -37,7 +37,6 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
 
     public function testDeterministicSign()
     {
-
         $f = file_get_contents(__DIR__.'/../data/rfc6979.json');
         $json = json_decode($f);
 
@@ -54,8 +53,6 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
             $k    = $drbg->generate($this->G->getOrder());
             $this->assertEquals(strtolower($test->expectedK), $this->math->decHex($k));
 
-
-
             $signer = new Signer($this->math);
             $sig    = $signer->sign($privateKey, $messageHash, $k);
 
@@ -65,5 +62,4 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
             $this->assertSame($test->expectedRS, $rHex.$sHex);
         }
     }
-
 }

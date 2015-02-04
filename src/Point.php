@@ -74,8 +74,8 @@ class Point implements PointInterface
      * @param  int|string           $y
      * @param  int|string           $order
      * @param  MathAdapterInterface $adapter
-     * @throws \RuntimeException when either the curve does not contain the given coordinates or
-     *                                   when order is not null and P(x, y) * order is not equal to infinity.
+     * @throws \RuntimeException    when either the curve does not contain the given coordinates or
+     *                                      when order is not null and P(x, y) * order is not equal to infinity.
      */
     public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order = null)
     {
@@ -93,7 +93,7 @@ class Point implements PointInterface
 
         if ($this->order != null && ! $this->mul($order)->equals(Points::infinity())) {
             throw new \RuntimeException(
-                "SELF * ORDER MUST EQUAL INFINITY. (".(string)$this->mul($order)." found instead)"
+                "SELF * ORDER MUST EQUAL INFINITY. (".(string) $this->mul($order)." found instead)"
             );
         }
     }
@@ -220,7 +220,7 @@ class Point implements PointInterface
 
     /**
      *
-     * @param  int|string $x
+     * @param  int|string        $x
      * @throws \RuntimeException
      */
     private function calcLeftMostBit($x)

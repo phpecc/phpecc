@@ -2,9 +2,6 @@
 
 namespace Mdanter\Ecc;
 
-use Mdanter\Ecc\EcMath;
-use Mdanter\Ecc\Signature\Signer;
-
 /**
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter
@@ -60,7 +57,7 @@ class PrivateKey implements PrivateKeyInterface
     {
         return $this->generator;
     }
-    
+
     public function getCurve()
     {
         return $this->generator->getCurve();
@@ -76,7 +73,7 @@ class PrivateKey implements PrivateKeyInterface
         $exchange = new EcDH($this->adapter);
         $exchange->setSenderKey($this);
         $exchange->setRecipientKey($recipientKey);
-        
+
         return $exchange;
     }
 }

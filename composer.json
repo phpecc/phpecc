@@ -26,14 +26,13 @@
    ],
    "require":{
        "php": ">=5.4.0",
-       "fgrosse/phpasn1": "dev-master#1033ca99966ee75b957d6f923dc21f4dad9b334b",
+       "fgrosse/phpasn1": "~1.0.0",
        "symfony/console": "~2.6"
    },
    "require-dev":{
       "phpunit/phpunit":"~4.1",
       "squizlabs/php_codesniffer":"~2",
-      "padraic/phpunit-extensions": "~1.0@dev",
-      "humbug/humbug": "dev-master"
+      "padraic/phpunit-extensions": "~1.0@dev"
    },
    "suggest":{
       "ext-gmp":"Improves drastically ECDSA library performance",
@@ -48,11 +47,5 @@
       "psr-4":{
          "Mdanter\\Ecc\\Tests\\":"tests/unit"
       }
-   },
-   "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:aztech-digital/php-asn1.git"
-        }
-    ]
+   }
 }

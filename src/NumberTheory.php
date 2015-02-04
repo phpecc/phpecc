@@ -24,11 +24,11 @@ namespace Mdanter\Ecc;
      * OTHER DEALINGS IN THE SOFTWARE.
      ************************************************************************/
 
-    /**
-     * Implementation of some number theoretic algorithms
-     *
-     * @author Matyas Danter
-     */
+/**
+ * Implementation of some number theoretic algorithms
+ *
+ * @author Matyas Danter
+ */
 
 /**
  * Rewritten to take a MathAdaptor to handle different environments. Has
@@ -36,7 +36,6 @@ namespace Mdanter\Ecc;
  *
  * @author Thomas Kerin
  */
-
 class NumberTheory
 {
     protected $adapter;

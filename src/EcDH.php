@@ -44,7 +44,7 @@ class EcDH implements EcDHInterface
      * @var MathAdapterInterface
      */
     private $adapter;
-    
+
     /**
      * Secret key between the two parties
      *
@@ -53,21 +53,20 @@ class EcDH implements EcDHInterface
     private $secretKey = null;
 
     /**
-     * 
+     *
      * @var PublicKeyInterface
      */
     private $recipientKey;
-    
+
     /**
-     * 
+     *
      * @var PrivateKeyInterface
      */
     private $senderKey;
-    
+
     /**
      * Initialize a new exchange from a generator point.
      *
-     * @param GeneratorPoint       $g       Generator used to create the private key secret.
      * @param MathAdapterInterface $adapter A math adapter instance.
      */
     public function __construct(MathAdapterInterface $adapter)
@@ -80,12 +79,12 @@ class EcDH implements EcDHInterface
      * @see \Mdanter\Ecc\EcDHInterface::calculateSharedKey()
      */
     public function calculateSharedKey()
-    {   
+    {
         $this->calculateKey();
-        
+
         return $this->secretKey->getX();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\EcDHInterface::setRecipientKey()
@@ -94,7 +93,7 @@ class EcDH implements EcDHInterface
     {
         $this->recipientKey = $key;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\EcDHInterface::setSenderKey()
@@ -103,7 +102,7 @@ class EcDH implements EcDHInterface
     {
         $this->senderKey = $key;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\EcDHInterface::encrypt()
@@ -163,17 +162,17 @@ class EcDH implements EcDHInterface
     private function calculateKey()
     {
         $this->checkExchangeState();
-        
+
         if ($this->secretKey === null) {
             $pubPoint = $this->recipientKey->getPoint();
-            $secret = $this->senderKey->getSecret(); 
-        
+            $secret = $this->senderKey->getSecret();
+
             $this->secretKey = $pubPoint->mul($secret);
         }
     }
 
     /**
-     * Verifies that the shared secret is known, or that the required keys are available 
+     * Verifies that the shared secret is known, or that the required keys are available
      * to calculate the shared secret.
      * @throws \RuntimeException when the exchange has not been made.
      */
@@ -182,11 +181,11 @@ class EcDH implements EcDHInterface
         if ($this->secretKey !== null) {
             return;
         }
-        
+
         if ($this->senderKey === null) {
             throw new \RuntimeException('Sender key not set.');
         }
-        
+
         if ($this->recipientKey === null) {
             throw new \RuntimeException('Recipient key not set.');
         }
