@@ -75,22 +75,21 @@ interface MathAdapterInterface
      * @return int|string
      */
     public function bitwiseAnd($first, $other);
-    
+
     /**
      * Shifts bits to the right
-     * @param int|string $number Number to shift
+     * @param int|string $number    Number to shift
      * @param int|string $positions Number of positions to shift
      */
     public function rightShift($number, $positions);
 
-
     /**
      * Shifts bits to the left
-     * @param int|string $number Number to shift
+     * @param int|string $number    Number to shift
      * @param int|string $positions Number of positions to shift
      */
     public function leftShift($number, $positions);
-    
+
     /**
      * Returns the string representation of a returned value.
      *
@@ -101,7 +100,7 @@ interface MathAdapterInterface
     /**
      * Converts an hexadecimal string to decimal.
      *
-     * @param  string $hexString
+     * @param  string     $hexString
      * @return int|string
      */
     public function hexDec($hexString);
@@ -154,7 +153,7 @@ interface MathAdapterInterface
     public function jacobi($a, $p);
 
     /**
-     * @param  int|string $x
+     * @param  int|string  $x
      * @return string|null
      */
     public function intToString($x);

@@ -2,31 +2,31 @@
 
 namespace Mdanter\Ecc\Serializer\Util\ASN;
 
-use PHPASN1\ASN_Construct;
-use PHPASN1\ASN_Object;
+use FG\ASN1\Construct;
+use FG\ASN1\Object;
 
-class ASNContext extends ASN_Construct
+class ASNContext extends Construct
 {
 
     private $contentLength;
-    
+
     private $identifierOctet;
-    
-    public function __construct($identifier, ASN_Object $object)
+
+    public function __construct($identifier, Object $object)
     {
         $this->identifierOctet = $identifier;
         $this->value = array();
         $this->contentLength = $object->getObjectLength();
-        
+
         $this->addChild($object);
     }
-    
+
     public function getType()
     {
         return $this->identifierOctet;
     }
 
-    protected function calculateContentLength() 
+    protected function calculateContentLength()
     {
         return $this->contentLength;
     }

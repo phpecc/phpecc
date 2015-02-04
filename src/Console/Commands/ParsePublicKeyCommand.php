@@ -2,20 +2,11 @@
 
 namespace Mdanter\Ecc\Console\Commands;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\KeyFormat\PKCS8Format;
 use Symfony\Component\Console\Input\InputOption;
-use Mdanter\Ecc\KeyFormat\X509PublicKeyFormatter;
-use Mdanter\Ecc\KeyFormat\PemPrivateKeyFormatter;
-use Mdanter\Ecc\KeyFormat\PemPublicKeyFormatter;
-use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
-use Mdanter\Ecc\File\PemLoader;
 use Symfony\Component\Console\Input\InputArgument;
 use Mdanter\Ecc\Console\Commands\Helper\KeyTextDumper;
-use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 
 class ParsePublicKeyCommand extends AbstractCommand
 {
@@ -41,7 +32,6 @@ class ParsePublicKeyCommand extends AbstractCommand
         $output->writeln('');
         KeyTextDumper::dumpPublicKey($output, $key);
         $output->writeln('');
-
 
         if ($input->getOption('rewrite')) {
             $output->writeln($parser->serialize($key));

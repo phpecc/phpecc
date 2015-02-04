@@ -17,7 +17,7 @@ class UncompressedPointSerializer implements PointSerializerInterface
     public function __construct(MathAdapterInterface $adapter, $debug = false)
     {
         $this->adapter = $adapter;
-        $this->debug = (bool)$debug;
+        $this->debug = (bool) $debug;
     }
 
     public function serialize(PointInterface $point)
@@ -25,10 +25,10 @@ class UncompressedPointSerializer implements PointSerializerInterface
         $length = CurveOidMapper::getByteSize($point->getCurve()) * 2;
 
         if ($this->debug) {
-            error_log('Detected length: ' . $length);
-            error_log('Unpadded:' . $this->adapter->decHex($point->getX()));
-            error_log('Unpadded len:' . strlen($this->adapter->decHex($point->getX())));
-            error_log('Padded: ' . str_pad($this->adapter->decHex($point->getX()), $length, '0', STR_PAD_LEFT));
+            error_log('Detected length: '.$length);
+            error_log('Unpadded:'.$this->adapter->decHex($point->getX()));
+            error_log('Unpadded len:'.strlen($this->adapter->decHex($point->getX())));
+            error_log('Padded: '.str_pad($this->adapter->decHex($point->getX()), $length, '0', STR_PAD_LEFT));
         }
 
         $hexString = '04';
@@ -36,8 +36,8 @@ class UncompressedPointSerializer implements PointSerializerInterface
         $hexString .= str_pad($this->adapter->decHex($point->getY()), $length, '0', STR_PAD_LEFT);
 
         if ($this->debug) {
-            error_log('Resulting length: ' . strlen($hexString));
-            error_log('Hex: ' . $hexString);
+            error_log('Resulting length: '.strlen($hexString));
+            error_log('Hex: '.$hexString);
         }
 
         return $hexString;

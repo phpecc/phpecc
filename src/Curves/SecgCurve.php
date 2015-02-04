@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc\Curves;
 
-use Mdanter\Ecc\CurveFp;
-use Mdanter\Ecc\GeneratorPoint;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
@@ -38,11 +36,11 @@ use Mdanter\Ecc\RandomNumberGeneratorInterface;
 class SecgCurve
 {
     private $adapter;
-    
-    CONST NAME_SECP_256K1 = 'secp256k1';
-    
+
+    const NAME_SECP_256K1 = 'secp256k1';
+
     const NAME_SECP_256R1 = 'secp256r1';
-    
+
     const NAME_SECP_384R1 = 'secp384r1';
 
     public function __construct(MathAdapterInterface $adapter)

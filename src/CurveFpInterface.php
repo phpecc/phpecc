@@ -36,18 +36,18 @@ interface CurveFpInterface
     /**
      * Returns the point identified by given coordinates.
      *
-     * @param  int|string $x
-     * @param  int|string $y
-     * @param  int|string $order
+     * @param  int|string     $x
+     * @param  int|string     $y
+     * @param  int|string     $order
      * @return PointInterface
      */
     public function getPoint($x, $y, $order = null);
 
     /**
      *
-     * @param int|string $x
-     * @param int|string $y
-     * @param string $order
+     * @param  int|string     $x
+     * @param  int|string     $y
+     * @param  string         $order
      * @return GeneratorPoint
      */
     public function getGenerator($x, $y, $order = null, RandomNumberGeneratorInterface $randomGenerator = null);

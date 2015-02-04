@@ -13,8 +13,8 @@ class ListCurvesCommand extends Command
     {
         $this->setName('list-curves')
             ->setDescription('Lists all the available curves.');
-    }    
-    
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(CurveOidMapper::getNames());

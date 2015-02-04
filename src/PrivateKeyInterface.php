@@ -33,22 +33,22 @@ namespace Mdanter\Ecc;
  */
 interface PrivateKeyInterface
 {
-    
+
     /**
      * @return PublicKeyInterface
      */
     public function getPublicKey();
-    
+
     /**
      * @return PointInterface
      */
     public function getPoint();
-    
+
     /**
      * @return int|string
      */
     public function getSecret();
-    
+
     /**
      * @return int|string
      */

@@ -72,10 +72,10 @@ class BcMathUtils
         $last = bcmod($dec, 16);
         $remain = bcdiv(bcsub($dec, $last), 16);
 
-        if($remain == 0) {
+        if ($remain == 0) {
             return dechex($last);
         } else {
-            return self::bcdechex($remain) . dechex($last);
+            return self::bcdechex($remain).dechex($last);
         }
     }
 
@@ -202,7 +202,7 @@ class BcMathUtils
 
         $value = $digits[intval($dec)].$value;
 
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -233,7 +233,7 @@ class BcMathUtils
             $dec = bcadd($dec, bcmul($element, $power));
         }
 
-        return (string)$dec;
+        return (string) $dec;
     }
 
     public static function digits($base)
@@ -251,7 +251,7 @@ class BcMathUtils
 
         $digits = substr($digits, 0, $base);
 
-        return (string)$digits;
+        return (string) $digits;
     }
 
     /**

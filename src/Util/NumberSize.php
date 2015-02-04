@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Util;
 
 use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class NumberSize
 {
@@ -33,8 +32,8 @@ class NumberSize
     /**
      * Returns the number of mininum required bytes to store a given number. Non-significant upper bits are not counted.
      *
-     * @param MathAdapterInterface $adapter
-     * @param int|string $x
+     * @param  MathAdapterInterface $adapter
+     * @param  int|string           $x
      * @return number
      *
      * @link https://www.openssl.org/docs/crypto/BN_num_bytes.html
@@ -48,8 +47,8 @@ class NumberSize
     /**
      * Returns the number of bits used to store this number. Non-singicant upper bits are not counted.
      *
-     * @param MathAdapterInterface $adapter
-     * @param int|string $x
+     * @param  MathAdapterInterface $adapter
+     * @param  int|string           $x
      * @return number
      *
      * @link https://www.openssl.org/docs/crypto/BN_num_bytes.html

@@ -44,7 +44,7 @@ interface PointInterface
     /**
      * Adds another point to the current one and returns the resulting point.
      *
-     * @param  PointInterface $addend
+     * @param  PointInterface          $addend
      * @return PointInterface|Infinity
      */
     public function add(PointInterface $addend);
@@ -69,7 +69,7 @@ interface PointInterface
     /**
      * Multiplies the point by a scalar value and returns the resulting point.
      *
-     * @param  mixed $multiplier
+     * @param  mixed                   $multiplier
      * @return PointInterface|Infinity
      */
     public function mul($multiplier);

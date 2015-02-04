@@ -43,11 +43,11 @@ interface EcDHInterface
 
     /**
      * Sets the sender's key.
-     * 
+     *
      * @param PrivateKeyInterface $key
      */
     public function setSenderKey(PrivateKeyInterface $key);
-    
+
     /**
      * Sets the recipient key.
      *
@@ -76,7 +76,7 @@ interface EcDHInterface
      * Generates an encrypted version of the given file, that can be decoded by the other
      * party.
      *
-     * @param  string $path
+     * @param  string      $path
      * @return string|null
      */
     public function encryptFile($path);
@@ -84,7 +84,7 @@ interface EcDHInterface
     /**
      * Decrypts a file that was encrypted by the other party.
      *
-     * @param  string $path
+     * @param  string      $path
      * @return string|null
      */
     public function decryptFile($path);

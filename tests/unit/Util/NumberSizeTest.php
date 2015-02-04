@@ -14,7 +14,7 @@ class NumberSizeTest extends AbstractTestCase
         return $this->_getAdapters(array(
             array('0', 0),
             array('0x100', 9),
-            array('0x00000432', 11)
+            array('0x00000432', 11),
         ));
     }
 
@@ -33,7 +33,7 @@ class NumberSizeTest extends AbstractTestCase
         return $this->_getAdapters(array(
             array('0', 0),
             array('0x00000432', 2),
-            array('0x2e224bd065fead1218f3608d4e74837b6096d11c4fff4139cd41d9df03cfcb270df7a9ae6f628819c3ae744db4189b1330cb2ee4eea7d5515b282dee59e21dcf1e', 65)
+            array('0x2e224bd065fead1218f3608d4e74837b6096d11c4fff4139cd41d9df03cfcb270df7a9ae6f628819c3ae744db4189b1330cb2ee4eea7d5515b282dee59e21dcf1e', 65),
         ));
     }
 

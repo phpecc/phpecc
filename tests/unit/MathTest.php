@@ -31,22 +31,22 @@ class MathTest extends AbstractTestCase
     }
 
     private $decHexMap = array(
-    	'00' => 0,
-		'01' => 1,
-		'02' => 2,
-		'03' => 3,
-		'04' => 4,
-		'05' => 5,
-		'06' => 6,
-		'07' => 7,
-		'08' => 8,
-		'09' => 9,
-		'0a' => 10,
-		'0b' => 11,
-		'0c' => 12,
-		'0d' => 13,
-		'0e' => 14,
-		'0f' => 15
+        '00' => 0,
+        '01' => 1,
+        '02' => 2,
+        '03' => 3,
+        '04' => 4,
+        '05' => 5,
+        '06' => 6,
+        '07' => 7,
+        '08' => 8,
+        '09' => 9,
+        '0a' => 10,
+        '0b' => 11,
+        '0c' => 12,
+        '0d' => 13,
+        '0e' => 14,
+        '0f' => 15,
     );
 
     /**
@@ -54,10 +54,10 @@ class MathTest extends AbstractTestCase
      */
     public function testDecHex(MathAdapterInterface $adapter)
     {
-    	foreach ($this->decHexMap as $hex => $dec) {
-    		$actual = $adapter->decHex($dec);
-    		$this->assertTrue($hex === $actual, "$hex === $actual");
-    	}
+        foreach ($this->decHexMap as $hex => $dec) {
+            $actual = $adapter->decHex($dec);
+            $this->assertTrue($hex === $actual, "$hex === $actual");
+        }
     }
 
     /**
@@ -65,10 +65,10 @@ class MathTest extends AbstractTestCase
      */
     public function testHexDec(MathAdapterInterface $adapter)
     {
-    	foreach ($this->decHexMap as $hex => $dec) {
-    		$actual = $adapter->hexDec($hex);
-    		$this->assertEquals($actual, $dec);
-    	}
+        foreach ($this->decHexMap as $hex => $dec) {
+            $actual = $adapter->hexDec($hex);
+            $this->assertEquals($actual, $dec);
+        }
     }
 
     /**

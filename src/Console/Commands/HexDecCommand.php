@@ -14,13 +14,13 @@ class HexDecCommand extends Command
     {
         $this->setName('hexdec')
             ->addArgument('hex', InputArgument::REQUIRED, 'Hex value');
-    }    
-    
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $hex = str_replace(' ', '', $input->getArgument('hex'));
         $adapter = MathAdapterFactory::getAdapter();
-        
+
         $output->writeln($adapter->hexDec($hex));
     }
 }

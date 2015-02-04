@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc\Signature;
 
-use Mdanter\Ecc\PublicKeyInterface;
-
 /**
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter

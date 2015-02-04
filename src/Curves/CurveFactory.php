@@ -10,9 +10,8 @@ class CurveFactory
     {
         $nistFactory = self::getNistFactory();
         $secpFactory = self::getSecpFactory();
-        
-        switch ($name)
-        {
+
+        switch ($name) {
             case NistCurve::NAME_P192:
                return $nistFactory->curve192();
             case NistCurve::NAME_P224:
@@ -32,15 +31,14 @@ class CurveFactory
             default:
                 throw new \RuntimeException('Unknown curve.');
         }
-    } 
-    
+    }
+
     public static function getGeneratorByName($name)
     {
         $nistFactory = self::getNistFactory();
         $secpFactory = self::getSecpFactory();
-    
-        switch ($name)
-        {
+
+        switch ($name) {
             case NistCurve::NAME_P192:
                 return $nistFactory->generator192();
             case NistCurve::NAME_P224:
@@ -61,12 +59,12 @@ class CurveFactory
                 throw new \RuntimeException('Unknown generator.');
         }
     }
-    
+
     private static function getNistFactory()
     {
         return new NistCurve(MathAdapterFactory::getAdapter());
     }
-    
+
     private static function getSecpFactory()
     {
         return new SecgCurve(MathAdapterFactory::getAdapter());

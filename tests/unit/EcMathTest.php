@@ -82,7 +82,7 @@ class EcMathTest extends AbstractTestCase
 
         $this->assertSame('4', $ec->result());
 
-        $ec ->add(2)
+        $ec->add(2)
             ->add(3);
 
         $this->assertSame('9', $ec->result());
@@ -95,8 +95,8 @@ class EcMathTest extends AbstractTestCase
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
-        $p2= new EcMath('2', $G, $math);
-        $p2= $p2->getPoint();
+        $p2 = new EcMath('2', $G, $math);
+        $p2 = $p2->getPoint();
 
         $p = new EcMath('2', $G, $math);
         $p = $p
@@ -107,7 +107,6 @@ class EcMathTest extends AbstractTestCase
         $this->assertInstanceOf('Mdanter\Ecc\PointInterface', $p);
         $this->assertEquals('103388573995635080359749164254216598308788835304023601477803095234286494993683', $p->getX());
         $this->assertEquals('37057141145242123013015316630864329550140216928701153669873286428255828810018', $p->getY());
-
     }
 
     /**
@@ -127,7 +126,6 @@ class EcMathTest extends AbstractTestCase
         $this->assertInstanceOf('Mdanter\Ecc\PointInterface', $p);
         $this->assertEquals('103388573995635080359749164254216598308788835304023601477803095234286494993683', $p->getX());
         $this->assertEquals('37057141145242123013015316630864329550140216928701153669873286428255828810018', $p->getY());
-
     }
 
     /**
@@ -206,7 +204,6 @@ class EcMathTest extends AbstractTestCase
 
         $e = new EcMath('2', $G, $math);
         $e->mod($P);
-
     }
 
     /**
@@ -238,7 +235,6 @@ class EcMathTest extends AbstractTestCase
         $this->assertEquals($ec1->result(), $result);
         $this->assertEquals($ec2->result(), $result);
         $this->assertEquals($ec3->result(), $result);
-
     }
 
     /**
@@ -260,7 +256,6 @@ class EcMathTest extends AbstractTestCase
             ->mul($G);
 
         $this->assertEquals($ec->result(), $ec2->result());
-
     }
 
     /**
@@ -299,7 +294,6 @@ class EcMathTest extends AbstractTestCase
         $this->assertSame('int', $ec->getType());
         $ec->toPoint();
         $this->assertSame('point', $ec->getType());
-
     }
 
     /**
@@ -332,7 +326,7 @@ class EcMathTest extends AbstractTestCase
     {
         $G  = EccFactory::getSecgCurves($math)->generator256k1();
         $ec = new EcMath('2', $G, $math);
-        $ec ->toPoint();
+        $ec->toPoint();
         $ec->cmp('2');
     }
 

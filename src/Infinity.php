@@ -32,12 +32,12 @@ final class Infinity implements PointInterface
     public function getCurve()
     {
         // Sry Leap's cough subsitute :D
-        return null;
+        return;
     }
 
     public function getOrder()
     {
-        return null;
+        return;
     }
 
     public function getX()

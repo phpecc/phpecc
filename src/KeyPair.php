@@ -5,21 +5,21 @@ namespace Mdanter\Ecc;
 class KeyPair
 {
     /**
-     * 
+     *
      * @var PrivateKeyInterface
      */
     private $privateKey;
-    
+
     /**
-     * 
+     *
      * @var PublicKeyInterface
      */
     private $publicKey;
-    
+
     /**
-     * 
-     * @param PrivateKeyInterface $privateKey
-     * @param PublicKeyInterface $publicKey
+     *
+     * @param  PrivateKeyInterface       $privateKey
+     * @param  PublicKeyInterface        $publicKey
      * @throws \InvalidArgumentException
      */
     public function __construct(PrivateKeyInterface $privateKey = null, PublicKeyInterface $publicKey = null)
@@ -27,15 +27,15 @@ class KeyPair
         if ($privateKey === null && $publicKey === null) {
             throw new \InvalidArgumentException('At least one key is required.');
         }
-        
+
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
-        
-        if ($this->publicKey !== null && ! $this->publicKey->equals($privateKey->getPublicKey())) {
+
+        if ($this->privateKey !== null && $this->publicKey !== null && ! $this->publicKey->equals($privateKey->getPublicKey())) {
             throw new \InvalidArgumentException('Private/public key mismatch.');
         }
     }
-    
+
     /**
      * @return PrivateKeyInterface
      * @throws \RuntimeException
@@ -45,21 +45,21 @@ class KeyPair
         if (! $this->hasPrivateKey()) {
             throw new \RuntimeException('Private key not available');
         }
-        
+
         return $this->privateKey;
     }
-    
+
     /**
-     * 
+     *
      * @return boolean
      */
     public function hasPrivateKey()
     {
         return $this->privateKey !== null;
     }
-    
+
     /**
-     * 
+     *
      * @return PublicKeyInterface
      */
     public function getPublicKey()
@@ -67,7 +67,7 @@ class KeyPair
         if (! $this->hasPublicKey()) {
             $this->publicKey = $this->privateKey->getPublicKey();
         }
-        
+
         return $this->publicKey;
-    }   
+    }
 }

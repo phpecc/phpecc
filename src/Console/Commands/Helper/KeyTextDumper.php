@@ -12,17 +12,17 @@ class KeyTextDumper
     {
         $output->writeln('<comment>Public key information</comment>');
         $output->writeln('');
-        $output->writeln('<info>Curve type</info> : ' . $key->getCurve()->getName());
-        $output->writeln('<info>X</info>          : ' . $key->getPoint()->getX());
-        $output->writeln('<info>Y</info>          : ' . $key->getPoint()->getY());
-        $output->writeln('<info>Order</info>      : ' . (empty($key->getPoint()->getOrder()) ? '<null>' : $key->getPoint()->getOrder()));
+        $output->writeln('<info>Curve type</info> : '.$key->getCurve()->getName());
+        $output->writeln('<info>X</info>          : '.$key->getPoint()->getX());
+        $output->writeln('<info>Y</info>          : '.$key->getPoint()->getY());
+        $output->writeln('<info>Order</info>      : '.(empty($key->getPoint()->getOrder()) ? '<null>' : $key->getPoint()->getOrder()));
     }
-    
+
     public static function dumpPrivateKey(OutputInterface $output, PrivateKeyInterface $key)
     {
         $output->writeln('<comment>Private key information</comment>');
         $output->writeln('');
-        $output->writeln('<info>Curve type</info> : ' . $key->getCurve()->getName());
-        $output->writeln('<info>Secret</info>     : ' . $key->getSecret());
+        $output->writeln('<info>Curve type</info> : '.$key->getCurve()->getName());
+        $output->writeln('<info>Secret</info>     : '.$key->getSecret());
     }
 }

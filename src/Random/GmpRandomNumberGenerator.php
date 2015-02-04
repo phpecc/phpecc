@@ -12,7 +12,7 @@ class GmpRandomNumberGenerator implements RandomNumberGeneratorInterface
             trigger_error('Using non-secure random number generator.', E_USER_WARNING);
         }
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\RandomNumberGeneratorInterface::generate()
@@ -21,11 +21,11 @@ class GmpRandomNumberGenerator implements RandomNumberGeneratorInterface
     {
         $random = gmp_strval(gmp_random());
         $small_rand = rand();
-    
+
         while (gmp_cmp($random, $max) > 0) {
             $random = gmp_div($random, $small_rand, GMP_ROUND_ZERO);
         }
-    
+
         return gmp_strval($random);
-    }   
+    }
 }

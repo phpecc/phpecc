@@ -5,7 +5,6 @@ use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\CurveFpInterface;
 use Mdanter\Ecc\GeneratorPoint;
 use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\Point;
 use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 /**
@@ -41,18 +40,17 @@ use Mdanter\Ecc\RandomNumberGeneratorInterface;
  */
 class NistCurve
 {
-    
+
     const NAME_P192 = 'nist-p192';
-    
+
     const NAME_P224 = 'nist-p224';
-    
+
     const NAME_P256 = 'nist-p256';
-    
+
     const NAME_P384 = 'nist-p384';
-    
+
     const NAME_P521 = 'nist-p521';
-    
-    
+
     private $adapter;
 
     public function __construct(MathAdapterInterface $adapter)

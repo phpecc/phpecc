@@ -2,23 +2,18 @@
 
 namespace Mdanter\Ecc\Serializer\PrivateKey;
 
-use PHPASN1\ASN_ObjectIdentifier;
-use PHPASN1\ASN_Sequence;
-use PHPASN1\ASN_Integer;
-use PHPASN1\ASN_BitString;
+use FG\ASN1\Object;
+use FG\ASN1\Universal\Sequence;
+use FG\ASN1\Universal\Integer;
+use FG\ASN1\Universal\BitString;
+use FG\ASN1\Universal\OctetString;
 use Mdanter\Ecc\PrivateKeyInterface;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
-use PHPASN1\ASN_Object;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
-use PHPASN1\ASN_OctetString;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
-use PHPASN1\ASN_UnknownConstructedObject;
-use Mdanter\Ecc\Util\NumberSize;
-use Mdanter\Ecc\Serializer\Util\OctetStringConverter;
 use Mdanter\Ecc\Serializer\Util\ASN\ASNContext;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
-use Mdanter\Ecc\Serializer\PublicKey\Der\Parser;
 
 /**
  * PEM Private key formatter
@@ -42,9 +37,9 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     public function serialize(PrivateKeyInterface $key)
     {
-        $privateKeyInfo = new ASN_Sequence(
-            new ASN_Integer(self::VERSION),
-            new ASN_OctetString($this->formatKey($key)),
+        $privateKeyInfo = new Sequence(
+            new Integer(self::VERSION),
+            new OctetString($this->formatKey($key)),
             new ASNContext(160, CurveOidMapper::getCurveOid($key->getPoint()->getCurve())),
             new ASNContext(161, $this->encodePubKey($key))
         );
@@ -54,7 +49,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     private function encodePubKey(PrivateKeyInterface $key)
     {
-        return new ASN_BitString(
+        return new BitString(
             $this->pubKeySerializer->getUncompressedKey($key->getPublicKey())
         );
     }
@@ -66,9 +61,9 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     public function parse($data)
     {
-        $asnObject = ASN_Object::fromBinary($data);
+        $asnObject = Object::fromBinary($data);
 
-        if (! ($asnObject instanceof ASN_Sequence) || $asnObject->getNumberofChildren() !== 4) {
+        if (! ($asnObject instanceof Sequence) || $asnObject->getNumberofChildren() !== 4) {
             throw new \RuntimeException('Invalid data.');
         }
 

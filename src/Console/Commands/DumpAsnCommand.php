@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use PHPASN1\ASN_Object;
+use FG\ASN1\Object;
 
 class DumpAsnCommand extends AbstractCommand
 {
@@ -25,8 +25,8 @@ class DumpAsnCommand extends AbstractCommand
         $loader = $this->getLoader($input, 'in');
         $data = $this->getPrivateKeyData($input, $loader, 'infile', 'data');
 
-        $asnObject = ASN_Object::fromBinary(base64_decode($data));
+        $asnObject = Object::fromBinary(base64_decode($data));
 
-        throw new \RuntimeException('Command not available.')
+        throw new \RuntimeException('Command not available.');
     }
 }

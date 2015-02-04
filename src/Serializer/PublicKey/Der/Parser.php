@@ -2,11 +2,9 @@
 
 namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 
+use FG\ASN1\Object;
+use FG\ASN1\Universal\Sequence;
 use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
-use PHPASN1\ASN_Object;
-use PHPASN1\ASN_ObjectIdentifier;
-use PHPASN1\ASN_Sequence;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\GeneratorPoint;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
@@ -29,9 +27,9 @@ class Parser
 
     public function parse($binaryData)
     {
-        $asnObject = ASN_Object::fromBinary($binaryData);
+        $asnObject = Object::fromBinary($binaryData);
 
-        if (! ($asnObject instanceof ASN_Sequence) || $asnObject->getNumberofChildren() != 2) {
+        if (! ($asnObject instanceof Sequence) || $asnObject->getNumberofChildren() != 2) {
             throw new \RuntimeException('Invalid data.');
         }
 

@@ -5,8 +5,6 @@ namespace Mdanter\Ecc\Tests\Curves;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Curves\SecgCurve;
-use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Signature\Signer;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 
@@ -58,29 +56,29 @@ class SecCurveTest extends AbstractTestCase
         $this->assertEquals($order, $generator->getOrder());
         $this->assertEquals($prime, $generator->getCurve()->getPrime());
     }
-    
+
     /**
-     * 
+     *
      * @dataProvider getAdapters
      */
     public function testSecp256r1EquivalenceToNistP192(MathAdapterInterface $adapter)
     {
         $secpFactory = EccFactory::getSecgCurves($adapter);
         $nistFactory = EccFactory::getNistCurves($adapter);
-        
+
         $signer = new Signer($adapter);
-        
+
         $secret = $adapter->hexDec('DC51D3866A15BACDE33D96F992FCA99DA7E6EF0934E7097559C27F1614C88A7F');
-        
+
         $secpKey = $secpFactory->generator256r1()->getPrivateKeyFrom($secret);
         $nistKey = $nistFactory->generator256()->getPrivateKeyFrom($secret);
-        
+
         $randomK = RandomGeneratorFactory::getRandomGenerator()->generate($secpKey->getPoint()->getOrder());
         $message = RandomGeneratorFactory::getRandomGenerator()->generate($secpKey->getPoint()->getOrder());
-        
+
         $sigSecp = $signer->sign($secpKey, $message, $randomK);
         $sigNist = $signer->sign($nistKey, $message, $randomK);
-        
+
         $this->assertEquals($sigNist->getR(), $sigSecp->getR());
         $this->assertEquals($sigNist->getS(), $sigSecp->getS());
     }

@@ -2,14 +2,11 @@
 
 namespace Mdanter\Ecc\Tests;
 
-use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Point;
 use Mdanter\Ecc\Points;
 use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\CurveFpInterface;
-use Mdanter\Ecc\Math\DebugDecorator;
 
 class EcArithmeticTest extends AbstractTestCase
 {
