@@ -4,7 +4,6 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Point;
-use Mdanter\Ecc\UnsafePoint;
 use Mdanter\Ecc\CurveFp;
 
 class PointTest extends \PHPUnit_Framework_TestCase

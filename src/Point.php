@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc;
 
-use Mdanter\Ecc\Math\BcMath;
-
 /**
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter
@@ -216,10 +214,6 @@ class Point implements PointInterface
      */
     public function mul($n)
     {
-        if ($this->adapter instanceof BcMath) {
-            return $this->mulUnsafe($n);
-        }
-
         return $this->mulSafe($n);
     }
 
@@ -254,35 +248,6 @@ class Point implements PointInterface
             $r[1] = $r[1]->getDouble();
 
             $this->cswap($r[0], $r[1], $j ^ 1);
-        }
-
-        return $r[0];
-    }
-
-    public function mulUnsafe($n)
-    {
-        if ($this->order != '0') {
-            $n = $this->adapter->mod($n, $this->order);
-        }
-
-        if ($this->adapter->cmp($n, 0) == 0) {
-            return $this->curve->getInfinity();
-        }
-
-        $r = [
-            new NullPoint($this->curve, $this->order),
-            $this
-        ];
-
-        $n = $this->adapter->baseConvert($n, 10, 2);
-        $k = strlen($n);
-
-        for ($i = 0; $i < $k; $i++) {
-            // Value of n[i]
-            $b = $n[$i] & 1;
-
-            $r[1 - $b] = $r[0]->add($r[1]);
-            $r[$b] = $r[$b]->getDouble();
         }
 
         return $r[0];

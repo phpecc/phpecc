@@ -8,7 +8,6 @@ php:
 
 env:
     - MATH_LIB=gmp
-    - MATH_LIB=bcmath
 
 before_script:
     - travis_retry composer selfupdate

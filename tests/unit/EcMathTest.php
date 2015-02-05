@@ -40,7 +40,8 @@ class EcMathTest extends AbstractTestCase
     public function testCreateFails(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
-        $fail = new EcMath('string', $G, $math);
+
+        new EcMath('string', $G, $math);
     }
 
     /**

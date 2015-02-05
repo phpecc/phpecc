@@ -4,7 +4,6 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\NumberTheory;
 use Mdanter\Ecc\MathAdapterInterface;
 
@@ -122,6 +121,8 @@ class NumberTheoryTest extends AbstractTestCase
         // Check that we can compress a key properly (tests $math->mod())
         foreach ($this->compression_data as $o) {
             $prefix = substr($o->decompressed, 0, 2); // will be 04.
+
+            $this->assertEquals('04', $prefix);
 
             // hex encoded (X,Y) coordinate of ECDSA public key.
             $x = substr($o->decompressed, 2, 64);
