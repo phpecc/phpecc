@@ -15,14 +15,14 @@ endif
 
 ifeq "$(STRICT)" "1"
 phpcs: pretest
-		vendor/bin/phpcs --standard=phpcs.xml src
+		vendor/bin/phpcs --standard=PSR2 src
 else
 phpcs: pretest
-		vendor/bin/phpcs --standard=phpcs.xml -n src
+		vendor/bin/phpcs --standard=PSR2 -n src
 endif
 
 phpcbf: pretest
-		vendor/bin/phpcbf --standard=phpcs.xml -n src
+		vendor/bin/phpcbf --standard=PSR2 -n src
 
 ifdef OCULAR_TOKEN
 scrutinizer: ocular

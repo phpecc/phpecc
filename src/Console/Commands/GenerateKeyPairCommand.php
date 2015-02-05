@@ -15,10 +15,19 @@ class GenerateKeyPairCommand extends AbstractCommand
     {
         $this
             ->setName('genkey')->setDescription('Generate a new keypair.')
-            ->addOption('curve', 'c', InputOption::VALUE_REQUIRED,
-                        'Curve name. Use \'list-curves\' for available names.')
-            ->addOption('out', 'p', InputOption::VALUE_OPTIONAL,
-                        'Output format (der or pem). Defaults to pem.', 'pem');
+            ->addOption(
+                'curve',
+                'c',
+                InputOption::VALUE_REQUIRED,
+                'Curve name. Use \'list-curves\' for available names.'
+            )
+            ->addOption(
+                'out',
+                'p',
+                InputOption::VALUE_OPTIONAL,
+                'Output format (der or pem). Defaults to pem.',
+                'pem'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

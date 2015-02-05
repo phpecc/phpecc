@@ -336,16 +336,16 @@ class Point implements PointInterface
         ];
     }
 }
-
+// @codingStandardsIgnoreStart
 /**
+ * PHPCS's PSR2 ruleset complains about one file per class, however, this class is not meant to be autoloadable.
+ *
  * RESERVED IMPLEMENTATION DETAIL !
  *
  * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
  * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
  * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
  * DO NOT USE THIS CLASS ! DO NOT USE THIS CLASS !
- *
- * @author thibaud
  *
  */
 class NullPoint implements PointInterface
@@ -452,3 +452,4 @@ class NullPoint implements PointInterface
         throw new \LogicException('I said, DO NOT USE THIS CLASS !');
     }
 }
+// @codingStandardsIgnoreEnd

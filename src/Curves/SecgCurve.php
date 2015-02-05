@@ -38,7 +38,7 @@ class SecgCurve
 
     const NAME_SECP_112R1 = 'secp112r1';
 
-    CONST NAME_SECP_256K1 = 'secp256k1';
+    const NAME_SECP_256K1 = 'secp256k1';
 
     const NAME_SECP_256R1 = 'secp256r1';
 

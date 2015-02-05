@@ -106,7 +106,8 @@ class EcMath implements EcMathInterface
             return $this;
         }
 
-        $this->handleOppositeTypes($addend,
+        $this->handleOppositeTypes(
+            $addend,
             function (PointInterface $data, $addendInt) {
                 // Multiply by generator and return a regular point to add to $data
                 $point = $this->generator->mul($addendInt);
@@ -137,7 +138,8 @@ class EcMath implements EcMathInterface
             return $this;
         }
 
-        $this->handleOppositeTypes($multiplicand,
+        $this->handleOppositeTypes(
+            $multiplicand,
             function (PointInterface $data, $multiplicandInt) {
                 return $data->mul($multiplicandInt);
             }
