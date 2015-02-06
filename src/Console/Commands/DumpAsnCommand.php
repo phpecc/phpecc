@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Console\Commands;
 
+use FG\ASN1\Identifier;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,7 +27,25 @@ class DumpAsnCommand extends AbstractCommand
         $data = $this->getPrivateKeyData($input, $loader, 'infile', 'data');
 
         $asnObject = Object::fromBinary(base64_decode($data));
+        $this->printObject($output, $asnObject);
+    }
 
-        throw new \RuntimeException('Command not available.');
+    function printObject(OutputInterface $output, Object $object, $depth=0) {
+        $treeSymbol = '';
+        $depthString = str_repeat('─', $depth);
+        if($depth > 0) {
+            $treeSymbol = '├';
+        }
+
+        $name = Identifier::getShortName($object->getType());
+        $output->write("{$treeSymbol}{$depthString}<comment>{$name}</comment> : ");
+        $output->writeln($object->__toString());
+
+        $content = $object->getContent();
+        if(is_array($content)) {
+            foreach ($object as $child) {
+                $this->printObject($output, $child, $depth+1);
+            }
+        }
     }
 }
