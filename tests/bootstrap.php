@@ -17,8 +17,10 @@ if (getenv('MATH_LIB') === false) {
 include buildPath(__DIR__, '..', 'vendor', 'autoload.php');
 
 $requiredNestingLevel = 150;
+
 if (extension_loaded('xdebug')) {
     $currentNestingLevel = intval(ini_get('xdebug.max_nesting_level'));
+
     if ($currentNestingLevel < $requiredNestingLevel) {
         fwrite(STDERR, <<<TEXT
 
@@ -39,3 +41,4 @@ TEXT
         ini_set('xdebug.max_nesting_level', $requiredNestingLevel);
     }
 }
+
