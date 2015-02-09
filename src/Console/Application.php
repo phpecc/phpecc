@@ -19,7 +19,7 @@ class Application extends ConsoleApplication
     {
         $commands = parent::getDefaultCommands();
 
-        //$commands[] = new DumpAsnCommand();
+        $commands[] = new DumpAsnCommand();
         $commands[] = new GenerateKeyPairCommand();
         $commands[] = new GeneratePublicKeyCommand();
         $commands[] = new ListCurvesCommand();
