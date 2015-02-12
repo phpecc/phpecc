@@ -104,11 +104,6 @@ class Point implements PointInterface
         return (string) $this->order;
     }
 
-    public function setOrder($order)
-    {
-        $this->order = (string) $order;
-    }
-
     /*
      * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getX()
     */
@@ -117,22 +112,12 @@ class Point implements PointInterface
         return $this->x;
     }
 
-    public function setX($x)
-    {
-        $this->x = (string) $x;
-    }
-
     /*
      * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getY()
     */
     public function getY()
     {
         return $this->y;
-    }
-
-    public function setY($y)
-    {
-        $this->y = (string) $y;
     }
 
     /*
@@ -214,11 +199,6 @@ class Point implements PointInterface
      */
     public function mul($n)
     {
-        return $this->mulSafe($n);
-    }
-
-    public function mulSafe($n)
-    {
         if ($this->isInfinity()) {
             return $this->curve->getInfinity();
         }
@@ -250,6 +230,8 @@ class Point implements PointInterface
             $this->cswap($r[0], $r[1], $j ^ 1);
         }
 
+        $r[0]->validate();
+
         return $r[0];
     }
 
@@ -275,6 +257,13 @@ class Point implements PointInterface
         $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
         $b = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tA);
         $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
+    }
+
+    private function validate()
+    {
+        if (! $this->infinity && ! $this->curve->contains($this->x, $this->y)) {
+            throw new \RuntimeException('Invalid point');
+        }
     }
 
     /*
