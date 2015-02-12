@@ -77,6 +77,15 @@ interface MathAdapterInterface
     public function bitwiseAnd($first, $other);
 
     /**
+     * Performs a logical XOR between two values.
+     *
+     * @param  int|string $first
+     * @param  int|string $other
+     * @return int|string
+     */
+    public function bitwiseXor($first, $other);
+
+    /**
      * Shifts bits to the right
      * @param int|string $number    Number to shift
      * @param int|string $positions Number of positions to shift
@@ -179,4 +188,6 @@ interface MathAdapterInterface
      * @return int|string
      */
     public function gcd2($a, $m);
+
+    public function baseConvert($value, $fromBase, $toBase);
 }

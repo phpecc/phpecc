@@ -13,9 +13,14 @@ class GeneratorPoint extends Point
 
     private $generator;
 
-    public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order = null,
-                                RandomNumberGeneratorInterface $generator = null)
-    {
+    public function __construct(
+        MathAdapterInterface $adapter,
+        CurveFpInterface $curve,
+        $x,
+        $y,
+        $order = null,
+        RandomNumberGeneratorInterface $generator = null
+    ) {
         $this->generator = $generator ?: RandomGeneratorFactory::getRandomGenerator();
 
         parent::__construct($adapter, $curve, $x, $y, $order);
@@ -46,7 +51,7 @@ class GeneratorPoint extends Point
 
         $point = $curve->getPoint($x, $y)->mul($n);
 
-        if (! $point->equals(Points::infinity())) {
+        if (! $point->isInfinity()) {
             return false;
         }
 

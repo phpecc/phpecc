@@ -77,7 +77,7 @@ class PublicKey implements PublicKeyInterface
             throw new \LogicException("Generator must have order.");
         }
 
-        if (! $point->mul($n)->equals(Points::infinity())) {
+        if (! $point->mul($n)->isInfinity()) {
             throw new \RuntimeException("Generator point order is bad.");
         }
 

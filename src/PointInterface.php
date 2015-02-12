@@ -37,10 +37,15 @@ namespace Mdanter\Ecc;
  * @todo Fix LSP break (possibly derive an extra interface, FinitePointInterface from current one, and move
  * coordinate-related ops to sub-interface).
  *
- * @author Matej Danter
  */
 interface PointInterface
 {
+
+    /**
+     * Returns true if instance is an non-finite point.
+     */
+    public function isInfinity();
+
     /**
      * Adds another point to the current one and returns the resulting point.
      *

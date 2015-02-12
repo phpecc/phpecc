@@ -15,7 +15,7 @@
 
 This library is a rewrite/update of Matyas Danter's ECC library. All credit goes to him.
 
-For more information on Elliptic Curve Cryptography please read [this fine article](http://www.matyasdanter.com/2010/12/elliptic-curve-php-oop-dsa-and-diffie-hellman/). 
+For more information on Elliptic Curve Cryptography please read [this fine article](http://www.matyasdanter.com/2010/12/elliptic-curve-php-oop-dsa-and-diffie-hellman/).
 
 ### License
 
@@ -25,7 +25,8 @@ This package is released under the MIT license.
 
 * PHP 5.4+
 * composer
-* ext-bcmath or ext-gmp. GMP math is highly recommended due to performance considerations (10x faster than BCMath)
+* ext-gmp
+* ext-mcrypt
 
 ### Installation
 
@@ -35,12 +36,12 @@ You can install this library via Composer :
 
 ### Contribute
 
-When sending in pull requests, please make sure to run the `make` command. 
+When sending in pull requests, please make sure to run the `make` command.
 
-The default target runs all PHPUnit (for both GMP and BCMath, so you need to install both extensions) and PHPCS tests. All tests
+The default target runs all PHPUnit and PHPCS tests. All tests
 must validate for your contribution to be accepted.
 
-It's also always a good idea to check the results of the [Scrutinizer analysis](https://scrutinizer-ci.com/g/mdanter/phpecc/) for your pull requests. 
+It's also always a good idea to check the results of the [Scrutinizer analysis](https://scrutinizer-ci.com/g/mdanter/phpecc/) for your pull requests.
 
 ### Usage
 

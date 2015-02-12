@@ -16,8 +16,13 @@ class ParsePrivateKeyCommand extends AbstractCommand
         $this->setName('parse-privkey')->setDescription('Parse a PEM encoded private key (without its delimiters).')
             ->addArgument('data', InputArgument::OPTIONAL)
             ->addOption('infile', null, InputOption::VALUE_OPTIONAL)
-            ->addOption('in', null, InputOption::VALUE_OPTIONAL,
-                'Input format (der or pem). Defaults to pem.', 'pem')
+            ->addOption(
+                'in',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Input format (der or pem). Defaults to pem.',
+                'pem'
+            )
             ->addOption('rewrite', null, InputOption::VALUE_NONE, 'Regenerate and output the PEM data from the parsed key.', null);
     }
 

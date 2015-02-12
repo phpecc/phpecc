@@ -9,11 +9,14 @@ use Mdanter\Ecc\Math\MathAdapterFactory;
 /**
  * Static factory class providing factory methods to work with NIST and SECG recommended curves.
  *
+ *
  */
 class EccFactory
 {
     /**
      * Selects and creates the most appropriate adapter for the running environment.
+     *
+     * @param $debug [optional] Set to true to get a trace of all mathematical operations
      *
      * @throws \RuntimeException
      * @return \Mdanter\Ecc\MathAdapterInterface

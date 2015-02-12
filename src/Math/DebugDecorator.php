@@ -56,12 +56,11 @@ class DebugDecorator implements MathAdapterInterface
             list(, $func) = explode('::', $func);
         }
 
-        $res = call_user_func_array(array(
-            $this->adapter,
-            $func,
-        ), $args);
+        $this->write($func.'('.implode(', ', $strArgs).')');
 
-        $this->writeln($func.'('.implode(', ', $strArgs).') => '.var_export($this->adapter->toString($res), true));
+        $res = call_user_func_array([ $this->adapter, $func ], $args);
+
+        $this->write(' => ' . var_export($this->adapter->toString($res), true) . PHP_EOL);
 
         return $res;
     }
@@ -213,7 +212,7 @@ class DebugDecorator implements MathAdapterInterface
     /**
      * (non-PHPdoc)
      *
-     * @see \Mdanter\Ecc\MathAdapterInterface::toString()
+     * @see \Mdanter\Ecc\MathAdapter::toString()
      */
     public function toString($value)
     {
@@ -420,6 +419,31 @@ class DebugDecorator implements MathAdapterInterface
         return call_user_func(array(
             $this,
             'call',
+        ), $func, $args);
+    }
+
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\MathAdapterInterface::bitwiseXor()
+     */
+    public function bitwiseXor($first, $other)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
+    }
+
+    public function baseConvert($value, $fromBase, $toBase)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(array(
+            $this,
+            'call'
         ), $func, $args);
     }
 }

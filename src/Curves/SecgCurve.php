@@ -31,11 +31,12 @@ use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 /**
  *
- * @author Jan Moritz Lindemann
  */
 class SecgCurve
 {
     private $adapter;
+
+    const NAME_SECP_112R1 = 'secp112r1';
 
     const NAME_SECP_256K1 = 'secp256k1';
 
@@ -46,6 +47,26 @@ class SecgCurve
     public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;
+    }
+
+    public function curve112r1()
+    {
+        $p = $this->adapter->hexDec('0xDB7C2ABF62E35E668076BEAD208B');
+        $a = $this->adapter->hexDec('0xDB7C2ABF62E35E668076BEAD2088');
+        $b = $this->adapter->hexDec('0x659EF8BA043916EEDE8911702B22');
+
+        return new NamedCurveFp(self::NAME_SECP_112R1, $p, $a, $b, $this->adapter);
+    }
+
+    public function generator112r1(RandomNumberGeneratorInterface $randomGenerator = null)
+    {
+        $curve = $this->curve112r1();
+
+        $order = $this->adapter->hexDec('0xDB7C2ABF62E35E7628DFAC6561C5');
+        $x = $this->adapter->hexDec('0x09487239995A5EE76B55F9C2F098');
+        $y = $this->adapter->hexDec('0xA89CE5AF8724C0A23E0E0FF77500');
+
+        return $curve->getGenerator($x, $y, $order, $randomGenerator);
     }
 
     public function curve256k1()

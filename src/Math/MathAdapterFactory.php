@@ -27,22 +27,13 @@ class MathAdapterFactory
         return self::wrapAdapter($adapter, (bool) $debug);
     }
 
-    public static function getBcMathAdapter($debug = false)
-    {
-        if (self::canLoad('bcmath')) {
-            return self::wrapAdapter(new BcMath(), $debug);
-        }
-
-        throw new \RuntimeException('Please install either GMP extension.');
-    }
-
     public static function getGmpAdapter($debug = false)
     {
         if (self::canLoad('gmp')) {
             return self::wrapAdapter(new Gmp(), $debug);
         }
 
-        throw new \RuntimeException('Please install either GMP extension.');
+        throw new \RuntimeException('Please install GMP extension.');
     }
 
     private static function getAdapterClass($extension = null)
@@ -51,11 +42,7 @@ class MathAdapterFactory
             return '\Mdanter\Ecc\Math\Gmp';
         }
 
-        if (self::canLoad('bcmath')) {
-            return '\Mdanter\Ecc\Math\BcMath';
-        }
-
-        throw new \RuntimeException('Please install either GMP or BCMath extensions.');
+        throw new \RuntimeException('Please install GMP extension.');
     }
 
     private static function canLoad($target)

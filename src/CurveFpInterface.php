@@ -29,7 +29,6 @@ namespace Mdanter\Ecc;
 /**
  * This is the contract for implementing CurveFp (EC prime finite-field).
  *
- * @author Matej Danter
  */
 interface CurveFpInterface
 {
@@ -42,6 +41,8 @@ interface CurveFpInterface
      * @return PointInterface
      */
     public function getPoint($x, $y, $order = null);
+
+    public function getInfinity();
 
     /**
      *

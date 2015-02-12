@@ -72,6 +72,11 @@ class CurveFp implements CurveFpInterface
         $this->adapter = $adapter;
     }
 
+    public function getInfinity()
+    {
+        return new Point($this->adapter, $this, 0, 0, 0, true);
+    }
+
     /**
      * (non-PHPdoc)
      * @see \Mdanter\Ecc\CurveFpInterface::getPoint()
@@ -161,5 +166,14 @@ class CurveFp implements CurveFpInterface
     public function __toString()
     {
         return 'curve('.$this->a.', '.$this->b.', '.$this->prime.')';
+    }
+
+    public function __debugInfo()
+    {
+        return [
+            'a' => (string) $this->a,
+            'b' => (string) $this->b,
+            'prime' => (string) $this->prime
+        ];
     }
 }

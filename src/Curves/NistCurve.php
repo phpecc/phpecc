@@ -36,7 +36,6 @@ use Mdanter\Ecc\RandomNumberGeneratorInterface;
  * - fields are Mersenne primes, i.e.
  * for some p, Mersenne_prine = 2^p - 1
  *
- * @author Matej Danter
  */
 class NistCurve
 {

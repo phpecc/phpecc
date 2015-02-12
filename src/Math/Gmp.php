@@ -12,7 +12,7 @@ class Gmp implements MathAdapterInterface
      */
     public function cmp($first, $other)
     {
-        return gmp_cmp($first, $other);
+        return gmp_cmp(gmp_init($first, 10), gmp_init($other, 10));
     }
 
     /**
@@ -21,7 +21,7 @@ class Gmp implements MathAdapterInterface
      */
     public function mod($number, $modulus)
     {
-        return gmp_strval(gmp_mod($number, $modulus));
+        return gmp_strval(gmp_mod(gmp_init($number, 10), gmp_init($modulus, 10)));
     }
 
     /**
@@ -30,7 +30,7 @@ class Gmp implements MathAdapterInterface
      */
     public function add($augend, $addend)
     {
-        return gmp_strval(gmp_add($augend, $addend));
+        return gmp_strval(gmp_add(gmp_init($augend, 10), gmp_init($addend, 10)));
     }
 
     /**
@@ -39,7 +39,7 @@ class Gmp implements MathAdapterInterface
      */
     public function sub($minuend, $subtrahend)
     {
-        return gmp_strval(gmp_sub($minuend, $subtrahend));
+        return gmp_strval(gmp_sub(gmp_init($minuend, 10), gmp_init($subtrahend, 10)));
     }
 
     /**
@@ -48,7 +48,7 @@ class Gmp implements MathAdapterInterface
      */
     public function mul($multiplier, $multiplicand)
     {
-        return gmp_strval(gmp_mul($multiplier, $multiplicand));
+        return gmp_strval(gmp_mul(gmp_init($multiplier, 10), gmp_init($multiplicand, 10)));
     }
 
     /**
@@ -57,7 +57,7 @@ class Gmp implements MathAdapterInterface
      */
     public function div($dividend, $divisor)
     {
-        return gmp_strval(gmp_div($dividend, $divisor));
+        return gmp_strval(gmp_div(gmp_init($dividend, 10), gmp_init($divisor, 10)));
     }
 
     /**
@@ -66,7 +66,7 @@ class Gmp implements MathAdapterInterface
      */
     public function pow($base, $exponent)
     {
-        return gmp_strval(gmp_pow($base, $exponent));
+        return gmp_strval(gmp_pow(gmp_init($base, 10), $exponent));
     }
 
     /**
@@ -75,7 +75,7 @@ class Gmp implements MathAdapterInterface
      */
     public function bitwiseAnd($first, $other)
     {
-        return gmp_strval(gmp_and($first, $other));
+        return gmp_strval(gmp_and(gmp_init($first, 10), gmp_init($other, 10)));
     }
 
     /**
@@ -90,17 +90,26 @@ class Gmp implements MathAdapterInterface
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapter::rightShift()
+     * @see \Mdanter\Ecc\MathAdapter::bitwiseXor()
      */
-    public function leftShift($number, $positions)
+    public function bitwiseXor($first, $other)
     {
-        // Shift 1 right = mul * 2
-        return gmp_strval(gmp_mul($number, gmp_pow(2, $positions)));
+        return gmp_strval(gmp_xor(gmp_init($first, 10), gmp_init($other, 10)));
     }
 
     /**
      * (non-PHPdoc)
-     * @see \Mdanter\Ecc\MathAdapterInterface::toString()
+     * @see \Mdanter\Ecc\MathAdapter::leftShift()
+     */
+    public function leftShift($number, $positions)
+    {
+        // Shift 1 left = mul by 2
+        return gmp_strval(gmp_mul(gmp_init($number), gmp_pow(2, $positions)));
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\MathAdapter::toString()
      */
     public function toString($value)
     {
@@ -145,7 +154,7 @@ class Gmp implements MathAdapterInterface
             throw new \InvalidArgumentException("Negative exponents ($exponent) not allowed.");
         }
 
-        return gmp_strval(gmp_powm($base, $exponent, $modulus));
+        return gmp_strval(gmp_powm(gmp_init($base, 10), gmp_init($exponent, 10), gmp_init($modulus, 10)));
     }
 
     /**
@@ -154,7 +163,7 @@ class Gmp implements MathAdapterInterface
      */
     public function isPrime($n)
     {
-        $prob = gmp_prob_prime($n);
+        $prob = gmp_prob_prime(gmp_init($n, 10));
 
         if ($prob > 0) {
             return true;
@@ -169,7 +178,7 @@ class Gmp implements MathAdapterInterface
      */
     public function nextPrime($starting_value)
     {
-        return gmp_strval(gmp_nextprime($starting_value));
+        return gmp_strval(gmp_nextprime(gmp_init($starting_value, 10)));
     }
 
     /**
@@ -178,7 +187,7 @@ class Gmp implements MathAdapterInterface
      */
     public function inverseMod($a, $m)
     {
-        return gmp_strval(gmp_invert($a, $m));
+        return gmp_strval(gmp_invert(gmp_init($a, 10), gmp_init($m, 10)));
     }
 
     /**
@@ -187,7 +196,7 @@ class Gmp implements MathAdapterInterface
      */
     public function jacobi($a, $n)
     {
-        return gmp_strval(gmp_jacobi($a, $n));
+        return gmp_strval(gmp_jacobi(gmp_init($a, 10), gmp_init($n, 10)));
     }
 
     /**
@@ -196,21 +205,22 @@ class Gmp implements MathAdapterInterface
      */
     public function intToString($x)
     {
-        $math = $this;
+        $x = gmp_init($x, 10);
 
         if (gmp_cmp($x, 0) == 0) {
             return chr(0);
         }
 
-        if ($math->cmp($x, 0) > 0) {
+        if (gmp_cmp($x, 0) > 0) {
             $result = "";
 
             while (gmp_cmp($x, 0) > 0) {
                 $q = gmp_div($x, 256, 0);
-                $r = $math->mod($x, 256);
-                $ascii = chr($r);
+                $r = gmp_mod($x, 256);
 
-                $result = $ascii.$result;
+                $ascii = chr(gmp_strval($r));
+
+                $result = $ascii . $result;
                 $x = $q;
             }
 
@@ -226,8 +236,9 @@ class Gmp implements MathAdapterInterface
     {
         $math = $this;
         $result = 0;
+        $sLen = strlen($s);
 
-        for ($c = 0; $c < strlen($s); $c ++) {
+        for ($c = 0; $c < $sLen; $c ++) {
             $result = $math->add($math->mul(256, $result), ord($s[$c]));
         }
 
@@ -256,5 +267,10 @@ class Gmp implements MathAdapterInterface
         }
 
         return gmp_strval($b);
+    }
+
+    public function baseConvert($number, $from, $to)
+    {
+        return gmp_strval(gmp_init($number, $from), $to);
     }
 }

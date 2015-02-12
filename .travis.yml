@@ -8,11 +8,10 @@ php:
 
 env:
     - MATH_LIB=gmp
-    - MATH_LIB=bcmath
 
 before_script:
-    - composer selfupdate
-    - composer install --prefer-source --dev
+    - travis_retry composer selfupdate
+    - travis_retry composer install --prefer-source --dev
 
 script:
     - vendor/bin/phpunit --coverage-clover=coverage.clover

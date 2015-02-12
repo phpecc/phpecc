@@ -32,7 +32,8 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
     {
         $privateKey  = new PrivateKey($this->math, $this->G, 1);
         $hash = hash('sha256', 'message');
-        $drbg = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $hash, 'sha256a');
+
+        RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $hash, 'sha256a');
     }
 
     public function testDeterministicSign()
@@ -40,7 +41,7 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
         $f = file_get_contents(__DIR__.'/../data/rfc6979.json');
         $json = json_decode($f);
 
-        foreach ($json->test as $c => $test) {
+        foreach ($json->test as $test) {
 
             // Initialize private key and message hash (decimal)
             $privateKey  = new PrivateKey($this->math, $this->G, $this->math->hexDec($test->privKey));

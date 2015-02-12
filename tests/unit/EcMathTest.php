@@ -40,7 +40,8 @@ class EcMathTest extends AbstractTestCase
     public function testCreateFails(MathAdapterInterface $math)
     {
         $G = EccFactory::getSecgCurves($math)->generator256k1();
-        $fail = new EcMath('string', $G, $math);
+
+        new EcMath('string', $G, $math);
     }
 
     /**
@@ -232,9 +233,9 @@ class EcMathTest extends AbstractTestCase
         $ec3->mul($G)
             ->add($pubKey);
 
-        $this->assertEquals($ec1->result(), $result);
-        $this->assertEquals($ec2->result(), $result);
-        $this->assertEquals($ec3->result(), $result);
+        $this->assertTrue($ec1->result()->equals($result));
+        $this->assertTrue($ec2->result()->equals($result));
+        $this->assertTrue($ec3->result()->equals($result));
     }
 
     /**
@@ -255,7 +256,7 @@ class EcMathTest extends AbstractTestCase
             ->mul(2)
             ->mul($G);
 
-        $this->assertEquals($ec->result(), $ec2->result());
+        $this->assertTrue($ec->result()->equals($ec2->result()));
     }
 
     /**
@@ -280,7 +281,7 @@ class EcMathTest extends AbstractTestCase
         $this->assertEquals('103388573995635080359749164254216598308788835304023601477803095234286494993683', $p->result()->getX());
         $this->assertEquals('37057141145242123013015316630864329550140216928701153669873286428255828810018', $p->result()->getY());
 
-        $this->assertEquals($int->result(), $p->result());
+        $this->assertTrue($int->result()->equals($p->result()));
     }
 
     /**

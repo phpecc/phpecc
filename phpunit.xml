@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php" colors="true"
-  stopOnFailure="true">
+  convertErrorsToExceptions="true" convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true" processIsolation="false"
+  stopOnFailure="false">
   <php>
-    <const name="PHPUNIT_DEBUG" value="false"/>
+    <const name="PHPUNIT_DEBUG" value="false" />
     <ini name="display_errors" value="On" />
     <ini name="error_reporting" value="32767" />
   </php>
@@ -18,11 +20,8 @@
       logIncompleteSkipped="true" />
   </logging>
   <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/</directory>
-            <exclude>
-
-            </exclude>
-        </whitelist>
-    </filter>
+    <whitelist addUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">src/</directory>
+    </whitelist>
+  </filter>
 </phpunit>

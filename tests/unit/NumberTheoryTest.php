@@ -4,8 +4,8 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\NumberTheory;
+use Mdanter\Ecc\MathAdapterInterface;
 
 class NumberTheoryTest extends AbstractTestCase
 {
@@ -32,72 +32,42 @@ class NumberTheoryTest extends AbstractTestCase
     }
 
     /**
+     * @dataProvider getAdapters
      * @expectedException \LogicException
      */
-    public function testSqrtDataWithNoRootsBcMath()
+    public function testSqrtDataWithNoRoots(MathAdapterInterface $adapter)
     {
-        $this->math = new \Mdanter\Ecc\Math\BcMath();
-        $this->theory = new \Mdanter\Ecc\NumberTheory($this->math);
+        $this->theory = new \Mdanter\Ecc\NumberTheory($adapter);
 
         foreach ($this->sqrt_data->no_root as $r) {
             $this->theory->squareRootModP($r->a, $r->p);
         }
     }
     /**
-     * @expectedException \LogicException
+     * @dataProvider getAdapters
      */
-    public function testSqrtDataWithNoRootsGmp()
+    public function testSqrtDataWithRoots(MathAdapterInterface $adapter)
     {
-        $this->math = new \Mdanter\Ecc\Math\Gmp();
-        $this->theory = new \Mdanter\Ecc\NumberTheory($this->math);
-
-        foreach ($this->sqrt_data->no_root as $r) {
-            $this->theory->squareRootModP($r->a, $r->p);
-        }
-    }
-
-    public function testSqrtDataWithRootsGmp()
-    {
-        $this->math = new \Mdanter\Ecc\Math\Gmp();
-        $this->theory = new \Mdanter\Ecc\NumberTheory($this->math);
+        $this->theory = new \Mdanter\Ecc\NumberTheory($adapter);
 
         foreach ($this->sqrt_data->has_root as $r) {
             $root1 = $this->theory->squareRootModP($r->a, $r->p);
-            $root2 = $this->math->sub($r->p, $root1);
+            $root2 = $adapter->sub($r->p, $root1);
             $this->assertTrue(in_array($root1, $r->res));
-            $this->assertTrue(in_array($root1, $r->res));
+            $this->assertTrue(in_array($root2, $r->res));
         }
     }
+
     /**
-     * This runs into an error..
+     * @dataProvider getAdapters
      */
-    public function testSqrtDataWithRootsBcMath()
+    public function testCompressionConsistency(MathAdapterInterface $adapter)
     {
-        $this->math = new \Mdanter\Ecc\Math\BcMath();
-        $this->theory = new \Mdanter\Ecc\NumberTheory($this->math);
-
-        foreach ($this->sqrt_data->has_root as $r) {
-            $root1 = $this->theory->squareRootModP($r->a, $r->p);
-            $root2 = $this->math->sub($r->p, $root1);
-            $this->assertTrue(in_array($root1, $r->res));
-            $this->assertTrue(in_array($root1, $r->res));
-        }
+        $this->theory = new \Mdanter\Ecc\NumberTheory($adapter);
+        $this->_doCompressionConsistence($adapter, $this->theory);
     }
 
-    public function testBcmathCompressionConsistency()
-    {
-        $this->math = new \Mdanter\Ecc\Math\BcMath();
-        $this->theory = new \Mdanter\Ecc\NumberTheory($this->math);
-        $this->_doCompressionConsistence($this->theory);
-    }
-    public function testGmpCompressionConsistency()
-    {
-        $this->math = new \Mdanter\Ecc\Math\Gmp();
-        $this->theory = new \Mdanter\Ecc\NumberTheory($this->math);
-        $this->_doCompressionConsistence($this->theory);
-    }
-
-    public function _doCompressionConsistence($theory)
+    public function _doCompressionConsistence(MathAdapterInterface $adapter, $theory)
     {
         foreach ($this->compression_data as $o) {
             // Try and regenerate the y coordinate from the parity byte
@@ -106,13 +76,13 @@ class NumberTheoryTest extends AbstractTestCase
             $y_byte = substr($o->compressed, 0, 2);
             $x_coordinate = substr($o->compressed, 2);
 
-            $x = $this->math->hexDec($x_coordinate);
+            $x = $adapter->hexDec($x_coordinate);
 
             // x^3
-            $x3 = $this->math->powmod($x, 3, $this->generator->getCurve()->getPrime());
+            $x3 = $adapter->powmod($x, 3, $this->generator->getCurve()->getPrime());
 
             // y^2
-            $y2 = $this->math->add(
+            $y2 = $adapter->add(
                         $x3,
                         $this->generator->getCurve()->getB()
                     );
@@ -124,14 +94,14 @@ class NumberTheoryTest extends AbstractTestCase
                     );
 
             // y1 = other root = p - y0
-            $y1 = gmp_strval($this->math->sub($this->generator->getCurve()->getPrime(), $y0), 16);
+            $y1 = gmp_strval($adapter->sub($this->generator->getCurve()->getPrime(), $y0), 16);
 
             if ($y_byte == '02') {
-                $y_coordinate = ($this->math->mod($y0, 2) == '0')
+                $y_coordinate = ($adapter->mod($y0, 2) == '0')
                     ? gmp_strval(gmp_init($y0, 10), 16)
                     : gmp_strval(gmp_sub($this->generator->getCurve()->getPrime(), $y0), 16);
             } else {
-                $y_coordinate = ($this->math->mod($y0, 2) == '0')
+                $y_coordinate = ($adapter->mod($y0, 2) == '0')
                     ? gmp_strval(gmp_sub($this->generator->getCurve()->getPrime(), $y0), 16)
                     : gmp_strval(gmp_init($y0, 10), 16);
             }
@@ -142,14 +112,17 @@ class NumberTheoryTest extends AbstractTestCase
         }
     }
 
-    public function testGmpModFunction()
+    /**
+     * @dataProvider getAdapters
+     */
+    public function testModFunction(MathAdapterInterface $math)
     {
-        $math = new \Mdanter\Ecc\Math\Gmp();
-
         // $o->compressed, $o->decompressed public key.
         // Check that we can compress a key properly (tests $math->mod())
         foreach ($this->compression_data as $o) {
             $prefix = substr($o->decompressed, 0, 2); // will be 04.
+
+            $this->assertEquals('04', $prefix);
 
             // hex encoded (X,Y) coordinate of ECDSA public key.
             $x = substr($o->decompressed, 2, 64);
@@ -160,29 +133,6 @@ class NumberTheoryTest extends AbstractTestCase
             $compressed = '0'.(($mod == 0) ? '2' : '3').$x;
 
             // Check that the mod function reported the parity for the y value.
-            $this->assertTrue($compressed === $o->compressed);
-        }
-    }
-
-    public function testBcmathModFunction()
-    {
-        $math = new \Mdanter\Ecc\Math\BcMath();
-
-        // $o->compressed, $o->decompressed public key.
-        // Check that we can compress a key properly (tests $math->mod())
-        foreach ($this->compression_data as $o) {
-            $prefix = substr($o->decompressed, 1, 2);
-
-            // hex encoded (X,Y) coordinate of ECDSA public key.
-            $x = substr($o->decompressed, 2, 64);
-            $y = substr($o->decompressed, 66, 64);
-
-            // y % 2 == 0       - true: y is even(02) / false: y is odd(03)
-            $mod = $math->mod($math->hexDec($y), 2);
-
-            // Prefix x coordinate with 02/03 depending on parity.
-            $compressed = '0'.(($mod == 0) ? '2' : '3').$x;
-
             $this->assertTrue($compressed === $o->compressed);
         }
     }

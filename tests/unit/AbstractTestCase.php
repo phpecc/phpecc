@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc\Tests;
 
-use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\Math\BcMath;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 
 abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
@@ -15,9 +13,6 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         }
 
         switch (MATH_LIB) {
-            case 'bcmath':
-                $adapter = MathAdapterFactory::getBcMathAdapter(PHPUNIT_DEBUG);
-                break;
             case 'gmp':
             default:
                 $adapter = MathAdapterFactory::getGmpAdapter(PHPUNIT_DEBUG);

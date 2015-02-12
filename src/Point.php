@@ -27,44 +27,27 @@ namespace Mdanter\Ecc;
  */
 
 /**
- * This class is where the elliptic curve arithmetic takes place. The important methods are:
+ * This class is where the elliptic curve arithmetic takes place.
+ * The important methods are:
  * - add: adds two points according to ec arithmetic
  * - double: doubles a point on the ec field mod p
  * - mul: uses double and add to achieve multiplication The rest of the methods are there for supporting the ones above.
  *
- * @author Matej Danter
  */
 class Point implements PointInterface
 {
-    /**
-     *
-     * @var CurveFpInterface
-     */
+
     private $curve;
 
-    /**
-     *
-     * @var int|string
-     */
+    private $adapter;
+
     private $x;
 
-    /**
-     *
-     * @var int|string
-     */
     private $y;
 
-    /**
-     *
-     * @var int|string
-     */
     private $order;
 
-    /**
-     *
-     * @var MathAdapterInterface
-     */
-    private $adapter;
+    private $infinity = false;
 
     /**
      * Initialize a new instance
@@ -77,41 +60,138 @@ class Point implements PointInterface
      * @throws \RuntimeException    when either the curve does not contain the given coordinates or
      *                                      when order is not null and P(x, y) * order is not equal to infinity.
      */
-    public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order = null)
+    public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order, $infinity = false)
     {
-        $this->curve = $curve;
-        $this->x = $x;
-        $this->y = $y;
-        $this->order = $order;
-        $this->adapter = $adapter;
+        $this->adapter  = $adapter;
+        $this->curve    = $curve;
+        $this->x        = (string) $x;
+        $this->y        = (string) $y;
+        $this->order    = $order !== null ? (string) $order : '0';
+        $this->infinity = (bool) $infinity;
 
-        if (! $this->curve->contains($this->x, $this->y)) {
-            throw new \RuntimeException(
-                "Curve ".$this->curve." does not contain point (".$x.", ".$y.")"
-            );
+        if (! $infinity && ! $curve->contains($x, $y)) {
+            throw new \RuntimeException("Curve " . $curve . " does not contain point (" . $x . ", " . $y . ")");
         }
 
-        if ($this->order != null && ! $this->mul($order)->equals(Points::infinity())) {
-            throw new \RuntimeException(
-                "SELF * ORDER MUST EQUAL INFINITY. (".(string) $this->mul($order)." found instead)"
-            );
+        if ($order != null && ! $this->mul($order)->isInfinity()) {
+            throw new \RuntimeException("SELF * ORDER MUST EQUAL INFINITY. (" . (string)$this->mul($order) . " found instead)");
         }
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::cmp()
-     */
-    public function cmp(PointInterface $other)
+    public function getAdapter()
     {
-        if ($other->equals(Points::infinity())) {
-            return 1;
+        return $this->adapter;
+    }
+
+    public function isInfinity()
+    {
+        return (bool) $this->infinity;
+    }
+
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getCurve()
+    */
+    public function getCurve()
+    {
+        return $this->curve;
+    }
+
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getOrder()
+    */
+    public function getOrder()
+    {
+        return (string) $this->order;
+    }
+
+    public function setOrder($order)
+    {
+        $this->order = (string) $order;
+    }
+
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getX()
+    */
+    public function getX()
+    {
+        return $this->x;
+    }
+
+    public function setX($x)
+    {
+        $this->x = (string) $x;
+    }
+
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getY()
+    */
+    public function getY()
+    {
+        return $this->y;
+    }
+
+    public function setY($y)
+    {
+        $this->y = (string) $y;
+    }
+
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::add()
+     */
+    public function add(PointInterface $addend)
+    {
+        if (! $this->curve->equals($addend->getCurve())) {
+            throw new \RuntimeException("The Elliptic Curves do not match.");
+        }
+
+        if ($addend->isInfinity()) {
+            return clone $this;
+        }
+
+        if ($this->isInfinity()) {
+            return clone $addend;
         }
 
         $math = $this->adapter;
 
-        $equal  = ($math->cmp($this->x, $other->getX()) == 0);
+        if ($math->mod($math->cmp($this->x, $addend->getX()), $this->curve->getPrime()) == 0) {
+            if ($math->mod($math->add($this->y, $addend->getY()), $this->curve->getPrime()) == 0) {
+                return new self($this->adapter, $this->curve, 0, 0, 0, true);
+            } else {
+                return $this->getDouble();
+            }
+        }
+
+        $p = $this->curve->getPrime();
+        $l = $math->mod($math->mul($math->sub($addend->getY(), $this->y), $math->inverseMod($math->sub($addend->getX(), $this->x), $p)), $p);
+
+        $x3 = $math->mod($math->sub($math->sub($math->pow($l, 2), $this->x), $addend->getX()), $p);
+        $y3 = $math->mod($math->sub($math->mul($l, $math->sub($this->x, $x3)), $this->y), $p);
+
+        if ($math->cmp(0, $y3) > 0) {
+            $y3 = $math->add($p, $y3);
+        }
+
+        return new self($this->adapter, $this->curve, $x3, $y3, $this->order, false);
+    }
+
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::cmp()
+     */
+    public function cmp(PointInterface $other)
+    {
+        if ($other->isInfinity() && $this->isInfinity()) {
+            return 0;
+        }
+
+        if ($other->isInfinity() || $this->isInfinity()) {
+            return 1;
+        }
+
+        $math = $this->adapter;
+        $equal = ($math->cmp($this->x, $other->getX()) == 0);
         $equal &= ($math->cmp($this->y, $other->getY()) == 0);
+        $equal &= $this->isInfinity() == $other->isInfinity();
         $equal &= $this->curve->equals($other->getCurve());
 
         if ($equal) {
@@ -121,149 +201,91 @@ class Point implements PointInterface
         return 1;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::equals()
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::equals()
      */
     public function equals(PointInterface $other)
     {
         return $this->cmp($other) == 0;
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::add()
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::mul()
      */
-    public function add(PointInterface $addend)
+    public function mul($n)
     {
-        if ($addend->equals(Points::infinity())) {
-            return $this;
-        }
-
-        $math = $this->adapter;
-
-        if (! $this->curve->equals($addend->getCurve())) {
-            throw new \RuntimeException("The Elliptic Curves do not match.");
-        }
-
-        if ($math->mod($math->cmp($this->x, $addend->getX()), $this->curve->getPrime()) == 0) {
-            if ($math->mod($math->add($this->y, $addend->getY()), $this->curve->getPrime()) == 0) {
-                return Points::infinity();
-            } else {
-                return $this->getDouble();
-            }
-        }
-
-        $p = $this->curve->getPrime();
-        $l = $math->mod(
-            $math->mul(
-                $math->sub($addend->getY(), $this->y),
-                $math->inverseMod($math->sub($addend->getX(), $this->x), $p)
-            ), $p
-        );
-
-        $x3 = $math->mod($math->sub($math->sub($math->pow($l, 2), $this->x), $addend->getX()), $p);
-        $y3 = $math->mod($math->sub($math->mul($l, $math->sub($this->x, $x3)), $this->y), $p);
-
-        if ($math->cmp(0, $y3) > 0) {
-            $y3 = $math->add($p, $y3);
-        }
-
-        return $this->curve->getPoint($x3, $y3);
+        return $this->mulSafe($n);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::mul()
-     */
-    public function mul($multiplier)
+    public function mulSafe($n)
     {
-        $math = $this->adapter;
-        $e = $multiplier;
-
-        if ($this->order != null) {
-            $e = $math->mod($e, $this->order);
+        if ($this->isInfinity()) {
+            return $this->curve->getInfinity();
         }
 
-        if ($math->cmp($e, 0) == 0) {
-            return Points::infinity();
+        if ($this->adapter->cmp($this->order, '0') > 0) {
+            $n = $this->adapter->mod($n, $this->order);
         }
 
-        if ($math->cmp($e, 0) > 0) {
-            $e3 = $math->mul(3, $e);
-
-            $negative_self = $this->curve->getPoint($this->x, $math->sub(0, $this->y), $this->order);
-            $i = $math->div($this->calcleftMostBit($e3), 2);
-
-            $result = $this;
-
-            while ($math->cmp($i, 1) > 0) {
-                $result = $result->getDouble();
-
-                $e3bit = $math->cmp($math->bitwiseAnd($e3, $i), '0');
-                $ebit = $math->cmp($math->bitwiseAnd($e, $i), '0');
-
-                if ($e3bit != 0 && $ebit == 0) {
-                    $result = $result->add($this);
-                } elseif ($e3bit == 0 && $ebit != 0) {
-                    $result = $result->add($negative_self);
-                }
-
-                $i = $math->div($i, 2);
-            }
-
-            return $result;
+        if ($this->adapter->cmp($n, '0') == 0) {
+            return $this->curve->getInfinity();
         }
 
-        throw new \RuntimeException('Unable to multiply by '.$multiplier);
-    }
+        $r = [
+            $this->curve->getInfinity(),
+            clone $this
+        ];
 
-    /**
-     *
-     * @param  int|string        $x
-     * @throws \RuntimeException
-     */
-    private function calcLeftMostBit($x)
-    {
-        $math = $this->adapter;
+        $n = $this->adapter->baseConvert($n, 10, 2);
+        $k = strlen($n);
 
-        if ($math->cmp($x, 0) > 0) {
-            $result = 1;
+        for ($i = 0; $i < $k; $i++) {
+            $j = $n[$i];
 
-            while ($math->cmp($result, $x) <= 0) {
-                $result = $math->mul(2, $result);
-            }
+            $this->cswap($r[0], $r[1], $j ^ 1);
 
-            return $math->div($result, 2);
+            $r[0] = $r[0]->add($r[1]);
+            $r[1] = $r[1]->getDouble();
+
+            $this->cswap($r[0], $r[1], $j ^ 1);
         }
 
-        throw new \RuntimeException('Unable to get leftmost bit of '.$math->toString($x));
+        return $r[0];
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getCurve()
-     */
-    public function getCurve()
+    private function cswap(self $a, self $b, $cond)
     {
-        return $this->curve;
+        $this->cswapValue($a->x, $b->x, $cond);
+        $this->cswapValue($a->y, $b->y, $cond);
+        $this->cswapValue($a->order, $b->order, $cond);
+        $this->cswapValue($a->infinity, $b->infinity, $cond);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::__toString()
-     */
-    public function __toString()
+    public function cswapValue(& $a, & $b, $cond)
     {
-        return "(".$this->adapter->toString($this->x).",".$this->adapter->toString($this->y).")";
+        $size = max(strlen($this->adapter->baseConvert($a, 10, 2)), strlen($this->adapter->baseConvert($b, 10, 2)));
+
+        $mask = 1 - intval($cond);
+        $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
+        $mask = $this->adapter->baseConvert($mask, 2, 10);
+
+        $tA = $this->adapter->bitwiseAnd($a, $mask);
+        $tB = $this->adapter->bitwiseAnd($b, $mask);
+
+        $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
+        $b = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tA);
+        $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getDouble()
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getDouble()
      */
     public function getDouble()
     {
+        if ($this->isInfinity()) {
+            return $this->curve->getInfinity();
+        }
+
         $math = $this->adapter;
 
         $p = $this->curve->getPrime();
@@ -272,7 +294,7 @@ class Point implements PointInterface
         $inverse = $math->inverseMod($math->mul(2, $this->y), $p);
         $threeX2 = $math->mul(3, $math->pow($this->x, 2));
 
-        $l = $math->mod($math->mul($math->add($threeX2, $a), $inverse), $p);
+        $l  = $math->mod($math->mul($math->add($threeX2, $a), $inverse), $p);
         $x3 = $math->mod($math->sub($math->pow($l, 2), $math->mul(2, $this->x)), $p);
         $y3 = $math->mod($math->sub($math->mul($l, $math->sub($this->x, $x3)), $this->y), $p);
 
@@ -280,38 +302,37 @@ class Point implements PointInterface
             $y3 = $math->add($p, $y3);
         }
 
-        return new self($this->adapter, $this->curve, $x3, $y3, null);
+        return new self($this->adapter, $this->curve, $x3, $y3, $this->order);
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getOrder()
-     */
-    public function getOrder()
+    /*
+     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::__toString()
+    */
+    public function __toString()
     {
-        return $this->order;
+        if ($this->infinity) {
+            return '[ (infinity) on ' . (string) $this->curve . ' ]';
+        }
+
+        return "[ (" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ') on ' . (string) $this->curve . ' ]';
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getX()
-     */
-    public function getX()
+    public function __debugInfo()
     {
-        return $this->x;
-    }
+        if ($this->infinity) {
+            return [
+                'x' => 'inf (' . $this->x . ')',
+                'y' => 'inf (' . $this->y . ')',
+                'z' => 'inf (' . $this->order . ')',
+                'curve' => $this->curve
+            ];
+        }
 
-    /**
-     * (non-PHPdoc)
-     * @see \Mdanter\Ecc\PointInterface::getY()
-     */
-    public function getY()
-    {
-        return $this->y;
-    }
-
-    protected function getAdapter()
-    {
-        return $this->adapter;
+        return [
+            'x' => (string) $this->x,
+            'y' => (string) $this->y,
+            'z' => (string) $this->order,
+            'curve' => $this->curve
+        ];
     }
 }

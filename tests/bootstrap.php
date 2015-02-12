@@ -5,6 +5,8 @@ function buildPath()
     return implode(DIRECTORY_SEPARATOR, func_get_args());
 }
 
+gc_disable();
+
 define('TEST_DATA_DIR', buildPath(__DIR__, 'data'));
 
 if (getenv('MATH_LIB') === false) {

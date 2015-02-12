@@ -15,10 +15,20 @@ class GeneratePublicKeyCommand extends AbstractCommand
         $this->setName('encode-pubkey')->setDescription('Encodes the public key from a PEM encoded private key to PEM format.')
             ->addArgument('data', InputArgument::OPTIONAL)
             ->addOption('infile', null, InputOption::VALUE_OPTIONAL)
-            ->addOption('in', null, InputOption::VALUE_OPTIONAL,
-                'Input format (der or pem). Defaults to pem.', 'pem')
-            ->addOption('out', null, InputOption::VALUE_OPTIONAL,
-                'Output format (der or pem). Defaults to pem.', 'pem');
+            ->addOption(
+                'in',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Input format (der or pem). Defaults to pem.',
+                'pem'
+            )
+            ->addOption(
+                'out',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Output format (der or pem). Defaults to pem.',
+                'pem'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

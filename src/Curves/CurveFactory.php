@@ -13,7 +13,7 @@ class CurveFactory
 
         switch ($name) {
             case NistCurve::NAME_P192:
-               return $nistFactory->curve192();
+                return $nistFactory->curve192();
             case NistCurve::NAME_P224:
                 return $nistFactory->curve224();
             case NistCurve::NAME_P256:

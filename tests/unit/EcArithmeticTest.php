@@ -4,9 +4,9 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Point;
-use Mdanter\Ecc\Points;
 use Mdanter\Ecc\CurveFp;
 use Mdanter\Ecc\CurveFpInterface;
+use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class EcArithmeticTest extends AbstractTestCase
 {
@@ -52,12 +52,9 @@ class EcArithmeticTest extends AbstractTestCase
 
         $c = new CurveFp(23, 1, 1, $math);
         $g = $c->getPoint(13, 7, 7);
-
-        $check = Points::infinity();
+        $check = $c->getInfinity();
 
         for ($i = 0; $i < 8; $i++) {
-            $p = $g->mul($i % 7);
-
             $a = $check->add($g);
             $b = $g->add($check);
 
@@ -114,9 +111,58 @@ class EcArithmeticTest extends AbstractTestCase
         $p1 = $c->getPoint($x1, $y1);
         $p3 = $p1->mul($m);
 
-        $this->assertFalse($p3->equals(Points::infinity()));
-        $this->assertEquals($math->mod($p3->getX(), 23), $x3);
-        $this->assertEquals($math->mod($p3->getY(), 23), $y3);
+        $this->assertFalse($p3->isInfinity());
+        $this->assertEquals($x3, $math->mod($p3->getX(), 23));
+        $this->assertEquals($y3, $math->mod($p3->getY(), 23));
+    }
+
+    public function getMultAdapters()
+    {
+        // https://www.certicom.com/index.php/52-the-elliptic-curve-discrete-logarithm-problem
+        return $this->_getAdapters([
+            [ 23, 9, 17, 16, 5, 9, 4, 5 ],
+            [ 23, 9, 17, 16, 5, 8, 12, 17 ],
+            [ 23, 9, 17, 16, 5, 7, 8, 7 ],
+            [ 23, 9, 17, 16, 5, 6, 7, 3 ],
+            [ 23, 9, 17, 16, 5, 5, 13, 10 ],
+            [ 23, 9, 17, 16, 5, 4, 19, 20 ],
+            [ 23, 9, 17, 16, 5, 3, 14, 14 ],
+            [ 23, 9, 17, 16, 5, 2, 20, 20 ],
+            [ 23, 9, 17, 16, 5, 1, 16, 5 ],
+            [ 2111, 20, 13, 3, 10, 57, 470, 1757]
+        ]);
+    }
+
+    /**
+     *
+     * @dataProvider getMultAdapters
+     */
+    public function testMultiply2(MathAdapterInterface $math, $p, $a, $b, $x, $y, $m, $ex, $ey)
+    {
+        $c = new CurveFp($p, $a, $b, $math);
+
+        $p1 = $c->getPoint($x, $y);
+        $p3 = $p1->mul($m);
+
+        $this->assertFalse($p3->isInfinity());
+
+        $this->assertEquals($ex, $math->mod($p3->getX(), $p));
+        $this->assertEquals($ey, $math->mod($p3->getY(), $p));
+    }
+
+    /**
+     *
+     * @dataProvider getAdapters
+     */
+    public function testMultiplyAssociative(MathAdapterInterface $math)
+    {
+        $c = new CurveFp(23, 1, 1, $math);
+        $g = $c->getPoint(13, 7, null);
+
+        $a = $g->mul('1234564564564564564564564564564564646')->mul(10);
+        $b = $g->mul(10)->mul('1234564564564564564564564564564564646');
+
+        $this->assertTrue($a->equals($b));
     }
 
     /**
@@ -128,12 +174,13 @@ class EcArithmeticTest extends AbstractTestCase
         $c = new CurveFp(23, 1, 1, $math);
         $g = $c->getPoint(13, 7, 7);
 
-        $check = Points::infinity();
+        $check = $c->getInfinity();
 
         for ($i = 0; $i < 8; $i++) {
-            $p = $g->mul($i % 7);
+            $mul = $i % 7;
+            $p = $g->mul($mul);
 
-            $this->assertEquals($check, $p, "$g * $i = $p, expected $check");
+            $this->assertTrue($check->equals($p), "$g * $mul = $p, expected $check");
 
             $check = $g->add($check);
         }

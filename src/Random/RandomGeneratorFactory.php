@@ -29,10 +29,6 @@ class RandomGeneratorFactory
         if (extension_loaded('gmp') && ! defined('HHVM_VERSION')) {
             return self::getGmpRandomGenerator($debug);
         }
-
-        if (extension_loaded('bcmath')) {
-            return self::getBcMathRandomGenerator($debug);
-        }
     }
 
     public static function getUrandomGenerator($debug = false)
@@ -49,15 +45,6 @@ class RandomGeneratorFactory
         return self::wrapAdapter(
             new GmpRandomNumberGenerator($noWarn),
             'gmp',
-            $debug
-        );
-    }
-
-    public static function getBcMathRandomGenerator($debug = false, $noWarn = false)
-    {
-        return self::wrapAdapter(
-            new BcMathRandomNumberGenerator($noWarn),
-            'bcmath',
             $debug
         );
     }

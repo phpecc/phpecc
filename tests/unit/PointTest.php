@@ -3,23 +3,48 @@
 namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\Points;
 use Mdanter\Ecc\Point;
+use Mdanter\Ecc\CurveFp;
 
 class PointTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAddInfinity()
+    public function testAddInfinityReturnsOriginalPoint()
     {
         $adapter = new Gmp();
-        $curve = $this->getMock('\Mdanter\Ecc\CurveFpInterface');
+        $curve = new CurveFp(23, 1, 1, $adapter);
+        $infinity = $curve->getInfinity();
 
-        $curve->expects($this->once())
-            ->method('contains')
-            ->willReturn(true);
+        $point = new Point($adapter, $curve, 13, 7, 7);
 
-        $point = new Point($adapter, $curve, 0, 0, null);
-        $sum = $point->add(Points::infinity());
+        $sum = $point->add($infinity);
+        $this->assertTrue($point->equals($sum));
 
-        $this->assertSame($point, $sum);
+        $sum = $infinity->add($point);
+        $this->assertTrue($point->equals($sum));
+
+    }
+
+    public function testConditionalSwap()
+    {
+        $a = '104564512312317874865';
+        $b = '04156456456456456456';
+
+        $curve = new CurveFp(23, 1, 1, new Gmp());
+        $point = $curve->getPoint(13, 7, 7);
+
+        $point->cswapValue($a, $b, false);
+
+        $this->assertEquals('104564512312317874865', $a);
+        $this->assertEquals('4156456456456456456', $b);
+
+        $point->cswapValue($a, $b, true);
+
+        $this->assertEquals('104564512312317874865', $b);
+        $this->assertEquals('4156456456456456456', $a);
+
+        $point->cswapValue($a, $b, false);
+
+        $this->assertEquals('104564512312317874865', $b);
+        $this->assertEquals('4156456456456456456', $a);
     }
 }

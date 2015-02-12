@@ -34,7 +34,6 @@ namespace Mdanter\Ecc;
  * Rewritten to take a MathAdaptor to handle different environments. Has
  * some desireble functions for public key compression/recovery.
  *
- * @author Thomas Kerin
  */
 class NumberTheory
 {

@@ -29,7 +29,6 @@ namespace Mdanter\Ecc\Signature;
 /**
  * This is the contract for describing a signature used in ECDSA.
  *
- * @author Matej Danter
  */
 interface SignatureInterface
 {
