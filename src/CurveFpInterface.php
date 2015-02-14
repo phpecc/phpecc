@@ -2,6 +2,8 @@
 
 namespace Mdanter\Ecc;
 
+use Mdanter\Ecc\Math\PrimeFieldArithmetic;
+
 /**
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter
@@ -32,6 +34,14 @@ namespace Mdanter\Ecc;
  */
 interface CurveFpInterface
 {
+
+    /**
+     * Returns a modular arithmetic adapter.
+     *
+     * @return PrimeFieldArithmetic
+     */
+    public function getModAdapter();
+
     /**
      * Returns the point identified by given coordinates.
      *
@@ -42,6 +52,11 @@ interface CurveFpInterface
      */
     public function getPoint($x, $y, $order = null);
 
+    /**
+     * Returns a point representing infinity on the curve.
+     *
+     * @return PointInterface
+     */
     public function getInfinity();
 
     /**

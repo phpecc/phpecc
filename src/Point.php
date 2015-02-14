@@ -2,6 +2,8 @@
 
 namespace Mdanter\Ecc;
 
+use Mdanter\Ecc\Math\PrimeFieldArithmetic;
+
 /**
  * *********************************************************************
  * Copyright (C) 2012 Matyas Danter
@@ -41,6 +43,8 @@ class Point implements PointInterface
 
     private $adapter;
 
+    private $modAdapter;
+
     private $x;
 
     private $y;
@@ -62,12 +66,13 @@ class Point implements PointInterface
      */
     public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order, $infinity = false)
     {
-        $this->adapter  = $adapter;
-        $this->curve    = $curve;
-        $this->x        = (string) $x;
-        $this->y        = (string) $y;
-        $this->order    = $order !== null ? (string) $order : '0';
-        $this->infinity = (bool) $infinity;
+        $this->adapter    = $adapter;
+        $this->modAdapter = $curve->getModAdapter();
+        $this->curve      = $curve;
+        $this->x          = (string) $x;
+        $this->y          = (string) $y;
+        $this->order      = $order !== null ? (string) $order : '0';
+        $this->infinity   = (bool) $infinity;
 
         if (! $infinity && ! $curve->contains($x, $y)) {
             throw new \RuntimeException("Curve " . $curve . " does not contain point (" . $x . ", " . $y . ")");
@@ -138,26 +143,32 @@ class Point implements PointInterface
         }
 
         $math = $this->adapter;
+        $modMath = $this->modAdapter;
 
-        if ($math->cmp($this->x, $addend->getX()) == 0) {
-            if ($math->mod($math->add($this->y, $addend->getY()), $this->curve->getPrime()) == 0) {
-                return new self($this->adapter, $this->curve, 0, 0, 0, true);
-            } else {
+        if ($math->cmp($addend->getX(), $this->x) == 0) {
+            if ($math->cmp($addend->getY(), $this->y) == 0) {
                 return $this->getDouble();
+            } else {
+                return new self($this->adapter, $this->curve, 0, 0, 0, true);
             }
         }
 
-        $p = $this->curve->getPrime();
-        $l = $math->mod($math->mul($math->sub($addend->getY(), $this->y), $math->inverseMod($math->sub($addend->getX(), $this->x), $p)), $p);
+        $slope = $modMath->div(
+            $math->sub($addend->getY(), $this->y),
+            $math->sub($addend->getX(), $this->x)
+        );
 
-        $x3 = $math->mod($math->sub($math->sub($math->pow($l, 2), $this->x), $addend->getX()), $p);
-        $y3 = $math->mod($math->sub($math->mul($l, $math->sub($this->x, $x3)), $this->y), $p);
+        $xR = $modMath->sub(
+            $math->sub($math->pow($slope, 2), $this->x),
+            $addend->x
+        );
 
-        if ($math->cmp(0, $y3) > 0) {
-            $y3 = $math->add($p, $y3);
-        }
+        $yR = $modMath->sub(
+            $math->mul($slope, $math->sub($this->x, $xR)),
+            $this->y
+        );
 
-        return new self($this->adapter, $this->curve, $x3, $y3, $this->order, false);
+        return new self($this->adapter, $this->curve, $xR, $yR, $this->order, false);
     }
 
     /*
@@ -276,20 +287,25 @@ class Point implements PointInterface
         }
 
         $math = $this->adapter;
+        $modMath = $this->modAdapter;
 
-        $p = $this->curve->getPrime();
         $a = $this->curve->getA();
-
-        $inverse = $math->inverseMod($math->mul(2, $this->y), $p);
         $threeX2 = $math->mul(3, $math->pow($this->x, 2));
 
-        $l  = $math->mod($math->mul($math->add($threeX2, $a), $inverse), $p);
-        $x3 = $math->mod($math->sub($math->pow($l, 2), $math->mul(2, $this->x)), $p);
-        $y3 = $math->mod($math->sub($math->mul($l, $math->sub($this->x, $x3)), $this->y), $p);
+        $tangent  = $modMath->div(
+            $math->add($threeX2, $a),
+            $math->mul(2, $this->y)
+        );
 
-        if ($math->cmp(0, $y3) > 0) {
-            $y3 = $math->add($p, $y3);
-        }
+        $x3 = $modMath->sub(
+            $math->pow($tangent, 2),
+            $math->mul(2, $this->x)
+        );
+
+        $y3 = $modMath->sub(
+            $math->mul($tangent, $math->sub($this->x, $x3)),
+            $this->y
+        );
 
         return new self($this->adapter, $this->curve, $x3, $y3, $this->order);
     }

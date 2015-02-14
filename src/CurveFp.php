@@ -23,6 +23,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 *************************************************************************/
 namespace Mdanter\Ecc;
 
+use Mdanter\Ecc\Math\PrimeFieldArithmetic;
+
 /**
  * This class is a representation of an EC over a field modulo a prime number
  *
@@ -58,6 +60,12 @@ class CurveFp implements CurveFpInterface
     protected $adapter = null;
 
     /**
+     *
+     * @var PrimeFieldArithmetic
+     */
+    protected $modAdapter = null;
+
+    /**
      * Constructor that sets up the instance variables.
      *
      * @param $prime int|string
@@ -70,8 +78,22 @@ class CurveFp implements CurveFpInterface
         $this->b = $b;
         $this->prime = $prime;
         $this->adapter = $adapter;
+        $this->modAdapter = new PrimeFieldArithmetic($this->adapter, $prime);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getModAdapter()
+     */
+    public function getModAdapter()
+    {
+        return $this->modAdapter;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\CurveFpInterface::getInfinity()
+     */
     public function getInfinity()
     {
         return new Point($this->adapter, $this, 0, 0, 0, true);
