@@ -58,8 +58,7 @@ interface PointInterface
      * Compares the current instance to another point.
      *
      * @param  PointInterface|Infinity $other
-     * @return int|string              A number less than 0 when current instance is less than the given point, 0 when they are equal,
-     *                                       and greater than 0 when current instance is greater than the given point.
+     * @return int|string              A number different than 0 when current instance is less than the given point, 0 when they are equal.
      */
     public function cmp(PointInterface $other);
 
