@@ -139,7 +139,7 @@ class Point implements PointInterface
 
         $math = $this->adapter;
 
-        if ($math->mod($math->cmp($this->x, $addend->getX()), $this->curve->getPrime()) == 0) {
+        if ($math->cmp($this->x, $addend->getX()) == 0) {
             if ($math->mod($math->add($this->y, $addend->getY()), $this->curve->getPrime()) == 0) {
                 return new self($this->adapter, $this->curve, 0, 0, 0, true);
             } else {
