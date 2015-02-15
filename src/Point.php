@@ -160,7 +160,7 @@ class Point implements PointInterface
 
         $xR = $modMath->sub(
             $math->sub($math->pow($slope, 2), $this->x),
-            $addend->x
+            $addend->getX()
         );
 
         $yR = $modMath->sub(
