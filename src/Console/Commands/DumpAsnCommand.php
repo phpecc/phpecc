@@ -30,7 +30,7 @@ class DumpAsnCommand extends AbstractCommand
         $this->printObject($output, $asnObject);
     }
 
-    private function printObject(OutputInterface $output, Object $object, $depth=0)
+    private function printObject(OutputInterface $output, Object $object, $depth = 0)
     {
         $treeSymbol = '';
         $depthString = str_repeat('─', $depth);
