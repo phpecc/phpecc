@@ -68,6 +68,10 @@ class PrivateKey implements PrivateKeyInterface
         return $this->secretMultiplier;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Mdanter\Ecc\PrivateKeyInterface::createExchange()
+     */
     public function createExchange(PublicKeyInterface $recipientKey = null)
     {
         $exchange = new EcDH($this->adapter);

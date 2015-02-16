@@ -1,6 +1,7 @@
 # http://point-at-infinity.org/ecc/nisttv
 name: nist-p192
-values:
+diffie: []
+keypairs:
   -
     k: 1
     x: 188DA80EB03090F67CBF20EB43A18800F4FF0AFD82FF1012
