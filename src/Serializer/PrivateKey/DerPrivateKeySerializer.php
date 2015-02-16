@@ -14,6 +14,7 @@ use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
 use Mdanter\Ecc\Serializer\Util\ASN\ASNContext;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
+use FG\ASN1\ExplicitlyTaggedObject;
 
 /**
  * PEM Private key formatter
@@ -40,8 +41,8 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
         $privateKeyInfo = new Sequence(
             new Integer(self::VERSION),
             new OctetString($this->formatKey($key)),
-            new ASNContext(160, CurveOidMapper::getCurveOid($key->getPoint()->getCurve())),
-            new ASNContext(161, $this->encodePubKey($key))
+            new ExplicitlyTaggedObject(0, CurveOidMapper::getCurveOid($key->getPoint()->getCurve())),
+            new ExplicitlyTaggedObject(1, $this->encodePubKey($key))
         );
 
         return $privateKeyInfo->getBinary();
@@ -76,7 +77,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
         }
 
         $key = $this->adapter->hexDec($children[1]->getContent());
-        $oid = $children[2]->getFirstChild();
+        $oid = $children[2]->getContent();
 
         $generator = CurveOidMapper::getGeneratorFromOid($oid);
 

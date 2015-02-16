@@ -28,7 +28,7 @@
         "php": ">=5.4.0",
         "ext-gmp": "*",
         "ext-mcrypt": "*",
-        "fgrosse/phpasn1": "~1.0.0",
+        "fgrosse/phpasn1": "~1.1.0",
         "symfony/console": "~2.6"
     },
     "require-dev": {
