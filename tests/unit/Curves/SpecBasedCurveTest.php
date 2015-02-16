@@ -6,7 +6,7 @@ use Mdanter\Ecc\GeneratorPoint;
 use Symfony\Component\Yaml\Yaml;
 use Mdanter\Ecc\Curves\CurveFactory;
 
-class SpecBasedCurveTests extends \PHPUnit_Framework_TestCase
+class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
 {
 
     public function getTestSet()
