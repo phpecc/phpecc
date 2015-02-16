@@ -1,6 +1,7 @@
 # http://point-at-infinity.org/ecc/nisttv
 name: nist-p256
-values:
+diffie: []
+keypairs:
   -
     k: 1
     x: 6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296

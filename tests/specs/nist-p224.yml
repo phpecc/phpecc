@@ -1,6 +1,7 @@
 # http://point-at-infinity.org/ecc/nisttv
 name: nist-p224
-values:
+diffie: []
+keypairs:
   -
     k: 1
     x: B70E0CBD6BB4BF7F321390B94A03C1D356C21122343280D6115C1D21

@@ -1,6 +1,7 @@
 # http://point-at-infinity.org/ecc/nisttv
 name: nist-p384
-values:
+diffie: []
+keypairs:
   -
     k: 1
     x: AA87CA22BE8B05378EB1C71EF320AD746E1D3B628BA79B9859F741E082542A385502F25DBF55296C3A545E3872760AB7
