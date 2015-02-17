@@ -5,6 +5,8 @@ namespace Mdanter\Ecc\Tests\Curves;
 use Mdanter\Ecc\GeneratorPoint;
 use Symfony\Component\Yaml\Yaml;
 use Mdanter\Ecc\Curves\CurveFactory;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
+use Mdanter\Ecc\Signature\Signer;
 
 class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
 {
@@ -110,4 +112,56 @@ class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($bobDh->calculateSharedKey(), $adapter->hexDec($expectedX));
     }
 
+    public function getHmacTestSet()
+    {
+        $yaml = new Yaml();
+        $files = $this->getFiles();
+        $datasets = [];
+
+        foreach ($files as $file) {
+            $data = $yaml->parse($file);
+
+            if (! isset($data['hmac'])) {
+                continue;
+            }
+
+            $generator = CurveFactory::getGeneratorByName($data['name']);
+
+            foreach ($data['hmac'] as $sig) {
+                $datasets[] = [
+                    $data['name'],
+                    $generator,
+                    $sig['key'],
+                    $sig['algo'],
+                    $sig['message'],
+                    $sig['k'],
+                    $sig['r'],
+                    $sig['s']
+                ];
+            }
+        }
+
+        return $datasets;
+    }
+
+    /**
+     * @dataProvider getHmacTestSet()
+     */
+    public function testHmacSignatures($name, GeneratorPoint $generator, $privKey, $algo, $message, $eK, $eR, $eS)
+    {
+        $adapter = $generator->getAdapter();
+
+        $key = $generator->getPrivateKeyFrom($adapter->hexDec($privKey));
+        $hash = $adapter->hexDec(hash($algo, $message, false));
+
+        $drbg = RandomGeneratorFactory::getHmacRandomGenerator($key, $hash, $algo);
+        $signer = new Signer($adapter);
+
+        $k = $drbg->generate($generator->getOrder());
+        $signature = $signer->sign($key, $hash, $k);
+
+        $this->assertEquals($adapter->hexDec($eK), $k, 'k');
+        $this->assertEquals($adapter->hexDec($eR), $signature->getR(), 'r');
+        $this->assertEquals($adapter->hexDec($eS), $signature->getS(), 's');
+    }
 }
