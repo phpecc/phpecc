@@ -39,7 +39,7 @@ class PemPublicKeySerializer implements PublicKeySerializerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\Serializer\PublicKey\PublicKeySerializerInterface::parse()
      */
     public function parse($formattedKey)

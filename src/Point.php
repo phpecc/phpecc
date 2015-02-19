@@ -96,7 +96,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::getCurve()
      */
     public function getCurve()
@@ -105,7 +105,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::getOrder()
      */
     public function getOrder()
@@ -114,7 +114,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::getX()
      */
     public function getX()
@@ -123,7 +123,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::getY()
      */
     public function getY()
@@ -132,7 +132,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::add()
      */
     public function add(PointInterface $addend)
@@ -179,7 +179,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::cmp()
      */
     public function cmp(PointInterface $other)
@@ -206,7 +206,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::equals()
      */
     public function equals(PointInterface $other)
@@ -215,7 +215,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::mul()
      */
     public function mul($n)
@@ -288,7 +288,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::getDouble()
      */
     public function getDouble()
@@ -322,7 +322,7 @@ class Point implements PointInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::__toString()
      */
     public function __toString()

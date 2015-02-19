@@ -50,7 +50,7 @@ class PrivateKey implements PrivateKeyInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PrivateKeyInterface::getPoint()
      */
     public function getPoint()
@@ -69,7 +69,7 @@ class PrivateKey implements PrivateKeyInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PrivateKeyInterface::createExchange()
      */
     public function createExchange(PublicKeyInterface $recipientKey = null)

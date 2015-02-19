@@ -14,7 +14,7 @@ class GmpRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\RandomNumberGeneratorInterface::generate()
      */
     public function generate($max)

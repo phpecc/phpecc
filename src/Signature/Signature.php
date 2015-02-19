@@ -57,7 +57,7 @@ class Signature implements SignatureInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\SignatureInterface::getR()
      */
     public function getR()
@@ -66,7 +66,7 @@ class Signature implements SignatureInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\SignatureInterface::getS()
      */
     public function getS()

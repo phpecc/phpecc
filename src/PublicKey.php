@@ -89,7 +89,7 @@ class PublicKey implements PublicKeyInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PublicKeyInterface::getCurve()
      */
     public function getCurve()
@@ -103,7 +103,7 @@ class PublicKey implements PublicKeyInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\PublicKeyInterface::getPoint()
      */
     public function getPoint()

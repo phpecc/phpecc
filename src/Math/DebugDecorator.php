@@ -66,7 +66,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::cmp()
      */
     public function cmp($first, $other)
@@ -81,7 +81,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::mod()
      */
     public function mod($number, $modulus)
@@ -96,7 +96,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::add()
      */
     public function add($augend, $addend)
@@ -111,7 +111,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::sub()
      */
     public function sub($minuend, $subtrahend)
@@ -126,7 +126,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::mul()
      */
     public function mul($multiplier, $multiplicand)
@@ -141,7 +141,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::div()
      */
     public function div($dividend, $divisor)
@@ -156,7 +156,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::pow()
      */
     public function pow($base, $exponent)
@@ -171,7 +171,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::rand()
      */
     public function rand($n)
@@ -186,7 +186,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseAnd()
      */
     public function bitwiseAnd($first, $other)
@@ -201,7 +201,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapter::toString()
      */
     public function toString($value)
@@ -210,7 +210,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::hexDec()
      */
     public function hexDec($hexString)
@@ -225,7 +225,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::decHex()
      */
     public function decHex($decString)
@@ -240,7 +240,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::powmod()
      */
     public function powmod($base, $exponent, $modulus)
@@ -255,7 +255,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::isPrime()
      */
     public function isPrime($n)
@@ -270,7 +270,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::nextPrime()
      */
     public function nextPrime($currentPrime)
@@ -285,7 +285,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::inverseMod()
      */
     public function inverseMod($a, $m)
@@ -300,7 +300,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::jacobi()
      */
     public function jacobi($a, $p)
@@ -315,7 +315,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::intToString()
      */
     public function intToString($x)
@@ -330,7 +330,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::stringToInt()
      */
     public function stringToInt($s)
@@ -345,7 +345,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::digestInteger()
      */
     public function digestInteger($m)
@@ -360,7 +360,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::gcd2()
      */
     public function gcd2($a, $m)
@@ -375,7 +375,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::rightShift()
      */
     public function rightShift($number, $positions)
@@ -390,7 +390,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::leftShift()
      */
     public function leftShift($number, $positions)
@@ -405,7 +405,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseXor()
      */
     public function bitwiseXor($first, $other)
@@ -420,7 +420,7 @@ class DebugDecorator implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::baseConvert()
      */
     public function baseConvert($value, $fromBase, $toBase)
