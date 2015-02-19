@@ -111,7 +111,7 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
         foreach ($json->test as $test) {
             $data[] = [
                 $test->curve,
-                $test->size,
+                isset($test->size) ? $test->size : 0,
                 $test->algorithm,
                 $test->privKey,
                 $test->message,
@@ -142,7 +142,18 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
         $k    = $drbg->generate($G->getOrder());
         $this->assertEquals($this->math->hexdec($eK), $k, 'k');
 
-        $messageHash = $this->math->baseConvert(substr($this->math->baseConvert($messageHash, 10, 2), 0, $size), 2, 10);
+        //var_dump($this->math->decHex($messageHash));
+
+        $hexSize = strlen($hashHex);
+        $hashBits = $this->math->baseConvert($messageHash, 10, 2);
+
+        if (strlen($hashBits) < $hexSize * 4) {
+            $hashBits = str_pad($hashBits, $hexSize * 4, '0', STR_PAD_LEFT);
+        }
+
+        $messageHash = $this->math->baseConvert(substr($hashBits, 0, $size), 2, 10);
+
+        //var_dump( $this->math->baseConvert(substr($this->math->baseConvert($messageHash, 10, 2), 0, $size), 2, 16), $messageHash);
 
         $signer = new Signer($this->math);
         $sig    = $signer->sign($privateKey, $messageHash, $k);
