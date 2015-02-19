@@ -2,6 +2,7 @@
   "test":[
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha1",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "sample",
@@ -11,6 +12,7 @@
     },
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha224",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "sample",
@@ -20,6 +22,7 @@
     },
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha256",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "sample",
@@ -29,6 +32,7 @@
     },
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha384",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "sample",
@@ -38,6 +42,7 @@
     },
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha512",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "sample",
@@ -47,6 +52,7 @@
     },
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha1",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "test",
@@ -56,6 +62,7 @@
     },
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha224",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "test",
@@ -65,6 +72,7 @@
     },
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha256",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "test",
@@ -74,6 +82,7 @@
     },
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha384",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "test",
@@ -83,6 +92,7 @@
     },
     {
       "curve": "nist-p192",
+      "size": "192",
       "algorithm": "sha512",
       "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
       "message": "test",

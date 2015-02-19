@@ -162,12 +162,14 @@ class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
             $hash = $adapter->baseConvert(substr($adapter->baseConvert($hash, 10, 2), 0, $size), 2, 10);
         }
 
-        //$k = $drbg->generate($generator->getOrder());
-        $signature = $signer->sign($key, $hash, $adapter->hexDec($eK));
+        $k = $drbg->generate($generator->getOrder());
+        $signature = $signer->sign($key, $hash, $k);
 
-        //$this->assertEquals($adapter->hexDec($eK), $k, 'k');
+        $this->assertEquals($adapter->hexDec($eK), $k, 'k');
+
         $r = $adapter->decHex($signature->getR());
         $s = $adapter->decHex($signature->getS());
+
         $this->assertEquals($eR, $r, "r: $eR == $r");
         $this->assertEquals($eS, $s, "r: $eS == $s");
     }

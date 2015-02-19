@@ -50,12 +50,11 @@ class RandomGeneratorFactory
         );
     }
 
-    public static function getHmacRandomGenerator(GeneratorPoint $generatorPoint, $privateKey, $messageHash, $algo, $debug = false)
+    public static function getHmacRandomGenerator(PrivateKeyInterface $privateKey, $messageHash, $algo, $debug = false)
     {
         return self::wrapAdapter(
             new HmacRandomNumberGenerator(
                 MathAdapterFactory::getAdapter($debug),
-                $generatorPoint,
                 $privateKey,
                 $messageHash,
                 $algo

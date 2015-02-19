@@ -61,7 +61,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      * @param $algo
      * @internal param string $personalString
      */
-    public function __construct(MathAdapterInterface $math, GeneratorPoint $generator, PrivateKeyInterface $privateKey, $messageHash, $algo)
+    public function __construct(MathAdapterInterface $math, PrivateKeyInterface $privateKey, $messageHash, $algo)
     {
         if (!in_array($algo, hash_algos())) {
             throw new \RuntimeException('HMACDRGB: Hashing algorithm not found');
@@ -77,7 +77,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
         $this->math = $math;
         $this->algorithm = $algo;
-        $this->generator = $generator;
+        $this->generator = $privateKey->getPoint();
 
         // Encode the private key and hash as binary, a seed for the DRBG
         $entropy = pack(
@@ -132,7 +132,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
         $v    = $this->math->stringToInt($data);
 
         if ($vlen > $this->qBitLen()) {
-            echo ">1\n";
+            //echo ">1\n";
             $v = $this->math->rightShift($v, ($vlen - $this->qBitLen()));
         }
         return $v;
@@ -146,15 +146,15 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     {
         $out = $this->math->decHex($v);
         $vlen = strlen($out);
-        echo "V: $vlen, R:".$this->rolen()."\n";
+        //echo "V: $vlen, R:".$this->rolen()."\n";
 
         if ($vlen < $this->rolen() * 2) {
-            echo " >2 \n";
+            //echo " >2 \n";
             $out = str_pad($out, $this->rolen() * 2, '0', STR_PAD_LEFT);
         }
 
         if ($vlen > $this->rolen() * 2) {
-            echo "<3\n";
+            //echo "<3\n";
             $out = substr($out, 0, $this->rolen() * 2);
         }
         //echo "out: $out\n";
