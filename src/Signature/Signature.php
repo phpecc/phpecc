@@ -57,7 +57,7 @@ class Signature implements SignatureInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\SignatureInterface::getR()
      */
     public function getR()
@@ -66,7 +66,7 @@ class Signature implements SignatureInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\SignatureInterface::getS()
      */
     public function getS()

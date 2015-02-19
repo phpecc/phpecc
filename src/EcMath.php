@@ -87,7 +87,7 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcMathInterface::add()
      */
     public function add($addend)
@@ -121,7 +121,7 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcMathInterface::mul()
      */
     public function mul($multiplicand)
@@ -149,7 +149,7 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcMathInterface::getDouble()
      */
     public function getDouble()
@@ -168,7 +168,7 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcMathInterface::mod()
      */
     public function mod($n)
@@ -185,7 +185,7 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcMathInterface::cmp()
      */
     public function cmp($input)
@@ -219,7 +219,7 @@ class EcMath implements EcMathInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcMathInterface::result()
      */
     public function result()

@@ -74,7 +74,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcDHInterface::calculateSharedKey()
      */
     public function calculateSharedKey()
@@ -85,7 +85,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcDHInterface::createMultiPartyKey()
      */
     public function createMultiPartyKey()
@@ -96,7 +96,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcDHInterface::setRecipientKey()
      */
     public function setRecipientKey(PublicKeyInterface $key)
@@ -105,7 +105,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcDHInterface::setSenderKey()
      */
     public function setSenderKey(PrivateKeyInterface $key)
@@ -114,7 +114,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcDHInterface::encrypt()
      */
     public function encrypt($string)
@@ -127,7 +127,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcDHInterface::decrypt()
      */
     public function decrypt($string)
@@ -140,7 +140,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcDHInterface::encryptFile()
      */
     public function encryptFile($path)
@@ -153,7 +153,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\EcDHInterface::decryptFile()
      */
     public function decryptFile($path)
@@ -166,7 +166,6 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * (non-PHPdoc)
      * @see \Mdanter\Ecc\EcDHInterface::calculateKey()
      */
     private function calculateKey()

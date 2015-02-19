@@ -56,11 +56,13 @@ class Point implements PointInterface
     /**
      * Initialize a new instance
      *
+     * @param  MathAdapterInterface $adapter
      * @param  CurveFpInterface     $curve
      * @param  int|string           $x
      * @param  int|string           $y
      * @param  int|string           $order
-     * @param  MathAdapterInterface $adapter
+     * @param  bool                 $infinity
+     *
      * @throws \RuntimeException    when either the curve does not contain the given coordinates or
      *                                      when order is not null and P(x, y) * order is not equal to infinity.
      */
@@ -93,40 +95,45 @@ class Point implements PointInterface
         return (bool) $this->infinity;
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getCurve()
-    */
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::getCurve()
+     */
     public function getCurve()
     {
         return $this->curve;
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getOrder()
-    */
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::getOrder()
+     */
     public function getOrder()
     {
         return (string) $this->order;
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getX()
-    */
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::getX()
+     */
     public function getX()
     {
         return $this->x;
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getY()
-    */
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::getY()
+     */
     public function getY()
     {
         return $this->y;
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::add()
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::add()
      */
     public function add(PointInterface $addend)
     {
@@ -171,8 +178,9 @@ class Point implements PointInterface
         return new self($this->adapter, $this->curve, $xR, $yR, $this->order, false);
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::cmp()
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::cmp()
      */
     public function cmp(PointInterface $other)
     {
@@ -197,16 +205,18 @@ class Point implements PointInterface
         return 1;
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::equals()
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::equals()
      */
     public function equals(PointInterface $other)
     {
         return $this->cmp($other) == 0;
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::mul()
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::mul()
      */
     public function mul($n)
     {
@@ -277,8 +287,9 @@ class Point implements PointInterface
         }
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::getDouble()
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::getDouble()
      */
     public function getDouble()
     {
@@ -310,9 +321,10 @@ class Point implements PointInterface
         return new self($this->adapter, $this->curve, $x3, $y3, $this->order);
     }
 
-    /*
-     * (non-PHPdoc) @see \Mdanter\Ecc\PointInterface::__toString()
-    */
+    /**
+     * @inheritDoc
+     * @see \Mdanter\Ecc\PointInterface::__toString()
+     */
     public function __toString()
     {
         if ($this->infinity) {
