@@ -15,8 +15,7 @@ class PemPublicKeySerializer implements PublicKeySerializerInterface
     private $derSerializer;
 
     /**
-     *
-     * @param MathAdapterInterface $adapter
+     * @param DerPublicKeySerializer $serializer
      */
     public function __construct(DerPublicKeySerializer $serializer)
     {
@@ -40,7 +39,7 @@ class PemPublicKeySerializer implements PublicKeySerializerInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\Serializer\PublicKey\PublicKeySerializerInterface::parse()
      */
     public function parse($formattedKey)

@@ -61,9 +61,10 @@ interface CurveFpInterface
 
     /**
      *
-     * @param  int|string     $x
-     * @param  int|string     $y
-     * @param  string         $order
+     * @param  int|string                       $x
+     * @param  int|string                       $y
+     * @param  string                           $order
+     * @param  RandomNumberGeneratorInterface   $randomGenerator
      * @return GeneratorPoint
      */
     public function getGenerator($x, $y, $order = null, RandomNumberGeneratorInterface $randomGenerator = null);
@@ -113,4 +114,11 @@ interface CurveFpInterface
      * @return bool
      */
     public function equals(CurveFpInterface $other);
+
+    /**
+     * Return string representation of curve for debugging
+     *
+     * @return string
+     */
+    public function __toString();
 }

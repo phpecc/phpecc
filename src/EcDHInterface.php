@@ -41,8 +41,6 @@ interface EcDHInterface
     public function calculateSharedKey();
 
     /**
-     *
-     * @param PublicKeyInterface $key
      * @return PublicKeyInterface
      */
     public function createMultiPartyKey();
@@ -57,6 +55,7 @@ interface EcDHInterface
     /**
      * Sets the recipient key.
      *
+     * @param  PublicKeyInterface $key
      * @return void
      */
     public function setRecipientKey(PublicKeyInterface $key);

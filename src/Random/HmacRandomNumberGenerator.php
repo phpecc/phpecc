@@ -57,7 +57,6 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      * @param PrivateKeyInterface  $privateKey
      * @param string               $messageHash
      * @param $algo
-     * @internal param string $personalString
      */
     public function __construct(MathAdapterInterface $math, PrivateKeyInterface $privateKey, $messageHash, $algo)
     {

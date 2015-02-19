@@ -49,6 +49,7 @@ interface PrivateKeyInterface
     public function getSecret();
 
     /**
+     * @param  PublicKeyInterface $recipient
      * @return int|string
      */
     public function createExchange(PublicKeyInterface $recipient);

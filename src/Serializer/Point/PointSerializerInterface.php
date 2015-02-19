@@ -15,9 +15,8 @@ interface PointSerializerInterface
     public function serialize(PointInterface $point);
 
     /**
-     * @param CurveFpInterface Curve that contains the serialized point
-     *
-     * @param  string         $string
+     * @param  CurveFpInterface $curve  Curve that contains the serialized point
+     * @param  string           $string
      * @return PointInterface
      */
     public function unserialize(CurveFpInterface $curve, $string);

@@ -63,7 +63,7 @@ class DerPublicKeySerializer implements PublicKeySerializerInterface
     }
 
     /**
-     * (non-PHPdoc)
+     * @inheritDoc
      * @see \Mdanter\Ecc\Serializer\PublicKey\PublicKeySerializerInterface::parse()
      */
     public function parse($string)
