@@ -7,7 +7,7 @@ use Mdanter\Ecc\MathAdapterInterface;
 class Gmp implements MathAdapterInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::cmp()
      */
     public function cmp($first, $other)
@@ -16,7 +16,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::mod()
      */
     public function mod($number, $modulus)
@@ -25,7 +25,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::add()
      */
     public function add($augend, $addend)
@@ -34,7 +34,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::sub()
      */
     public function sub($minuend, $subtrahend)
@@ -43,7 +43,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::mul()
      */
     public function mul($multiplier, $multiplicand)
@@ -52,7 +52,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::div()
      */
     public function div($dividend, $divisor)
@@ -61,7 +61,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::pow()
      */
     public function pow($base, $exponent)
@@ -70,7 +70,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseAnd()
      */
     public function bitwiseAnd($first, $other)
@@ -79,7 +79,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapter::rightShift()
      */
     public function rightShift($number, $positions)
@@ -89,7 +89,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapter::bitwiseXor()
      */
     public function bitwiseXor($first, $other)
@@ -98,7 +98,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapter::leftShift()
      */
     public function leftShift($number, $positions)
@@ -108,7 +108,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapter::toString()
      */
     public function toString($value)
@@ -121,7 +121,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::hexDec()
      */
     public function hexDec($hex)
@@ -130,7 +130,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::decHex()
      */
     public function decHex($dec)
@@ -145,7 +145,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::powmod()
      */
     public function powmod($base, $exponent, $modulus)
@@ -158,7 +158,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::isPrime()
      */
     public function isPrime($n)
@@ -173,7 +173,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::nextPrime()
      */
     public function nextPrime($starting_value)
@@ -182,7 +182,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::inverseMod()
      */
     public function inverseMod($a, $m)
@@ -191,7 +191,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::jacobi()
      */
     public function jacobi($a, $n)
@@ -200,7 +200,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::intToString()
      */
     public function intToString($x)
@@ -229,7 +229,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::stringToInt()
      */
     public function stringToInt($s)
@@ -246,7 +246,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::digestInteger()
      */
     public function digestInteger($m)
@@ -255,7 +255,7 @@ class Gmp implements MathAdapterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapterInterface::gcd2()
      */
     public function gcd2($a, $b)

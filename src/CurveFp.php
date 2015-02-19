@@ -83,7 +83,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getModAdapter()
      */
     public function getModAdapter()
@@ -92,7 +92,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getInfinity()
      */
     public function getInfinity()
@@ -101,7 +101,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getPoint()
      */
     public function getPoint($x, $y, $order = null)
@@ -110,7 +110,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getGenerator()
      */
     public function getGenerator($x, $y, $order = null, RandomNumberGeneratorInterface $randomGenerator = null)
@@ -119,7 +119,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::contains()
      */
     public function contains($x, $y)
@@ -132,7 +132,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getA()
      */
     public function getA()
@@ -141,7 +141,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getB()
      */
     public function getB()
@@ -150,7 +150,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getPrime()
      */
     public function getPrime()
@@ -159,7 +159,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::cmp()
      */
     public function cmp(CurveFpInterface $other)
@@ -174,7 +174,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::equals()
      */
     public function equals(CurveFpInterface $other)
@@ -183,7 +183,7 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::__toString()
      */
     public function __toString()
