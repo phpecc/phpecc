@@ -77,6 +77,7 @@ class PrivateKey implements PrivateKeyInterface
         $exchange = new EcDH($this->adapter);
         $exchange->setSenderKey($this);
         $exchange->setRecipientKey($recipientKey);
+        $exchange->calculateSharedKey();
 
         return $exchange;
     }

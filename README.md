@@ -179,8 +179,8 @@ $pubKeySerializer = new PemPublicKeySerializer(new DerPublicKeySerializer());
 $bobPrivateKeyPath = '/path/to/bob/privkey.pem';
 $alicePublicKeyPath = '/path/to/alice/publickey.pem';
 
-$alice = $pubKeySerializer->parse($loader->loadPublicKeyData($alicePrivateKeyPath));
-$bob = $privKeySerializer->parse($loader->loadPrivateKeyData($bobPublicKeyPath));
+$alice = $pubKeySerializer->parse($loader->loadPublicKeyData($alicePublicKeyPath));
+$bob = $privKeySerializer->parse($loader->loadPrivateKeyData($bobPrivateKeyPath));
 
 $bobDh = $bob->createExchange($alice);
 $messageForBob = $bobDh->decrypt('... the encrypted message... too lazy to actually generate the encoded message');
