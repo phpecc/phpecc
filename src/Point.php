@@ -92,7 +92,7 @@ class Point implements PointInterface
 
     public function isInfinity()
     {
-        return (bool) $this->infinity;
+        return (bool) gmp_strval($this->infinity, 10);
     }
 
     /**
@@ -270,7 +270,8 @@ class Point implements PointInterface
 
         $mask = 1 - intval($cond);
         $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
-        $mask = $this->adapter->baseConvert($mask, 2, 10);
+        $mask = gmp_init($mask, 2);
+        // $mask = $this->adapter->baseConvert($mask, 2, 10);
 
         $tA = $this->adapter->bitwiseAnd($a, $mask);
         $tB = $this->adapter->bitwiseAnd($b, $mask);
@@ -282,7 +283,7 @@ class Point implements PointInterface
 
     private function validate()
     {
-        if (! $this->infinity && ! $this->curve->contains($this->x, $this->y)) {
+        if (! gmp_strval($this->infinity, 10) && ! $this->curve->contains($this->x, $this->y)) {
             throw new \RuntimeException('Invalid point');
         }
     }
