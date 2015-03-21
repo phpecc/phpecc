@@ -9,11 +9,20 @@ use Mdanter\Ecc\MathAdapterInterface;
  */
 class DebugDecorator implements MathAdapterInterface
 {
-
+    /**
+     * @var MathAdapterInterface
+     */
     private $adapter;
 
+    /**
+     * @var callable
+     */
     private $writer;
 
+    /**
+     * @param MathAdapterInterface $adapter
+     * @param null $callback
+     */
     public function __construct(MathAdapterInterface $adapter, $callback = null)
     {
         $this->adapter = $adapter;

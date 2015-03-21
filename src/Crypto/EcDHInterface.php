@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Crypto;
 
 /**
  * *********************************************************************

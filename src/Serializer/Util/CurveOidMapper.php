@@ -7,7 +7,7 @@ use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
-use Mdanter\Ecc\CurveFpInterface;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
 
 class CurveOidMapper
 {

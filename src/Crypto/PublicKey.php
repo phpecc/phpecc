@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Crypto;
 
 /**
  * *********************************************************************
@@ -25,6 +25,10 @@ namespace Mdanter\Ecc;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
+use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
+use Mdanter\Ecc\Primitives\PointInterface;
 
 /**
  * This class serves as public- private key exchange for signature verification
@@ -58,9 +62,9 @@ class PublicKey implements PublicKeyInterface
     /**
      * Initialize a new instance.
      *
+     * @param  MathAdapterInterface $adapter
      * @param  GeneratorPoint       $generator
      * @param  PointInterface       $point
-     * @param  MathAdapterInterface $adapter
      * @throws \LogicException
      * @throws \RuntimeException
      */

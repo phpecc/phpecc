@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Math;
 
 /***********************************************************************
      * Copyright (C) 2012 Matyas Danter
@@ -29,6 +29,7 @@ namespace Mdanter\Ecc;
  *
  * @author Matyas Danter
  */
+use Mdanter\Ecc\MathAdapterInterface;
 
 /**
  * Rewritten to take a MathAdaptor to handle different environments. Has
@@ -37,13 +38,25 @@ namespace Mdanter\Ecc;
  */
 class NumberTheory
 {
+    /**
+     * @var MathAdapterInterface
+     */
     protected $adapter;
 
+    /**
+     * @param MathAdapterInterface $adapter
+     */
     public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;
     }
 
+    /**
+     * @param $poly
+     * @param $polymod
+     * @param $p
+     * @return array
+     */
     public function polynomialReduceMod($poly, $polymod, $p)
     {
         $count_polymod = count($polymod);
@@ -70,8 +83,17 @@ class NumberTheory
 
             return $poly;
         }
+
+        throw new \InvalidArgumentException('Unable to calculate polynomialReduceMod');
     }
 
+    /**
+     * @param $m1
+     * @param $m2
+     * @param $polymod
+     * @param $p
+     * @return array
+     */
     public function polynomialMultiplyMod($m1, $m2, $polymod, $p)
     {
         $prod = array();
@@ -101,6 +123,13 @@ class NumberTheory
         return $this->polynomialReduceMod($prod, $polymod, $p);
     }
 
+    /**
+     * @param $base
+     * @param $exponent
+     * @param $polymod
+     * @param $p
+     * @return array|int
+     */
     public function polynomialPowMod($base, $exponent, $polymod, $p)
     {
         if ($this->adapter->cmp($exponent, $p) < 0) {
@@ -128,8 +157,16 @@ class NumberTheory
 
             return $s;
         }
+
+        throw new \InvalidArgumentException('Unable to calculate polynomialPowMod');
+
     }
 
+    /**
+     * @param $a
+     * @param $p
+     * @return int|string
+     */
     public function squareRootModP($a, $p)
     {
         if (0 <= $a && $a < $p && 1 < $p) {
@@ -214,5 +251,8 @@ class NumberTheory
                 }
             }
         }
+
+        throw new \InvalidArgumentException('Unable to calculate square root mod p!');
+
     }
 }

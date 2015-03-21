@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Crypto\Signature;
 
 /**
  * *********************************************************************
@@ -27,24 +27,50 @@ namespace Mdanter\Ecc;
  */
 
 /**
- * This is the contract for the PublicKey portion of ECDSA.
+ * Plain Old PHP Object that stores the signature r,s for ECDSA
  *
  */
-interface PublicKeyInterface
+class Signature implements SignatureInterface
 {
+    /**
+     *
+     * @var int|string
+     */
+    protected $r;
 
     /**
-     * @return CurveFpInterface
+     *
+     * @var int|string
      */
-    public function getCurve();
+    protected $s;
 
     /**
-     * @return PointInterface
+     * Initialize a new instance with values
+     *
+     * @param int|string $r
+     * @param int|string $s
      */
-    public function getPoint();
+    public function __construct($r, $s)
+    {
+        $this->r = $r;
+        $this->s = $s;
+    }
 
     /**
-     * @return PointInterface
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\SignatureInterface::getR()
      */
-    public function getGenerator();
+    public function getR()
+    {
+        return $this->r;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\SignatureInterface::getS()
+     */
+    public function getS()
+    {
+        return $this->s;
+    }
 }

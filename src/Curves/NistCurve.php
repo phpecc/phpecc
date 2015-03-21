@@ -1,9 +1,9 @@
 <?php
 namespace Mdanter\Ecc\Curves;
 
-use Mdanter\Ecc\CurveFp;
-use Mdanter\Ecc\CurveFpInterface;
-use Mdanter\Ecc\GeneratorPoint;
+use Mdanter\Ecc\Primitives\CurveFp;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\RandomNumberGeneratorInterface;
 

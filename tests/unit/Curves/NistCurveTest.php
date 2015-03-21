@@ -4,9 +4,9 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\PublicKey;
-use Mdanter\Ecc\Signature\Signature;
-use Mdanter\Ecc\Signature\Signer;
+use Mdanter\Ecc\Crypto\PublicKey;
+use Mdanter\Ecc\Crypto\Signature\Signature;
+use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\RandomNumberGeneratorInterface;
 

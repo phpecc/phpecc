@@ -3,8 +3,8 @@
 namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\Point;
-use Mdanter\Ecc\CurveFp;
+use Mdanter\Ecc\Primitives\Point;
+use Mdanter\Ecc\Primitives\CurveFp;
 
 class PointTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Math;
 
+use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\MathAdapterInterface;
 
 class Gmp implements MathAdapterInterface
@@ -226,6 +227,8 @@ class Gmp implements MathAdapterInterface
 
             return $result;
         }
+
+        throw new \InvalidArgumentException('Unable to convert int to string');
     }
 
     /**
@@ -272,5 +275,22 @@ class Gmp implements MathAdapterInterface
     public function baseConvert($number, $from, $to)
     {
         return gmp_strval(gmp_init($number, $from), $to);
+    }
+
+    /**
+     * @return NumberTheory
+     */
+    public function getNumberTheory()
+    {
+        return new NumberTheory($this);
+    }
+
+    /**
+     * @param CurveFpInterface $curve
+     * @return PrimeFieldArithmetic
+     */
+    public function getPrimeFieldArithmetic(CurveFpInterface $curve)
+    {
+        return new PrimeFieldArithmetic($this, $curve->getPrime());
     }
 }

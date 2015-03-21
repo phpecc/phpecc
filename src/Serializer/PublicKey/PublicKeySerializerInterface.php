@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Serializer\PublicKey;
 
-use Mdanter\Ecc\PublicKeyInterface;
+use Mdanter\Ecc\Crypto\PublicKeyInterface;
 
 interface PublicKeySerializerInterface
 {

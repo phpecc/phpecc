@@ -2,11 +2,9 @@
 
 namespace Mdanter\Ecc;
 
-/**
- * Interface EcMathInterface
- * @package Mdanter\Ecc
- * @author Thomas Kerin
- */
+
+use Mdanter\Ecc\Primitives\PointInterface;
+
 interface EcMathInterface
 {
     /**

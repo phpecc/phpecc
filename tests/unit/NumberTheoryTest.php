@@ -4,7 +4,7 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\Gmp;
-use Mdanter\Ecc\NumberTheory;
+use Mdanter\Ecc\Math\NumberTheory;
 use Mdanter\Ecc\MathAdapterInterface;
 
 class NumberTheoryTest extends AbstractTestCase
@@ -37,7 +37,7 @@ class NumberTheoryTest extends AbstractTestCase
      */
     public function testSqrtDataWithNoRoots(MathAdapterInterface $adapter)
     {
-        $this->theory = new \Mdanter\Ecc\NumberTheory($adapter);
+        $this->theory = new \Mdanter\Ecc\Math\NumberTheory($adapter);
 
         foreach ($this->sqrt_data->no_root as $r) {
             $this->theory->squareRootModP($r->a, $r->p);
@@ -48,7 +48,7 @@ class NumberTheoryTest extends AbstractTestCase
      */
     public function testSqrtDataWithRoots(MathAdapterInterface $adapter)
     {
-        $this->theory = new \Mdanter\Ecc\NumberTheory($adapter);
+        $this->theory = new \Mdanter\Ecc\Math\NumberTheory($adapter);
 
         foreach ($this->sqrt_data->has_root as $r) {
             $root1 = $this->theory->squareRootModP($r->a, $r->p);
@@ -63,7 +63,7 @@ class NumberTheoryTest extends AbstractTestCase
      */
     public function testCompressionConsistency(MathAdapterInterface $adapter)
     {
-        $this->theory = new \Mdanter\Ecc\NumberTheory($adapter);
+        $this->theory = new \Mdanter\Ecc\Math\NumberTheory($adapter);
         $this->_doCompressionConsistence($adapter, $this->theory);
     }
 

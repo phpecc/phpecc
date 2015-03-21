@@ -3,9 +3,9 @@
 namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\PrivateKey;
+use Mdanter\Ecc\Crypto\PrivateKey;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
-use Mdanter\Ecc\Signature\Signer;
+use Mdanter\Ecc\Crypto\Signature\Signer;
 
 class HmacRandomNumberGeneratorTest extends AbstractTestCase
 {
@@ -14,7 +14,7 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
      */
     protected $math;
     /**
-     * @var \Mdanter\Ecc\GeneratorPoint
+     * @var \Mdanter\Ecc\Primitives\GeneratorPoint
      */
     protected $G;
 

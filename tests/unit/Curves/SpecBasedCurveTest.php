@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
-use Mdanter\Ecc\GeneratorPoint;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Symfony\Component\Yaml\Yaml;
 use Mdanter\Ecc\Curves\CurveFactory;
 

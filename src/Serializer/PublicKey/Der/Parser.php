@@ -6,11 +6,11 @@ use FG\ASN1\Object;
 use FG\ASN1\Universal\Sequence;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
-use Mdanter\Ecc\GeneratorPoint;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\Point\PointSerializerInterface;
 use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
-use Mdanter\Ecc\PublicKey;
+use Mdanter\Ecc\Crypto\PublicKey;
 
 class Parser
 {

@@ -1,8 +1,9 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Primitives;
 
 use Mdanter\Ecc\Math\PrimeFieldArithmetic;
+use Mdanter\Ecc\MathAdapterInterface;
 
 /**
  * *********************************************************************
@@ -38,19 +39,39 @@ use Mdanter\Ecc\Math\PrimeFieldArithmetic;
  */
 class Point implements PointInterface
 {
-
+    /**
+     * @var CurveFpInterface
+     */
     private $curve;
 
+    /**
+     * @var MathAdapterInterface
+     */
     private $adapter;
 
+    /**
+     * @var PrimeFieldArithmetic
+     */
     private $modAdapter;
 
+    /**
+     * @var string
+     */
     private $x;
 
+    /**
+     * @var string
+     */
     private $y;
 
+    /**
+     * @var string
+     */
     private $order;
 
+    /**
+     * @var bool
+     */
     private $infinity = false;
 
     /**

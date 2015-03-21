@@ -2,11 +2,9 @@
 
 namespace Mdanter\Ecc;
 
-/**
- * Class EcMath
- * @package Mdanter\Ecc
- * @author Thomas Kerin
- */
+use Mdanter\Ecc\Primitives\GeneratorPoint;
+use Mdanter\Ecc\Primitives\PointInterface;
+
 class EcMath implements EcMathInterface
 {
     /**
@@ -31,7 +29,7 @@ class EcMath implements EcMathInterface
 
     /**
      * @param $input
-     * @param GeneratorPoint       $G
+     * @param GeneratorPoint $G
      * @param MathAdapterInterface $math
      */
     public function __construct($input, GeneratorPoint $G, MathAdapterInterface $math)

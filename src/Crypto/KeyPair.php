@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Crypto;
 
 class KeyPair
 {
@@ -31,9 +31,29 @@ class KeyPair
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
 
-        if ($this->privateKey !== null && $this->publicKey !== null && ! $this->publicKey->equals($privateKey->getPublicKey())) {
+        // TODO! PublicKey::equals() does not exist
+        if ($this->privateKey !== null && $this->publicKey !== null
+        //    && ! $this->publicKey->equals($privateKey->getPublicKey())
+        ) {
             throw new \InvalidArgumentException('Private/public key mismatch.');
         }
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function hasPrivateKey()
+    {
+        return $this->privateKey !== null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPublicKey()
+    {
+        return $this->publicKey !== null;
     }
 
     /**
@@ -47,15 +67,6 @@ class KeyPair
         }
 
         return $this->privateKey;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function hasPrivateKey()
-    {
-        return $this->privateKey !== null;
     }
 
     /**

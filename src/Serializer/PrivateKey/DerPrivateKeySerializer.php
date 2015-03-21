@@ -7,7 +7,7 @@ use FG\ASN1\Universal\Sequence;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\BitString;
 use FG\ASN1\Universal\OctetString;
-use Mdanter\Ecc\PrivateKeyInterface;
+use Mdanter\Ecc\Crypto\PrivateKeyInterface;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;

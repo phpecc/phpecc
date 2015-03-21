@@ -3,9 +3,9 @@
 namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\Point;
-use Mdanter\Ecc\CurveFp;
-use Mdanter\Ecc\CurveFpInterface;
+use Mdanter\Ecc\Primitives\Point;
+use Mdanter\Ecc\Primitives\CurveFp;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class EcArithmeticTest extends AbstractTestCase

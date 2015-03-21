@@ -1,8 +1,9 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Primitives;
 
 use Mdanter\Ecc\Math\PrimeFieldArithmetic;
+use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 /**
  * *********************************************************************

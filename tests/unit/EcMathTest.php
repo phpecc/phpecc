@@ -5,7 +5,7 @@ namespace Mdanter\Ecc\Tests;
 use Mdanter\Ecc\MathAdapterInterface;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\EcMath;
-use Mdanter\Ecc\Point;
+use Mdanter\Ecc\Primitives\Point;
 
 class EcMathTest extends AbstractTestCase
 {

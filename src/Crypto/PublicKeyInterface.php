@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Crypto;
 
 /**
  * *********************************************************************
@@ -25,59 +25,28 @@ namespace Mdanter\Ecc;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
+use Mdanter\Ecc\Primitives\CurveFpInterface;
+use Mdanter\Ecc\Primitives\PointInterface;
 
 /**
- * This class serves as public - private key exchange for signature verification.
+ * This is the contract for the PublicKey portion of ECDSA.
+ *
  */
-class PrivateKey implements PrivateKeyInterface
+interface PublicKeyInterface
 {
-    private $generator;
-
-    private $secretMultiplier;
-
-    private $adapter;
-
-    public function __construct(MathAdapterInterface $adapter, GeneratorPoint $generator, $secretMultiplier)
-    {
-        $this->adapter = $adapter;
-        $this->generator = $generator;
-        $this->secretMultiplier = $secretMultiplier;
-    }
-
-    public function getPublicKey()
-    {
-        return new PublicKey($this->adapter, $this->generator, $this->generator->mul($this->secretMultiplier));
-    }
 
     /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\PrivateKeyInterface::getPoint()
+     * @return CurveFpInterface
      */
-    public function getPoint()
-    {
-        return $this->generator;
-    }
-
-    public function getCurve()
-    {
-        return $this->generator->getCurve();
-    }
-
-    public function getSecret()
-    {
-        return $this->secretMultiplier;
-    }
+    public function getCurve();
 
     /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\PrivateKeyInterface::createExchange()
+     * @return PointInterface
      */
-    public function createExchange(PublicKeyInterface $recipientKey = null)
-    {
-        $exchange = new EcDH($this->adapter);
-        $exchange->setSenderKey($this);
-        $exchange->setRecipientKey($recipientKey);
+    public function getPoint();
 
-        return $exchange;
-    }
+    /**
+     * @return PointInterface
+     */
+    public function getGenerator();
 }

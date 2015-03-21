@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Crypto\Signature;
 
 /**
  * *********************************************************************
@@ -27,30 +27,22 @@ namespace Mdanter\Ecc;
  */
 
 /**
- * This is a contract for the PrivateKey portion of ECDSA.
+ * This is the contract for describing a signature used in ECDSA.
  *
  */
-interface PrivateKeyInterface
+interface SignatureInterface
 {
-
     /**
-     * @return PublicKeyInterface
-     */
-    public function getPublicKey();
-
-    /**
-     * @return PointInterface
-     */
-    public function getPoint();
-
-    /**
+     * Returns the r parameter of the signature.
+     *
      * @return int|string
      */
-    public function getSecret();
+    public function getR();
 
     /**
-     * @param  PublicKeyInterface $recipient
+     * Returns the s parameter of the signature.
+     *
      * @return int|string
      */
-    public function createExchange(PublicKeyInterface $recipient);
+    public function getS();
 }

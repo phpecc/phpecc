@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Crypto;
 
 /**
  * *********************************************************************
@@ -25,6 +25,8 @@ namespace Mdanter\Ecc;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
+use Mdanter\Ecc\Primitives\PointInterface;
+use Mdanter\Ecc\MathAdapterInterface;
 
 /**
  * This class is the implementation of ECDH.
@@ -38,7 +40,7 @@ namespace Mdanter\Ecc;
 class EcDH implements EcDHInterface
 {
     /**
-     * Adapter used for math calculatioins
+     * Adapter used for math calculations
      *
      * @var MathAdapterInterface
      */

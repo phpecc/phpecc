@@ -1,10 +1,10 @@
 <?php
 
-namespace Mdanter\Ecc\Signature;
+namespace Mdanter\Ecc\Crypto\Signature;
 
 use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\PrivateKeyInterface;
-use Mdanter\Ecc\PublicKeyInterface;
+use Mdanter\Ecc\Crypto\PrivateKeyInterface;
+use Mdanter\Ecc\Crypto\PublicKeyInterface;
 
 class Signer
 {

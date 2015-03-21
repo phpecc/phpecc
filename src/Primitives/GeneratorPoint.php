@@ -1,8 +1,12 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Primitives;
 
+use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Crypto\PrivateKey;
+use Mdanter\Ecc\Crypto\PublicKey;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
+use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 /**
  * Curve point from which public and private keys can be derived.
@@ -10,9 +14,19 @@ use Mdanter\Ecc\Random\RandomGeneratorFactory;
  */
 class GeneratorPoint extends Point
 {
-
+    /**
+     * @var \Mdanter\Ecc\Random\DebugDecorator|RandomNumberGeneratorInterface|null
+     */
     private $generator;
 
+    /**
+     * @param MathAdapterInterface $adapter
+     * @param CurveFpInterface $curve
+     * @param int|string $x
+     * @param int|string $y
+     * @param null $order
+     * @param RandomNumberGeneratorInterface $generator
+     */
     public function __construct(
         MathAdapterInterface $adapter,
         CurveFpInterface $curve,

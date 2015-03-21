@@ -21,9 +21,11 @@ OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 *************************************************************************/
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Primitives;
 
 use Mdanter\Ecc\Math\PrimeFieldArithmetic;
+use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\RandomNumberGeneratorInterface;
 
 /**
  * This class is a representation of an EC over a field modulo a prime number
