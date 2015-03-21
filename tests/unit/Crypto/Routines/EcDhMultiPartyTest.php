@@ -1,10 +1,11 @@
 <?php
 
-namespace Mdanter\Ecc\Tests;
+namespace Mdanter\Ecc\Tests\Crypto\Routines;
 
+use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
 
-class EcDhMultiPartyTest extends \PHPUnit_Framework_TestCase
+class EcDhMultiPartyTest extends AbstractTestCase
 {
 
     public function testMultiPartyKeyGeneration()

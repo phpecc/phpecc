@@ -2,11 +2,12 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
+use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Symfony\Component\Yaml\Yaml;
 use Mdanter\Ecc\Curves\CurveFactory;
 
-class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
+class SpecBasedCurveTest extends AbstractTestCase
 {
 
     public function getFiles()

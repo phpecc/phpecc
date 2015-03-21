@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Math;
 
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 
 /**
  * Debug helper class to trace all calls to math functions along with the provided params and result.

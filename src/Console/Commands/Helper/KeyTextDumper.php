@@ -3,8 +3,8 @@
 namespace Mdanter\Ecc\Console\Commands\Helper;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Mdanter\Ecc\Crypto\PublicKeyInterface;
-use Mdanter\Ecc\Crypto\PrivateKeyInterface;
+use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 
 class KeyTextDumper
 {

@@ -2,8 +2,8 @@
 
 namespace Mdanter\Ecc\Curves;
 
-use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
  * *********************************************************************

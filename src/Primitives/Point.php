@@ -3,7 +3,7 @@
 namespace Mdanter\Ecc\Primitives;
 
 use Mdanter\Ecc\Math\PrimeFieldArithmetic;
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 
 /**
  * *********************************************************************

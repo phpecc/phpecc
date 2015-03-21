@@ -2,8 +2,8 @@
 
 namespace Mdanter\Ecc\Random;
 
-use Mdanter\Ecc\Crypto\PrivateKeyInterface;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
+use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class RandomGeneratorFactory

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto;
+namespace Mdanter\Ecc\Crypto\Routines\Signature;
 
 /**
  * *********************************************************************
@@ -25,70 +25,52 @@ namespace Mdanter\Ecc\Crypto;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 /**
- * This class serves as public - private key exchange for signature verification.
+ * Plain Old PHP Object that stores the signature r,s for ECDSA
+ *
  */
-class PrivateKey implements PrivateKeyInterface
+class Signature implements SignatureInterface
 {
     /**
-     * @var GeneratorPoint
+     *
+     * @var int|string
      */
-    private $generator;
+    protected $r;
 
     /**
-     * @var
+     *
+     * @var int|string
      */
-    private $secretMultiplier;
+    protected $s;
 
     /**
-     * @var MathAdapterInterface
+     * Initialize a new instance with values
+     *
+     * @param int|string $r
+     * @param int|string $s
      */
-    private $adapter;
-
-    public function __construct(MathAdapterInterface $adapter, GeneratorPoint $generator, $secretMultiplier)
+    public function __construct($r, $s)
     {
-        $this->adapter = $adapter;
-        $this->generator = $generator;
-        $this->secretMultiplier = $secretMultiplier;
-    }
-
-    public function getPublicKey()
-    {
-        return new PublicKey($this->adapter, $this->generator, $this->generator->mul($this->secretMultiplier));
+        $this->r = $r;
+        $this->s = $s;
     }
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\PrivateKeyInterface::getPoint()
+     * @see \Mdanter\Ecc\SignatureInterface::getR()
      */
-    public function getPoint()
+    public function getR()
     {
-        return $this->generator;
-    }
-
-    public function getCurve()
-    {
-        return $this->generator->getCurve();
-    }
-
-    public function getSecret()
-    {
-        return $this->secretMultiplier;
+        return $this->r;
     }
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\PrivateKeyInterface::createExchange()
+     * @see \Mdanter\Ecc\SignatureInterface::getS()
      */
-    public function createExchange(PublicKeyInterface $recipientKey = null)
+    public function getS()
     {
-        $exchange = new EcDH($this->adapter);
-        $exchange->setSenderKey($this);
-        $exchange->setRecipientKey($recipientKey);
-
-        return $exchange;
+        return $this->s;
     }
 }

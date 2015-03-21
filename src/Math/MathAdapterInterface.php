@@ -1,6 +1,9 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Math;
+
+use Mdanter\Ecc\Primitives\CurveFpInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 interface MathAdapterInterface
 {
@@ -189,5 +192,27 @@ interface MathAdapterInterface
      */
     public function gcd2($a, $m);
 
+    /**
+     * @param $value
+     * @param $fromBase
+     * @param $toBase
+     * @return int|string
+     */
     public function baseConvert($value, $fromBase, $toBase);
+
+    /**
+     * @return NumberTheory
+     */
+    public function getNumberTheory();
+
+    /**
+     * @return PrimeFieldArithmetic
+     */
+    public function getPrimeFieldArithmetic(CurveFpInterface $curve);
+
+    /**
+     * @return EcMath
+     */
+    public function getEcMath(GeneratorPoint $generatorPoint, $input);
+
 }

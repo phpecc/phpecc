@@ -2,8 +2,8 @@
 
 namespace Mdanter\Ecc\Serializer\PublicKey;
 
-use Mdanter\Ecc\Crypto\PublicKeyInterface;
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Serializer\PublicKey\Der\Formatter;
 use Mdanter\Ecc\Serializer\PublicKey\Der\Parser;

@@ -3,7 +3,7 @@
 namespace Mdanter\Ecc\Tests\Util;
 
 use Mdanter\Ecc\Tests\AbstractTestCase;
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Util\NumberSize;
 
 class NumberSizeTest extends AbstractTestCase

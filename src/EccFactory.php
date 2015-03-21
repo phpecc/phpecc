@@ -5,6 +5,7 @@ namespace Mdanter\Ecc;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
 use Mdanter\Ecc\Math\MathAdapterFactory;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Math\NumberTheory;
 use Mdanter\Ecc\Primitives\CurveFp;
 
@@ -21,7 +22,7 @@ class EccFactory
      * @param $debug [optional] Set to true to get a trace of all mathematical operations
      *
      * @throws \RuntimeException
-     * @return \Mdanter\Ecc\MathAdapterInterface
+     * @return \Mdanter\Ecc\Math\MathAdapterInterface
      */
     public static function getAdapter($debug = false)
     {

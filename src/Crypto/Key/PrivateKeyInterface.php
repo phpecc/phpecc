@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto\Signature;
+namespace Mdanter\Ecc\Crypto\Key;
 
 /**
  * *********************************************************************
@@ -25,52 +25,34 @@ namespace Mdanter\Ecc\Crypto\Signature;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
+use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Primitives\PointInterface;
 
 /**
- * Plain Old PHP Object that stores the signature r,s for ECDSA
+ * This is a contract for the PrivateKey portion of ECDSA.
  *
  */
-class Signature implements SignatureInterface
+interface PrivateKeyInterface
 {
-    /**
-     *
-     * @var int|string
-     */
-    protected $r;
 
     /**
-     *
-     * @var int|string
+     * @return PublicKeyInterface
      */
-    protected $s;
+    public function getPublicKey();
 
     /**
-     * Initialize a new instance with values
-     *
-     * @param int|string $r
-     * @param int|string $s
+     * @return PointInterface
      */
-    public function __construct($r, $s)
-    {
-        $this->r = $r;
-        $this->s = $s;
-    }
+    public function getPoint();
 
     /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\SignatureInterface::getR()
+     * @return int|string
      */
-    public function getR()
-    {
-        return $this->r;
-    }
+    public function getSecret();
 
     /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\SignatureInterface::getS()
+     * @param  PublicKeyInterface $recipient
+     * @return int|string
      */
-    public function getS()
-    {
-        return $this->s;
-    }
+    public function createExchange(PublicKeyInterface $recipient);
 }

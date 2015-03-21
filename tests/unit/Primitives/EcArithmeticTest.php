@@ -1,12 +1,13 @@
 <?php
 
-namespace Mdanter\Ecc\Tests;
+namespace Mdanter\Ecc\Tests\Primitives;
 
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\Point;
 use Mdanter\Ecc\Primitives\CurveFp;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
+use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class EcArithmeticTest extends AbstractTestCase
 {

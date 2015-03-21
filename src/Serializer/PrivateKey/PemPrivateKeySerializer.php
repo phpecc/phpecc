@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Serializer\PrivateKey;
 
-use Mdanter\Ecc\Crypto\PrivateKeyInterface;
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 
 /**
  * PEM Private key formatter

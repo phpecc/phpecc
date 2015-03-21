@@ -1,8 +1,9 @@
 <?php
 
-namespace Mdanter\Ecc\Tests;
+namespace Mdanter\Ecc\Tests\Math;
 
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class MathTest extends AbstractTestCase
 {

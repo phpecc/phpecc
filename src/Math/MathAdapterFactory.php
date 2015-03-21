@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Math;
 
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 
 class MathAdapterFactory
 {

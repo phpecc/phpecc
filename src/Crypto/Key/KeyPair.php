@@ -1,6 +1,9 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto;
+namespace Mdanter\Ecc\Crypto\Key;
+
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
+use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 
 class KeyPair
 {

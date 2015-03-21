@@ -1,12 +1,13 @@
 <?php
 
-namespace Mdanter\Ecc\Tests;
+namespace Mdanter\Ecc\Tests\Primitives;
 
 use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Primitives\Point;
 use Mdanter\Ecc\Primitives\CurveFp;
+use Mdanter\Ecc\Tests\AbstractTestCase;
 
-class PointTest extends \PHPUnit_Framework_TestCase
+class PointTest extends AbstractTestCase
 {
     public function testAddInfinityReturnsOriginalPoint()
     {

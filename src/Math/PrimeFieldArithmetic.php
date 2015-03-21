@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc\Math;
 
-use Mdanter\Ecc\MathAdapterInterface;
-
 class PrimeFieldArithmetic
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto;
+namespace Mdanter\Ecc\Crypto\Routines\Signature;
 
 /**
  * *********************************************************************
@@ -25,28 +25,24 @@ namespace Mdanter\Ecc\Crypto;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-use Mdanter\Ecc\Primitives\CurveFpInterface;
-use Mdanter\Ecc\Primitives\PointInterface;
 
 /**
- * This is the contract for the PublicKey portion of ECDSA.
+ * This is the contract for describing a signature used in ECDSA.
  *
  */
-interface PublicKeyInterface
+interface SignatureInterface
 {
+    /**
+     * Returns the r parameter of the signature.
+     *
+     * @return int|string
+     */
+    public function getR();
 
     /**
-     * @return CurveFpInterface
+     * Returns the s parameter of the signature.
+     *
+     * @return int|string
      */
-    public function getCurve();
-
-    /**
-     * @return PointInterface
-     */
-    public function getPoint();
-
-    /**
-     * @return PointInterface
-     */
-    public function getGenerator();
+    public function getS();
 }

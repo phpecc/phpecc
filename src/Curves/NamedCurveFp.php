@@ -3,7 +3,7 @@
 namespace Mdanter\Ecc\Curves;
 
 use Mdanter\Ecc\Primitives\CurveFp;
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 
 class NamedCurveFp extends CurveFp
 {

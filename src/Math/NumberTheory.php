@@ -29,11 +29,10 @@ namespace Mdanter\Ecc\Math;
  *
  * @author Matyas Danter
  */
-use Mdanter\Ecc\MathAdapterInterface;
 
 /**
  * Rewritten to take a MathAdaptor to handle different environments. Has
- * some desireble functions for public key compression/recovery.
+ * some desireable functions for public key compression/recovery.
  *
  */
 class NumberTheory

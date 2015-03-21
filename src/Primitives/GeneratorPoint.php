@@ -2,11 +2,11 @@
 
 namespace Mdanter\Ecc\Primitives;
 
-use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\Crypto\PrivateKey;
-use Mdanter\Ecc\Crypto\PublicKey;
+use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Crypto\Key\PrivateKey;
+use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
  * Curve point from which public and private keys can be derived.
@@ -72,6 +72,9 @@ class GeneratorPoint extends Point
         return true;
     }
 
+    /**
+     * @return PrivateKey
+     */
     public function createPrivateKey()
     {
         $secret = $this->generator->generate($this->getOrder());
@@ -79,6 +82,12 @@ class GeneratorPoint extends Point
         return new PrivateKey($this->getAdapter(), $this, $secret);
     }
 
+    /**
+     * @param $x
+     * @param $y
+     * @param null $order
+     * @return PublicKey
+     */
     public function getPublicKeyFrom($x, $y, $order = null)
     {
         $pubPoint = $this->getCurve()->getPoint($x, $y, $order);
@@ -86,6 +95,10 @@ class GeneratorPoint extends Point
         return new PublicKey($this->getAdapter(), $this, $pubPoint);
     }
 
+    /**
+     * @param $secretMultiplier
+     * @return PrivateKey
+     */
     public function getPrivateKeyFrom($secretMultiplier)
     {
         return new PrivateKey($this->getAdapter(), $this, $secretMultiplier);

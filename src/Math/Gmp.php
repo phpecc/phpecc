@@ -3,7 +3,8 @@
 namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\Primitives\CurveFpInterface;
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 class Gmp implements MathAdapterInterface
 {
@@ -228,7 +229,7 @@ class Gmp implements MathAdapterInterface
             return $result;
         }
 
-        throw new \InvalidArgumentException('Unable to convert int to string');
+        throw new \RuntimeException('Unable to convert int to string');
     }
 
     /**
@@ -292,5 +293,15 @@ class Gmp implements MathAdapterInterface
     public function getPrimeFieldArithmetic(CurveFpInterface $curve)
     {
         return new PrimeFieldArithmetic($this, $curve->getPrime());
+    }
+
+    /**
+     * @param GeneratorPoint $generatorPoint
+     * @param $input
+     * @return EcMath
+     */
+    public function getEcMath(GeneratorPoint $generatorPoint, $input)
+    {
+        return new EcMath($input, $generatorPoint, $this);
     }
 }

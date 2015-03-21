@@ -24,8 +24,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 namespace Mdanter\Ecc\Primitives;
 
 use Mdanter\Ecc\Math\PrimeFieldArithmetic;
-use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
  * This class is a representation of an EC over a field modulo a prime number

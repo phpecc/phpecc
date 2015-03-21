@@ -1,15 +1,28 @@
 <?php
 
-namespace Mdanter\Ecc\Tests;
+namespace Mdanter\Ecc\Tests\Math;
 
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Math\Gmp;
 use Mdanter\Ecc\Math\NumberTheory;
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class NumberTheoryTest extends AbstractTestCase
 {
+    /**
+     * @var
+     */
     protected $compression_data;
+
+    /**
+     * @var
+     */
+    protected $sqrt_data;
+
+    /**
+     * @var \Mdanter\Ecc\Primitives\GeneratorPoint
+     */
+    protected $generator;
 
     protected function setUp()
     {
@@ -37,10 +50,10 @@ class NumberTheoryTest extends AbstractTestCase
      */
     public function testSqrtDataWithNoRoots(MathAdapterInterface $adapter)
     {
-        $this->theory = new \Mdanter\Ecc\Math\NumberTheory($adapter);
+        $theory = $adapter->getNumberTheory();
 
         foreach ($this->sqrt_data->no_root as $r) {
-            $this->theory->squareRootModP($r->a, $r->p);
+            $theory->squareRootModP($r->a, $r->p);
         }
     }
     /**
@@ -48,10 +61,10 @@ class NumberTheoryTest extends AbstractTestCase
      */
     public function testSqrtDataWithRoots(MathAdapterInterface $adapter)
     {
-        $this->theory = new \Mdanter\Ecc\Math\NumberTheory($adapter);
+        $theory = $adapter->getNumberTheory();
 
         foreach ($this->sqrt_data->has_root as $r) {
-            $root1 = $this->theory->squareRootModP($r->a, $r->p);
+            $root1 = $theory->squareRootModP($r->a, $r->p);
             $root2 = $adapter->sub($r->p, $root1);
             $this->assertTrue(in_array($root1, $r->res));
             $this->assertTrue(in_array($root2, $r->res));
@@ -63,11 +76,11 @@ class NumberTheoryTest extends AbstractTestCase
      */
     public function testCompressionConsistency(MathAdapterInterface $adapter)
     {
-        $this->theory = new \Mdanter\Ecc\Math\NumberTheory($adapter);
-        $this->_doCompressionConsistence($adapter, $this->theory);
+        $theory = $adapter->getNumberTheory();
+        $this->_doCompressionConsistence($adapter, $theory);
     }
 
-    public function _doCompressionConsistence(MathAdapterInterface $adapter, $theory)
+    public function _doCompressionConsistence(MathAdapterInterface $adapter, NumberTheory $theory)
     {
         foreach ($this->compression_data as $o) {
             // Try and regenerate the y coordinate from the parity byte
@@ -92,9 +105,6 @@ class NumberTheoryTest extends AbstractTestCase
                         $y2,
                         $this->generator->getCurve()->getPrime()
                     );
-
-            // y1 = other root = p - y0
-            $y1 = gmp_strval($adapter->sub($this->generator->getCurve()->getPrime(), $y0), 16);
 
             if ($y_byte == '02') {
                 $y_coordinate = ($adapter->mod($y0, 2) == '0')

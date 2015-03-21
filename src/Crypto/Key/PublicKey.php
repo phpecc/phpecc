@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto;
+namespace Mdanter\Ecc\Crypto\Key;
 
 /**
  * *********************************************************************
@@ -25,7 +25,8 @@ namespace Mdanter\Ecc\Crypto;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Primitives\PointInterface;

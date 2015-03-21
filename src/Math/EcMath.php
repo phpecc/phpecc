@@ -1,6 +1,7 @@
 <?php
 
-namespace Mdanter\Ecc;
+namespace Mdanter\Ecc\Math;
+
 
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Primitives\PointInterface;

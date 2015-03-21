@@ -3,7 +3,7 @@
 namespace Mdanter\Ecc\Primitives;
 
 use Mdanter\Ecc\Math\PrimeFieldArithmetic;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
  * *********************************************************************

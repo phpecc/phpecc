@@ -4,7 +4,7 @@ namespace Mdanter\Ecc\Tests\Console\Commands;
 
 use Mdanter\Ecc\Console\Commands\GeneratePublicKeyCommand;
 use Mdanter\Ecc\Math\MathAdapterFactory;
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 
 class GeneratePublicKeyCommandTest extends AbstractCommandTest
 {

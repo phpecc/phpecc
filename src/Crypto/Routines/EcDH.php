@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto;
+namespace Mdanter\Ecc\Crypto\Routines;
 
 /**
  * *********************************************************************
@@ -25,8 +25,12 @@ namespace Mdanter\Ecc\Crypto;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
+use Mdanter\Ecc\Crypto\Routines\EcDHInterface;
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
+use Mdanter\Ecc\Crypto\Key\PublicKey;
+use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 
 /**
  * This class is the implementation of ECDH.
