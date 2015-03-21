@@ -25,9 +25,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
-use Mdanter\Ecc\Crypto\Key\PublicKey;
-use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+
 use Mdanter\Ecc\Crypto\Routines\EcDH;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
@@ -59,6 +57,10 @@ class PrivateKey implements PrivateKeyInterface
         $this->secretMultiplier = $secretMultiplier;
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\PrivateKeyInterface::getPublicKey()
+     */
     public function getPublicKey()
     {
         return new PublicKey($this->adapter, $this->generator, $this->generator->mul($this->secretMultiplier));
@@ -73,11 +75,19 @@ class PrivateKey implements PrivateKeyInterface
         return $this->generator;
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\PrivateKeyInterface::getCurve()
+     */
     public function getCurve()
     {
         return $this->generator->getCurve();
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\PrivateKeyInterface::getSecret()
+     */
     public function getSecret()
     {
         return $this->secretMultiplier;

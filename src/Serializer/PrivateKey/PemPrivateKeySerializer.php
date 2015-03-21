@@ -11,14 +11,23 @@ use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
  */
 class PemPrivateKeySerializer implements PrivateKeySerializerInterface
 {
-
+    /**
+     * @var DerPrivateKeySerializer
+     */
     private $derSerializer;
 
+    /**
+     * @param DerPrivateKeySerializer $derSerializer
+     */
     public function __construct(DerPrivateKeySerializer $derSerializer)
     {
         $this->derSerializer = $derSerializer;
     }
 
+    /**
+     * @param PrivateKeyInterface $key
+     * @return string
+     */
     public function serialize(PrivateKeyInterface $key)
     {
         $privateKeyInfo = $this->derSerializer->serialize($key);
@@ -30,6 +39,10 @@ class PemPrivateKeySerializer implements PrivateKeySerializerInterface
         return $content;
     }
 
+    /**
+     * @param string $formattedKey
+     * @return \Mdanter\Ecc\Crypto\Key\PrivateKey
+     */
     public function parse($formattedKey)
     {
         $formattedKey = str_replace('-----BEGIN EC PRIVATE KEY-----', '', $formattedKey);

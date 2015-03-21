@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\Primitives\CurveFpInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 class Gmp implements MathAdapterInterface

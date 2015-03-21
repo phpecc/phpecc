@@ -2,6 +2,8 @@
 
 namespace Mdanter\Ecc\File;
 
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
+
 class PemLoader implements FileLoader
 {
 

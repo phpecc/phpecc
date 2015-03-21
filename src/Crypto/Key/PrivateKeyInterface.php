@@ -25,7 +25,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+
 use Mdanter\Ecc\Primitives\PointInterface;
 
 /**

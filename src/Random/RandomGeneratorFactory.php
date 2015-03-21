@@ -3,19 +3,27 @@
 namespace Mdanter\Ecc\Random;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
-use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class RandomGeneratorFactory
 {
-
+    /**
+     * @var RandomNumberGeneratorInterface|null
+     */
     private static $forcedGenerator = null;
 
+    /**
+     * @param RandomNumberGeneratorInterface $generator
+     */
     public static function forceGenerator(RandomNumberGeneratorInterface $generator = null)
     {
         self::$forcedGenerator = $generator;
     }
 
+    /**
+     * @param bool $debug
+     * @return DebugDecorator|RandomNumberGeneratorInterface|null
+     */
     public static function getRandomGenerator($debug = false)
     {
         if (self::$forcedGenerator !== null) {
@@ -29,8 +37,14 @@ class RandomGeneratorFactory
         if (extension_loaded('gmp') && ! defined('HHVM_VERSION')) {
             return self::getGmpRandomGenerator($debug);
         }
+
+        throw new \RuntimeException('No usable RandomGenerator was found');
     }
 
+    /**
+     * @param bool $debug
+     * @return DebugDecorator|RandomNumberGeneratorInterface
+     */
     public static function getUrandomGenerator($debug = false)
     {
         return self::wrapAdapter(
@@ -40,6 +54,11 @@ class RandomGeneratorFactory
         );
     }
 
+    /**
+     * @param bool $debug
+     * @param bool $noWarn
+     * @return DebugDecorator|RandomNumberGeneratorInterface
+     */
     public static function getGmpRandomGenerator($debug = false, $noWarn = false)
     {
         return self::wrapAdapter(
@@ -49,6 +68,13 @@ class RandomGeneratorFactory
         );
     }
 
+    /**
+     * @param PrivateKeyInterface $privateKey
+     * @param $messageHash
+     * @param $algo
+     * @param bool $debug
+     * @return DebugDecorator|RandomNumberGeneratorInterface
+     */
     public static function getHmacRandomGenerator(PrivateKeyInterface $privateKey, $messageHash, $algo, $debug = false)
     {
         return self::wrapAdapter(
@@ -63,6 +89,12 @@ class RandomGeneratorFactory
         );
     }
 
+    /**
+     * @param RandomNumberGeneratorInterface $generator
+     * @param $name
+     * @param bool $debug
+     * @return DebugDecorator|RandomNumberGeneratorInterface
+     */
     private static function wrapAdapter(RandomNumberGeneratorInterface $generator, $name, $debug = false)
     {
         if ($debug === true) {

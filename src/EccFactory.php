@@ -6,7 +6,6 @@ use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Math\MathAdapterInterface;
-use Mdanter\Ecc\Math\NumberTheory;
 use Mdanter\Ecc\Primitives\CurveFp;
 
 /**
@@ -22,7 +21,7 @@ class EccFactory
      * @param $debug [optional] Set to true to get a trace of all mathematical operations
      *
      * @throws \RuntimeException
-     * @return \Mdanter\Ecc\Math\MathAdapterInterface
+     * @return MathAdapterInterface
      */
     public static function getAdapter($debug = false)
     {
@@ -38,14 +37,15 @@ class EccFactory
      */
     public static function getNumberTheory(MathAdapterInterface $adapter = null)
     {
-        return new NumberTheory($adapter ?: self::getAdapter());
+        $adapter = $adapter ?: self::getAdapter();
+        return $adapter->getNumberTheory();
     }
 
     /**
      * Returns a factory to create NIST Recommended curves and generators.
      *
      * @param  MathAdapterInterface          $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
-     * @return \Mdanter\Ecc\Curves\NistCurve
+     * @return NistCurve
      */
     public static function getNistCurves(MathAdapterInterface $adapter = null)
     {
@@ -56,7 +56,7 @@ class EccFactory
      * Returns a factory to return SECG Recommended curves and generators.
      *
      * @param  MathAdapterInterface          $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
-     * @return \Mdanter\Ecc\Curves\SecgCurve
+     * @return SecgCurve
      */
     public static function getSecgCurves(MathAdapterInterface $adapter = null)
     {

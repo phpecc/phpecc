@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc\Crypto\Key;
 
-use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
-use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 
 class KeyPair
 {
@@ -43,8 +41,7 @@ class KeyPair
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function hasPrivateKey()
     {

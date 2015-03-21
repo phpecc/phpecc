@@ -277,6 +277,11 @@ class Point implements PointInterface
         return $r[0];
     }
 
+    /**
+     * @param Point $a
+     * @param Point $b
+     * @param $cond
+     */
     private function cswap(self $a, self $b, $cond)
     {
         $this->cswapValue($a->x, $b->x, $cond);
@@ -285,6 +290,11 @@ class Point implements PointInterface
         $this->cswapValue($a->infinity, $b->infinity, $cond);
     }
 
+    /**
+     * @param $a
+     * @param $b
+     * @param $cond
+     */
     public function cswapValue(& $a, & $b, $cond)
     {
         $size = max(strlen($this->adapter->baseConvert($a, 10, 2)), strlen($this->adapter->baseConvert($b, 10, 2)));
@@ -301,6 +311,9 @@ class Point implements PointInterface
         $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
     }
 
+    /**
+     *
+     */
     private function validate()
     {
         if (! $this->infinity && ! $this->curve->contains($this->x, $this->y)) {

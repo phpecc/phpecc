@@ -52,14 +52,14 @@ interface PointInterface
      * Adds another point to the current one and returns the resulting point.
      *
      * @param  PointInterface          $addend
-     * @return PointInterface|Infinity
+     * @return PointInterface
      */
     public function add(PointInterface $addend);
 
     /**
      * Compares the current instance to another point.
      *
-     * @param  PointInterface|Infinity $other
+     * @param  PointInterface $other
      * @return int|string              A number different than 0 when current instance is less than the given point, 0 when they are equal.
      */
     public function cmp(PointInterface $other);
@@ -67,7 +67,7 @@ interface PointInterface
     /**
      * Checks whether the current instance is equal to the given point.
      *
-     * @param  PointInterface|Infinity $other
+     * @param  PointInterface $other
      * @return bool                    true when points are equal, false otherwise.
      */
     public function equals(PointInterface $other);
@@ -76,7 +76,7 @@ interface PointInterface
      * Multiplies the point by a scalar value and returns the resulting point.
      *
      * @param  mixed                   $multiplier
-     * @return PointInterface|Infinity
+     * @return PointInterface
      */
     public function mul($multiplier);
 
@@ -90,7 +90,7 @@ interface PointInterface
     /**
      * Doubles the current point and returns the resulting point.
      *
-     * @return PointInterface|Infinity
+     * @return PointInterface
      */
     public function getDouble();
 

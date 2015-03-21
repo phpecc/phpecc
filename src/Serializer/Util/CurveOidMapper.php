@@ -28,6 +28,9 @@ class CurveOidMapper
 
     const SECP_384R1_OID = '1.3.132.0.34';
 
+    /**
+     * @var array
+     */
     private static $oidMap = array(
         NistCurve::NAME_P192 => self::NIST_P192_OID,
         NistCurve::NAME_P224 => self::NIST_P224_OID,
@@ -38,6 +41,9 @@ class CurveOidMapper
         SecgCurve::NAME_SECP_384R1 => self::SECP_384R1_OID,
     );
 
+    /**
+     * @var array
+     */
     private static $sizeMap = array(
         NistCurve::NAME_P192 => 12,
         NistCurve::NAME_P224 => 28,
@@ -48,11 +54,18 @@ class CurveOidMapper
         SecgCurve::NAME_SECP_384R1 => 48,
     );
 
+    /**
+     * @return array
+     */
     public static function getNames()
     {
         return array_keys(self::$oidMap);
     }
 
+    /**
+     * @param CurveFpInterface $curve
+     * @return mixed
+     */
     public static function getByteSize(CurveFpInterface $curve)
     {
         if ($curve instanceof NamedCurveFp && array_key_exists($curve->getName(), self::$sizeMap)) {
@@ -62,6 +75,10 @@ class CurveOidMapper
         throw new \RuntimeException('Unsupported curve type.');
     }
 
+    /**
+     * @param NamedCurveFp $curve
+     * @return ObjectIdentifier
+     */
     public static function getCurveOid(NamedCurveFp $curve)
     {
         if (array_key_exists($curve->getName(), self::$oidMap)) {
@@ -73,6 +90,10 @@ class CurveOidMapper
         throw new \RuntimeException('Unsupported curve type.');
     }
 
+    /**
+     * @param ObjectIdentifier $oid
+     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     */
     public static function getCurveFromOid(ObjectIdentifier $oid)
     {
         $oidString = $oid->getContent();
@@ -85,6 +106,10 @@ class CurveOidMapper
         throw new \RuntimeException('Invalid data: unsupported curve.');
     }
 
+    /**
+     * @param ObjectIdentifier $oid
+     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     */
     public static function getGeneratorFromOid(ObjectIdentifier $oid)
     {
         $oidString = $oid->getContent();

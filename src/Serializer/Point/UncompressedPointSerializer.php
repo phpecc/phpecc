@@ -9,17 +9,30 @@ use Mdanter\Ecc\Math\MathAdapterInterface;
 
 class UncompressedPointSerializer implements PointSerializerInterface
 {
-
+    /**
+     * @var MathAdapterInterface
+     */
     private $adapter;
 
+    /**
+     * @var bool
+     */
     private $debug = false;
 
+    /**
+     * @param MathAdapterInterface $adapter
+     * @param bool $debug
+     */
     public function __construct(MathAdapterInterface $adapter, $debug = false)
     {
         $this->adapter = $adapter;
         $this->debug = (bool) $debug;
     }
 
+    /**
+     * @param PointInterface $point
+     * @return string
+     */
     public function serialize(PointInterface $point)
     {
         $length = CurveOidMapper::getByteSize($point->getCurve()) * 2;
@@ -43,6 +56,11 @@ class UncompressedPointSerializer implements PointSerializerInterface
         return $hexString;
     }
 
+    /**
+     * @param CurveFpInterface $curve
+     * @param string $data
+     * @return PointInterface
+     */
     public function unserialize(CurveFpInterface $curve, $data)
     {
         if (substr($data, 0, 2) != '04') {

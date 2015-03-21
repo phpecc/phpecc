@@ -2,7 +2,9 @@
 
 namespace Mdanter\Ecc\Math;
 
-use Mdanter\Ecc\Math\MathAdapterInterface;
+
+use Mdanter\Ecc\Primitives\CurveFpInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 /**
  * Debug helper class to trace all calls to math functions along with the provided params and result.
@@ -433,6 +435,51 @@ class DebugDecorator implements MathAdapterInterface
      * @see \Mdanter\Ecc\MathAdapterInterface::baseConvert()
      */
     public function baseConvert($value, $fromBase, $toBase)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::getEcMath()
+     */
+    public function getEcMath(GeneratorPoint $generatorPoint, $input)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::getPrimeFieldArithmetic()
+     */
+    public function getPrimeFieldArithmetic(CurveFpInterface $curve)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(array(
+            $this,
+            'call'
+        ), $func, $args);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::getNumberTheory()
+     */
+    public function getNumberTheory()
     {
         $func = __METHOD__;
         $args = func_get_args();

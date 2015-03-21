@@ -26,16 +26,30 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     const VERSION = 1;
 
+    /**
+     * @var \Mdanter\Ecc\Math\DebugDecorator|MathAdapterInterface|null
+     */
     private $adapter;
 
+    /**
+     * @var DerPublicKeySerializer
+     */
     private $pubKeySerializer;
 
+    /**
+     * @param MathAdapterInterface $adapter
+     * @param PemPublicKeySerializer $pubKeySerializer
+     */
     public function __construct(MathAdapterInterface $adapter = null, PemPublicKeySerializer $pubKeySerializer = null)
     {
         $this->adapter = $adapter ?: MathAdapterFactory::getAdapter();
         $this->pubKeySerializer = $pubKeySerializer ?: new DerPublicKeySerializer($this->adapter);
     }
 
+    /**
+     * @param PrivateKeyInterface $key
+     * @return string
+     */
     public function serialize(PrivateKeyInterface $key)
     {
         $privateKeyInfo = new Sequence(
@@ -48,6 +62,10 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
         return $privateKeyInfo->getBinary();
     }
 
+    /**
+     * @param PrivateKeyInterface $key
+     * @return BitString
+     */
     private function encodePubKey(PrivateKeyInterface $key)
     {
         return new BitString(
@@ -55,11 +73,20 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
         );
     }
 
+    /**
+     * @param PrivateKeyInterface $key
+     * @return int|mixed|string
+     */
     private function formatKey(PrivateKeyInterface $key)
     {
         return $this->adapter->decHex($key->getSecret());
     }
 
+    /**
+     * @param string $data
+     * @return \Mdanter\Ecc\Crypto\Key\PrivateKey
+     * @throws \FG\ASN1\Exception\ParserException
+     */
     public function parse($data)
     {
         $asnObject = Object::fromBinary($data);
