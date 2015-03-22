@@ -66,7 +66,6 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
         }
 
         $tempHash = hash($algo, 1, true);
-        $hlen = strlen($tempHash);
         $vlen = NumberSize::getCeiledByteSize($math, $math->hexdec(bin2hex($tempHash), 1));
 
         // Initialize deterministic vectors
@@ -82,10 +81,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
             "H*",
             $this->int2octets($privateKey->getSecret()).
             $this->int2octets($messageHash)
-        //    str_pad($math->decHex($privateKey->getSecret()), $hlen * 2, '0', STR_PAD_LEFT) .
-            //str_pad($math->decHex($messageHash), $hlen * 2, '0', STR_PAD_LEFT)
         );
-
 
         $this->update($entropy);
 

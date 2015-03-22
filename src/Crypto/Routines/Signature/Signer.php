@@ -24,6 +24,12 @@ class Signer
         $this->adapter = $adapter;
     }
 
+    /**
+     * @param PrivateKeyInterface $key
+     * @param $hash
+     * @param $randomK
+     * @return Signature
+     */
     public function sign(PrivateKeyInterface $key, $hash, $randomK)
     {
         $math = $this->adapter;
@@ -53,6 +59,12 @@ class Signer
         return new Signature($r, $s);
     }
 
+    /**
+     * @param PublicKeyInterface $key
+     * @param SignatureInterface $signature
+     * @param $hash
+     * @return bool
+     */
     public function verify(PublicKeyInterface $key, SignatureInterface $signature, $hash)
     {
         $math = $this->adapter;

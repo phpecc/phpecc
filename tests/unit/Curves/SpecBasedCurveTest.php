@@ -7,7 +7,7 @@ use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Symfony\Component\Yaml\Yaml;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
-use Mdanter\Ecc\Signature\Signer;
+use Mdanter\Ecc\Crypto\Routines\Signature\Signer;
 
 class SpecBasedCurveTest extends AbstractTestCase
 {

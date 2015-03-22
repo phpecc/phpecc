@@ -92,18 +92,12 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
             $sig    = $signer->sign($privateKey, $messageHash, $k);
 
             // R and S should be correct
-            $rHex = $math->dechex($sig->getR());
-            $sHex = $math->decHex($sig->getS());
-            $this->assertSame($test->expectedRS, $rHex.$sHex);
             $sR = $this->math->hexDec($test->expectedR);
             $sS = $this->math->hexDec($test->expectedS);
 
             $this->assertTrue($signer->verify($privateKey->getPublicKey(), $sig, $messageHash));
 
             $this->assertSame($sR, $sig->getR(), 'r');
-            //echo "k: ".$this->math->decHex($k)." ({$test->expectedK})\n";
-            //echo "R: ".$this->math->decHex($sig->getR())." ({$test->expectedR})\n";
-            //echo "S: ".$this->math->decHex($sig->getS())." ({$test->expectedS})\n";
             $this->assertSame($sS, $sig->getS(), 's');
         }
     }
@@ -112,7 +106,7 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
     {
         $data = [];
 
-        $f = file_get_contents(__DIR__.'/../data/rfc6979.2.json');
+        $f = file_get_contents(__DIR__.'/../../data/rfc6979.2.json');
         $json = json_decode($f);
 
         foreach ($json->test as $test) {

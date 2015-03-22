@@ -25,7 +25,7 @@ namespace Mdanter\Ecc\Crypto\Routines;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-use Mdanter\Ecc\Crypto\Routines\EcDHInterface;
+
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;

@@ -2,9 +2,7 @@
 
 namespace Mdanter\Ecc\Random;
 
-use Mdanter\Ecc\GeneratorPoint;
-use Mdanter\Ecc\PrivateKeyInterface;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 
 use Mdanter\Ecc\Math\MathAdapterFactory;
 

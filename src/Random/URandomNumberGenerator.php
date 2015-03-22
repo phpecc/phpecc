@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Random;
 
 use Mdanter\Ecc\Math\MathAdapterInterface;
-use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 use Mdanter\Ecc\Util\NumberSize;
 
 class URandomNumberGenerator implements RandomNumberGeneratorInterface
