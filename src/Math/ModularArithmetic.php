@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Math;
 
-class PrimeFieldArithmetic
+class ModularArithmetic
 {
     /**
      * @var MathAdapterInterface
@@ -12,16 +12,16 @@ class PrimeFieldArithmetic
     /**
      * @var
      */
-    private $prime;
+    private $modulus;
 
     /**
      * @param MathAdapterInterface $adapter
-     * @param $prime
+     * @param $modulus
      */
-    public function __construct(MathAdapterInterface $adapter, $prime)
+    public function __construct(MathAdapterInterface $adapter, $modulus)
     {
         $this->adapter = $adapter;
-        $this->prime = $prime;
+        $this->modulus = $modulus;
     }
 
     /**
@@ -31,7 +31,7 @@ class PrimeFieldArithmetic
      */
     public function add($augend, $addend)
     {
-        return $this->adapter->mod($this->adapter->add($augend, $addend), $this->prime);
+        return $this->adapter->mod($this->adapter->add($augend, $addend), $this->modulus);
     }
 
     /**
@@ -41,7 +41,7 @@ class PrimeFieldArithmetic
      */
     public function sub($minuend, $subtrahend)
     {
-        return $this->adapter->mod($this->adapter->sub($minuend, $subtrahend), $this->prime);
+        return $this->adapter->mod($this->adapter->sub($minuend, $subtrahend), $this->modulus);
     }
 
     /**
@@ -51,7 +51,7 @@ class PrimeFieldArithmetic
      */
     public function mul($multiplier, $muliplicand)
     {
-        return $this->adapter->mod($this->adapter->mul($multiplier, $muliplicand), $this->prime);
+        return $this->adapter->mod($this->adapter->mul($multiplier, $muliplicand), $this->modulus);
     }
 
     /**
@@ -61,7 +61,7 @@ class PrimeFieldArithmetic
      */
     public function div($dividend, $divisor)
     {
-        return $this->adapter->mod($this->adapter->mul($dividend, $this->adapter->inverseMod($divisor, $this->prime)), $this->prime);
+        return $this->adapter->mod($this->adapter->mul($dividend, $this->adapter->inverseMod($divisor, $this->modulus)), $this->modulus);
     }
 
     /**
@@ -71,6 +71,6 @@ class PrimeFieldArithmetic
      */
     public function pow($base, $exponent)
     {
-        return $this->adapter->powmod($base, $exponent, $this->prime);
+        return $this->adapter->powmod($base, $exponent, $this->modulus);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Primitives;
 
-use Mdanter\Ecc\Math\PrimeFieldArithmetic;
+use Mdanter\Ecc\Math\ModularArithmetic;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 
 /**
@@ -49,7 +49,7 @@ class Point implements PointInterface
     private $adapter;
 
     /**
-     * @var PrimeFieldArithmetic
+     * @var ModularArithmetic
      */
     private $modAdapter;
 

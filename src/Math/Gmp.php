@@ -287,11 +287,20 @@ class Gmp implements MathAdapterInterface
 
     /**
      * @param CurveFpInterface $curve
-     * @return PrimeFieldArithmetic
+     * @return ModularArithmetic
      */
     public function getPrimeFieldArithmetic(CurveFpInterface $curve)
     {
-        return new PrimeFieldArithmetic($this, $curve->getPrime());
+        return new ModularArithmetic($this, $curve->getPrime());
+    }
+
+    /**
+     * @param $modulus
+     * @return ModularArithmetic
+     */
+    public function getModularArithmetic($modulus)
+    {
+        return new ModularArithmetic($this, $modulus);
     }
 
     /**

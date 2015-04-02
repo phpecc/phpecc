@@ -206,9 +206,15 @@ interface MathAdapterInterface
     public function getNumberTheory();
 
     /**
-     * @return PrimeFieldArithmetic
+     * @return ModularArithmetic
      */
     public function getPrimeFieldArithmetic(CurveFpInterface $curve);
+
+    /**
+     * @param $modulus
+     * @return ModularArithmetic
+     */
+    public function getModularArithmetic($modulus);
 
     /**
      * @return EcMath

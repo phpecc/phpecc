@@ -23,7 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 *************************************************************************/
 namespace Mdanter\Ecc\Primitives;
 
-use Mdanter\Ecc\Math\PrimeFieldArithmetic;
+use Mdanter\Ecc\Math\ModularArithmetic;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
@@ -63,7 +63,7 @@ class CurveFp implements CurveFpInterface
 
     /**
      *
-     * @var PrimeFieldArithmetic
+     * @var ModularArithmetic
      */
     protected $modAdapter = null;
 
@@ -81,7 +81,7 @@ class CurveFp implements CurveFpInterface
         $this->b = $b;
         $this->prime = $prime;
         $this->adapter = $adapter;
-        $this->modAdapter = new PrimeFieldArithmetic($this->adapter, $prime);
+        $this->modAdapter = new ModularArithmetic($this->adapter, $prime);
     }
 
     /**

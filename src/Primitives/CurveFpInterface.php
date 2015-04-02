@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Primitives;
 
-use Mdanter\Ecc\Math\PrimeFieldArithmetic;
+use Mdanter\Ecc\Math\ModularArithmetic;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
@@ -38,7 +38,7 @@ interface CurveFpInterface
     /**
      * Returns a modular arithmetic adapter.
      *
-     * @return PrimeFieldArithmetic
+     * @return ModularArithmetic
      */
     public function getModAdapter();
 
