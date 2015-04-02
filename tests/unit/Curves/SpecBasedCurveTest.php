@@ -13,6 +13,9 @@ use Mdanter\Ecc\Crypto\Routines\Signature\Signer;
 class SpecBasedCurveTest extends AbstractTestCase
 {
 
+    /**
+     * @return array
+     */
     public function getFiles()
     {
         return [
@@ -27,6 +30,9 @@ class SpecBasedCurveTest extends AbstractTestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getKeypairsTestSet()
     {
         $yaml = new Yaml();
@@ -69,6 +75,9 @@ class SpecBasedCurveTest extends AbstractTestCase
         $this->assertEquals($adapter->hexDec($expectedY), $publicKey->getPoint()->getY(), $name);
     }
 
+    /**
+     * @return array
+     */
     public function getDiffieHellmanTestSet()
     {
         $yaml = new Yaml();
@@ -81,7 +90,6 @@ class SpecBasedCurveTest extends AbstractTestCase
 
             foreach ($data['diffie'] as $testKeyPair) {
                 $datasets[] = [
-                    $data['name'],
                     $generator,
                     $testKeyPair['alice'],
                     $testKeyPair['bob'],
@@ -100,7 +108,7 @@ class SpecBasedCurveTest extends AbstractTestCase
      * @param string $bob
      * @param string $expectedX
      */
-    public function testGetDiffieHellmanSharedSecret($name, GeneratorPoint $generator, $alice, $bob, $expectedX)
+    public function testGetDiffieHellmanSharedSecret(GeneratorPoint $generator, $alice, $bob, $expectedX)
     {
         $adapter = $generator->getAdapter();
 
@@ -114,6 +122,9 @@ class SpecBasedCurveTest extends AbstractTestCase
         $this->assertEquals($bobDh->calculateSharedKey(), $adapter->hexDec($expectedX));
     }
 
+    /**
+     * @return array
+     */
     public function getHmacTestSet()
     {
         $yaml = new Yaml();
@@ -179,9 +190,7 @@ class SpecBasedCurveTest extends AbstractTestCase
             $hashBits = str_pad($hashBits, $hexSize * 4, '0', STR_PAD_LEFT);
         }
 
-        $messageHash = $math->baseConvert(substr($hashBits, 0, $size), 2, 10);
-
-        //var_dump( $math->baseConvert(substr($math->baseConvert($messageHash, 10, 2), 0, $size), 2, 16), $messageHash);
+        $messageHash = $math->baseConvert(substr($hashBits, 0, NumberSize::bnNumBits($math, $G->getOrder())), 2, 10);
 
         $signer = new Signer($math);
         $sig    = $signer->sign($privateKey, $messageHash, $k);
@@ -195,50 +204,4 @@ class SpecBasedCurveTest extends AbstractTestCase
         $this->assertSame($sS, $sig->getS(), 's');
     }
 
-    /**
-     * @dataProvider getHmacTestSet()
-     */
-    public function atestHmacSignatures2($name, GeneratorPoint $generator, $size, $privKey, $algo, $message, $eK, $eR, $eS)
-    {
-        echo "\n";
-        echo "curve: $name\n";
-        echo "algo: $algo\n";
-        $adapter = $generator->getAdapter();
-
-        $key = $generator->getPrivateKeyFrom($adapter->hexDec($privKey));
-        $hashB = hash($algo, $message, true);
-        $hashL = strlen($hashB) * 8;
-        $hash = $adapter->hexDec(bin2hex($hashB));
-
-        $qBitSize = NumberSize::bnNumBits($adapter, $generator->getOrder());
-        echo "hl: $hashL\n";
-        echo "ql: $qBitSize\n";
-
-        $drbg = RandomGeneratorFactory::getHmacRandomGenerator($key, $hash, $algo);
-        $k = $drbg->generate($generator->getOrder());
-
-        $this->assertEquals($adapter->hexDec($eK), $k, 'k');
-        if ($size > 0) {
-            $k = $adapter->baseConvert(substr($adapter->baseConvert($k, 10, 2), 0, $qBitSize), 2, 10);
-        }
-
-        echo "Size: $size\n";
-        echo "K: ".$adapter->decHex($k)."\n";
-        echo "hash: $hash\n";
-        ///if ($size > 0) {
-        //    $hash = $adapter->baseConvert(substr($adapter->baseConvert($hash, 10, 2), 0, $size ), 2, 10);
-       // }
-        echo "hash: $hash\n";
-        $signer = new Signer($adapter);
-        $signature = $signer->sign($key, $hash, $k);
-
-
-        $r = $adapter->decHex($signature->getR());
-        $s = $adapter->decHex($signature->getS());
-        echo "R: $r\n";
-        echo "S: $s\n";
-        echo "\n";
-        $this->assertEquals($eR, $r, "r: $eR == $r");
-        $this->assertEquals($eS, $s, "s: $eS == $s");
-    }
 }

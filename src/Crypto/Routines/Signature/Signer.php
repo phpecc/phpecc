@@ -5,6 +5,8 @@ namespace Mdanter\Ecc\Crypto\Routines\Signature;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
+use Mdanter\Ecc\Util\NumberSize;
 
 class Signer
 {
@@ -22,6 +24,23 @@ class Signer
     public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;
+    }
+
+    /**
+     * @param GeneratorPoint $G
+     * @param $hash
+     * @return int|string
+     */
+    public function truncateHash(GeneratorPoint $G, $hash)
+    {
+        $hexSize = strlen($this->adapter->decHex($hash));
+        $hashBits = $this->adapter->baseConvert($hash, 10, 2);
+        if (strlen($hashBits) < $hexSize * 4) {
+            $hashBits = str_pad($hashBits, $hexSize * 4, '0', STR_PAD_LEFT);
+        }
+
+        $messageHash = $this->adapter->baseConvert(substr($hashBits, 0, NumberSize::bnNumBits($this->adapter, $G->getOrder())), 2, 10);
+        return $messageHash;
     }
 
     /**
@@ -43,6 +62,8 @@ class Signer
         if ($math->cmp($r, 0) == 0) {
             throw new \RuntimeException("Error: random number R = 0");
         }
+
+        $hash = $this->truncateHash($generator, $hash);
 
         $s = $math->mod(
             $math->mul(
