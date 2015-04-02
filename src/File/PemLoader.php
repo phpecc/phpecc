@@ -13,7 +13,7 @@ class PemLoader implements FileLoader
 
     /**
      *
-     * @param  string                    $file
+     * @param  string $file
      * @return PrivateKeyInterface
      * @throws \InvalidArgumentException
      */
@@ -38,7 +38,7 @@ class PemLoader implements FileLoader
 
     /**
      *
-     * @param  string                    $file
+     * @param  string $file
      * @return PrivateKeyInterface
      * @throws \InvalidArgumentException
      */

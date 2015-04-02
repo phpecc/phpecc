@@ -30,7 +30,6 @@ use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 
 /**
  * This is the contract for implementing EcDH (EC Diffie Hellman).
- *
  */
 interface EcDHInterface
 {
@@ -83,7 +82,7 @@ interface EcDHInterface
      * Generates an encrypted version of the given file, that can be decoded by the other
      * party.
      *
-     * @param  string      $path
+     * @param  string $path
      * @return string|null
      */
     public function encryptFile($path);
@@ -91,7 +90,7 @@ interface EcDHInterface
     /**
      * Decrypts a file that was encrypted by the other party.
      *
-     * @param  string      $path
+     * @param  string $path
      * @return string|null
      */
     public function decryptFile($path);

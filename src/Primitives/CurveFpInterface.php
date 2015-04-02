@@ -31,7 +31,6 @@ use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
  * This is the contract for implementing CurveFp (EC prime finite-field).
- *
  */
 interface CurveFpInterface
 {
@@ -46,9 +45,9 @@ interface CurveFpInterface
     /**
      * Returns the point identified by given coordinates.
      *
-     * @param  int|string     $x
-     * @param  int|string     $y
-     * @param  int|string     $order
+     * @param  int|string $x
+     * @param  int|string $y
+     * @param  int|string $order
      * @return PointInterface
      */
     public function getPoint($x, $y, $order = null);
@@ -62,10 +61,10 @@ interface CurveFpInterface
 
     /**
      *
-     * @param  int|string                       $x
-     * @param  int|string                       $y
-     * @param  string                           $order
-     * @param  RandomNumberGeneratorInterface   $randomGenerator
+     * @param  int|string                     $x
+     * @param  int|string                     $y
+     * @param  string                         $order
+     * @param  RandomNumberGeneratorInterface $randomGenerator
      * @return GeneratorPoint
      */
     public function getGenerator($x, $y, $order = null, RandomNumberGeneratorInterface $randomGenerator = null);

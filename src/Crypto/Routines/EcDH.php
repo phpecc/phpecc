@@ -39,7 +39,6 @@ use Mdanter\Ecc\Math\MathAdapterInterface;
  * The key then can be hashed and used as a basis in
  * a dual encryption scheme, along with AES for faster
  * two- way encryption.
- *
  */
 class EcDH implements EcDHInterface
 {

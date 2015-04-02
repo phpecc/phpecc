@@ -28,7 +28,6 @@ namespace Mdanter\Ecc\Crypto\Routines\Signature;
 
 /**
  * This is the contract for describing a signature used in ECDSA.
- *
  */
 interface SignatureInterface
 {

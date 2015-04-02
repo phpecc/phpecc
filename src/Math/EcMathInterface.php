@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Math;
 
-
 use Mdanter\Ecc\Primitives\PointInterface;
 
 interface EcMathInterface
@@ -10,7 +9,7 @@ interface EcMathInterface
     /**
      * Add $addend to the current value stored in the instance.
      *
-     * @param $addend
+     * @param  $addend
      * @return $this
      */
     public function add($addend);
@@ -18,7 +17,7 @@ interface EcMathInterface
     /**
      * Multiply $multiplicand by the current value stored in the instance.
      *
-     * @param $multiplicand
+     * @param  $multiplicand
      * @return $this
      */
     public function mul($multiplicand);
@@ -34,7 +33,7 @@ interface EcMathInterface
      * Calculate the mod $int of the current value. No operation if the
      * current value is a point.
      *
-     * @param $int
+     * @param  $int
      * @return $this
      */
     public function mod($int);
@@ -42,7 +41,7 @@ interface EcMathInterface
     /**
      * Compare the current value with $n.
      *
-     * @param $n
+     * @param  $n
      * @return mixed
      */
     public function cmp($n);

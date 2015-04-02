@@ -24,7 +24,6 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      */
     private $algorithm;
 
-    private $generator;
     /**
      * @var string
      */
@@ -53,10 +52,10 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     /**
      * Construct a HMAC deterministic byte generator.
      *
-     * @param MathAdapterInterface $math
-     * @param PrivateKeyInterface $privateKey
-     * @param string $messageHash
-     * @param $algo
+     * @param    MathAdapterInterface $math
+     * @param    PrivateKeyInterface  $privateKey
+     * @param    string               $messageHash
+     * @param    $algo
      * @internal param string $personalString
      */
     public function __construct(MathAdapterInterface $math, PrivateKeyInterface $privateKey, $messageHash, $algo)
@@ -189,22 +188,26 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      */
     private function update($data = null)
     {
-        $this->K = $this->hash(sprintf(
-            "%s%s%s",
-            $this->V,
-            chr(0x00),
-            $data
-        ));
+        $this->K = $this->hash(
+            sprintf(
+                "%s%s%s",
+                $this->V,
+                chr(0x00),
+                $data
+            )
+        );
 
         $this->V = $this->hash($this->V);
 
         if ($data) {
-            $this->K = $this->hash(sprintf(
-                "%s%s%s",
-                $this->V,
-                chr(0x01),
-                $data
-            ));
+            $this->K = $this->hash(
+                sprintf(
+                    "%s%s%s",
+                    $this->V,
+                    chr(0x01),
+                    $data
+                )
+            );
 
             $this->V = $this->hash($this->V);
         }
@@ -236,7 +239,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     /**
      * Generate a nonce based on the given $max
      *
-     * @param $max
+     * @param  $max
      * @return int|string
      */
     public function generate($max)
@@ -254,7 +257,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
                 }
 
                 // Otherwise derive another and try again.
-                $this->update(null);
+                $this->update(chr(0));
             }
 
             $this->result = $rand;

@@ -15,7 +15,7 @@ interface PublicKeySerializerInterface
 
     /**
      *
-     * @param  string             $formattedKey
+     * @param  string $formattedKey
      * @return PublicKeyInterface
      */
     public function parse($formattedKey);

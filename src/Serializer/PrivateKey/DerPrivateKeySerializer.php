@@ -37,7 +37,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
     private $pubKeySerializer;
 
     /**
-     * @param MathAdapterInterface $adapter
+     * @param MathAdapterInterface   $adapter
      * @param PemPublicKeySerializer $pubKeySerializer
      */
     public function __construct(MathAdapterInterface $adapter = null, PemPublicKeySerializer $pubKeySerializer = null)

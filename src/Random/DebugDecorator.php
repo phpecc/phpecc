@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Random;
 
-
 class DebugDecorator implements RandomNumberGeneratorInterface
 {
     /**

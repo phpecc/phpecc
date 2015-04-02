@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Crypto\Key;
 
-
 class KeyPair
 {
     /**
@@ -19,8 +18,8 @@ class KeyPair
 
     /**
      *
-     * @param  PrivateKeyInterface       $privateKey
-     * @param  PublicKeyInterface        $publicKey
+     * @param  PrivateKeyInterface $privateKey
+     * @param  PublicKeyInterface  $publicKey
      * @throws \InvalidArgumentException
      */
     public function __construct(PrivateKeyInterface $privateKey = null, PublicKeyInterface $publicKey = null)
@@ -33,8 +32,7 @@ class KeyPair
         $this->publicKey = $publicKey;
 
         // TODO! PublicKey::equals() does not exist
-        if ($this->privateKey !== null && $this->publicKey !== null
-        //    && ! $this->publicKey->equals($privateKey->getPublicKey())
+        if ($this->privateKey !== null && $this->publicKey !== null            //    && ! $this->publicKey->equals($privateKey->getPublicKey())
         ) {
             throw new \InvalidArgumentException('Private/public key mismatch.');
         }

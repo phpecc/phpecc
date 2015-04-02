@@ -28,7 +28,6 @@ namespace Mdanter\Ecc\Crypto\Routines\Signature;
 
 /**
  * Plain Old PHP Object that stores the signature r,s for ECDSA
- *
  */
 class Signature implements SignatureInterface
 {

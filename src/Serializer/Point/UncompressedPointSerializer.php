@@ -21,7 +21,7 @@ class UncompressedPointSerializer implements PointSerializerInterface
 
     /**
      * @param MathAdapterInterface $adapter
-     * @param bool $debug
+     * @param bool                 $debug
      */
     public function __construct(MathAdapterInterface $adapter, $debug = false)
     {
@@ -58,7 +58,7 @@ class UncompressedPointSerializer implements PointSerializerInterface
 
     /**
      * @param CurveFpInterface $curve
-     * @param string $data
+     * @param string           $data
      * @return PointInterface
      */
     public function unserialize(CurveFpInterface $curve, $data)

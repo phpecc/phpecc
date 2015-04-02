@@ -33,7 +33,6 @@ namespace Mdanter\Ecc\Math;
 /**
  * Rewritten to take a MathAdaptor to handle different environments. Has
  * some desireable functions for public key compression/recovery.
- *
  */
 class NumberTheory
 {

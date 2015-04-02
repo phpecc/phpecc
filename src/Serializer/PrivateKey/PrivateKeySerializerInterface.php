@@ -15,7 +15,7 @@ interface PrivateKeySerializerInterface
 
     /**
      *
-     * @param  string              $formattedKey
+     * @param  string $formattedKey
      * @return PrivateKeyInterface
      */
     public function parse($formattedKey);

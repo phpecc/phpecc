@@ -10,7 +10,6 @@ use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
  * Curve point from which public and private keys can be derived.
- *
  */
 class GeneratorPoint extends Point
 {
@@ -20,11 +19,11 @@ class GeneratorPoint extends Point
     private $generator;
 
     /**
-     * @param MathAdapterInterface $adapter
-     * @param CurveFpInterface $curve
-     * @param int|string $x
-     * @param int|string $y
-     * @param null $order
+     * @param MathAdapterInterface           $adapter
+     * @param CurveFpInterface               $curve
+     * @param int|string                     $x
+     * @param int|string                     $y
+     * @param null                           $order
      * @param RandomNumberGeneratorInterface $generator
      */
     public function __construct(

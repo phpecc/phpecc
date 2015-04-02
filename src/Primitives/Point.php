@@ -35,7 +35,6 @@ use Mdanter\Ecc\Math\MathAdapterInterface;
  * - add: adds two points according to ec arithmetic
  * - double: doubles a point on the ec field mod p
  * - mul: uses double and add to achieve multiplication The rest of the methods are there for supporting the ones above.
- *
  */
 class Point implements PointInterface
 {
@@ -77,12 +76,12 @@ class Point implements PointInterface
     /**
      * Initialize a new instance
      *
-     * @param  MathAdapterInterface $adapter
-     * @param  CurveFpInterface     $curve
-     * @param  int|string           $x
-     * @param  int|string           $y
-     * @param  int|string           $order
-     * @param  bool                 $infinity
+     * @param MathAdapterInterface $adapter
+     * @param CurveFpInterface     $curve
+     * @param int|string           $x
+     * @param int|string           $y
+     * @param int|string           $order
+     * @param bool                 $infinity
      *
      * @throws \RuntimeException    when either the curve does not contain the given coordinates or
      *                                      when order is not null and P(x, y) * order is not equal to infinity.

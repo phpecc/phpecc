@@ -112,7 +112,7 @@ interface MathAdapterInterface
     /**
      * Converts an hexadecimal string to decimal.
      *
-     * @param  string     $hexString
+     * @param  string $hexString
      * @return int|string
      */
     public function hexDec($hexString);
@@ -165,7 +165,7 @@ interface MathAdapterInterface
     public function jacobi($a, $p);
 
     /**
-     * @param  int|string  $x
+     * @param  int|string $x
      * @return string|null
      */
     public function intToString($x);
@@ -214,5 +214,4 @@ interface MathAdapterInterface
      * @return EcMath
      */
     public function getEcMath(GeneratorPoint $generatorPoint, $input);
-
 }

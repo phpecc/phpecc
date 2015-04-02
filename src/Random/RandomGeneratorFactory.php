@@ -73,7 +73,7 @@ class RandomGeneratorFactory
      * @param PrivateKeyInterface $privateKey
      * @param $messageHash
      * @param $algo
-     * @param bool $debug
+     * @param bool                $debug
      * @return DebugDecorator|RandomNumberGeneratorInterface
      */
     public static function getHmacRandomGenerator(PrivateKeyInterface $privateKey, $messageHash, $algo, $debug = false)
@@ -93,7 +93,7 @@ class RandomGeneratorFactory
     /**
      * @param RandomNumberGeneratorInterface $generator
      * @param $name
-     * @param bool $debug
+     * @param bool                           $debug
      * @return DebugDecorator|RandomNumberGeneratorInterface
      */
     private static function wrapAdapter(RandomNumberGeneratorInterface $generator, $name, $debug = false)

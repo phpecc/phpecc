@@ -30,7 +30,6 @@ use Mdanter\Ecc\Primitives\PointInterface;
 
 /**
  * This is a contract for the PrivateKey portion of ECDSA.
- *
  */
 interface PrivateKeyInterface
 {

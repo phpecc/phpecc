@@ -99,6 +99,56 @@
       "expectedK": "0758753A5254759C7CFBAD2E2D9B0792EEE44136C9480527",
       "expectedR": "FE4F4AE86A58B6507946715934FE2D8FF9D95B6B098FE739",
       "expectedS": "74CF5605C98FBA0E1EF34D4B5A1577A7DCF59457CAE52290"
+    },
+    {
+      "curve": "nist-p224",
+      "size": 224,
+      "algorithm": "sha512",
+      "privKey": "F220266E1105BFE3083E03EC7A3A654651F45E37167E88600BF257C1",
+      "message": "sample",
+      "expectedK": "9DB103FFEDEDF9CFDBA05184F925400C1653B8501BAB89CEA0FBEC14",
+      "expectedR": "074BD1D979D5F32BF958DDC61E4FB4872ADCAFEB2256497CDAC30397",
+      "expectedS": "A4CECA196C3D5A1FF31027B33185DC8EE43F288B21AB342E5D8EB084"
+    },
+    {
+      "curve": "secp256k1",
+      "size": 256,
+      "algorithm": "sha256",
+      "privKey": "0000000000000000000000000000000000000000000000000000000000000001",
+      "message": "Satoshi Nakamoto",
+      "expectedK":  "8F8A276C19F4149656B280621E358CCE24F5F52542772691EE69063B74F15D15",
+      "expectedR": "934b1ea10a4b3c1757e2b0c017d0b6143ce3c9a7e6a4a49860d7a6ab210ee3d8",
+      "expectedS": "dbbd3162d46e9f9bef7feb87c16dc13b4f6568a87f4e83f728e2443ba586675c"
+    },
+    {
+      "curve": "secp256k1",
+      "size": 256,
+      "algorithm": "sha256",
+      "privKey": "0000000000000000000000000000000000000000000000000000000000000001",
+      "message": "All those moments will be lost in time, like tears in rain. Time to die...",
+      "expectedK": "38AA22D72376B4DBC472E06C3BA403EE0A394DA63FC58D88686C611ABA98D6B3",
+      "expectedR": "8600dbd41e348fe5c9465ab92d23e3db8b98b873beecd930736488696438cb6b",
+      "expectedS": "ab8019bbd8b6924cc4099fe625340ffb1eaac34bf4477daa39d0835429094520"
+    },
+    {
+      "curve": "secp256k1",
+      "size": 256,
+      "algorithm": "sha256",
+      "privKey": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140",
+      "message": "Satoshi Nakamoto",
+      "expectedK": "33A19B60E25FB6F4435AF53A3D42D493644827367E6453928554F43E49AA6F90",
+      "expectedR": "fd567d121db66e382991534ada77a6bd3106f0a1098c231e47993447cd6af2d0",
+      "expectedS": "94c632f14e4379fc1ea610a3df5a375152549736425ee17cebe10abbc2a2826c"
+    },
+    {
+      "curve": "secp256k1",
+      "size": 256,
+      "algorithm": "sha256",
+      "privKey": "f8b8af8ce3c7cca5e300d33939540c10d45ce001b8f252bfbc57ba0342904181",
+      "message": "Alan Turing",
+      "expectedK": "525A82B70E67874398067543FD84C83D30C175FDC45FDEEE082FE13B1D7CFDF1",
+      "expectedR": "7063ae83e7f62bbb171798131b4a0564b956930092b33b07b395615d9ec7e15c",
+      "expectedS": "a72033e1ff5ca1ea8d0c99001cb45f0272d3be7525d3049c0d9e98dc7582b857"
     }
   ]
 }

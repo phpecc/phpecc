@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Math;
 
-
 class MathAdapterFactory
 {
     private static $forcedAdapter = null;

@@ -38,7 +38,6 @@ use Mdanter\Ecc\Infinity;
  *
  * @todo Fix LSP break (possibly derive an extra interface, FinitePointInterface from current one, and move
  * coordinate-related ops to sub-interface).
- *
  */
 interface PointInterface
 {
@@ -51,7 +50,7 @@ interface PointInterface
     /**
      * Adds another point to the current one and returns the resulting point.
      *
-     * @param  PointInterface          $addend
+     * @param  PointInterface $addend
      * @return PointInterface
      */
     public function add(PointInterface $addend);
@@ -75,7 +74,7 @@ interface PointInterface
     /**
      * Multiplies the point by a scalar value and returns the resulting point.
      *
-     * @param  mixed                   $multiplier
+     * @param  mixed $multiplier
      * @return PointInterface
      */
     public function mul($multiplier);
