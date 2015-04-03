@@ -28,14 +28,13 @@ class KeyPair
             throw new \InvalidArgumentException('At least one key is required.');
         }
 
-        $this->privateKey = $privateKey;
-        $this->publicKey = $publicKey;
-
-        // TODO! PublicKey::equals() does not exist
-        if ($this->privateKey !== null && $this->publicKey !== null            //    && ! $this->publicKey->equals($privateKey->getPublicKey())
+        if ($this->privateKey !== null && $this->publicKey !== null && ! $this->publicKey->getPoint()->equals($privateKey->getPublicKey()->getPoint())
         ) {
             throw new \InvalidArgumentException('Private/public key mismatch.');
         }
+
+        $this->privateKey = $privateKey;
+        $this->publicKey = $publicKey;
     }
 
     /**

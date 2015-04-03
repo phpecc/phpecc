@@ -50,6 +50,11 @@ class PrivateKey implements PrivateKeyInterface
      */
     private $adapter;
 
+    /**
+     * @param MathAdapterInterface $adapter
+     * @param GeneratorPoint $generator
+     * @param $secretMultiplier
+     */
     public function __construct(MathAdapterInterface $adapter, GeneratorPoint $generator, $secretMultiplier)
     {
         $this->adapter = $adapter;
