@@ -10,12 +10,19 @@ use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class HexDecCommand extends Command
 {
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setName('hexdec')
             ->addArgument('hex', InputArgument::REQUIRED, 'Hex value');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $hex = str_replace(' ', '', $input->getArgument('hex'));

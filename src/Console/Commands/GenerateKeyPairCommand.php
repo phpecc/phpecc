@@ -11,6 +11,9 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 class GenerateKeyPairCommand extends AbstractCommand
 {
 
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this
@@ -30,6 +33,11 @@ class GenerateKeyPairCommand extends AbstractCommand
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $curveName = $input->getOption('curve');

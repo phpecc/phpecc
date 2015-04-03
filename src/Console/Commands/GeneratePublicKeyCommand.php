@@ -10,6 +10,9 @@ use Symfony\Component\Console\Input\InputArgument;
 class GeneratePublicKeyCommand extends AbstractCommand
 {
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setName('encode-pubkey')->setDescription('Encodes the public key from a PEM encoded private key to PEM format.')
@@ -31,6 +34,10 @@ class GeneratePublicKeyCommand extends AbstractCommand
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $pubKeySerializer = $this->getPublicKeySerializer($input, 'out');
@@ -43,6 +50,10 @@ class GeneratePublicKeyCommand extends AbstractCommand
         $output->writeln($pubKeySerializer->serialize($key->getPublicKey()));
     }
 
+    /**
+     * @param $string
+     * @return string
+     */
     protected function formatBase64($string)
     {
         return trim(chunk_split($string, 64, PHP_EOL));
