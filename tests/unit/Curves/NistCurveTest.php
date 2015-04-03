@@ -305,7 +305,7 @@ class NistCurveTest extends AbstractTestCase
         $this->assertEquals($alice->calculateSharedKey(), $bob->calculateSharedKey());
 
         // Test encrypt/decrypt by both parties
-        $unencrypted = 'This is some text';
+        $unencrypted = EccFactory::getMessage('This is some text', 'sha256');
 
         $encrypted = $alice->encrypt($unencrypted);
         $this->assertEquals($unencrypted, $bob->decrypt($encrypted));

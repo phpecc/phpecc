@@ -29,6 +29,7 @@ namespace Mdanter\Ecc\Crypto\Routines;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 
@@ -122,11 +123,11 @@ class EcDH implements EcDHInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\EcDHInterface::encrypt()
      */
-    public function encrypt($string)
+    public function encrypt(Message $string)
     {
         $key = hash("sha256", $this->secretKey->getX(), true);
 
-        $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string), MCRYPT_MODE_CBC, $key);
+        $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string->getContent()), MCRYPT_MODE_CBC, $key);
 
         return $cypherText;
     }
@@ -140,7 +141,7 @@ class EcDH implements EcDHInterface
         $key = hash("sha256", $this->secretKey->getX(), true);
 
         $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
-
+        $clearText = EccFactory::getMessage($clearText, 'sha256');
         return $clearText;
     }
 
@@ -151,7 +152,8 @@ class EcDH implements EcDHInterface
     public function encryptFile($path)
     {
         if (file_exists($path) && is_readable($path)) {
-            return $this->encrypt(file_get_contents($path));
+            $message = EccFactory::getMessage(file_get_contents($path), 'sha256');
+            return $this->encrypt($message);
         }
 
         throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");
@@ -164,7 +166,8 @@ class EcDH implements EcDHInterface
     public function decryptFile($path)
     {
         if (file_exists($path) && is_readable($path)) {
-            return $this->decrypt(file_get_contents($path));
+            $message = EccFactory::getMessage(file_get_contents($path), 'sha256');
+            return $this->decrypt($message);
         }
 
         throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");
@@ -178,10 +181,7 @@ class EcDH implements EcDHInterface
         $this->checkExchangeState();
 
         if ($this->secretKey === null) {
-            $pubPoint = $this->recipientKey->getPoint();
-            $secret = $this->senderKey->getSecret();
-
-            $this->secretKey = $pubPoint->mul($secret);
+            $this->secretKey = $this->recipientKey->getPoint()->mul($this->senderKey->getSecret());
         }
     }
 

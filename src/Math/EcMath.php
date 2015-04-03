@@ -38,6 +38,7 @@ class EcMath implements EcMathInterface
         $this->data      = $input;
         $this->math      = $math;
         $this->generator = $G;
+        $this->modMath = $math->getModularArithmetic($G->getOrder());
     }
 
     /**
@@ -71,7 +72,7 @@ class EcMath implements EcMathInterface
     private function handleOppositeTypes($operand, callable $handler)
     {
         $data =  $this->data;
-        if ($this->dataType == 'int') {
+        if (false === $data instanceof PointInterface) {
             list($data, $operand) = array($operand, $data);
         }
 
@@ -94,13 +95,11 @@ class EcMath implements EcMathInterface
 
         if ($this->dataType == 'point' && $type == 'point') {
             $this->data = $this->data->add($addend);
-
             return $this;
         }
 
         if ($this->dataType == 'int' && $type == 'int') {
-            $this->data = $this->math->add($this->data, $addend);
-
+            $this->data = $this->modMath->add($this->data, $addend);
             return $this;
         }
 
@@ -109,7 +108,7 @@ class EcMath implements EcMathInterface
             function (PointInterface $data, $addendInt) {
                 // Multiply by generator and return a regular point to add to $data
                 $point = $this->generator->mul($addendInt);
-                $point = $this->generator->getCurve()->getPoint($point->getX(), $point->getY(), $this->generator->getOrder());
+                //$point = $this->generator->getCurve()->getPoint($point->getX(), $point->getY(), $this->generator->getOrder());
 
                 return $data->add($point);
             }
@@ -131,8 +130,7 @@ class EcMath implements EcMathInterface
         }
 
         if ($this->dataType == 'int' && $type == 'int') {
-            $this->data = $this->math->mul($this->data, $multiplicand);
-
+            $this->data = $this->modMath->mul($this->data, $multiplicand);
             return $this;
         }
 
@@ -156,10 +154,9 @@ class EcMath implements EcMathInterface
 
         if ($this->dataType == 'point') {
             $this->data = $data->getDouble();
-
             return $this;
         } else {
-            $this->data = $this->math->mul($data, '2');
+            $this->data = $this->modMath->mul($data, '2');
 
             return $this;
         }
@@ -236,14 +233,11 @@ class EcMath implements EcMathInterface
     {
         if ($this->dataType == 'point') {
             $point = $this->data;
-
             return $point;
         } else {
             $self = new EcMath($this->data, $this->generator, $this->math);
             $self->mul($this->generator);
-
             $point = $self->result();
-
             return $point;
         }
     }

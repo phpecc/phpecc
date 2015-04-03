@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc;
 
+use Mdanter\Ecc\Crypto\Routines\Message;
 use Mdanter\Ecc\Crypto\Routines\Signature\Signer;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
@@ -74,6 +75,16 @@ class EccFactory
     public static function createCurve($prime, $a, $b, MathAdapterInterface $adapter = null)
     {
         return new CurveFp($prime, $a, $b, $adapter ?: self::getAdapter());
+    }
+
+    /**
+     * @param $content
+     * @param $algorithm
+     * @return Message
+     */
+    public static function getMessage($content, $algorithm, MathAdapterInterface $adapter = null)
+    {
+        return new Message($adapter ?: self::getAdapter(), $content, $algorithm);
     }
 
     /**
