@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc\File;
 
-use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
-
 class PemLoader implements FileLoader
 {
 
@@ -12,9 +10,8 @@ class PemLoader implements FileLoader
     const PEM_PUBLIC_KEY_HEADER = 'PUBLIC KEY';
 
     /**
-     *
-     * @param  string $file
-     * @return PrivateKeyInterface
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\File\FileLoader::loadPublicKeyData()
      * @throws \InvalidArgumentException
      */
     public function loadPrivateKeyData($file)
@@ -37,9 +34,8 @@ class PemLoader implements FileLoader
     }
 
     /**
-     *
-     * @param  string $file
-     * @return PrivateKeyInterface
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\File\FileLoader::loadPublicKeyData()
      * @throws \InvalidArgumentException
      */
     public function loadPublicKeyData($file)
@@ -61,6 +57,10 @@ class PemLoader implements FileLoader
         throw new \InvalidArgumentException('No public key available in file.');
     }
 
+    /**
+     * @param $headerName
+     * @return string
+     */
     private function buildPattern($headerName)
     {
         $begin = '/\-\-\-\-\-BEGIN '.$headerName.'\-\-\-\-\-';
@@ -71,6 +71,10 @@ class PemLoader implements FileLoader
         return $pattern;
     }
 
+    /**
+     * @param $string
+     * @return mixed
+     */
     private function normalize($string)
     {
         $string = str_replace(PHP_EOL, '', $string);

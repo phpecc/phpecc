@@ -25,8 +25,8 @@ class PemPrivateKeySerializer implements PrivateKeySerializerInterface
     }
 
     /**
-     * @param PrivateKeyInterface $key
-     * @return string
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::serialize()
      */
     public function serialize(PrivateKeyInterface $key)
     {
@@ -40,8 +40,8 @@ class PemPrivateKeySerializer implements PrivateKeySerializerInterface
     }
 
     /**
-     * @param string $formattedKey
-     * @return \Mdanter\Ecc\Crypto\Key\PrivateKey
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::parse()
      */
     public function parse($formattedKey)
     {

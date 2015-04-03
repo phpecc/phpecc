@@ -25,8 +25,6 @@ namespace Mdanter\Ecc\Primitives;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-use Mdanter\Ecc\Primitives\CurveFpInterface;
-use Mdanter\Ecc\Infinity;
 
 /**
  * This is the contract for implementing Point, which encapsulates entities

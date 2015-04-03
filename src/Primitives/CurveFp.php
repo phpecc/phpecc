@@ -193,6 +193,9 @@ class CurveFp implements CurveFpInterface
         return 'curve('.$this->a.', '.$this->b.', '.$this->prime.')';
     }
 
+    /**
+     * @return array
+     */
     public function __debugInfo()
     {
         return [

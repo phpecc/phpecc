@@ -272,26 +272,22 @@ class Gmp implements MathAdapterInterface
         return gmp_strval($b);
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::baseConvert()
+     */
     public function baseConvert($number, $from, $to)
     {
         return gmp_strval(gmp_init($number, $from), $to);
     }
 
     /**
-     * @return NumberTheory
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::getNumberTheory()
      */
     public function getNumberTheory()
     {
         return new NumberTheory($this);
-    }
-
-    /**
-     * @param CurveFpInterface $curve
-     * @return ModularArithmetic
-     */
-    public function getPrimeFieldArithmetic(CurveFpInterface $curve)
-    {
-        return new ModularArithmetic($this, $curve->getPrime());
     }
 
     /**
@@ -301,6 +297,15 @@ class Gmp implements MathAdapterInterface
     public function getModularArithmetic($modulus)
     {
         return new ModularArithmetic($this, $modulus);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::getPrimeFieldArithmetic()
+     */
+    public function getPrimeFieldArithmetic(CurveFpInterface $curve)
+    {
+        return $this->getModularArithmetic($curve->getPrime());
     }
 
     /**

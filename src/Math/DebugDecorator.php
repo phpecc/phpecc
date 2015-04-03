@@ -22,23 +22,14 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * @param MathAdapterInterface $adapter
-     * @param null                 $callback
+     * @param callable|null        $callback
      */
-    public function __construct(MathAdapterInterface $adapter, $callback = null)
+    public function __construct(MathAdapterInterface $adapter, callable $callback = null)
     {
         $this->adapter = $adapter;
         $this->writer = $callback ?: function ($message) {
             echo $message;
         };
-    }
-
-    /**
-     *
-     * @param string $message
-     */
-    private function writeln($message)
-    {
-        call_user_func($this->writer, $message.PHP_EOL);
     }
 
     /**
@@ -575,6 +566,25 @@ class DebugDecorator implements MathAdapterInterface
             array(
             $this,
             'call'
+            ),
+            $func,
+            $args
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::getModularArithmetic()
+     */
+    public function getModularArithmetic($modulus)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(
+            array(
+                $this,
+                'call'
             ),
             $func,
             $args

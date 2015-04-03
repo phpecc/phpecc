@@ -12,7 +12,6 @@ use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
-use Mdanter\Ecc\Serializer\Util\ASN\ASNContext;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use FG\ASN1\ExplicitlyTaggedObject;
 
@@ -47,8 +46,8 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
     }
 
     /**
-     * @param PrivateKeyInterface $key
-     * @return string
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::serialize()
      */
     public function serialize(PrivateKeyInterface $key)
     {
@@ -84,7 +83,8 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     /**
      * @param string $data
-     * @return \Mdanter\Ecc\Crypto\Key\PrivateKey
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::parse()
      * @throws \FG\ASN1\Exception\ParserException
      */
     public function parse($data)

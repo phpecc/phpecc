@@ -105,11 +105,18 @@ class Point implements PointInterface
         }
     }
 
+    /**
+     * @return MathAdapterInterface
+     */
     public function getAdapter()
     {
         return $this->adapter;
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\PointInterface::isInfinity()
+     */
     public function isInfinity()
     {
         return (bool) $this->infinity;
@@ -367,6 +374,9 @@ class Point implements PointInterface
         return "[ (" . $this->adapter->toString($this->x) . "," . $this->adapter->toString($this->y) . ') on ' . (string) $this->curve . ' ]';
     }
 
+    /**
+     * @return array
+     */
     public function __debugInfo()
     {
         if ($this->infinity) {

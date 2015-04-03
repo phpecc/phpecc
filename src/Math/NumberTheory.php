@@ -245,7 +245,7 @@ class NumberTheory
                     if ($ff[1] == 0) {
                         return $ff[0];
                     }
-                            // if we got here no b was found
+                    // if we got here no b was found
                 }
             }
         }

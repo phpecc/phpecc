@@ -239,8 +239,8 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     /**
      * Generate a nonce based on the given $max
      *
-     * @param  $max
-     * @return int|string
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Random\RandomNumberGeneratorInterface::generate()
      */
     public function generate($max)
     {

@@ -84,7 +84,7 @@ interface EcDHInterface
      * party.
      *
      * @param  string $path
-     * @return string|null
+     * @return string
      */
     public function encryptFile($path);
 
@@ -92,7 +92,7 @@ interface EcDHInterface
      * Decrypts a file that was encrypted by the other party.
      *
      * @param  string $path
-     * @return Message|null
+     * @return Message
      */
     public function decryptFile($path);
 }

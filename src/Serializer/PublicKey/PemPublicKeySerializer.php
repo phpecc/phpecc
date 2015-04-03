@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Serializer\PublicKey;
 
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 
 /**
  *
@@ -25,7 +24,8 @@ class PemPublicKeySerializer implements PublicKeySerializerInterface
     /**
      *
      * @param  PublicKeyInterface $key
-     * @return string
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Serializer\PublicKey\PublicKeySerializerInterface::serialize()
      */
     public function serialize(PublicKeyInterface $key)
     {
