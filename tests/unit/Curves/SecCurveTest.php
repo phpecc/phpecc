@@ -5,7 +5,7 @@ namespace Mdanter\Ecc\Tests\Curves;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Crypto\Routines\Signature\Signer;
+use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 
 class SecCurveTest extends AbstractTestCase

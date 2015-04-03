@@ -26,7 +26,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  * ***********************************************************************
  */
 
-use Mdanter\Ecc\Crypto\Routines\EcDH;
+use Mdanter\Ecc\Crypto\EcDH\EcDH;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 

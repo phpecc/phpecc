@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto\Routines\Signature;
+namespace Mdanter\Ecc\Crypto\Signature;
 
 /**
  * *********************************************************************
@@ -27,49 +27,21 @@ namespace Mdanter\Ecc\Crypto\Routines\Signature;
  */
 
 /**
- * Plain Old PHP Object that stores the signature r,s for ECDSA
+ * This is the contract for describing a signature used in ECDSA.
  */
-class Signature implements SignatureInterface
+interface SignatureInterface
 {
     /**
+     * Returns the r parameter of the signature.
      *
-     * @var int|string
+     * @return int|string
      */
-    protected $r;
+    public function getR();
 
     /**
+     * Returns the s parameter of the signature.
      *
-     * @var int|string
+     * @return int|string
      */
-    protected $s;
-
-    /**
-     * Initialize a new instance with values
-     *
-     * @param int|string $r
-     * @param int|string $s
-     */
-    public function __construct($r, $s)
-    {
-        $this->r = $r;
-        $this->s = $s;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\SignatureInterface::getR()
-     */
-    public function getR()
-    {
-        return $this->r;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\SignatureInterface::getS()
-     */
-    public function getS()
-    {
-        return $this->s;
-    }
+    public function getS();
 }

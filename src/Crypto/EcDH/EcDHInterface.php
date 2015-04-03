@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto\Routines;
+namespace Mdanter\Ecc\Crypto\EcDH;
 
 /**
  * *********************************************************************
@@ -27,6 +27,7 @@ namespace Mdanter\Ecc\Crypto\Routines;
  */
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
+use Mdanter\Ecc\Crypto\Message;
 
 /**
  * This is the contract for implementing EcDH (EC Diffie Hellman).

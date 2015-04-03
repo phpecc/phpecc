@@ -6,7 +6,7 @@ use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Key\PrivateKey;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
-use Mdanter\Ecc\Crypto\Routines\Signature\Signer;
+use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\Util\NumberSize;
 

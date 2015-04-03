@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto\Routines;
+namespace Mdanter\Ecc\Crypto\EcDH;
 
 /**
  * *********************************************************************
@@ -29,6 +29,7 @@ namespace Mdanter\Ecc\Crypto\Routines;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Crypto\Message;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Math\MathAdapterInterface;

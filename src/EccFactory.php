@@ -2,8 +2,8 @@
 
 namespace Mdanter\Ecc;
 
-use Mdanter\Ecc\Crypto\Routines\Message;
-use Mdanter\Ecc\Crypto\Routines\Signature\Signer;
+use Mdanter\Ecc\Crypto\Message;
+use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
 use Mdanter\Ecc\Math\MathAdapterFactory;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto\Routines\Signature;
+namespace Mdanter\Ecc\Crypto\Signature;
 
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;

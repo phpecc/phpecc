@@ -27,6 +27,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  */
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 /**
  * This is the contract for the PublicKey portion of ECDSA.
@@ -45,7 +46,7 @@ interface PublicKeyInterface
     public function getPoint();
 
     /**
-     * @return PointInterface
+     * @return GeneratorPoint
      */
     public function getGenerator();
 }

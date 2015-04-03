@@ -102,6 +102,10 @@ class PublicKey implements PublicKeyInterface
         return $this->curve;
     }
 
+    /**
+     * {$inheritDoc}
+     * @see \Mdanter\Ecc\PublicKeyInterface::getGenerator()
+     */
     public function getGenerator()
     {
         return $this->generator;
