@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
-use Mdanter\Ecc\Crypto\MessageFactory;
+use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Util\NumberSize;

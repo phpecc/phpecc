@@ -29,8 +29,8 @@ namespace Mdanter\Ecc\Crypto\EcDH;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
-use Mdanter\Ecc\Crypto\Message;
-use Mdanter\Ecc\Crypto\MessageFactory;
+use Mdanter\Ecc\Message\Message;
+use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 
@@ -52,7 +52,7 @@ class EcDH implements EcDHInterface
     private $adapter;
 
     /**
-     * @var MessageFactory
+     * @var \Mdanter\Ecc\Message\MessageFactory
      */
     private $messages;
 
@@ -79,7 +79,7 @@ class EcDH implements EcDHInterface
      * Initialize a new exchange from a generator point.
      *
      * @param MathAdapterInterface $adapter A math adapter instance.
-     * @param MessageFactory $messages A message factory
+     * @param \Mdanter\Ecc\Message\MessageFactory $messages A message factory
      */
     public function __construct(MathAdapterInterface $adapter, MessageFactory $messages)
     {

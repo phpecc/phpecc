@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Crypto;
+namespace Mdanter\Ecc\Message;
 
 use Mdanter\Ecc\Math\MathAdapterInterface;
 

@@ -27,7 +27,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  */
 
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
-use Mdanter\Ecc\Crypto\MessageFactory;
+use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 

@@ -26,7 +26,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  * ***********************************************************************
  */
 
-use Mdanter\Ecc\Crypto\MessageFactory;
+use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Primitives\PointInterface;
 
 /**
@@ -51,7 +51,7 @@ interface PrivateKeyInterface
     public function getSecret();
 
     /**
-     * @param  MessageFactory $messageFactory
+     * @param  \Mdanter\Ecc\Message\MessageFactory $messageFactory
      * @param  PublicKeyInterface $recipient
      * @return int|string
      */

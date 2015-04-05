@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Crypto\Routines;
 
-use Mdanter\Ecc\Crypto\MessageFactory;
+use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
 

@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Tests;
 
-use Mdanter\Ecc\Crypto\MessageFactory;
+use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Crypto\Signature\Signature;
