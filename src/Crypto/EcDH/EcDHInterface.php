@@ -66,18 +66,18 @@ interface EcDHInterface
      * Generates an encrypted version of the given text, that can be decoded by the other
      * party.
      *
-     * @param Message $string $string
+     * @param Message $message
      * @return string
      */
-    public function encrypt(Message $string);
+    public function encrypt(Message $message);
 
     /**
      * Decrypts a string that was encrypted by the other party.
      *
-     * @param  string $string The encrypted string.
+     * @param  string $ciphertext The encrypted string.
      * @return Message
      */
-    public function decrypt($string);
+    public function decrypt($ciphertext);
 
     /**
      * Generates an encrypted version of the given file, that can be decoded by the other

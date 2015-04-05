@@ -89,7 +89,7 @@ class EcDH implements EcDHInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\EcDHInterface::calculateSharedKey()
+     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::calculateSharedKey()
      */
     public function calculateSharedKey()
     {
@@ -100,7 +100,7 @@ class EcDH implements EcDHInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\EcDHInterface::createMultiPartyKey()
+     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::createMultiPartyKey()
      */
     public function createMultiPartyKey()
     {
@@ -111,7 +111,7 @@ class EcDH implements EcDHInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\EcDHInterface::setRecipientKey()
+     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::setRecipientKey()
      */
     public function setRecipientKey(PublicKeyInterface $key)
     {
@@ -120,7 +120,7 @@ class EcDH implements EcDHInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\EcDHInterface::setSenderKey()
+     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::setSenderKey()
      */
     public function setSenderKey(PrivateKeyInterface $key)
     {
@@ -129,33 +129,33 @@ class EcDH implements EcDHInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\EcDHInterface::encrypt()
+     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::encrypt()
      */
-    public function encrypt(Message $string)
+    public function encrypt(Message $message)
     {
         $key = hash("sha256", $this->secretKey->getX(), true);
 
-        $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($string->getContent()), MCRYPT_MODE_CBC, $key);
+        $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($message->getContent()), MCRYPT_MODE_CBC, $key);
 
         return $cypherText;
     }
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\EcDHInterface::decrypt()
+     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::decrypt()
      */
-    public function decrypt($string)
+    public function decrypt($ciphertext)
     {
         $key = hash("sha256", $this->secretKey->getX(), true);
 
-        $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
+        $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $ciphertext, MCRYPT_MODE_CBC, $key));
         $clearText = $this->messages->plaintext($clearText, 'sha256');
         return $clearText;
     }
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\EcDHInterface::encryptFile()
+     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::encryptFile()
      */
     public function encryptFile($path)
     {
@@ -169,7 +169,7 @@ class EcDH implements EcDHInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\EcDHInterface::decryptFile()
+     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::decryptFile()
      */
     public function decryptFile($path)
     {
@@ -181,7 +181,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * @see \Mdanter\Ecc\EcDHInterface::calculateKey()
+     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::calculateKey()
      */
     private function calculateKey()
     {
