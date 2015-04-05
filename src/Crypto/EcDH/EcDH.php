@@ -30,7 +30,7 @@ use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Crypto\Message;
-use Mdanter\Ecc\EccFactory;
+use Mdanter\Ecc\Crypto\MessageFactory;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 
@@ -50,6 +50,11 @@ class EcDH implements EcDHInterface
      * @var MathAdapterInterface
      */
     private $adapter;
+
+    /**
+     * @var MessageFactory
+     */
+    private $messages;
 
     /**
      * Secret key between the two parties
@@ -74,10 +79,12 @@ class EcDH implements EcDHInterface
      * Initialize a new exchange from a generator point.
      *
      * @param MathAdapterInterface $adapter A math adapter instance.
+     * @param MessageFactory $messages A message factory
      */
-    public function __construct(MathAdapterInterface $adapter)
+    public function __construct(MathAdapterInterface $adapter, MessageFactory $messages)
     {
         $this->adapter = $adapter;
+        $this->messages = $messages;
     }
 
     /**
@@ -142,7 +149,7 @@ class EcDH implements EcDHInterface
         $key = hash("sha256", $this->secretKey->getX(), true);
 
         $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $key));
-        $clearText = EccFactory::getMessage($clearText, 'sha256');
+        $clearText = $this->messages->plaintext($clearText, 'sha256');
         return $clearText;
     }
 
@@ -153,7 +160,7 @@ class EcDH implements EcDHInterface
     public function encryptFile($path)
     {
         if (file_exists($path) && is_readable($path)) {
-            $message = EccFactory::getMessage(file_get_contents($path), 'sha256');
+            $message = $this->messages->plaintext(file_get_contents($path), 'sha256');
             return $this->encrypt($message);
         }
 
@@ -167,8 +174,7 @@ class EcDH implements EcDHInterface
     public function decryptFile($path)
     {
         if (file_exists($path) && is_readable($path)) {
-            $message = EccFactory::getMessage(file_get_contents($path), 'sha256');
-            return $this->decrypt($message);
+            return $this->decrypt(file_get_contents($path));
         }
 
         throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");

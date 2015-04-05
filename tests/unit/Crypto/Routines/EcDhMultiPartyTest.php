@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Crypto\Routines;
 
+use Mdanter\Ecc\Crypto\MessageFactory;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
 
@@ -10,30 +11,31 @@ class EcDhMultiPartyTest extends AbstractTestCase
 
     public function testMultiPartyKeyGeneration()
     {
-        $generator = EccFactory::getNistCurves()->generator256();
-
+        $adapter = EccFactory::getAdapter();
+        $generator = EccFactory::getNistCurves($adapter)->generator256();
+        $messages = new MessageFactory($adapter);
         $alice = $generator->createPrivateKey();
         $bob = $generator->createPrivateKey();
         $carol = $generator->createPrivateKey();
 
         // Alice computes g^a and sends it to Bob.
-        $bobX = $alice->createExchange($bob->getPublicKey());
+        $bobX = $alice->createExchange($messages, $bob->getPublicKey());
         // Bob computes (g^a)^b = g^{ab} and sends it to Carol.
-        $carolX = $carol->createExchange($bobX->createMultiPartyKey());
+        $carolX = $carol->createExchange($messages, $bobX->createMultiPartyKey());
         // Carol computes (g^{ab})^c = g^{abc} and uses it as her secret.
         $carolSharedKey = $carolX->calculateSharedKey();
 
         // Bob computes g^b and sends it to Carol.
-        $carolX = $carol->createExchange($bob->getPublicKey());
+        $carolX = $carol->createExchange($messages, $bob->getPublicKey());
         // Carol computes (g^b)^c = g^{bc} and sends it to Alice.
-        $aliceX = $alice->createExchange($carolX->createMultiPartyKey());
+        $aliceX = $alice->createExchange($messages, $carolX->createMultiPartyKey());
         // Alice computes (g^{bc})^a = g^{bca} = g^{abc} and uses it as her secret.
         $aliceSharedKey = $aliceX->calculateSharedKey();
 
         // Carol computes g^c and sends it to Alice.
-        $aliceX = $carol->createExchange($alice->getPublicKey());
+        $aliceX = $carol->createExchange($messages, $alice->getPublicKey());
         // Alice computes (g^c)^a = g^{ca} and sends it to Bob.
-        $bobX = $bob->createExchange($aliceX->createMultiPartyKey());
+        $bobX = $bob->createExchange($messages, $aliceX->createMultiPartyKey());
         // Bob computes (g^{ca})^b = g^{cab} = g^{abc} and uses it as his secret.
         $bobSharedKey = $bobX->calculateSharedKey();
 

@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
+use Mdanter\Ecc\Crypto\MessageFactory;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Util\NumberSize;
@@ -111,12 +112,12 @@ class SpecBasedCurveTest extends AbstractTestCase
     public function testGetDiffieHellmanSharedSecret(GeneratorPoint $generator, $alice, $bob, $expectedX)
     {
         $adapter = $generator->getAdapter();
-
+        $messages = new MessageFactory($adapter);
         $alicePrivKey = $generator->getPrivateKeyFrom($alice);
         $bobPrivKey = $generator->getPrivateKeyFrom($bob);
 
-        $aliceDh = $alicePrivKey->createExchange($bobPrivKey->getPublicKey());
-        $bobDh = $bobPrivKey->createExchange($alicePrivKey->getPublicKey());
+        $aliceDh = $alicePrivKey->createExchange($messages, $bobPrivKey->getPublicKey());
+        $bobDh = $bobPrivKey->createExchange($messages, $alicePrivKey->getPublicKey());
 
         $this->assertEquals($aliceDh->calculateSharedKey(), $adapter->hexDec($expectedX));
         $this->assertEquals($bobDh->calculateSharedKey(), $adapter->hexDec($expectedX));
