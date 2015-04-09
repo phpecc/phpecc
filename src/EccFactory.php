@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc;
 
-use Mdanter\Ecc\Message\Message;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
@@ -80,7 +79,8 @@ class EccFactory
     /**
      *
      * @param  MathAdapterInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapteR()
-     * @return Signer
+     * @return \Mdanter\Ecc\Crypto\Signature\Signer;
+
      */
     public static function getSigner(MathAdapterInterface $adapter = null)
     {

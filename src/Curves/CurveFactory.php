@@ -6,6 +6,10 @@ use Mdanter\Ecc\Math\MathAdapterFactory;
 
 class CurveFactory
 {
+    /**
+     * @param $name
+     * @return NamedCurveFp|\Mdanter\Ecc\Primitives\CurveFp|\Mdanter\Ecc\Primitives\CurveFpInterface
+     */
     public static function getCurveByName($name)
     {
         $nistFactory = self::getNistFactory();
@@ -33,6 +37,10 @@ class CurveFactory
         }
     }
 
+    /**
+     * @param $name
+     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     */
     public static function getGeneratorByName($name)
     {
         $nistFactory = self::getNistFactory();
@@ -60,11 +68,17 @@ class CurveFactory
         }
     }
 
+    /**
+     * @return NistCurve
+     */
     private static function getNistFactory()
     {
         return new NistCurve(MathAdapterFactory::getAdapter());
     }
 
+    /**
+     * @return SecgCurve
+     */
     private static function getSecpFactory()
     {
         return new SecgCurve(MathAdapterFactory::getAdapter());

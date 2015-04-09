@@ -181,7 +181,7 @@ class EcDH implements EcDHInterface
     }
 
     /**
-     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::calculateKey()
+     *
      */
     private function calculateKey()
     {

@@ -65,7 +65,7 @@ class PrivateKey implements PrivateKeyInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\PrivateKeyInterface::getPublicKey()
+     * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::getPublicKey()
      */
     public function getPublicKey()
     {
@@ -74,7 +74,7 @@ class PrivateKey implements PrivateKeyInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\PrivateKeyInterface::getPoint()
+     * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::getPoint()
      */
     public function getPoint()
     {
@@ -83,7 +83,7 @@ class PrivateKey implements PrivateKeyInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\PrivateKeyInterface::getCurve()
+     * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::getCurve()
      */
     public function getCurve()
     {
@@ -92,7 +92,7 @@ class PrivateKey implements PrivateKeyInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\PrivateKeyInterface::getSecret()
+     * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::getSecret()
      */
     public function getSecret()
     {
@@ -101,7 +101,7 @@ class PrivateKey implements PrivateKeyInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\PrivateKeyInterface::createExchange()
+     * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::createExchange()
      */
     public function createExchange(MessageFactory $messageFactory, PublicKeyInterface $recipient = null)
     {

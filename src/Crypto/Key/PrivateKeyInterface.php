@@ -51,7 +51,7 @@ interface PrivateKeyInterface
     public function getSecret();
 
     /**
-     * @param  \Mdanter\Ecc\Message\MessageFactory $messageFactory
+     * @param  MessageFactory $messageFactory
      * @param  PublicKeyInterface $recipient
      * @return int|string
      */

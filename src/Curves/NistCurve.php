@@ -51,6 +51,9 @@ class NistCurve
 
     private $adapter;
 
+    /**
+     * @param MathAdapterInterface $adapter
+     */
     public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;

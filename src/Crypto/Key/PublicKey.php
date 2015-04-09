@@ -95,7 +95,7 @@ class PublicKey implements PublicKeyInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\PublicKeyInterface::getCurve()
+     * @see \Mdanter\Ecc\Crypto\Key\PublicKeyInterface::getCurve()
      */
     public function getCurve()
     {
@@ -104,7 +104,7 @@ class PublicKey implements PublicKeyInterface
 
     /**
      * {$inheritDoc}
-     * @see \Mdanter\Ecc\PublicKeyInterface::getGenerator()
+     * @see \Mdanter\Ecc\Crypto\Key\PublicKeyInterface::getGenerator()
      */
     public function getGenerator()
     {
@@ -113,7 +113,7 @@ class PublicKey implements PublicKeyInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\PublicKeyInterface::getPoint()
+     * @see \Mdanter\Ecc\Crypto\Key\PublicKeyInterface::getPoint()
      */
     public function getPoint()
     {
