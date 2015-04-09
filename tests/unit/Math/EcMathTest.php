@@ -166,30 +166,13 @@ class EcMathTest extends AbstractTestCase
         $G = EccFactory::getSecgCurves($math)->generator256k1();
 
         $m1 = $math->getEcMath($G, '2')
-            ->mod($G->getOrder())
             ->result();
         $this->assertSame('2', $m1);
 
         $m2 = $math->getEcMath($G, '2')
             ->add($G->getOrder())
-            ->mod($G->getOrder())
             ->result();
         $this->assertSame('2', $m2);
-    }
-
-    /**
-     * @dataProvider getAdapters
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Parameter for mod() must be an integer
-     */
-    public function testModFail(MathAdapterInterface $math)
-    {
-        $G = EccFactory::getSecgCurves($math)->generator256k1();
-
-        $P = new Point($math, $G->getCurve(), '73860570345112489656772034832846662006004986975604346631559066988788718814653', '41411225685712237035336738056202424213651816215153045928424574041669488255541', $G->getOrder());
-
-        $e = $math->getEcMath($G, '2');
-        $e->mod($P);
     }
 
     /**
@@ -308,7 +291,7 @@ class EcMathTest extends AbstractTestCase
     public function testCmpDifferentTypes(MathAdapterInterface $math)
     {
         $G  = EccFactory::getSecgCurves($math)->generator256k1();
-        $ec = $math->getEcMath($G, '2')->toPoint()->cmp('2');
+        $math->getEcMath($G, '2')->toPoint()->cmp('2');
     }
 
     /**
@@ -326,16 +309,14 @@ class EcMathTest extends AbstractTestCase
 
         // (P+o)%n  -> Only has point
         $pubData = $math->getEcMath($G, $pubkey)
-            ->add($sharedOffsetDerivedFromMasterPubkey)
-            ->mod($G->getOrder());
+            ->add($sharedOffsetDerivedFromMasterPubkey);
         $this->assertSame('point', $pubData->getType());
         $this->assertSame('103388573995635080359749164254216598308788835304023601477803095234286494993683', $pubData->result()->getX());
         $this->assertSame('37057141145242123013015316630864329550140216928701153669873286428255828810018', $pubData->result()->getY());
 
         // (k+o)%n  -> Result is int, for the same point.
         $prvData = $math->getEcMath($G, $secret)
-            ->add($sharedOffsetDerivedFromMasterPubkey)
-            ->mod($G->getOrder());
+            ->add($sharedOffsetDerivedFromMasterPubkey);
         $this->assertSame('int', $prvData->getType());
         $this->assertSame('4', $prvData->result());
 
