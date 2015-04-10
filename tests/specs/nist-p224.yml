@@ -211,7 +211,7 @@ keypairs:
     x: B70E0CBD6BB4BF7F321390B94A03C1D356C21122343280D6115C1D21
     y: 42C89C774A08DC04B3DD201932BC8A5EA5F8B89BBB2A7E667AFF81CD
 
-    # https://tools.ietf.org/html/rfc6979#appendix-A.2.3
+    # https://tools.ietf.org/html/rfc6979#appendix-A.2.4
 hmac:
   -
     algo: sha1
