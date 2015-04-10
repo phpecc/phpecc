@@ -202,7 +202,7 @@ class SpecBasedCurveTest extends AbstractTestCase
         $sR = $math->hexDec($eR);
         $sS = $math->hexDec($eS);
         $this->assertSame($sR, $sig->getR(), "r $sR == ".$sig->getR());
-        $this->assertSame($sS, $sig->getS(), 's');
+        $this->assertSame($sS, $sig->getS(), "s $sR == " . $sig->getS());
     }
 
 }
