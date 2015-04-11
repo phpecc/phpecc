@@ -10,7 +10,9 @@ use Mdanter\Ecc\Console\Commands\ParsePublicKeyCommand;
 use Mdanter\Ecc\Console\Commands\ParsePrivateKeyCommand;
 use Mdanter\Ecc\Console\Commands\GeneratePublicKeyCommand;
 use Mdanter\Ecc\Console\Commands\ListCurvesCommand;
+use Mdanter\Ecc\Console\Commands\EcParamsCommand;
 use Mdanter\Ecc\Console\Commands\DumpAsnCommand;
+use Mdanter\Ecc\Console\Commands\MessageSignCommand;
 
 class Application extends ConsoleApplication
 {
@@ -26,10 +28,12 @@ class Application extends ConsoleApplication
         $commands[] = new GenerateKeyPairCommand();
         $commands[] = new GeneratePublicKeyCommand();
         $commands[] = new ListCurvesCommand();
+        $commands[] = new EcParamsCommand();
         $commands[] = new ParsePrivateKeyCommand();
         $commands[] = new ParsePublicKeyCommand();
         $commands[] = new HexDecCommand();
         $commands[] = new DecHexCommand();
+        //$commands[] = new MessageSignCommand();
 
         return $commands;
     }
