@@ -1,11 +1,11 @@
 <?php
 namespace Mdanter\Ecc\Curves;
 
-use Mdanter\Ecc\CurveFp;
-use Mdanter\Ecc\CurveFpInterface;
-use Mdanter\Ecc\GeneratorPoint;
-use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Primitives\CurveFp;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
+use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
  * *********************************************************************
@@ -35,7 +35,6 @@ use Mdanter\Ecc\RandomNumberGeneratorInterface;
  * This class encapsulates the NIST recommended curves
  * - fields are Mersenne primes, i.e.
  * for some p, Mersenne_prine = 2^p - 1
- *
  */
 class NistCurve
 {
@@ -52,6 +51,9 @@ class NistCurve
 
     private $adapter;
 
+    /**
+     * @param MathAdapterInterface $adapter
+     */
     public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;

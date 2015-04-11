@@ -2,7 +2,8 @@
 
 namespace Mdanter\Ecc\Math;
 
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 class Gmp implements MathAdapterInterface
 {
@@ -226,6 +227,8 @@ class Gmp implements MathAdapterInterface
 
             return $result;
         }
+
+        throw new \RuntimeException('Unable to convert int to string');
     }
 
     /**
@@ -269,8 +272,49 @@ class Gmp implements MathAdapterInterface
         return gmp_strval($b);
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::baseConvert()
+     */
     public function baseConvert($number, $from, $to)
     {
         return gmp_strval(gmp_init($number, $from), $to);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::getNumberTheory()
+     */
+    public function getNumberTheory()
+    {
+        return new NumberTheory($this);
+    }
+
+    /**
+     * @param $modulus
+     * @return ModularArithmetic
+     */
+    public function getModularArithmetic($modulus)
+    {
+        return new ModularArithmetic($this, $modulus);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\MathAdapterInterface::getPrimeFieldArithmetic()
+     */
+    public function getPrimeFieldArithmetic(CurveFpInterface $curve)
+    {
+        return $this->getModularArithmetic($curve->getPrime());
+    }
+
+    /**
+     * @param GeneratorPoint $generatorPoint
+     * @param $input
+     * @return EcMath
+     */
+    public function getEcMath(GeneratorPoint $generatorPoint, $input)
+    {
+        return new EcMath($input, $generatorPoint, $this);
     }
 }

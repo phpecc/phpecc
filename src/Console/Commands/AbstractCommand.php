@@ -14,6 +14,13 @@ use Mdanter\Ecc\File\FileLoader;
 
 abstract class AbstractCommand extends Command
 {
+    /**
+     * @param InputInterface $input
+     * @param FileLoader $loader
+     * @param $fileOptionName
+     * @param $dataOptionName
+     * @return mixed
+     */
     protected function getPrivateKeyData(InputInterface $input, FileLoader $loader, $fileOptionName, $dataOptionName)
     {
         if ($infile = $input->getOption($fileOptionName)) {
@@ -29,6 +36,13 @@ abstract class AbstractCommand extends Command
         return $data;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param FileLoader $loader
+     * @param $fileOptionName
+     * @param $dataOptionName
+     * @return mixed
+     */
     protected function getPublicKeyData(InputInterface $input, FileLoader $loader, $fileOptionName, $dataOptionName)
     {
         if ($infile = $input->getOption($fileOptionName)) {
@@ -44,6 +58,11 @@ abstract class AbstractCommand extends Command
         return $data;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param $formatOptionName
+     * @return DerFileLoader|PemLoader
+     */
     protected function getLoader(InputInterface $input, $formatOptionName)
     {
         if ($input->getOption($formatOptionName) == 'der') {
@@ -53,6 +72,11 @@ abstract class AbstractCommand extends Command
         return new PemLoader();
     }
 
+    /**
+     * @param InputInterface $input
+     * @param $formatOptionName
+     * @return DerPrivateKeySerializer|PemPrivateKeySerializer
+     */
     protected function getPrivateKeySerializer(InputInterface $input, $formatOptionName)
     {
         $serializer = new DerPrivateKeySerializer();
@@ -64,6 +88,11 @@ abstract class AbstractCommand extends Command
         return $serializer;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param $formatOptionName
+     * @return DerPublicKeySerializer|PemPublicKeySerializer
+     */
     protected function getPublicKeySerializer(InputInterface $input, $formatOptionName)
     {
         $serializer = new DerPublicKeySerializer();

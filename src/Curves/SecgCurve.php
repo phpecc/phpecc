@@ -2,8 +2,8 @@
 
 namespace Mdanter\Ecc\Curves;
 
-use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
  * *********************************************************************
@@ -44,11 +44,17 @@ class SecgCurve
 
     const NAME_SECP_384R1 = 'secp384r1';
 
+    /**
+     * @param MathAdapterInterface $adapter
+     */
     public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;
     }
 
+    /**
+     * @return NamedCurveFp
+     */
     public function curve112r1()
     {
         $p = $this->adapter->hexDec('0xDB7C2ABF62E35E668076BEAD208B');
@@ -58,6 +64,10 @@ class SecgCurve
         return new NamedCurveFp(self::NAME_SECP_112R1, $p, $a, $b, $this->adapter);
     }
 
+    /**
+     * @param RandomNumberGeneratorInterface $randomGenerator
+     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     */
     public function generator112r1(RandomNumberGeneratorInterface $randomGenerator = null)
     {
         $curve = $this->curve112r1();
@@ -69,6 +79,9 @@ class SecgCurve
         return $curve->getGenerator($x, $y, $order, $randomGenerator);
     }
 
+    /**
+     * @return NamedCurveFp
+     */
     public function curve256k1()
     {
         $p = $this->adapter->hexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F');
@@ -78,6 +91,10 @@ class SecgCurve
         return new NamedCurveFp(self::NAME_SECP_256K1, $p, $a, $b, $this->adapter);
     }
 
+    /**
+     * @param RandomNumberGeneratorInterface $randomGenerator
+     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     */
     public function generator256k1(RandomNumberGeneratorInterface $randomGenerator = null)
     {
         $curve = $this->curve256k1();
@@ -89,6 +106,9 @@ class SecgCurve
         return $curve->getGenerator($x, $y, $order, $randomGenerator);
     }
 
+    /**
+     * @return NamedCurveFp
+     */
     public function curve256r1()
     {
         $p = $this->adapter->hexDec('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF');
@@ -98,6 +118,10 @@ class SecgCurve
         return new NamedCurveFp(self::NAME_SECP_256R1, $p, $a, $b, $this->adapter);
     }
 
+    /**
+     * @param RandomNumberGeneratorInterface $randomGenerator
+     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     */
     public function generator256r1(RandomNumberGeneratorInterface $randomGenerator = null)
     {
         $curve = $this->curve256r1();
@@ -109,6 +133,9 @@ class SecgCurve
         return $curve->getGenerator($x, $y, $order, $randomGenerator);
     }
 
+    /**
+     * @return NamedCurveFp
+     */
     public function curve384r1()
     {
         $p = $this->adapter->hexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFF');
@@ -118,6 +145,10 @@ class SecgCurve
         return new NamedCurveFp(self::NAME_SECP_384R1, $p, $a, $b, $this->adapter);
     }
 
+    /**
+     * @param RandomNumberGeneratorInterface $randomGenerator
+     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     */
     public function generator384r1(RandomNumberGeneratorInterface $randomGenerator = null)
     {
         $curve = $this->curve384r1();

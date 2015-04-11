@@ -7,12 +7,11 @@ use FG\ASN1\Universal\Sequence;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\BitString;
 use FG\ASN1\Universal\OctetString;
-use Mdanter\Ecc\PrivateKeyInterface;
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
-use Mdanter\Ecc\Serializer\Util\ASN\ASNContext;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use FG\ASN1\ExplicitlyTaggedObject;
 
@@ -26,16 +25,30 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     const VERSION = 1;
 
+    /**
+     * @var \Mdanter\Ecc\Math\DebugDecorator|MathAdapterInterface|null
+     */
     private $adapter;
 
+    /**
+     * @var DerPublicKeySerializer
+     */
     private $pubKeySerializer;
 
+    /**
+     * @param MathAdapterInterface   $adapter
+     * @param PemPublicKeySerializer $pubKeySerializer
+     */
     public function __construct(MathAdapterInterface $adapter = null, PemPublicKeySerializer $pubKeySerializer = null)
     {
         $this->adapter = $adapter ?: MathAdapterFactory::getAdapter();
         $this->pubKeySerializer = $pubKeySerializer ?: new DerPublicKeySerializer($this->adapter);
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::serialize()
+     */
     public function serialize(PrivateKeyInterface $key)
     {
         $privateKeyInfo = new Sequence(
@@ -48,6 +61,10 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
         return $privateKeyInfo->getBinary();
     }
 
+    /**
+     * @param PrivateKeyInterface $key
+     * @return BitString
+     */
     private function encodePubKey(PrivateKeyInterface $key)
     {
         return new BitString(
@@ -55,11 +72,21 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
         );
     }
 
+    /**
+     * @param PrivateKeyInterface $key
+     * @return int|mixed|string
+     */
     private function formatKey(PrivateKeyInterface $key)
     {
         return $this->adapter->decHex($key->getSecret());
     }
 
+    /**
+     * @param string $data
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::parse()
+     * @throws \FG\ASN1\Exception\ParserException
+     */
     public function parse($data)
     {
         $asnObject = Object::fromBinary($data);

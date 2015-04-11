@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Serializer\PrivateKey;
 
-use Mdanter\Ecc\PrivateKeyInterface;
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 
 interface PrivateKeySerializerInterface
 {
@@ -15,7 +15,7 @@ interface PrivateKeySerializerInterface
 
     /**
      *
-     * @param  string              $formattedKey
+     * @param  string $formattedKey
      * @return PrivateKeyInterface
      */
     public function parse($formattedKey);

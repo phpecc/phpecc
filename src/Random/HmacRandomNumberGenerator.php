@@ -2,9 +2,8 @@
 
 namespace Mdanter\Ecc\Random;
 
-use Mdanter\Ecc\MathAdapterInterface;
-use Mdanter\Ecc\PrivateKeyInterface;
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Util\NumberSize;
 
 /**
@@ -53,10 +52,11 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     /**
      * Construct a HMAC deterministic byte generator.
      *
-     * @param MathAdapterInterface $math
-     * @param PrivateKeyInterface  $privateKey
-     * @param string               $messageHash
-     * @param $algo
+     * @param    MathAdapterInterface $math
+     * @param    PrivateKeyInterface  $privateKey
+     * @param    string               $messageHash
+     * @param    $algo
+     * @internal param string $personalString
      */
     public function __construct(MathAdapterInterface $math, PrivateKeyInterface $privateKey, $messageHash, $algo)
     {
@@ -64,25 +64,110 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
             throw new \RuntimeException('HMACDRGB: Hashing algorithm not found');
         }
 
-        $this->math = $math;
-        $this->algorithm = $algo;
-
-        $hlen = strlen(hash($algo, 1, true));
-        $vlen = 8 * ceil($hlen / 8);
+        $tempHash = hash($algo, 1, true);
+        $vlen = NumberSize::getCeiledByteSize($math, $math->hexdec(bin2hex($tempHash), 1));
 
         // Initialize deterministic vectors
         $this->V = str_pad('', $vlen, chr(0x01), STR_PAD_LEFT);
         $this->K = str_pad('', $vlen, chr(0x00), STR_PAD_LEFT);
 
+        $this->math = $math;
+        $this->algorithm = $algo;
+        $this->generator = $privateKey->getPoint();
+
         // Encode the private key and hash as binary, a seed for the DRBG
-        $hex     = str_pad($math->decHex($privateKey->getSecret()), $hlen * 2, '0', STR_PAD_LEFT);
-        $hash    = str_pad($math->decHex($messageHash), $hlen * 2, '0', STR_PAD_LEFT);
-        $entropy = pack("H*", $hex.$hash);
+        $entropy = pack(
+            "H*",
+            $this->int2octets($privateKey->getSecret()).
+            $this->int2octets($messageHash)
+        );
 
         $this->update($entropy);
 
         return $this;
     }
+    private function bitLength($number)
+    {
+        return NumberSize::bnNumBits($this->math, $number);
+    }
+
+    /**
+     * @return number
+     */
+    public function qBitLen()
+    {
+        return $this->bitLength($this->generator->getOrder());
+    }
+
+    /**
+     * @return int
+     */
+    public function hashBitLength()
+    {
+        return strlen(hash($this->algorithm, 1, true)) * 8;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function rolen()
+    {
+        return $this->math->rightShift($this->math->add($this->qBitLen(), 7), 3);
+    }
+
+    /**
+     * @param $data
+     * @return int|string
+     */
+    public function bits2int($data)
+    {
+        $vlen = strlen($data) * 8;
+        $v    = $this->math->stringToInt($data);
+
+        if ($vlen > $this->qBitLen()) {
+            //echo ">1\n";
+            $v = $this->math->rightShift($v, ($vlen - $this->qBitLen()));
+        }
+        return $v;
+    }
+
+    /**
+     * @param $v
+     * @return int|string
+     */
+    public function int2octets($v)
+    {
+        $out = $this->math->decHex($v);
+        $vlen = strlen($out);
+        //echo "V: $vlen, R:".$this->rolen()."\n";
+
+        if ($vlen < $this->rolen() * 2) {
+            //echo " >2 \n";
+            $out = str_pad($out, $this->rolen() * 2, '0', STR_PAD_LEFT);
+        }
+
+        if ($vlen > $this->rolen() * 2) {
+            //echo "<3\n";
+            $out = substr($out, 0, $this->rolen() * 2);
+        }
+        //echo "out: $out\n";
+        return $out;
+    }
+
+    /**
+     * @param $in
+     * @return int|string
+     */
+    public function bits2octets($in)
+    {
+        $z1 = $this->bits2int($in);
+        $z2 = $this->math->sub($z1, $this->generator->getOrder());
+        if ($this->math->cmp($z2, 0) < 0) {
+            return $this->int2octets($z1);
+        }
+        return $this->int2octets($z2);
+    }
+
 
     /**
      * Return the hash of the given binary $data
@@ -92,7 +177,6 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     private function hash($data)
     {
         $hash = hash_hmac($this->algorithm, $data, $this->K, true);
-
         return $hash;
     }
 
@@ -104,22 +188,26 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      */
     private function update($data = null)
     {
-        $this->K = $this->hash(sprintf(
-            "%s%s%s",
-            $this->V,
-            chr(0x00),
-            $data
-        ));
+        $this->K = $this->hash(
+            sprintf(
+                "%s%s%s",
+                $this->V,
+                chr(0x00),
+                $data
+            )
+        );
 
         $this->V = $this->hash($this->V);
 
         if ($data) {
-            $this->K = $this->hash(sprintf(
-                "%s%s%s",
-                $this->V,
-                chr(0x01),
-                $data
-            ));
+            $this->K = $this->hash(
+                sprintf(
+                    "%s%s%s",
+                    $this->V,
+                    chr(0x01),
+                    $data
+                )
+            );
 
             $this->V = $this->hash($this->V);
         }
@@ -130,7 +218,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     /**
      * Load $numBytes bytes from the DRBG
      *
-     * @param  int    $numNumBytes
+     * @param  int $numNumBytes
      * @return string
      */
     private function bytes($numNumBytes)
@@ -139,8 +227,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
         // Build a string of $numBytes bytes from hashing the seeded DRBG
         while (strlen($temp) < $numNumBytes) {
-            $this->V = $this->hash($this->V);
-            $temp   .= $this->V;
+            $temp .= $this->V = $this->hash($this->V);
         }
 
         $this->update(null);
@@ -152,18 +239,17 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     /**
      * Generate a nonce based on the given $max
      *
-     * @param $max
-     * @return int|string
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Random\RandomNumberGeneratorInterface::generate()
      */
     public function generate($max)
     {
         if (is_null($this->result)) {
-            $v     = NumberSize::getCeiledByteSize($this->math, $max);
+            $v = NumberSize::getCeiledByteSize($this->math, $max);
 
             while (true) {
-                $bytes = $this->bytes($v);
-                $hex   = bin2hex($bytes);
-                $rand  = $this->math->hexDec($hex);
+                $hex  = bin2hex($this->bytes($v));
+                $rand = $this->math->hexDec($hex);
 
                 // Check k is between [1, ... $max]
                 if ($this->math->cmp(1, $rand) <= 0 && $this->math->cmp($rand, $max) < 0) {
@@ -171,7 +257,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
                 }
 
                 // Otherwise derive another and try again.
-                $this->update(null);
+                $this->update(chr(0));
             }
 
             $this->result = $rand;

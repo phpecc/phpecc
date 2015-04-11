@@ -10,7 +10,9 @@ use Mdanter\Ecc\Console\Commands\Helper\KeyTextDumper;
 
 class ParsePublicKeyCommand extends AbstractCommand
 {
-
+    /**
+     *
+     */
     protected function configure()
     {
         $this->setName('parse-pubkey')->setDescription('Parse a PEM encoded public key, without its delimiters.')
@@ -26,6 +28,10 @@ class ParsePublicKeyCommand extends AbstractCommand
             ->addOption('rewrite', null, InputOption::VALUE_NONE, 'Regenerate and output the PEM data from the parsed key.', null);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $parser = $this->getPublicKeySerializer($input, 'in');

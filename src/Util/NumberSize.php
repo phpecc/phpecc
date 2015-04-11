@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Util;
 
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 
 class NumberSize
 {

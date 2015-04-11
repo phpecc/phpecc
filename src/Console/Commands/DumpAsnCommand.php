@@ -12,6 +12,9 @@ use FG\ASN1\Object;
 class DumpAsnCommand extends AbstractCommand
 {
 
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('dump-asn')
@@ -21,6 +24,12 @@ class DumpAsnCommand extends AbstractCommand
             ->addOption('in', null, InputOption::VALUE_OPTIONAL, 'Input format (der or pem). Defaults to pem.', 'pem');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @throws \FG\ASN1\Exception\ParserException
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $loader = $this->getLoader($input, 'in');
@@ -30,6 +39,13 @@ class DumpAsnCommand extends AbstractCommand
         $this->printObject($output, $asnObject);
     }
 
+    /**
+     * @param OutputInterface $output
+     * @param Object $object
+     * @param int $depth
+     * @return void
+     * @throws \FG\ASN1\Exception\NotImplementedException
+     */
     private function printObject(OutputInterface $output, Object $object, $depth = 0)
     {
         $treeSymbol = '';

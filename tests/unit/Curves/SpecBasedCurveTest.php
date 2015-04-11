@@ -2,13 +2,21 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
-use Mdanter\Ecc\GeneratorPoint;
+use Mdanter\Ecc\Message\MessageFactory;
+use Mdanter\Ecc\Tests\AbstractTestCase;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
+use Mdanter\Ecc\Util\NumberSize;
 use Symfony\Component\Yaml\Yaml;
 use Mdanter\Ecc\Curves\CurveFactory;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
+use Mdanter\Ecc\Crypto\Signature\Signer;
 
-class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
+class SpecBasedCurveTest extends AbstractTestCase
 {
 
+    /**
+     * @return array
+     */
     public function getFiles()
     {
         return [
@@ -23,6 +31,9 @@ class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getKeypairsTestSet()
     {
         $yaml = new Yaml();
@@ -65,6 +76,9 @@ class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($adapter->hexDec($expectedY), $publicKey->getPoint()->getY(), $name);
     }
 
+    /**
+     * @return array
+     */
     public function getDiffieHellmanTestSet()
     {
         $yaml = new Yaml();
@@ -77,7 +91,6 @@ class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
 
             foreach ($data['diffie'] as $testKeyPair) {
                 $datasets[] = [
-                    $data['name'],
                     $generator,
                     $testKeyPair['alice'],
                     $testKeyPair['bob'],
@@ -96,18 +109,100 @@ class SpecBasedCurveTest extends \PHPUnit_Framework_TestCase
      * @param string $bob
      * @param string $expectedX
      */
-    public function testGetDiffieHellmanSharedSecret($name, GeneratorPoint $generator, $alice, $bob, $expectedX)
+    public function testGetDiffieHellmanSharedSecret(GeneratorPoint $generator, $alice, $bob, $expectedX)
     {
         $adapter = $generator->getAdapter();
-
+        $messages = new MessageFactory($adapter);
         $alicePrivKey = $generator->getPrivateKeyFrom($alice);
         $bobPrivKey = $generator->getPrivateKeyFrom($bob);
 
-        $aliceDh = $alicePrivKey->createExchange($bobPrivKey->getPublicKey());
-        $bobDh = $bobPrivKey->createExchange($alicePrivKey->getPublicKey());
+        $aliceDh = $alicePrivKey->createExchange($messages, $bobPrivKey->getPublicKey());
+        $bobDh = $bobPrivKey->createExchange($messages, $alicePrivKey->getPublicKey());
 
         $this->assertEquals($aliceDh->calculateSharedKey(), $adapter->hexDec($expectedX));
         $this->assertEquals($bobDh->calculateSharedKey(), $adapter->hexDec($expectedX));
+    }
+
+    /**
+     * @return array
+     */
+    public function getHmacTestSet()
+    {
+        $yaml = new Yaml();
+        $files = $this->getFiles();
+        $datasets = [];
+
+        foreach ($files as $file) {
+            $data = $yaml->parse($file);
+
+            if (! isset($data['hmac'])) {
+                continue;
+            }
+
+            $generator = CurveFactory::getGeneratorByName($data['name']);
+
+            foreach ($data['hmac'] as $sig) {
+                $datasets[] = [
+                    $generator,
+                    isset($sig['size']) ? $sig['size'] : 0,
+                    $sig['key'],
+                    $sig['algo'],
+                    $sig['message'],
+                    strtolower($sig['k']),
+                    strtolower($sig['r']),
+                    strtolower($sig['s'])
+                ];
+            }
+        }
+
+        return $datasets;
+    }
+
+    /**
+     * @dataProvider getHmacTestSet
+     * @param GeneratorPoint $G
+     * @param integer $size
+     * @param string $privKey
+     * @param string $algo
+     * @param string $message
+     * @param string $eK expected K hex
+     * @param string $eR expected R hex
+     * @param string $eS expected S hex
+     */
+    public function testHmacSignatures(GeneratorPoint $G, $size, $privKey, $algo, $message, $eK, $eR, $eS)
+    {
+        //echo "Try {$test->curve} / {$test->algorithm} / '{$test->message}'\n";
+
+        $math = $G->getAdapter();
+        
+        // Initialize private key and message hash (decimal)
+        $privateKey  = $G->getPrivateKeyFrom($math->hexDec($privKey));
+        $hashHex     = hash($algo, $message);
+        $messageHash = $math->hexDec($hashHex);
+
+        // Derive K
+        $drbg = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $messageHash, $algo);
+        $k    = $drbg->generate($G->getOrder());
+        $this->assertEquals($k, $math->hexdec($eK), 'k');
+
+        $hexSize = strlen($hashHex);
+        $hashBits = $math->baseConvert($messageHash, 10, 2);
+        if (strlen($hashBits) < $hexSize * 4) {
+            $hashBits = str_pad($hashBits, $hexSize * 4, '0', STR_PAD_LEFT);
+        }
+
+        $messageHash = $math->baseConvert(substr($hashBits, 0, NumberSize::bnNumBits($math, $G->getOrder())), 2, 10);
+
+        $signer = new Signer($math);
+        $sig    = $signer->sign($privateKey, $messageHash, $k);
+        // Should be consistent
+        $this->assertTrue($signer->verify($privateKey->getPublicKey(), $sig, $messageHash));
+
+        // R and S should be correct
+        $sR = $math->hexDec($eR);
+        $sS = $math->hexDec($eS);
+        $this->assertSame($sR, $sig->getR(), "r $sR == ".$sig->getR());
+        $this->assertSame($sS, $sig->getS(), "s $sR == " . $sig->getS());
     }
 
 }

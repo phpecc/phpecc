@@ -2,10 +2,11 @@
 
 namespace Mdanter\Ecc\Random;
 
-use Mdanter\Ecc\RandomNumberGeneratorInterface;
-
 class GmpRandomNumberGenerator implements RandomNumberGeneratorInterface
 {
+    /**
+     * @param bool $noWarn
+     */
     public function __construct($noWarn = false)
     {
         if ($noWarn !== true) {

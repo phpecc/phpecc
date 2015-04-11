@@ -2,14 +2,15 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
-use Mdanter\Ecc\MathAdapterInterface;
+use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Signature\Signer;
+use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 
 class SecCurveTest extends AbstractTestCase
 {
+
     public function getCurveParams()
     {
         return $this->_getAdapters([
@@ -28,7 +29,7 @@ class SecCurveTest extends AbstractTestCase
         $factory = EccFactory::getSecgCurves($math);
         $curve = $factory->{$function}();
 
-        $this->assertInstanceOf('\Mdanter\Ecc\CurveFpInterface', $curve);
+        $this->assertInstanceOf($this->classCurveFpInterface, $curve);
         $this->assertEquals($a, $curve->getA());
         $this->assertEquals($b, $curve->getB());
         $this->assertEquals($prime, $curve->getPrime());
@@ -52,7 +53,7 @@ class SecCurveTest extends AbstractTestCase
         $factory = EccFactory::getSecgCurves($math);
         $generator = $factory->{$function}();
 
-        $this->assertInstanceOf('\Mdanter\Ecc\PointInterface', $generator);
+        $this->assertInstanceOf($this->classPointInterface, $generator);
         $this->assertEquals($order, $generator->getOrder());
         $this->assertEquals($prime, $generator->getCurve()->getPrime());
     }

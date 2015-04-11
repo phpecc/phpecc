@@ -1,0 +1,155 @@
+{
+  "test":[
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha1",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "sample",
+      "expectedK": "37D7CA00D2C7B0E5E412AC03BD44BA837FDD5B28CD3B0021",
+      "expectedR": "98C6BD12B23EAF5E2A2045132086BE3EB8EBD62ABF6698FF",
+      "expectedS": "57A22B07DEA9530F8DE9471B1DC6624472E8E2844BC25B64"
+    },
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha224",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "sample",
+      "expectedK": "4381526B3FC1E7128F202E194505592F01D5FF4C5AF015D8",
+      "expectedR": "A1F00DAD97AEEC91C95585F36200C65F3C01812AA60378F5",
+      "expectedS": "E07EC1304C7C6C9DEBBE980B9692668F81D4DE7922A0F97A"
+    },
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha256",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "sample",
+      "expectedK": "32B1B6D7D42A05CB449065727A84804FB1A3E34D8F261496",
+      "expectedR": "4B0B8CE98A92866A2820E20AA6B75B56382E0F9BFD5ECB55",
+      "expectedS": "CCDB006926EA9565CBADC840829D8C384E06DE1F1E381B85"
+    },
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha384",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "sample",
+      "expectedK": "4730005C4FCB01834C063A7B6760096DBE284B8252EF4311",
+      "expectedR": "DA63BF0B9ABCF948FBB1E9167F136145F7A20426DCC287D5",
+      "expectedS": "C3AA2C960972BD7A2003A57E1C4C77F0578F8AE95E31EC5E"
+    },
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha512",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "sample",
+      "expectedK": "A2AC7AB055E4F20692D49209544C203A7D1F2C0BFBC75DB1",
+      "expectedR": "4D60C5AB1996BD848343B31C00850205E2EA6922DAC2E4B8",
+      "expectedS": "3F6E837448F027A1BF4B34E796E32A811CBB4050908D8F67"
+    },
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha1",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "test",
+      "expectedK": "D9CF9C3D3297D3260773A1DA7418DB5537AB8DD93DE7FA25",
+      "expectedR": "0F2141A0EBBC44D2E1AF90A50EBCFCE5E197B3B7D4DE036D",
+      "expectedS": "EB18BC9E1F3D7387500CB99CF5F7C157070A8961E38700B7"
+    },
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha224",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "test",
+      "expectedK": "F5DC805F76EF851800700CCE82E7B98D8911B7D510059FBE",
+      "expectedR": "6945A1C1D1B2206B8145548F633BB61CEF04891BAF26ED34",
+      "expectedS": "B7FB7FDFC339C0B9BD61A9F5A8EAF9BE58FC5CBA2CB15293"
+    },
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha256",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "test",
+      "expectedK": "5C4CE89CF56D9E7C77C8585339B006B97B5F0680B4306C6C",
+      "expectedR": "3A718BD8B4926C3B52EE6BBE67EF79B18CB6EB62B1AD97AE",
+      "expectedS": "5662E6848A4A19B1F1AE2F72ACD4B8BBE50F1EAC65D9124F"
+    },
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha384",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "test",
+      "expectedK": "5AFEFB5D3393261B828DB6C91FBC68C230727B030C975693",
+      "expectedR": "B234B60B4DB75A733E19280A7A6034BD6B1EE88AF5332367",
+      "expectedS": "7994090B2D59BB782BE57E74A44C9A1C700413F8ABEFE77A"
+    },
+    {
+      "curve": "nist-p192",
+      "size": "192",
+      "algorithm": "sha512",
+      "privKey": "6FAB034934E4C0FC9AE67F5B5659A9D7D1FEFD187EE09FD4",
+      "message": "test",
+      "expectedK": "0758753A5254759C7CFBAD2E2D9B0792EEE44136C9480527",
+      "expectedR": "FE4F4AE86A58B6507946715934FE2D8FF9D95B6B098FE739",
+      "expectedS": "74CF5605C98FBA0E1EF34D4B5A1577A7DCF59457CAE52290"
+    },
+    {
+      "curve": "nist-p224",
+      "size": 224,
+      "algorithm": "sha512",
+      "privKey": "F220266E1105BFE3083E03EC7A3A654651F45E37167E88600BF257C1",
+      "message": "sample",
+      "expectedK": "9DB103FFEDEDF9CFDBA05184F925400C1653B8501BAB89CEA0FBEC14",
+      "expectedR": "074BD1D979D5F32BF958DDC61E4FB4872ADCAFEB2256497CDAC30397",
+      "expectedS": "A4CECA196C3D5A1FF31027B33185DC8EE43F288B21AB342E5D8EB084"
+    },
+    {
+      "curve": "secp256k1",
+      "size": 256,
+      "algorithm": "sha256",
+      "privKey": "0000000000000000000000000000000000000000000000000000000000000001",
+      "message": "Satoshi Nakamoto",
+      "expectedK":  "8F8A276C19F4149656B280621E358CCE24F5F52542772691EE69063B74F15D15",
+      "expectedR": "934b1ea10a4b3c1757e2b0c017d0b6143ce3c9a7e6a4a49860d7a6ab210ee3d8",
+      "expectedS": "dbbd3162d46e9f9bef7feb87c16dc13b4f6568a87f4e83f728e2443ba586675c"
+    },
+    {
+      "curve": "secp256k1",
+      "size": 256,
+      "algorithm": "sha256",
+      "privKey": "0000000000000000000000000000000000000000000000000000000000000001",
+      "message": "All those moments will be lost in time, like tears in rain. Time to die...",
+      "expectedK": "38AA22D72376B4DBC472E06C3BA403EE0A394DA63FC58D88686C611ABA98D6B3",
+      "expectedR": "8600dbd41e348fe5c9465ab92d23e3db8b98b873beecd930736488696438cb6b",
+      "expectedS": "ab8019bbd8b6924cc4099fe625340ffb1eaac34bf4477daa39d0835429094520"
+    },
+    {
+      "curve": "secp256k1",
+      "size": 256,
+      "algorithm": "sha256",
+      "privKey": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140",
+      "message": "Satoshi Nakamoto",
+      "expectedK": "33A19B60E25FB6F4435AF53A3D42D493644827367E6453928554F43E49AA6F90",
+      "expectedR": "fd567d121db66e382991534ada77a6bd3106f0a1098c231e47993447cd6af2d0",
+      "expectedS": "94c632f14e4379fc1ea610a3df5a375152549736425ee17cebe10abbc2a2826c"
+    },
+    {
+      "curve": "secp256k1",
+      "size": 256,
+      "algorithm": "sha256",
+      "privKey": "f8b8af8ce3c7cca5e300d33939540c10d45ce001b8f252bfbc57ba0342904181",
+      "message": "Alan Turing",
+      "expectedK": "525A82B70E67874398067543FD84C83D30C175FDC45FDEEE082FE13B1D7CFDF1",
+      "expectedR": "7063ae83e7f62bbb171798131b4a0564b956930092b33b07b395615d9ec7e15c",
+      "expectedS": "a72033e1ff5ca1ea8d0c99001cb45f0272d3be7525d3049c0d9e98dc7582b857"
+    }
+  ]
+}
+

@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Serializer\PublicKey;
 
-use Mdanter\Ecc\PublicKeyInterface;
+use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 
 interface PublicKeySerializerInterface
 {
@@ -15,7 +15,7 @@ interface PublicKeySerializerInterface
 
     /**
      *
-     * @param  string             $formattedKey
+     * @param  string $formattedKey
      * @return PublicKeyInterface
      */
     public function parse($formattedKey);

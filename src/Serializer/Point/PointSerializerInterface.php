@@ -2,8 +2,8 @@
 
 namespace Mdanter\Ecc\Serializer\Point;
 
-use Mdanter\Ecc\PointInterface;
-use Mdanter\Ecc\CurveFpInterface;
+use Mdanter\Ecc\Primitives\PointInterface;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
 
 interface PointSerializerInterface
 {

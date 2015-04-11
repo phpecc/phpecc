@@ -3,7 +3,7 @@ test: phpunit phpcs
 .PHONY: test phpunit phpcs
 
 pretest:
-		composer install --dev
+		composer install
 
 phpunit: pretest
 		mkdir -p tests/output

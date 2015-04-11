@@ -15,6 +15,9 @@ use Mdanter\Ecc\Console\Commands\DumpAsnCommand;
 class Application extends ConsoleApplication
 {
 
+    /**
+     * @return array|\Symfony\Component\Console\Command\Command[]
+     */
     protected function getDefaultCommands()
     {
         $commands = parent::getDefaultCommands();
