@@ -29,6 +29,7 @@ namespace Mdanter\Ecc\Crypto\EcDH;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Message\EncryptedMessage;
 use Mdanter\Ecc\Message\Message;
 use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Primitives\PointInterface;
@@ -144,11 +145,11 @@ class EcDH implements EcDHInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::decrypt()
      */
-    public function decrypt($ciphertext)
+    public function decrypt(EncryptedMessage $ciphertext)
     {
         $key = hash("sha256", $this->calculateSharedKey(), true);
 
-        $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $ciphertext, MCRYPT_MODE_CBC, $key));
+        $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $ciphertext->getContent(), MCRYPT_MODE_CBC, $key));
         $clearText = $this->messages->plaintext($clearText, 'sha256');
         return $clearText;
     }
@@ -174,7 +175,8 @@ class EcDH implements EcDHInterface
     public function decryptFile($path)
     {
         if (file_exists($path) && is_readable($path)) {
-            return $this->decrypt(file_get_contents($path));
+            $cipherText = $this->messages->ciphertext(file_get_contents($path));
+            return $cipherText;
         }
 
         throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");

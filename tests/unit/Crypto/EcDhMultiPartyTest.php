@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Tests\Crypto\Routines;
+namespace Mdanter\Ecc\Tests\Crypto;
 
 use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Tests\AbstractTestCase;
