@@ -136,8 +136,8 @@ class EcDH implements EcDHInterface
         $key = hash("sha256", $this->calculateSharedKey(), true);
 
         $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($message->getContent()), MCRYPT_MODE_CBC, $key);
-
-        return $cypherText;
+        $message = $this->messages->ciphertext($cypherText);
+        return $message;
     }
 
     /**
