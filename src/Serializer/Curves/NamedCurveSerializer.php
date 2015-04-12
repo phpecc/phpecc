@@ -10,7 +10,6 @@ use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 /**
  * This class serializes the curve to its OID. For explicit domain parameters see
  * NamedCurveExplicitSerializer.
- *
  */
 class NamedCurveSerializer
 {
@@ -24,8 +23,12 @@ class NamedCurveSerializer
     public function serialize(NamedCurveFp $c)
     {
         $oid = CurveOidMapper::getCurveOid($c);
-        $payload = base64_encode($oid->getBinary());
-        return self::HEADER . "\n" . $payload . "\n" . self::FOOTER;
+
+        $content = self::HEADER . PHP_EOL .
+            base64_encode($oid->getBinary()) . PHP_EOL .
+            self::FOOTER;
+
+        return $content;
     }
 
     /**
