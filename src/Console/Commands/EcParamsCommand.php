@@ -4,8 +4,9 @@ namespace Mdanter\Ecc\Console\Commands;
 
 use FG\ASN1\Identifier;
 use Mdanter\Ecc\Curves\CurveFactory;
+use Mdanter\Ecc\Serializer\Curves\NamedCurveExplicitSerializer;
 use Mdanter\Ecc\Serializer\Curves\NamedCurveSerializer;
-use Symfony\Component\Console\Input\InputArgument;
+use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,11 +43,15 @@ class EcParamsCommand extends AbstractCommand
 
         $curve = CurveFactory::getCurveByName($curveName);
         if ($input->getOption('explicit')) {
-            echo 'explicit params file';
+            $generator = CurveFactory::getGeneratorByName($curveName);
+            $serializer = new NamedCurveExplicitSerializer(new UncompressedPointSerializer($generator->getAdapter()));
+            $data = $serializer->serialize($curve, $generator);
         } else {
             $serializer = new NamedCurveSerializer();
-            $output->writeln($serializer->serialize($curve));
+            $data = $serializer->serialize($curve);
         }
+
+        $output->writeln($data);
     }
 
     /**
