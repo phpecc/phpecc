@@ -2,12 +2,16 @@
 
 namespace Mdanter\Ecc\Serializer\Curves;
 
-use FG\ASN1\ExplicitlyTaggedObject;
+
 use FG\ASN1\Universal\ObjectIdentifier;
 use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
-use FG\ASN1\Object;
 
+/**
+ * This class serializes the curve to its OID. For explicit domain parameters see
+ * NamedCurveExplicitSerializer.
+ *
+ */
 class NamedCurveSerializer
 {
     const HEADER = '-----BEGIN EC PARAMETERS-----';
@@ -25,7 +29,8 @@ class NamedCurveSerializer
     }
 
     /**
-     * @param $params
+     * @param string $params
+     * @return \Mdanter\Ecc\Curves\NamedCurveFp
      */
     public function parse($params)
     {
