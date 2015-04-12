@@ -29,4 +29,13 @@ class MessageFactory
     {
         return new Message($this->adapter, $content, $algo);
     }
+
+    /**
+     * @param $content
+     * @return EncryptedMessage
+     */
+    public function ciphertext($content)
+    {
+        return new EncryptedMessage($content);
+    }
 }
