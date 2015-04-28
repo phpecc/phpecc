@@ -27,6 +27,7 @@ namespace Mdanter\Ecc\Crypto\EcDH;
  */
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
+use Mdanter\Ecc\Message\EncryptedMessage;
 use Mdanter\Ecc\Message\Message;
 
 /**
@@ -67,24 +68,24 @@ interface EcDHInterface
      * party.
      *
      * @param \Mdanter\Ecc\Message\Message $message
-     * @return string
+     * @return \Mdanter\Ecc\Message\EncryptedMessage
      */
     public function encrypt(Message $message);
 
     /**
      * Decrypts a string that was encrypted by the other party.
      *
-     * @param  string $ciphertext The encrypted string.
+     * @param \Mdanter\Ecc\Message\EncryptedMessage $ciphertext The encrypted message.
      * @return Message
      */
-    public function decrypt($ciphertext);
+    public function decrypt(EncryptedMessage $ciphertext);
 
     /**
      * Generates an encrypted version of the given file, that can be decoded by the other
      * party.
      *
      * @param  string $path
-     * @return string
+     * @return \Mdanter\Ecc\Message\EncryptedMessage
      */
     public function encryptFile($path);
 

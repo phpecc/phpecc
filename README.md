@@ -109,19 +109,27 @@ TODO...
 require 'vendor/autoload.php';
 
 use \Mdanter\Ecc\EccFactory;
+use \Mdanter\Ecc\Message\MessageFactory;
 
+$math = EccFactory::getAdapter();
 $generator = EccFactory::getNistCurves()->generator256();
 
 // Yeah, you won't really be doing that...
 $alice = $generator->createPrivateKey();
 $bob = $generator->createPrivateKey();
 
-// Exchange keys
-$aliceDh = $alice->createExchange($bob->getPublicKey());
-$bobDh = $bob->createExchange($alice->getPublicKey());
+$messages = new MessageFactory($math);
+$message = $messages->plaintext('Not for eavesdroppers', 'sha256');
 
-$encryptedText = $aliceDh->encrypt('Not for eavesdroppers');
-$decryptedText = $bobDh->decrypt($encryptedText);
+// Exchange keys
+$aliceDh = $alice->createExchange($messages, $bob->getPublicKey());
+$bobDh = $bob->createExchange($messages, $alice->getPublicKey());
+
+$encryptedMessage = $aliceDh->encrypt($message);
+$decryptedMessage = $bobDh->decrypt($encryptedMessage);
+
+echo $decryptedMessage->getContent() . PHP_EOL;
+
 ```
 
 ##### A lesser dead stupid example
@@ -137,24 +145,35 @@ You want to encrypt a message for Bob --and only Bob-- to read.
 
 require 'vendor/autoload.php';
 
+use \Mdanter\Ecc\EccFactory;
 use \Mdanter\Ecc\File\PemLoader;
 use \Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
 use \Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use \Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use \Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
+use \Mdanter\Ecc\Message\MessageFactory;
+
+$math = EccFactory::getAdapter();
+$messages = new MessageFactory($math);
 
 $loader = new PemLoader();
 $privKeySerializer = new PemPrivateKeySerializer(new DerPrivateKeySerializer());
 $pubKeySerializer = new PemPublicKeySerializer(new DerPublicKeySerializer());
 
-$alicePrivateKeyPath = '/path/to/alice/privkey.pem';
-$bobPublicKeyPath = '/path/to/bob/publickey.pem';
+$alicePrivateKeyPath = '/path/to/alice.priv';
+$bobPublicKeyPath = '/path/to/bob.pub';
 
 $alice = $privKeySerializer->parse($loader->loadPrivateKeyData($alicePrivateKeyPath));
 $bob = $pubKeySerializer->parse($loader->loadPublicKeyData($bobPublicKeyPath));
 
-$aliceDh = $alice->createExchange($bob);
-$messageForBob = $aliceDh->encrypt('To Bob - For your eyes only');
+$aliceDh = $alice->createExchange($messages, $bob);
+
+$message = $messages->plaintext('To Bob - For your eyes only', 'sha256');
+$messageForBob = $aliceDh->encrypt($message);
+
+// Binary!
+echo $messageForBob->getContent() . PHP_EOL;
+
 ```
 
 Now you can email/snail mail/whatever the encrypted message to Bob, and he will be able to decrypt your secret data (assuming he already has your public key, and his private key...)
