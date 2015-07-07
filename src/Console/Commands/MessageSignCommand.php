@@ -6,6 +6,7 @@ use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
+use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 use Mdanter\Ecc\Serializer\Util\HashAlgorithmOidMapper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -26,11 +27,15 @@ class MessageSignCommand extends AbstractCommand
             ->addOption('in', null, InputOption::VALUE_OPTIONAL, 'Key file input format (der or pem). Defaults to pem.', 'pem')
             ->addOption('curve', null, InputOption::VALUE_OPTIONAL, 'Curve to sign over', 'secp256k1')
             ->addOption('algo', null, InputOption::VALUE_OPTIONAL, 'Hashing algorithm', 'sha256')
-            ->addOption('det-sig', null, InputOption::VALUE_OPTIONAL, 'Use deterministic signatures', false)
+            ->addOption('det-sig', null, InputOption::VALUE_NONE, 'Use deterministic signatures')
         ;
 
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -45,7 +50,7 @@ class MessageSignCommand extends AbstractCommand
         $parser = $this->getPrivateKeySerializer($input, 'in');
         $loader = $this->getLoader($input, 'in');
 
-        $keyData = $this->getPrivateKeyData($input, $loader, 'infile', 'keyfile');
+        $keyData = $this->getPrivateKeyData($input, $loader, 'infile', null);
         $key = $parser->parse($keyData);
 
         // Check the target file exists
@@ -65,6 +70,8 @@ class MessageSignCommand extends AbstractCommand
 
         $signer = new Signer($math);
         $signature = $signer->sign($key, $hash, $random->generate($generator->getOrder()));
-        
+
+        $sigSerializer = new DerSignatureSerializer();
+        $output->writeln($sigSerializer->serialize($signature));
     }
 }
