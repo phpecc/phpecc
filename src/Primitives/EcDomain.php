@@ -3,8 +3,12 @@
 namespace Mdanter\Ecc\Primitives;
 
 
+use Mdanter\Ecc\Crypto\Certificates\CertificateSubject;
+use Mdanter\Ecc\Crypto\Certificates\Csr;
+use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Serializer\Util\HashAlgorithmOidMapper;
 
 class EcDomain
@@ -94,5 +98,27 @@ class EcDomain
     public function getSigner()
     {
         return new Signer($this->math);
+    }
+
+    /**
+     * @param CertificateSubject $subject
+     * @param PrivateKeyInterface $privateKey
+     * @return Csr
+     */
+    public function getCsr(CertificateSubject $subject, PrivateKeyInterface $privateKey)
+    {
+        $g = $this->getGenerator();
+        $signer = $this->getSigner();
+        $data = 1;
+
+        $rng = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $data, $this->getHashAlgo());
+        $signature = $signer->sign($privateKey, $data, $rng->generate($g->getOrder()));
+
+        return new Csr(
+            $subject,
+            "ecdsa+" . $this->getHashAlgo(),
+            $privateKey->getPublicKey(),
+            $signature
+        );
     }
 }
