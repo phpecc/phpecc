@@ -33,7 +33,7 @@ class Application extends ConsoleApplication
         $commands[] = new ParsePublicKeyCommand();
         $commands[] = new HexDecCommand();
         $commands[] = new DecHexCommand();
-        //$commands[] = new MessageSignCommand();
+        $commands[] = new MessageSignCommand();
 
         return $commands;
     }

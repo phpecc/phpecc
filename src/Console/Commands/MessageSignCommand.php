@@ -2,7 +2,11 @@
 
 namespace Mdanter\Ecc\Console\Commands;
 
-use Symfony\Component\Console\Command\Command;
+use Mdanter\Ecc\Crypto\Signature\Signer;
+use Mdanter\Ecc\Curves\CurveFactory;
+use Mdanter\Ecc\EccFactory;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
+use Mdanter\Ecc\Serializer\Util\HashAlgorithmOidMapper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,16 +19,15 @@ class MessageSignCommand extends AbstractCommand
      */
     protected function configure()
     {
-        $this->setName('sign')
-            ->addOption('keyfile', null, InputOption::VALUE_REQUIRED)
-            ->addOption(
-                'in',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Input format (der or pem). Defaults to pem.',
-                'pem'
-            )
-            ->setDescription('Calculate a signature for a file.');
+        $this
+            ->setName('sign')
+            ->addArgument('file', InputArgument::REQUIRED)
+            ->addOption('infile', null, InputOption::VALUE_REQUIRED, 'Key file')
+            ->addOption('in', null, InputOption::VALUE_OPTIONAL, 'Key file input format (der or pem). Defaults to pem.', 'pem')
+            ->addOption('curve', null, InputOption::VALUE_OPTIONAL, 'Curve to sign over', 'secp256k1')
+            ->addOption('algo', null, InputOption::VALUE_OPTIONAL, 'Hashing algorithm', 'sha256')
+            ->addOption('det-sig', null, InputOption::VALUE_OPTIONAL, 'Use deterministic signatures', false)
+        ;
 
     }
 
@@ -34,13 +37,34 @@ class MessageSignCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("We wont really do anything!");
+        // Check the hashing algorithm
+        $hashAlgo = $input->getOption('algo');
+        HashAlgorithmOidMapper::getHashAlgorithmOid($hashAlgo);
+
+        // Parse the private key file
         $parser = $this->getPrivateKeySerializer($input, 'in');
         $loader = $this->getLoader($input, 'in');
 
-        $data = $this->getPrivateKeyData($input, $loader, 'keyfile', 'data');
+        $keyData = $this->getPrivateKeyData($input, $loader, 'infile', 'keyfile');
+        $key = $parser->parse($keyData);
 
-        $key = $parser->parse($data);
+        // Check the target file exists
+        $data = $this->getUserFile($input, 'file');
 
+        $math = EccFactory::getAdapter();
+        $curve = CurveFactory::getCurveByName($input->getOption('curve'));
+        $generator = CurveFactory::getGeneratorByName($input->getOption('curve'));
+        $hash = $math->hexDec(hash($hashAlgo, $data));
+        $useDetSigs = $input->getOption('det-sig');
+
+        if ($useDetSigs) {
+            $random = RandomGeneratorFactory::getHmacRandomGenerator($key, $hash, $hashAlgo);
+        } else {
+            $random = RandomGeneratorFactory::getUrandomGenerator();
+        }
+
+        $signer = new Signer($math);
+        $signature = $signer->sign($key, $hash, $random->generate($generator->getOrder()));
+        
     }
 }
