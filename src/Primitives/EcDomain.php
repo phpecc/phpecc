@@ -7,14 +7,19 @@ use Mdanter\Ecc\Crypto\Certificates\CertificateSubject;
 use Mdanter\Ecc\Crypto\Certificates\Csr;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Signature\Signer;
+use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
+use Mdanter\Ecc\Serializer\Certificates\CertificateSubjectSerializer;
+use Mdanter\Ecc\Serializer\Certificates\CsrSerializer;
+use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
+use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 use Mdanter\Ecc\Serializer\Util\HashAlgorithmOidMapper;
 
 class EcDomain
 {
     /**
-     * @var CurveFp
+     * @var NamedCurveFp
      */
     private $curve;
 
@@ -35,11 +40,11 @@ class EcDomain
 
     /**
      * @param MathAdapterInterface $math
-     * @param CurveFp $curve
+     * @param NamedCurveFp $curve
      * @param GeneratorPoint $generatorPoint
      * @param string $hashAlgo - must be a known hash algorithm
      */
-    public function __construct(MathAdapterInterface $math, CurveFp $curve, GeneratorPoint $generatorPoint, $hashAlgo)
+    public function __construct(MathAdapterInterface $math, NamedCurveFp $curve, GeneratorPoint $generatorPoint, $hashAlgo)
     {
         HashAlgorithmOidMapper::getHashAlgorithmOid($hashAlgo);
         if (!$curve->contains($generatorPoint->getX(), $generatorPoint->getY())) {
@@ -107,17 +112,24 @@ class EcDomain
      */
     public function getCsr(CertificateSubject $subject, PrivateKeyInterface $privateKey)
     {
+        $publicKey = $privateKey->getPublicKey();
         $g = $this->getGenerator();
-        $signer = $this->getSigner();
-        $data = 1;
+        $hasher = $this->getHasher();
+
+        $serializer = new CsrSerializer(new CertificateSubjectSerializer(), new DerPublicKeySerializer($this->math), new DerSignatureSerializer());
+        $data = $serializer->getCertRequestInfoASN($this->curve, $publicKey, $subject)->getBinary();
+        $hash = $this->math->hexDec($hasher($data, false));
 
         $rng = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $data, $this->getHashAlgo());
-        $signature = $signer->sign($privateKey, $data, $rng->generate($g->getOrder()));
+        $signer = $this->getSigner();
+        $k = $rng->generate($g->getOrder());
+        $signature = $signer->sign($privateKey, $hash, $k);
 
         return new Csr(
             $subject,
             "ecdsa+" . $this->getHashAlgo(),
-            $privateKey->getPublicKey(),
+            $this->curve,
+            $publicKey,
             $signature
         );
     }
