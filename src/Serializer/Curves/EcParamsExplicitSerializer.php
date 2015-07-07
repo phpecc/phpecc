@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Serializer\Curves;
 
 
-use FG\ASN1\Universal\BitString;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\OctetString;
@@ -12,7 +11,7 @@ use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
-use Mdanter\Ecc\Serializer\Util\HashAlgorithmOidMapper;
+//use Mdanter\Ecc\Serializer\Util\HashAlgorithmOidMapper;
 
 /**
  * Serialize a named curve to it's explicit parameters.
@@ -22,6 +21,7 @@ class EcParamsExplicitSerializer
     const VERSION = 3;
     const HEADER = '-----BEGIN EC PARAMETERS-----';
     const FOOTER = '-----END EC PARAMETERS-----';
+    const FIELD_ID = '1.2.840.10045.1.1';
 
     /**
      * @param UncompressedPointSerializer $pointSerializer
@@ -39,25 +39,31 @@ class EcParamsExplicitSerializer
     public function serialize(NamedCurveFp $c, GeneratorPoint $G)
     {
         $math = $G->getAdapter();
-        $hexSize = CurveOidMapper::getByteSize($c) * 2;
+        //$hexSize = CurveOidMapper::getByteSize($c) * 2;
 
-        $generatorHex = $this->pointSerializer->serialize($G);
-
-        $domainParams = new Sequence(
-            new Integer(self::VERSION), // version
-            new Integer(1),                         // fieldId
-            new Sequence(
-                new OctetString(str_pad($math->decHex($c->getA()), $hexSize, '0', STR_PAD_LEFT)),
-                new OctetString(str_pad($math->decHex($c->getA()), $hexSize, '0', STR_PAD_LEFT)),
-                new BitString('')
-            ),
-            new BitString($generatorHex),
-            new Integer($G->getOrder()),    // order
-            new Integer(1),                          // cofactor
-            HashAlgorithmOidMapper::getHashAlgorithmOid('sha1')
+        $fieldID = new Sequence(
+            new ObjectIdentifier(self::FIELD_ID), // 1.2.840.10045.3.1.1.7
+            new Integer($c->getPrime())
+            // prime bit size?
         );
 
-        $payload = base64_encode($domainParams->getBinary());
+        $curve = new Sequence(
+            new OctetString($math->decHex($c->getA())),
+            new OctetString($math->decHex($c->getB()))
+        );
+
+        $domain = new Sequence(
+            new Integer(1),
+            $fieldID,
+            $curve,
+            new OctetString($this->pointSerializer->serialize($G)),
+            new Integer($G->getOrder()),
+            new Integer(1)
+            // Hash function oid
+        );
+
+        $payload = $domain->getBinary();
+
         $content = self::HEADER . PHP_EOL
             . trim(chunk_split(base64_encode($payload), 64, PHP_EOL)).PHP_EOL
             . self::FOOTER;
