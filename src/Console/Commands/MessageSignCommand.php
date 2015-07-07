@@ -22,6 +22,7 @@ class MessageSignCommand extends AbstractCommand
     {
         $this
             ->setName('sign')
+            ->setDescription('Calculate a signature for a given file and private key')
             ->addArgument('file', InputArgument::REQUIRED)
             ->addOption('infile', null, InputOption::VALUE_REQUIRED, 'Key file')
             ->addOption('in', null, InputOption::VALUE_OPTIONAL, 'Key file input format (der or pem). Defaults to pem.', 'pem')
