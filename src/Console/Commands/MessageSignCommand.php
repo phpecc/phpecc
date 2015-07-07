@@ -36,10 +36,6 @@ class MessageSignCommand extends AbstractCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Check the hashing algorithm
