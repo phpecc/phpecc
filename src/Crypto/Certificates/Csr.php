@@ -3,11 +3,17 @@
 namespace Mdanter\Ecc\Crypto\Certificates;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
+use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Serializer\Util\SigAlgorithmOidMapper;
 
 
 class Csr
 {
+    /**
+     * @var NamedCurveFp
+     */
+    private $curve;
+
     /**
      * @var PublicKeyInterface
      */
@@ -31,13 +37,15 @@ class Csr
     /**
      * @param CertificateSubject $subject
      * @param string $sigAlgorithm
+     * @param NamedCurveFp $curve
      * @param PublicKeyInterface $publicKey
      * @param SignatureInterface $signature
      */
-    public function __construct(CertificateSubject $subject, $sigAlgorithm, PublicKeyInterface $publicKey, SignatureInterface $signature)
+    public function __construct(CertificateSubject $subject, $sigAlgorithm, NamedCurveFp $curve, PublicKeyInterface $publicKey, SignatureInterface $signature)
     {
         SigAlgorithmOidMapper::getSigAlgorithmOid($sigAlgorithm);
         $this->sigAlgorithm = $sigAlgorithm;
+        $this->curve = $curve;
         $this->publicKey = $publicKey;
         $this->signature = $signature;
         $this->subject = $subject;
@@ -65,5 +73,21 @@ class Csr
     public function getSigAlgorithm()
     {
         return $this->sigAlgorithm;
+    }
+
+    /**
+     * @return NamedCurveFp
+     */
+    public function getCurve()
+    {
+        return $this->curve;
+    }
+
+    /**
+     * @return CertificateSubject
+     */
+    public function getSubject()
+    {
+        return $this->subject;
     }
 }
