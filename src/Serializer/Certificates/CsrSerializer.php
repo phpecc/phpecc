@@ -27,7 +27,7 @@ class CsrSerializer
     private $pubKeySer;
 
     /**
-     * @var CertificateSubjectSerializer
+     * @var CsrSubjectSerializer
      */
     private $subjectSer;
 
@@ -37,11 +37,11 @@ class CsrSerializer
     private $sigSer;
 
     /**
-     * @param CertificateSubjectSerializer $subSerializer
+     * @param CsrSubjectSerializer $subSerializer
      * @param DerPublicKeySerializer $pubKeySerializer
      * @param DerSignatureSerializer $sigSerializer
      */
-    public function __construct(CertificateSubjectSerializer $subSerializer, DerPublicKeySerializer $pubKeySerializer, DerSignatureSerializer $sigSerializer)
+    public function __construct(CsrSubjectSerializer $subSerializer, DerPublicKeySerializer $pubKeySerializer, DerSignatureSerializer $sigSerializer)
     {
         $this->subjectSer = $subSerializer;
         $this->pubKeySer = $pubKeySerializer;
@@ -67,10 +67,10 @@ class CsrSerializer
     /**
      * @param NamedCurveFp $curve
      * @param PublicKeyInterface $publicKey
-     * @param \Mdanter\Ecc\Crypto\Certificates\CertificateSubject $subject
+     * @param \Mdanter\Ecc\Crypto\Certificates\CsrSubject $subject
      * @return Sequence
      */
-    public function getCertRequestInfoASN(NamedCurveFp $curve, PublicKeyInterface $publicKey, \Mdanter\Ecc\Crypto\Certificates\CertificateSubject $subject)
+    public function getCertRequestInfoASN(NamedCurveFp $curve, PublicKeyInterface $publicKey, \Mdanter\Ecc\Crypto\Certificates\CsrSubject $subject)
     {
         return new Sequence(
             new Integer(\FG\X509\CSR\CSR::CSR_VERSION_NR),

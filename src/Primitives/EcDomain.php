@@ -3,14 +3,14 @@
 namespace Mdanter\Ecc\Primitives;
 
 
-use Mdanter\Ecc\Crypto\Certificates\CertificateSubject;
+use Mdanter\Ecc\Crypto\Certificates\CsrSubject;
 use Mdanter\Ecc\Crypto\Certificates\Csr;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
-use Mdanter\Ecc\Serializer\Certificates\CertificateSubjectSerializer;
+use Mdanter\Ecc\Serializer\Certificates\CsrSubjectSerializer;
 use Mdanter\Ecc\Serializer\Certificates\CsrSerializer;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
@@ -106,17 +106,17 @@ class EcDomain
     }
 
     /**
-     * @param CertificateSubject $subject
+     * @param CsrSubject $subject
      * @param PrivateKeyInterface $privateKey
      * @return Csr
      */
-    public function getCsr(CertificateSubject $subject, PrivateKeyInterface $privateKey)
+    public function getCsr(CsrSubject $subject, PrivateKeyInterface $privateKey)
     {
         $publicKey = $privateKey->getPublicKey();
         $g = $this->getGenerator();
         $hasher = $this->getHasher();
 
-        $serializer = new CsrSerializer(new CertificateSubjectSerializer(), new DerPublicKeySerializer($this->math), new DerSignatureSerializer());
+        $serializer = new CsrSerializer(new CsrSubjectSerializer(), new DerPublicKeySerializer($this->math), new DerSignatureSerializer());
         $data = $serializer->getCertRequestInfoASN($this->curve, $publicKey, $subject)->getBinary();
         $hash = $this->math->hexDec($hasher($data, false));
 

@@ -1,24 +1,29 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: thomas
- * Date: 07/07/15
- * Time: 19:11
- */
 
 namespace Mdanter\Ecc\Crypto\Certificates;
 
 
-class CertificateSubjectFactory
+class CsrSubjectFactory
 {
+    /**
+     * @var array
+     */
     private $subject = [];
 
+    /**
+     * @param $name
+     * @return $this
+     */
     public function country($name)
     {
         $this->subject['country'] = $name;
         return $this;
     }
 
+    /**
+     * @param $state
+     * @return $this
+     */
     public function state($state)
     {
         $this->subject['state'] = $state;
@@ -66,10 +71,10 @@ class CertificateSubjectFactory
     }
 
     /**
-     * @return CertificateSubject
+     * @return CsrSubject
      */
     public function getSubject()
     {
-        return new CertificateSubject($this->subject);
+        return new CsrSubject($this->subject);
     }
 }

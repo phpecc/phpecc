@@ -35,13 +35,13 @@ class Csr
     private $subject;
 
     /**
-     * @param CertificateSubject $subject
+     * @param CsrSubject $subject
      * @param string $sigAlgorithm
      * @param NamedCurveFp $curve
      * @param PublicKeyInterface $publicKey
      * @param SignatureInterface $signature
      */
-    public function __construct(CertificateSubject $subject, $sigAlgorithm, NamedCurveFp $curve, PublicKeyInterface $publicKey, SignatureInterface $signature)
+    public function __construct(CsrSubject $subject, $sigAlgorithm, NamedCurveFp $curve, PublicKeyInterface $publicKey, SignatureInterface $signature)
     {
         SigAlgorithmOidMapper::getSigAlgorithmOid($sigAlgorithm);
         $this->sigAlgorithm = $sigAlgorithm;
@@ -84,7 +84,7 @@ class Csr
     }
 
     /**
-     * @return CertificateSubject
+     * @return CsrSubject
      */
     public function getSubject()
     {

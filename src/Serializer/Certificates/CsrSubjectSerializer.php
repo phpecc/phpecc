@@ -3,15 +3,15 @@
 namespace Mdanter\Ecc\Serializer\Certificates;
 
 use FG\X509\CertificateSubject as AsnSubject;
-use Mdanter\Ecc\Crypto\Certificates\CertificateSubject;
+use Mdanter\Ecc\Crypto\Certificates\CsrSubject;
 
-class CertificateSubjectSerializer
+class CsrSubjectSerializer
 {
     /**
-     * @param CertificateSubject $subject
+     * @param CsrSubject $subject
      * @return AsnSubject
      */
-    public function toAsn(CertificateSubject $subject)
+    public function toAsn(CsrSubject $subject)
     {
         return new AsnSubject(
             $subject->value('commonName'),
@@ -24,7 +24,7 @@ class CertificateSubjectSerializer
         );
     }
 
-    public function serialize(CertificateSubject $subject)
+    public function serialize(CsrSubject $subject)
     {
         $asn = new AsnSubject(
             $subject->value('commonName'),

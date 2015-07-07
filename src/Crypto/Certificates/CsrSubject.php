@@ -3,7 +3,7 @@
 namespace Mdanter\Ecc\Crypto\Certificates;
 
 
-class CertificateSubject
+class CsrSubject
 {
     /**
      * @var array
