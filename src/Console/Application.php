@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Console;
 
+use Mdanter\Ecc\Console\Commands\CsrCommand;
 use Mdanter\Ecc\Console\Commands\DsaInfoCommand;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Mdanter\Ecc\Console\Commands\GenerateKeyPairCommand;
@@ -35,6 +36,7 @@ class Application extends ConsoleApplication
         $commands[] = new ParsePublicKeyCommand();
         $commands[] = new HexDecCommand();
         $commands[] = new DecHexCommand();
+        $commands[] = new CsrCommand();
         $commands[] = new MessageSignCommand();
 
         return $commands;

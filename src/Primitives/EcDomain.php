@@ -114,6 +114,7 @@ class EcDomain
     {
         $publicKey = $privateKey->getPublicKey();
         $g = $this->getGenerator();
+        $signer = $this->getSigner();
         $hasher = $this->getHasher();
 
         $serializer = new CsrSerializer(new CsrSubjectSerializer(), new DerPublicKeySerializer($this->math), new DerSignatureSerializer());
@@ -121,7 +122,6 @@ class EcDomain
         $hash = $this->math->hexDec($hasher($data, false));
 
         $rng = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $data, $this->getHashAlgo());
-        $signer = $this->getSigner();
         $k = $rng->generate($g->getOrder());
         $signature = $signer->sign($privateKey, $hash, $k);
 

@@ -26,6 +26,10 @@ class DsaInfoCommand extends AbstractCommand
             ->setDescription('Lists curves and hashing algorithms supported by this tool');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $curves = CurveOidMapper::getNames();
