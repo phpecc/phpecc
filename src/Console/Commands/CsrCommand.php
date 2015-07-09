@@ -9,10 +9,13 @@ use Mdanter\Ecc\Serializer\Certificates\CsrSerializer;
 use Mdanter\Ecc\Serializer\Certificates\CsrSubjectSerializer;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Question\Question;
 
 class CsrCommand extends AbstractCommand
 {
@@ -44,6 +47,7 @@ class CsrCommand extends AbstractCommand
             ->addOption('ST', null, InputOption::VALUE_REQUIRED, 'State')
             ->addOption('L', null, InputOption::VALUE_REQUIRED, 'Locality')
             ->addOption('C', null, InputOption::VALUE_REQUIRED, 'Country')
+            ->addOption('no-prompt', null, InputOption::VALUE_NONE, false)
             ->addOption('domain', null, InputOption::VALUE_REQUIRED, 'Elliptic curve domain - see `list-dsa`', 'secp256k1+sha256')
         ;
     }
@@ -54,6 +58,7 @@ class CsrCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $helper = $this->getHelper('question');
         $domain = EccFactory::domain($input->getOption('domain'));
 
         $parser = $this->getPrivateKeySerializer($input, 'in');
@@ -64,15 +69,51 @@ class CsrCommand extends AbstractCommand
 
         $subject = new CsrSubjectFactory();
         $subject->commonName($input->getOption('CN'));
-        foreach (array_keys(self::$optMap) as $char) {
-            if ($input->getOption($char)) {
-                // get function name
-                $opt = self::$optMap[$char];
-                $subject->$opt($input->getOption($char));
+
+        // Only ask for further details + prompt for confirmation when this option isn't set
+        if (!$input->getOption('no-prompt')) {
+            foreach (self::$optMap as $char => $optionStr) {
+                if ($input->getOption($char)) {
+                    $option = $input->getOption($char);
+                } else {
+                    $q = new Question('Enter a ' . $optionStr . " [" . $char . "]: ");
+                    $option = $helper->ask($input, $output, $q);
+                    if (!$option) {
+                        $output->writeln(" .. skipped " . $optionStr);
+                        continue;
+                    }
+                }
+                // $optionStr is function name + textual representation
+                $subject->$optionStr($option);
             }
+
+            $subjectInfo = $subject->getSubject();
+            $values = $subjectInfo->getValues();
+
+            $table = new Table($output);
+            $table
+                ->setHeaders(['Subject Info', 'Data'])
+                ->setRows(array_map(
+                    function ($key) use ($values) {
+                        return [$key, $values[$key]];
+                    },
+                    array_keys($values)
+                ));
+            ;
+            $table->render();
+
+            $confirmationQ = new ConfirmationQuestion('Is the above information correct? [y/N]', false);
+            $option = $helper->ask($input, $output, $confirmationQ);
+            if (!$option) {
+                $output->writeln('Will not create CSR');
+                return;
+            }
+        } else {
+            $subjectInfo = $subject->getSubject();
         }
 
-        $csr = $domain->getCsr($subject->getSubject(), $key);
+        // Produce the CSR
+        $csr = $domain->getCsr($subjectInfo, $key);
 
         $output->write((
             new CsrSerializer(
