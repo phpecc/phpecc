@@ -17,6 +17,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CsrCommand extends AbstractCommand
 {
     /**
+     * @var array
+     */
+    private static $optMap = [
+        'OU' => 'organizationUnit',
+        'O' => 'organization',
+        'ST' => 'state',
+        'L' => 'locality',
+        'C' => 'country'
+    ];
+
+    /**
      * @return void
      */
     protected function configure()
@@ -37,14 +48,10 @@ class CsrCommand extends AbstractCommand
         ;
     }
 
-    private static $optMap = [
-        'OU' => 'organizationUnit',
-        'O' => 'organization',
-        'ST' => 'state',
-        'L' => 'locality',
-        'C' => 'country'
-    ];
-
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $domain = EccFactory::domain($input->getOption('domain'));
@@ -57,7 +64,7 @@ class CsrCommand extends AbstractCommand
 
         $subject = new CsrSubjectFactory();
         $subject->commonName($input->getOption('CN'));
-        foreach (['O', 'OU', 'ST', 'L', 'C'] as $char) {
+        foreach (array_keys(self::$optMap) as $char) {
             if ($input->getOption($char)) {
                 // get function name
                 $opt = self::$optMap[$char];
