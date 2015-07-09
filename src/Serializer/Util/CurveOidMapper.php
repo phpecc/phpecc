@@ -28,6 +28,8 @@ class CurveOidMapper
 
     const SECP_384R1_OID = '1.3.132.0.34';
 
+    const SECT_571R_OID = '1.3.132.0.39';// sect571r1
+
     /**
      * @var array
      */
@@ -54,7 +56,6 @@ class CurveOidMapper
         SecgCurve::NAME_SECP_256K1 => 28,
         SecgCurve::NAME_SECP_256R1 => 28,
         SecgCurve::NAME_SECP_384R1 => 48
-
     );
 
     /**

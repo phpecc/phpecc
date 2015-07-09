@@ -21,6 +21,12 @@ class SigAlgorithmOidMapper
         'ecdsa+sha512' => self::ECDSA_WITH_SHA512_OID
     ];
 
+    const RSA_WITH_SHA1_OID = '1.2.840.113549.1.1.5';
+
+    private static $otherOidMap = [
+        'rsa+sha1' => self::RSA_WITH_SHA1_OID
+    ];
+
     /**
      * @return array
      */
@@ -54,12 +60,28 @@ class SigAlgorithmOidMapper
         $invertedMap = array_flip(self::$oidMap);
 
         if (array_key_exists($oidString, $invertedMap)) {
-            $hashAlgorithm = $invertedMap[$oidString];
-            return function ($data, $asBinary = false) use ($hashAlgorithm) {
-                return hash($hashAlgorithm, $data, $asBinary);
-            };
+            $algorithm = $invertedMap[$oidString];
+            return $algorithm;
         }
 
         throw new \RuntimeException('Unsupported hashing algorithm.');
+    }
+
+    /**
+     * @param ObjectIdentifier $oid
+     * @return mixed
+     */
+    public static function getKnownAlgorithmFromOid(ObjectIdentifier $oid)
+    {
+        $oidString = $oid->getContent();
+        $supported = array_flip(self::$oidMap);
+        $known = array_flip(self::$otherOidMap);
+        $all = array_merge($supported, $known);
+
+        if (array_key_exists($oidString, $all)) {
+            return $all[$oidString];
+        }
+
+        throw new \RuntimeException('Unsupported signature algorithm.');
     }
 }

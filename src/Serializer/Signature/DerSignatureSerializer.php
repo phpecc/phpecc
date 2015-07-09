@@ -24,16 +24,25 @@ class DerSignatureSerializer
         );
     }
 
+    /**
+     * @param SignatureInterface $signature
+     * @return string
+     */
     public function serialize(SignatureInterface $signature)
     {
         $sig = $this->toAsn($signature->getR(), $signature->getS());
         return $sig->getBinary();
     }
 
+    /**
+     * @param string $binary
+     * @return Signature
+     * @throws \FG\ASN1\Exception\ParserException
+     */
     public function parse($binary)
     {
         $object = Object::fromBinary($binary);
-        echo Identifier::getShortName($object->getType()) . "\n";
+
         if (!$object->getTypeName() !== 'Sequence') {
 
         }
