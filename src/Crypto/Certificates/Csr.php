@@ -30,7 +30,7 @@ class Csr
     private $signature;
 
     /**
-     * @var
+     * @var CsrSubject
      */
     private $subject;
 

@@ -82,6 +82,14 @@ class EcDomain
     }
 
     /**
+     * @return string
+     */
+    public function getSigAlgorithm()
+    {
+        return "ecdsa+" . $this->getHashAlgo();
+    }
+
+    /**
      * @return \FG\ASN1\Universal\ObjectIdentifier
      */
     public function getHashAlgoOid()
@@ -127,7 +135,7 @@ class EcDomain
 
         return new Csr(
             $subject,
-            "ecdsa+" . $this->getHashAlgo(),
+            $this->getSigAlgorithm(),
             $this->curve,
             $publicKey,
             $signature
