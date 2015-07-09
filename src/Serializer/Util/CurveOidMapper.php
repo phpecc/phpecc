@@ -52,7 +52,9 @@ class CurveOidMapper
         NistCurve::NAME_P384 => 48,
         NistCurve::NAME_P521 => 66,
         SecgCurve::NAME_SECP_256K1 => 28,
-        SecgCurve::NAME_SECP_384R1 => 48,
+        SecgCurve::NAME_SECP_256R1 => 28,
+        SecgCurve::NAME_SECP_384R1 => 48
+
     );
 
     /**
