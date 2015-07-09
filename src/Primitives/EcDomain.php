@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc\Primitives;
 
 
+use Mdanter\Ecc\Crypto\Certificates\CertAuthority;
 use Mdanter\Ecc\Crypto\Certificates\CsrSubject;
 use Mdanter\Ecc\Crypto\Certificates\Csr;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
@@ -139,6 +140,19 @@ class EcDomain
             $this->curve,
             $publicKey,
             $signature
+        );
+    }
+
+    /**
+     * @param CsrSubject $issuer
+     * @return CertAuthority
+     */
+    public function getCertAuthority(CsrSubject $issuer)
+    {
+        return new CertAuthority(
+            $this->math,
+            $issuer,
+            $this->getSigAlgorithm()
         );
     }
 }

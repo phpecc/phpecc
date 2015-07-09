@@ -73,7 +73,7 @@ class CertificateInfo
 
     public function getVersion()
     {
-        return $this->version;
+        return 1;//$this->version;
     }
 
     /**

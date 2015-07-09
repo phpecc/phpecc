@@ -76,8 +76,11 @@ class CertificateSerializer
         $curve = EccFactory::getSecgCurves()->curve256k1();
 
         return new Sequence(
-            new Integer($info->getVersion()),
+            //new Integer($info->getVersion()),
             new Integer($info->getSerialNo()),
+            new Sequence(
+                SigAlgorithmOidMapper::getSigAlgorithmOid($info->getSigAlgo())
+            ),
             $this->subjectSer->toAsn($info->getIssuerInfo()),
             new Sequence(
                 new UTCTime($info->getValidityStart()),
