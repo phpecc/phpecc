@@ -44,11 +44,11 @@ class CertAuthority
     /**
      * @param Csr $csr
      * @param int $serialNumber
-     * @param string $validityStart
-     * @param string $validityEnd
+     * @param \DateTime $validityStart
+     * @param \DateTime $validityEnd
      * @return CertificateInfo
      */
-    public function createCertificateInfo(Csr $csr, $serialNumber, $validityStart, $validityEnd)
+    public function createCertificateInfo(Csr $csr, $serialNumber, \DateTime $validityStart, \DateTime $validityEnd)
     {
         return new CertificateInfo(
             $serialNumber,
@@ -66,11 +66,11 @@ class CertAuthority
      * @param EcDomain $domain
      * @param PrivateKeyInterface $privateKey
      * @param $serialNumber
-     * @param $validityStart
-     * @param $validityEnd
+     * @param \DateTime $validityStart
+     * @param \DateTime $validityEnd
      * @return Certificate
      */
-    public function createCertificate(Csr $csr, EcDomain $domain, PrivateKeyInterface $privateKey, $serialNumber, $validityStart, $validityEnd)
+    public function createCertificate(Csr $csr, EcDomain $domain, PrivateKeyInterface $privateKey, $serialNumber, \DateTime $validityStart, \DateTime $validityEnd)
     {
         $generator = $domain->getGenerator();
         $signer = $domain->getSigner();

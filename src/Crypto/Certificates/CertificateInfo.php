@@ -7,8 +7,6 @@ use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 
 class CertificateInfo
 {
-    private $version;
-
     /**
      * @var int
      */
@@ -35,12 +33,12 @@ class CertificateInfo
     private $publicKey;
 
     /**
-     * @var
+     * @var \DateTime
      */
     private $validityStart;
 
     /**
-     * @var
+     * @var \DateTime
      */
     private $validityEnd;
 
@@ -50,8 +48,8 @@ class CertificateInfo
      * @param CsrSubject $issuer
      * @param CsrSubject $subject
      * @param PublicKeyInterface $publicKey
-     * @param $validityStart
-     * @param $validityEnd
+     * @param \DateTime $validityStart
+     * @param \DateTime $validityEnd
      */
     public function __construct(
         $serialNo,
@@ -59,8 +57,8 @@ class CertificateInfo
         CsrSubject $issuer,
         CsrSubject $subject,
         PublicKeyInterface $publicKey,
-        $validityStart,
-        $validityEnd
+        \DateTime $validityStart,
+        \DateTime $validityEnd
     ) {
         $this->serialNo = $serialNo;
         $this->sigAlgo = $sigAlgo;
@@ -73,7 +71,8 @@ class CertificateInfo
 
     public function getVersion()
     {
-        return 1;//$this->version;
+        // Implicit, so we need logic to work this out.
+        return 1;
     }
 
     /**
@@ -117,7 +116,7 @@ class CertificateInfo
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getValidityStart()
     {
@@ -125,7 +124,7 @@ class CertificateInfo
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getValidityEnd()
     {
