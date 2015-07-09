@@ -23,7 +23,7 @@ class CertificateSerializer
 {
     const HEADER = '-----BEGIN CERTIFICATE-----';
     const FOOTER = '-----END CERTIFICATE-----';
-
+    const UTCTIME_FORMAT = 'Y-m-d\tH:i:s';
     /**
      * @var DerPublicKeySerializer
      */
@@ -75,6 +75,7 @@ class CertificateSerializer
     {
         $curve = EccFactory::getSecgCurves()->curve256k1();
 
+        echo $info->getValidityStart()->format(self::UTCTIME_FORMAT);
         return new Sequence(
             //new Integer($info->getVersion()),
             new Integer($info->getSerialNo()),
@@ -83,8 +84,8 @@ class CertificateSerializer
             ),
             $this->subjectSer->toAsn($info->getIssuerInfo()),
             new Sequence(
-                new UTCTime($info->getValidityStart()),
-                new UTCTime($info->getValidityEnd())
+                new UTCTime($info->getValidityStart()->format(self::UTCTIME_FORMAT)),
+                new UTCTime($info->getValidityEnd()->format(self::UTCTIME_FORMAT))
             ),
             $this->subjectSer->toAsn($info->getSubjectInfo()),
             $this->getSubjectKeyASN($curve, $info->getPublicKey())
@@ -113,7 +114,8 @@ class CertificateSerializer
     public function serialize(Certificate $certificate)
     {
         $payload = $this->getCertificateASN($certificate)->getBinary();
-        $content = trim(chunk_split(base64_encode($payload), 64, PHP_EOL)).PHP_EOL;
+        $base64 = base64_encode($payload);
+        $content = trim(chunk_split($base64, 64, PHP_EOL)).PHP_EOL;
 
         return self::HEADER . PHP_EOL
         . $content
