@@ -30,6 +30,7 @@ class CertAuthority
     private $sigAlg;
 
     /**
+     * @param MathAdapterInterface $math
      * @param CsrSubject $issuer
      * @param string $sigAlg
      */
