@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Serializer\Signature;
 
-use FG\ASN1\Identifier;
 use FG\ASN1\Object;
 use FG\ASN1\Universal\Integer;
 use Mdanter\Ecc\Crypto\Signature\Signature;
@@ -30,8 +29,7 @@ class DerSignatureSerializer
      */
     public function serialize(SignatureInterface $signature)
     {
-        $sig = $this->toAsn($signature->getR(), $signature->getS());
-        return $sig->getBinary();
+        return $this->toAsn($signature->getR(), $signature->getS())->getBinary();
     }
 
     /**
@@ -53,7 +51,11 @@ class DerSignatureSerializer
         }
 
         list ($r, $s) = $content;
-
-        return new Signature($r->getContent(), $s->getContent());
+        /** @var \FG\ASN1\Universal\Integer $r */
+        /** @var \FG\ASN1\Universal\Integer $s */
+        return new Signature(
+            $r->getContent(),
+            $s->getContent()
+        );
     }
 }

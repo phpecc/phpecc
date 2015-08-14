@@ -2,12 +2,9 @@
 
 namespace Mdanter\Ecc\Console\Commands;
 
-use Mdanter\Ecc\Crypto\Signature\Signer;
-use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
-use Mdanter\Ecc\Serializer\Util\HashAlgorithmOidMapper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,12 +33,16 @@ class MessageSignCommand extends AbstractCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $math = EccFactory::getAdapter();
+
         // Check the hashing algorithm
-        $hashAlgo = $input->getOption('algo');
-        HashAlgorithmOidMapper::getHashAlgorithmOid($hashAlgo);
+        $hashSelection = $input->getOption('algo');
+        $curveSelection = $input->getOption('curve');
+        $domain = EccFactory::domain("$curveSelection+$hashSelection");
 
         // Parse the private key file
         $parser = $this->getPrivateKeySerializer($input, 'in');
@@ -53,22 +54,29 @@ class MessageSignCommand extends AbstractCommand
         // Check the target file exists
         $data = $this->getUserFile($input, 'file');
 
-        $math = EccFactory::getAdapter();
-        $curve = CurveFactory::getCurveByName($input->getOption('curve'));
-        $generator = CurveFactory::getGeneratorByName($input->getOption('curve'));
-        $hash = $math->hexDec(hash($hashAlgo, $data));
+        $hasher = $domain->getHasher();
+        $hashOut = $hasher($data);
+        $hash = $math->hexDec($hashOut);
+
         $useDetSigs = $input->getOption('det-sig');
 
         if ($useDetSigs) {
-            $random = RandomGeneratorFactory::getHmacRandomGenerator($key, $hash, $hashAlgo);
+            $random = RandomGeneratorFactory::getHmacRandomGenerator($key, $hash, $hashSelection);
         } else {
             $random = RandomGeneratorFactory::getUrandomGenerator();
         }
 
-        $signer = new Signer($math);
-        $signature = $signer->sign($key, $hash, $random->generate($generator->getOrder()));
+        $generator = $domain->getGenerator();
+        $k = $random->generate($generator->getOrder());
+
+        $signer = $domain->getSigner();
+        $signature = $signer->sign($key, $hash, $k);
 
         $sigSerializer = new DerSignatureSerializer();
-        $output->writeln($sigSerializer->serialize($signature));
+        $sig = $sigSerializer->serialize($signature);
+
+        $binary = base64_encode($sig);
+        $output->writeln($binary);
+        return 0;
     }
 }
