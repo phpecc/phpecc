@@ -28,7 +28,7 @@
         "php": ">=5.4.0",
         "ext-gmp": "*",
         "ext-mcrypt": "*",
-        "afk11/phpasn1": "dev-with-bigints2",
+        "fgrosse/phpasn1": "~1.4",
         "symfony/console": "~2.6",
         "phpunit/phpunit": "~4.1",
         "squizlabs/php_codesniffer": "~2",
