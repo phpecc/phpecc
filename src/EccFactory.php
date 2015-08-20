@@ -3,11 +3,14 @@
 namespace Mdanter\Ecc;
 
 use Mdanter\Ecc\Crypto\Signature\Signer;
+use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\CurveFp;
+use Mdanter\Ecc\Primitives\EcDomain;
+use Mdanter\Ecc\Util\Hasher;
 
 /**
  * Static factory class providing factory methods to work with NIST and SECG recommended curves.
@@ -77,13 +80,29 @@ class EccFactory
     }
 
     /**
-     *
      * @param  MathAdapterInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapteR()
      * @return \Mdanter\Ecc\Crypto\Signature\Signer;
-
      */
     public static function getSigner(MathAdapterInterface $adapter = null)
     {
         return new Signer($adapter ?: self::getAdapter());
+    }
+
+    /**
+     * @param $curveName
+     * @param $hashAlgorithm
+     * @param MathAdapterInterface|null $adapter
+     * @return EcDomain
+     */
+    public static function getDomain($curveName, $hashAlgorithm, MathAdapterInterface $adapter = null)
+    {
+        $adapter = $adapter ?: self::getAdapter();
+
+        return new EcDomain(
+            $adapter,
+            CurveFactory::getCurveByName($curveName),
+            CurveFactory::getGeneratorByName($curveName),
+            new Hasher($adapter, $hashAlgorithm)
+        );
     }
 }
