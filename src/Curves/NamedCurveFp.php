@@ -16,7 +16,7 @@ class NamedCurveFp extends CurveFp
      * @param int|string           $name
      * @param int|string           $prime
      * @param int|string           $a
-     * @param MathAdapterInterface $b
+     * @param int|string           $b
      * @param MathAdapterInterface $adapter
      */
     public function __construct($name, $prime, $a, $b, MathAdapterInterface $adapter)
