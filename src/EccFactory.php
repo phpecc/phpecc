@@ -89,8 +89,8 @@ class EccFactory
     }
 
     /**
-     * @param $curveName
-     * @param $hashAlgorithm
+     * @param string $curveName
+     * @param string $hashAlgorithm
      * @param MathAdapterInterface|null $adapter
      * @return EcDomain
      */
