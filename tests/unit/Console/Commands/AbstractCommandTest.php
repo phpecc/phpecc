@@ -13,7 +13,7 @@ abstract class AbstractCommandTest extends AbstractTestCase
     /**
      *
      * @param  Command                                         $command
-     * @param  unknown                                         $name
+     * @param  string                                          $name
      * @return \Symfony\Component\Console\Tester\CommandTester
      */
     protected function getCommandTester(Command $command, $name)

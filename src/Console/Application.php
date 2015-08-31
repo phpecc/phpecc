@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Console;
 
+use Mdanter\Ecc\Console\Commands\EcParamsCommand;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Mdanter\Ecc\Console\Commands\GenerateKeyPairCommand;
 use Mdanter\Ecc\Console\Commands\HexDecCommand;
@@ -23,6 +24,7 @@ class Application extends ConsoleApplication
         $commands = parent::getDefaultCommands();
 
         $commands[] = new DumpAsnCommand();
+        $commands[] = new EcParamsCommand();
         $commands[] = new GenerateKeyPairCommand();
         $commands[] = new GeneratePublicKeyCommand();
         $commands[] = new ListCurvesCommand();
