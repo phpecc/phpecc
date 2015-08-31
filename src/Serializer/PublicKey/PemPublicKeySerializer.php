@@ -22,6 +22,15 @@ class PemPublicKeySerializer implements PublicKeySerializerInterface
     }
 
     /**
+     * @param PublicKeyInterface $key
+     * @return string
+     */
+    public function getUncompressedKey(PublicKeyInterface $key)
+    {
+        return $this->derSerializer->getUncompressedKey($key);
+    }
+
+    /**
      *
      * @param  PublicKeyInterface $key
      * {@inheritDoc}

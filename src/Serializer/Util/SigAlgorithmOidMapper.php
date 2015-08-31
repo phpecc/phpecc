@@ -4,6 +4,8 @@ namespace Mdanter\Ecc\Serializer\Util;
 
 
 use FG\ASN1\Universal\ObjectIdentifier;
+use Mdanter\Ecc\EccFactory;
+use Mdanter\Ecc\Util\Hasher;
 
 class SigAlgorithmOidMapper
 {
@@ -48,6 +50,20 @@ class SigAlgorithmOidMapper
         }
 
         throw new \RuntimeException('Unsupported signature algorithm.');
+    }
+
+    /**
+     * @param string $sigAlgo
+     * @return Hasher
+     */
+    public static function getHasher($sigAlgo)
+    {
+        if (array_key_exists($sigAlgo, self::$oidMap)) {
+            $algo = explode("+", $sigAlgo)[1];
+            return new Hasher(EccFactory::getAdapter(), $algo);
+        }
+
+        throw new \RuntimeException('Unsupported hashing algorithm.');
     }
 
     /**
