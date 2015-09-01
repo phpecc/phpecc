@@ -4,6 +4,7 @@ namespace Mdanter\Ecc\Curves;
 
 use Mdanter\Ecc\Primitives\CurveFp;
 use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Primitives\CurveParameters;
 
 class NamedCurveFp extends CurveFp
 {
@@ -14,16 +15,14 @@ class NamedCurveFp extends CurveFp
 
     /**
      * @param int|string           $name
-     * @param int|string           $prime
-     * @param int|string           $a
-     * @param MathAdapterInterface $b
+     * @param CurveParameters      $parameters
      * @param MathAdapterInterface $adapter
      */
-    public function __construct($name, $prime, $a, $b, MathAdapterInterface $adapter)
+    public function __construct($name, CurveParameters $parameters, MathAdapterInterface $adapter)
     {
         $this->name = $name;
 
-        parent::__construct($prime, $a, $b, $adapter);
+        parent::__construct($parameters, $adapter);
     }
 
     /**

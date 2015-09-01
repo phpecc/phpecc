@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc\Curves;
 
 use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Primitives\CurveParameters;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
@@ -61,7 +62,9 @@ class SecgCurve
         $a = $this->adapter->hexDec('0xDB7C2ABF62E35E668076BEAD2088');
         $b = $this->adapter->hexDec('0x659EF8BA043916EEDE8911702B22');
 
-        return new NamedCurveFp(self::NAME_SECP_112R1, $p, $a, $b, $this->adapter);
+        $parameters = new CurveParameters(112, $p, $a, $b);
+
+        return new NamedCurveFp(self::NAME_SECP_112R1, $parameters, $this->adapter);
     }
 
     /**
@@ -88,7 +91,9 @@ class SecgCurve
         $a = 0;
         $b = 7;
 
-        return new NamedCurveFp(self::NAME_SECP_256K1, $p, $a, $b, $this->adapter);
+        $parameters = new CurveParameters(256, $p, $a, $b);
+
+        return new NamedCurveFp(self::NAME_SECP_256K1, $parameters, $this->adapter);
     }
 
     /**
@@ -115,7 +120,9 @@ class SecgCurve
         $a = $this->adapter->hexDec('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC');
         $b = $this->adapter->hexDec('0x5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B');
 
-        return new NamedCurveFp(self::NAME_SECP_256R1, $p, $a, $b, $this->adapter);
+        $parameters = new CurveParameters(256, $p, $a, $b);
+
+        return new NamedCurveFp(self::NAME_SECP_256R1, $parameters, $this->adapter);
     }
 
     /**
@@ -142,7 +149,9 @@ class SecgCurve
         $a = $this->adapter->hexDec('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFC');
         $b = $this->adapter->hexDec('0xB3312FA7E23EE7E4988E056BE3F82D19181D9C6EFE8141120314088F5013875AC656398D8A2ED19D2A85C8EDD3EC2AEF');
 
-        return new NamedCurveFp(self::NAME_SECP_384R1, $p, $a, $b, $this->adapter);
+        $parameters = new CurveParameters(384, $p, $a, $b);
+
+        return new NamedCurveFp(self::NAME_SECP_384R1, $parameters, $this->adapter);
     }
 
     /**

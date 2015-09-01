@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc\Tests\Primitives;
 
 use Mdanter\Ecc\Math\Gmp;
+use Mdanter\Ecc\Primitives\CurveParameters;
 use Mdanter\Ecc\Primitives\Point;
 use Mdanter\Ecc\Primitives\CurveFp;
 use Mdanter\Ecc\Tests\AbstractTestCase;
@@ -12,7 +13,9 @@ class PointTest extends AbstractTestCase
     public function testAddInfinityReturnsOriginalPoint()
     {
         $adapter = new Gmp();
-        $curve = new CurveFp(23, 1, 1, $adapter);
+        $parameters = new CurveParameters(32, 23, 1, 1);
+        $curve = new CurveFp($parameters, $adapter);
+
         $infinity = $curve->getInfinity();
 
         $point = new Point($adapter, $curve, 13, 7, 7);
@@ -30,7 +33,10 @@ class PointTest extends AbstractTestCase
         $a = '104564512312317874865';
         $b = '04156456456456456456';
 
-        $curve = new CurveFp(23, 1, 1, new Gmp());
+        $adapter = new Gmp();
+        $parameters = new CurveParameters(32, 23, 1, 1);
+        $curve = new CurveFp($parameters, $adapter);
+
         $point = $curve->getPoint(13, 7, 7);
 
         $point->cswapValue($a, $b, false);

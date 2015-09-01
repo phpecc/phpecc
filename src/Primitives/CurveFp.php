@@ -36,24 +36,11 @@ use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
  */
 class CurveFp implements CurveFpInterface
 {
-    /**
-     * Elliptic curve over the field of integers modulo a prime.
-     *
-     * @var int|string
-     */
-    protected $a = 0;
 
     /**
-     *
-     * @var int|string
+     * @var CurveParameters
      */
-    protected $b = 0;
-
-    /**
-     *
-     * @var int|string
-     */
-    protected $prime = 0;
+    protected $parameters;
 
     /**
      *
@@ -70,18 +57,14 @@ class CurveFp implements CurveFpInterface
     /**
      * Constructor that sets up the instance variables.
      *
-     * @param $prime int|string
-     * @param $a int|string
-     * @param $b int|string
+     * @param $parameters CurveParameters
      * @param $adapter MathAdapterInterface
      */
-    public function __construct($prime, $a, $b, MathAdapterInterface $adapter)
+    public function __construct(CurveParameters $parameters, MathAdapterInterface $adapter)
     {
-        $this->a = $a;
-        $this->b = $b;
-        $this->prime = $prime;
+        $this->parameters = $parameters;
         $this->adapter = $adapter;
-        $this->modAdapter = new ModularArithmetic($this->adapter, $prime);
+        $this->modAdapter = new ModularArithmetic($this->adapter, $this->parameters->getPrime());
     }
 
     /**
@@ -128,7 +111,7 @@ class CurveFp implements CurveFpInterface
     {
         $math = $this->adapter;
 
-        $eq_zero = $math->cmp($math->mod($math->sub($math->pow($y, 2), $math->add($math->add($math->pow($x, 3), $math->mul($this->a, $x)), $this->b)), $this->prime), 0);
+        $eq_zero = $math->cmp($math->mod($math->sub($math->pow($y, 2), $math->add($math->add($math->pow($x, 3), $math->mul($this->getA(), $x)), $this->getB())), $this->getPrime()), 0);
 
         return ($eq_zero == 0);
     }
@@ -139,7 +122,7 @@ class CurveFp implements CurveFpInterface
      */
     public function getA()
     {
-        return $this->a;
+        return $this->parameters->getA();
     }
 
     /**
@@ -148,7 +131,7 @@ class CurveFp implements CurveFpInterface
      */
     public function getB()
     {
-        return $this->b;
+        return $this->parameters->getB();
     }
 
     /**
@@ -157,7 +140,15 @@ class CurveFp implements CurveFpInterface
      */
     public function getPrime()
     {
-        return $this->prime;
+        return $this->parameters->getPrime();
+    }
+
+    /**
+     * @return int
+     */
+    public function getSize()
+    {
+        return $this->parameters->getSize();
     }
 
     /**
@@ -168,9 +159,9 @@ class CurveFp implements CurveFpInterface
     {
         $math = $this->adapter;
 
-        $equal  = ($math->cmp($this->a, $other->getA()) == 0);
-        $equal &= ($math->cmp($this->b, $other->getB()) == 0);
-        $equal &= ($math->cmp($this->prime, $other->getPrime()) == 0);
+        $equal  = ($math->cmp($this->getA(), $other->getA()) == 0);
+        $equal &= ($math->cmp($this->getB(), $other->getB()) == 0);
+        $equal &= ($math->cmp($this->getPrime(), $other->getPrime()) == 0);
 
         return ($equal) ? 0 : 1;
     }
@@ -190,7 +181,7 @@ class CurveFp implements CurveFpInterface
      */
     public function __toString()
     {
-        return 'curve('.$this->a.', '.$this->b.', '.$this->prime.')';
+        return 'curve(' . $this->getA() . ', ' . $this->getB() . ', ' . $this->getPrime() . ')';
     }
 
     /**
@@ -199,9 +190,9 @@ class CurveFp implements CurveFpInterface
     public function __debugInfo()
     {
         return [
-            'a' => (string) $this->a,
-            'b' => (string) $this->b,
-            'prime' => (string) $this->prime
+            'a' => (string) $this->getA(),
+            'b' => (string) $this->getB(),
+            'prime' => (string) $this->getPrime()
         ];
     }
 }

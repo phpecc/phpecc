@@ -264,8 +264,8 @@ class Point implements PointInterface
             clone $this
         ];
 
-        $n = $this->adapter->baseConvert($n, 10, 2);
-        $k = strlen($n);
+        $k = $this->curve->getSize();
+        $n = str_pad($this->adapter->baseConvert($n, 10, 2), $k, '0', STR_PAD_LEFT);
 
         for ($i = 0; $i < $k; $i++) {
             $j = $n[$i];

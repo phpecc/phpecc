@@ -100,6 +100,11 @@ interface CurveFpInterface
     public function getPrime();
 
     /**
+     * @return int
+     */
+    public function getSize();
+
+    /**
      * Compares the curve to another.
      *
      * @param  CurveFpInterface $other
