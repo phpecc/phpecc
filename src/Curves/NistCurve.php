@@ -166,7 +166,7 @@ class NistCurve
         $p = '39402006196394479212279040100143613805079739270465446667948293404245721771496870329047266088258938001861606973112319';
         $b = $this->adapter->hexDec('0xb3312fa7e23ee7e4988e056be3f82d19181d9c6efe8141120314088f5013875ac656398d8a2ed19d2a85c8edd3ec2aef');
 
-        $parameters = new CurveParameters(256, $p, -3, $b);
+        $parameters = new CurveParameters(384, $p, -3, $b);
 
         return new NamedCurveFp(self::NAME_P384, $parameters, $this->adapter);
     }
