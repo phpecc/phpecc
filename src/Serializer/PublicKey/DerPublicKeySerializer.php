@@ -57,6 +57,10 @@ class DerPublicKeySerializer implements PublicKeySerializerInterface
         return $this->formatter->format($key);
     }
 
+    /**
+     * @param PublicKeyInterface $key
+     * @return string
+     */
     public function getUncompressedKey(PublicKeyInterface $key)
     {
         return $this->formatter->encodePoint($key->getPoint());
