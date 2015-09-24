@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: aeonium
- * Date: 24/09/15
- * Time: 13:49
- */
 
 namespace Mdanter\Ecc\Tests\Serializer;
 
