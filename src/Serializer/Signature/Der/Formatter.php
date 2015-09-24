@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Serializer\Signature\Der;
 
-
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\Sequence;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;

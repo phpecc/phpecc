@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Serializer\Signature;
 
-
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 

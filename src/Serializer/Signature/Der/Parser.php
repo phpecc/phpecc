@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Serializer\Signature\Der;
 
-
 use FG\ASN1\Identifier;
 use FG\ASN1\Object;
 use Mdanter\Ecc\Crypto\Signature\Signature;
