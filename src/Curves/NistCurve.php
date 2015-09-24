@@ -39,6 +39,8 @@ use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 class NistCurve
 {
 
+    const SET_NAME = 'NistCurve';
+
     const NAME_P192 = 'nist-p192';
 
     const NAME_P224 = 'nist-p224';

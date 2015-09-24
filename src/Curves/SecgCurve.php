@@ -36,6 +36,8 @@ class SecgCurve
 {
     private $adapter;
 
+    const SET_NAME = 'SecgCurve';
+
     const NAME_SECP_112R1 = 'secp112r1';
 
     const NAME_SECP_256K1 = 'secp256k1';
