@@ -26,6 +26,8 @@ class CurveFactory
                 return $nistFactory->curve384();
             case NistCurve::NAME_P521:
                 return $nistFactory->curve521();
+            case SecgCurve::NAME_SECP_112R1:
+                return $secpFactory->curve112r1();
             case SecgCurve::NAME_SECP_256K1:
                 return $secpFactory->curve256k1();
             case SecgCurve::NAME_SECP_256R1:
@@ -57,6 +59,8 @@ class CurveFactory
                 return $nistFactory->generator384();
             case NistCurve::NAME_P521:
                 return $nistFactory->generator521();
+            case SecgCurve::NAME_SECP_112R1:
+                return $secpFactory->generator112r1();
             case SecgCurve::NAME_SECP_256K1:
                 return $secpFactory->generator256k1();
             case SecgCurve::NAME_SECP_256R1:
