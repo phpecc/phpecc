@@ -259,6 +259,7 @@ class Point implements PointInterface
             return $this->curve->getInfinity();
         }
 
+        /** @var Point[] $r */
         $r = [
             $this->curve->getInfinity(),
             clone $this

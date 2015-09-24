@@ -28,6 +28,8 @@ class CurveOidMapper
 
     const SECP_384R1_OID = '1.3.132.0.34';
 
+    const SECT_571R_OID = '1.3.132.0.39';// sect571r1
+
     /**
      * @var array
      */
@@ -38,7 +40,8 @@ class CurveOidMapper
         NistCurve::NAME_P384 => self::NIST_P384_OID,
         NistCurve::NAME_P521 => self::NIST_P521_OID,
         SecgCurve::NAME_SECP_256K1 => self::SECP_256K1_OID,
-        SecgCurve::NAME_SECP_384R1 => self::SECP_384R1_OID,
+        SecgCurve::NAME_SECP_256R1 => self::SECP_256R1_OID,
+        SecgCurve::NAME_SECP_384R1 => self::SECP_384R1_OID
     );
 
     /**
@@ -51,7 +54,8 @@ class CurveOidMapper
         NistCurve::NAME_P384 => 48,
         NistCurve::NAME_P521 => 66,
         SecgCurve::NAME_SECP_256K1 => 28,
-        SecgCurve::NAME_SECP_384R1 => 48,
+        SecgCurve::NAME_SECP_256R1 => 28,
+        SecgCurve::NAME_SECP_384R1 => 48
     );
 
     /**

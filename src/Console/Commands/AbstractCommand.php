@@ -103,4 +103,28 @@ abstract class AbstractCommand extends Command
 
         return $serializer;
     }
+
+    /**
+     * @param InputInterface $input
+     * @param string $formatOptionName
+     * @return string
+     */
+    protected function getUserFile(InputInterface $input, $formatOptionName)
+    {
+        $path = $input->getArgument($formatOptionName);
+        if (!file_exists($path)) {
+            throw new \InvalidArgumentException('File not found');
+        }
+
+        if (!is_file($path)) {
+            throw new \InvalidArgumentException('This is not a file');
+        }
+
+        $contents = file_get_contents($path);
+        if (!$contents) {
+            throw new \RuntimeException('Failed to load file');
+        }
+
+        return $contents;
+    }
 }
