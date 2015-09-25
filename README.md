@@ -1,6 +1,6 @@
 ## Pure PHP Elliptic Curve DSA and DH
 
-[![Build Status](https://travis-ci.org/mdanter/phpecc.svg?branch=master)](https://travis-ci.org/mdanter/phpecc)
+[![Build Status](https://travis-ci.org/phpecc/phpecc.svg?branch=master)](https://travis-ci.org/mdanter/phpecc)
 [![HHVM Status](http://hhvm.h4cc.de/badge/mdanter/ecc.svg)](http://hhvm.h4cc.de/package/mdanter/ecc)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mdanter/phpecc/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mdanter/phpecc?branch=master)
@@ -95,13 +95,13 @@ secp256k1
 secp384r1
 ```
 
-##### The developper way
+##### The developer way
 
 TODO...
 
 #### Asymmetric encryption
 
-##### The dead stupid example:
+##### The dead simple example:
 
 ```php
 <?php
@@ -132,7 +132,7 @@ echo $decryptedMessage->getContent() . PHP_EOL;
 
 ```
 
-##### A lesser dead stupid example
+##### A lesser dead simple example
 
 A more realistic example, assumes you are Alice, and that your private key is stored (unencrypted) in PEM format on file. You will of course also need Bob's public key in PEM format on file. This example clearly shows that this library can be improved...
 
