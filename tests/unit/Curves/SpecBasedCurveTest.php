@@ -41,7 +41,7 @@ class SpecBasedCurveTest extends AbstractTestCase
         $datasets = [];
 
         foreach ($files as $file) {
-            $data = $yaml->parse($file);
+            $data = $yaml->parse(file_get_contents($file));
             $generator = CurveFactory::getGeneratorByName($data['name']);
 
             foreach ($data['keypairs'] as $testKeyPair) {
@@ -86,7 +86,7 @@ class SpecBasedCurveTest extends AbstractTestCase
         $datasets = [];
 
         foreach ($files as $file) {
-            $data = $yaml->parse($file);
+            $data = $yaml->parse(file_get_contents($file));
             $generator = CurveFactory::getGeneratorByName($data['name']);
 
             foreach ($data['diffie'] as $testKeyPair) {
@@ -133,7 +133,7 @@ class SpecBasedCurveTest extends AbstractTestCase
         $datasets = [];
 
         foreach ($files as $file) {
-            $data = $yaml->parse($file);
+            $data = $yaml->parse(file_get_contents($file));
 
             if (! isset($data['hmac'])) {
                 continue;
