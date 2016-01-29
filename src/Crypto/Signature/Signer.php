@@ -7,6 +7,7 @@ use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Util\NumberSize;
+use Mdanter\Ecc\Util\BinaryString;
 
 class Signer
 {
@@ -101,6 +102,6 @@ class Signer
         $xy = $generator->mul($u1)->add($point->mul($u2));
         $v = $math->mod($xy->getX(), $n);
 
-        return $math->cmp($v, $r) == 0;
+        return BinaryString::constantTimeCompare($v, $r);
     }
 }
