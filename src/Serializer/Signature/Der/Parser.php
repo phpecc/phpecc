@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Serializer\Signature\Der;
 
 use FG\ASN1\Identifier;
-use FG\ASN1\Object;
 use Mdanter\Ecc\Crypto\Signature\Signature;
 
 class Parser
@@ -15,7 +14,7 @@ class Parser
      */
     public function parse($binary)
     {
-        $object = Object::fromBinary($binary);
+        $object = BignumObjectParser::fromBinary($binary);
         if ($object->getType() !== Identifier::SEQUENCE) {
             throw new \RuntimeException('Failed to parse signature');
         }
