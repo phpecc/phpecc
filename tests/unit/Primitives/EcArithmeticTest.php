@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc\Tests\Primitives;
 
 use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Primitives\CurveParameters;
 use Mdanter\Ecc\Primitives\Point;
 use Mdanter\Ecc\Primitives\CurveFp;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
@@ -29,7 +30,8 @@ class EcArithmeticTest extends AbstractTestCase
      */
     public function testAdditions(MathAdapterInterface $math)
     {
-        $curve = new CurveFp(23, 1, 1, $math);
+        $parameters = new CurveParameters(32, 23, 1, 1);
+        $curve = new CurveFp($parameters, $math);
 
         $this->add($math, $curve, 3, 10, 9, 7, 17, 20);
     }
@@ -41,7 +43,8 @@ class EcArithmeticTest extends AbstractTestCase
      */
     public function testAdditionCommutativity(MathAdapterInterface $math)
     {
-        $curve = new CurveFp(23, 1, 1, $math);
+        $parameters = new CurveParameters(32, 23, 1, 1);
+        $curve = new CurveFp($parameters, $math);
 
         $p1 = $curve->getPoint(3, 10);
         $p2 = $curve->getPoint(9, 7);
@@ -51,7 +54,7 @@ class EcArithmeticTest extends AbstractTestCase
 
         $this->assertTrue($p3a == $p4a);
 
-        $c = new CurveFp(23, 1, 1, $math);
+        $c = new CurveFp($parameters, $math);
         $g = $c->getPoint(13, 7, 7);
         $check = $c->getInfinity();
 
@@ -71,7 +74,9 @@ class EcArithmeticTest extends AbstractTestCase
      */
     public function testDouble(MathAdapterInterface $math)
     {
-        $c = new CurveFp(23, 1, 1, $math);
+        $parameters = new CurveParameters(32, 23, 1, 1);
+        $c = new CurveFp($parameters, $math);
+
         $x1 = 3;
         $y1 = 10;
         $x3 = 7;
@@ -91,7 +96,8 @@ class EcArithmeticTest extends AbstractTestCase
      */
     public function testAddDouble(MathAdapterInterface $math)
     {
-        $c = new CurveFp(23, 1, 1, $math);
+        $parameters = new CurveParameters(32, 23, 1, 1);
+        $c = new CurveFp($parameters, $math);
 
         $this->add($math, $c, 3, 10, 3, 10, 7, 12);
     }
@@ -102,7 +108,9 @@ class EcArithmeticTest extends AbstractTestCase
      */
     public function testMultiply(MathAdapterInterface $math)
     {
-        $c = new CurveFp(23, 1, 1, $math);
+        $parameters = new CurveParameters(32, 23, 1, 1);
+        $c = new CurveFp($parameters, $math);
+
         $x1 = 3;
         $y1 = 10;
         $m = 2;
@@ -140,7 +148,8 @@ class EcArithmeticTest extends AbstractTestCase
      */
     public function testMultiply2(MathAdapterInterface $math, $p, $a, $b, $x, $y, $m, $ex, $ey)
     {
-        $c = new CurveFp($p, $a, $b, $math);
+        $parameters = new CurveParameters(32, $p, $a, $b);
+        $c = new CurveFp($parameters, $math);
 
         $p1 = $c->getPoint($x, $y);
         $p3 = $p1->mul($m);
@@ -157,7 +166,9 @@ class EcArithmeticTest extends AbstractTestCase
      */
     public function testMultiplyAssociative(MathAdapterInterface $math)
     {
-        $c = new CurveFp(23, 1, 1, $math);
+        $parameters = new CurveParameters(32, 23, 1, 1);
+        $c = new CurveFp($parameters, $math);
+
         $g = $c->getPoint(13, 7, null);
 
         $a = $g->mul('1234564564564564564564564564564564646')->mul(10);
@@ -172,7 +183,9 @@ class EcArithmeticTest extends AbstractTestCase
      */
     public function testInfinity(MathAdapterInterface $math)
     {
-        $c = new CurveFp(23, 1, 1, $math);
+        $parameters = new CurveParameters(32, 23, 1, 1);
+        $c = new CurveFp($parameters, $math);
+
         $g = $c->getPoint(13, 7, 7);
 
         $check = $c->getInfinity();
