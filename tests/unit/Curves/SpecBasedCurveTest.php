@@ -110,15 +110,15 @@ class SpecBasedCurveTest extends AbstractTestCase
      */
     public function testGetDiffieHellmanSharedSecret(GeneratorPoint $generator, $alice, $bob, $expectedX)
     {
-        $adapter = $generator->getAdapter();
         $alicePrivKey = $generator->getPrivateKeyFrom($alice);
         $bobPrivKey = $generator->getPrivateKeyFrom($bob);
 
         $aliceDh = $alicePrivKey->createExchange($bobPrivKey->getPublicKey());
         $bobDh = $bobPrivKey->createExchange($alicePrivKey->getPublicKey());
 
-        $this->assertEquals($aliceDh->calculateSharedKey(), $adapter->hexDec($expectedX));
-        $this->assertEquals($bobDh->calculateSharedKey(), $adapter->hexDec($expectedX));
+        $expectedHash = hash('sha256', pack("H*", $expectedX), true);
+        $this->assertEquals($aliceDh->calculateSharedKey(), $expectedHash);
+        $this->assertEquals($bobDh->calculateSharedKey(), $expectedHash);
     }
 
     /**

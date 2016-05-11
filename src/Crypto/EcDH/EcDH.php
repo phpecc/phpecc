@@ -86,7 +86,7 @@ class EcDH implements EcDHInterface
     {
         $this->calculateKey();
 
-        return hash('sha256', $this->secretKey->getX(), true);
+        return hash('sha256', pack("H*", $this->adapter->baseConvert($this->secretKey->getX(), 10, 16)), true);
     }
 
     /**
