@@ -27,8 +27,6 @@ namespace Mdanter\Ecc\Crypto\EcDH;
  */
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
-use Mdanter\Ecc\Message\EncryptedMessage;
-use Mdanter\Ecc\Message\Message;
 
 /**
  * This is the contract for implementing EcDH (EC Diffie Hellman).

@@ -29,9 +29,6 @@ namespace Mdanter\Ecc\Crypto\EcDH;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
-use Mdanter\Ecc\Message\EncryptedMessage;
-use Mdanter\Ecc\Message\Message;
-use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 
