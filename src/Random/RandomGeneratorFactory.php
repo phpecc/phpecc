@@ -31,41 +31,8 @@ class RandomGeneratorFactory
             return self::$forcedGenerator;
         }
 
-        if (extension_loaded('mcrypt')) {
-            return self::getUrandomGenerator($debug);
-        }
-
-        if (extension_loaded('gmp') && ! defined('HHVM_VERSION')) {
-            return self::getGmpRandomGenerator($debug);
-        }
-
-        throw new \RuntimeException('No usable RandomGenerator was found');
-    }
-
-    /**
-     * @param bool $debug
-     * @return DebugDecorator|RandomNumberGeneratorInterface
-     */
-    public static function getUrandomGenerator($debug = false)
-    {
-        return self::wrapAdapter(
-            new URandomNumberGenerator(MathAdapterFactory::getAdapter($debug)),
-            'urandom',
-            $debug
-        );
-    }
-
-    /**
-     * @param bool $debug
-     * @param bool $noWarn
-     * @return DebugDecorator|RandomNumberGeneratorInterface
-     */
-    public static function getGmpRandomGenerator($debug = false, $noWarn = false)
-    {
-        return self::wrapAdapter(
-            new GmpRandomNumberGenerator($noWarn),
-            'gmp',
-            $debug
+        return new RandomNumberGenerator(
+            MathAdapterFactory::getAdapter($debug)
         );
     }
 

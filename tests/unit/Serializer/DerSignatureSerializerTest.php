@@ -25,7 +25,7 @@ class DerSignatureSerializerTest extends AbstractTestCase
     public function testIsConsistent()
     {
         $math = new Gmp();
-        $rbg = RandomGeneratorFactory::getUrandomGenerator();
+        $rbg = RandomGeneratorFactory::getRandomGenerator();
         $serializer = new DerSignatureSerializer();
 
         for ($i = 2; $i <= 521; $i++) {
