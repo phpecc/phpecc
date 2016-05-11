@@ -44,6 +44,22 @@ class Signer
     }
 
     /**
+     * @param GeneratorPoint $G
+     * @param string $algorithm
+     * @param string $data
+     * @return int|string
+     */
+    public function hashData(GeneratorPoint $G, $algorithm, $data)
+    {
+        if (!in_array($algorithm, hash_algos())) {
+            throw new \InvalidArgumentException('Unsupported hashing algorithm');
+        }
+
+        $hash = $this->adapter->hexDec(hash($algorithm, $data, false));
+        return $this->truncateHash($G, $hash);
+    }
+
+    /**
      * @param PrivateKeyInterface $key
      * @param $hash
      * @param $randomK
