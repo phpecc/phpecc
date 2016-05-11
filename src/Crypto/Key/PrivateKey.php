@@ -27,7 +27,6 @@ namespace Mdanter\Ecc\Crypto\Key;
  */
 
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
-use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 
@@ -103,9 +102,9 @@ class PrivateKey implements PrivateKeyInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::createExchange()
      */
-    public function createExchange(MessageFactory $messageFactory, PublicKeyInterface $recipient = null)
+    public function createExchange(PublicKeyInterface $recipient = null)
     {
-        $exchange = new EcDH($this->adapter, $messageFactory);
+        $exchange = new EcDH($this->adapter);
         $exchange->setSenderKey($this);
         $exchange->setRecipientKey($recipient);
 
