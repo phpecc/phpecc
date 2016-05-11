@@ -29,9 +29,6 @@ namespace Mdanter\Ecc\Crypto\EcDH;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
-use Mdanter\Ecc\Message\EncryptedMessage;
-use Mdanter\Ecc\Message\Message;
-use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 
@@ -51,11 +48,6 @@ class EcDH implements EcDHInterface
      * @var MathAdapterInterface
      */
     private $adapter;
-
-    /**
-     * @var \Mdanter\Ecc\Message\MessageFactory
-     */
-    private $messages;
 
     /**
      * Secret key between the two parties
@@ -80,12 +72,10 @@ class EcDH implements EcDHInterface
      * Initialize a new exchange from a generator point.
      *
      * @param MathAdapterInterface $adapter A math adapter instance.
-     * @param \Mdanter\Ecc\Message\MessageFactory $messages A message factory
      */
-    public function __construct(MathAdapterInterface $adapter, MessageFactory $messages)
+    public function __construct(MathAdapterInterface $adapter)
     {
         $this->adapter = $adapter;
-        $this->messages = $messages;
     }
 
     /**
@@ -96,7 +86,7 @@ class EcDH implements EcDHInterface
     {
         $this->calculateKey();
 
-        return $this->secretKey->getX();
+        return hash('sha256', pack("H*", $this->adapter->baseConvert($this->secretKey->getX(), 10, 16)), true);
     }
 
     /**
@@ -126,60 +116,6 @@ class EcDH implements EcDHInterface
     public function setSenderKey(PrivateKeyInterface $key)
     {
         $this->senderKey = $key;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::encrypt()
-     */
-    public function encrypt(Message $message)
-    {
-        $key = hash("sha256", $this->calculateSharedKey(), true);
-
-        $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($message->getContent()), MCRYPT_MODE_CBC, $key);
-        $message = $this->messages->ciphertext($cypherText);
-        return $message;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::decrypt()
-     */
-    public function decrypt(EncryptedMessage $ciphertext)
-    {
-        $key = hash("sha256", $this->calculateSharedKey(), true);
-
-        $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $ciphertext->getContent(), MCRYPT_MODE_CBC, $key));
-        $clearText = $this->messages->plaintext($clearText, 'sha256');
-        return $clearText;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::encryptFile()
-     */
-    public function encryptFile($path)
-    {
-        if (file_exists($path) && is_readable($path)) {
-            $message = $this->messages->plaintext(file_get_contents($path), 'sha256');
-            return $this->encrypt($message);
-        }
-
-        throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::decryptFile()
-     */
-    public function decryptFile($path)
-    {
-        if (file_exists($path) && is_readable($path)) {
-            $cipherText = $this->messages->ciphertext(file_get_contents($path));
-            return $cipherText;
-        }
-
-        throw new \InvalidArgumentException("File '$path' does not exist or is not readable.");
     }
 
     /**

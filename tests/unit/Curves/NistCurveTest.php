@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests;
 
-use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Crypto\Signature\Signature;
@@ -297,22 +296,34 @@ class NistCurveTest extends AbstractTestCase
     public function testDiffieHellman(MathAdapterInterface $math, RandomNumberGeneratorInterface $rng)
     {
         $generator = EccFactory::getNistCurves($math)->generator192($rng);
-        $messages = new MessageFactory($math);
         $alicePrivKey = $generator->createPrivateKey();
         $bobPrivKey = $generator->createPrivateKey();
 
-        $alice = $alicePrivKey->createExchange($messages, $bobPrivKey->getPublicKey());
-        $bob = $bobPrivKey->createExchange($messages, $alicePrivKey->getPublicKey());
+        $alice = $alicePrivKey->createExchange($bobPrivKey->getPublicKey());
+        $bob = $bobPrivKey->createExchange($alicePrivKey->getPublicKey());
 
         $this->assertEquals($alice->calculateSharedKey(), $bob->calculateSharedKey());
 
         // Test encrypt/decrypt by both parties
-        $unencrypted = $messages->plaintext('This is some text', 'sha256');
+        $unencrypted = 'This is some text';
 
-        $encrypted = $alice->encrypt($unencrypted);
-        $this->assertEquals($unencrypted, $bob->decrypt($encrypted));
+        $encrypted = $this->encrypt($unencrypted, $alice->calculateSharedKey());
+        $this->assertEquals($unencrypted, $this->decrypt($encrypted, $bob->calculateSharedKey()));
 
-        $encrypted = $bob->encrypt($unencrypted);
-        $this->assertEquals($unencrypted, $alice->decrypt($encrypted));
+        $encrypted = $this->encrypt($unencrypted, $bob->calculateSharedKey());
+        $this->assertEquals($unencrypted, $this->decrypt($encrypted, $alice->calculateSharedKey()));
+    }
+
+    public function encrypt($message, $key)
+    {
+        $cypherText = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, base64_encode($message), MCRYPT_MODE_CBC, $key);
+
+        return $cypherText;
+    }
+
+    public function decrypt($message, $key)
+    {
+        $clearText = base64_decode(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $message, MCRYPT_MODE_CBC, $key));
+        return $clearText;
     }
 }
