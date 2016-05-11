@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\Tests\Random;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Key\PrivateKey;
 use Mdanter\Ecc\Random\Hmac;
+use Mdanter\Ecc\Random\HmacRandomNumberGenerator;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class HmacRandomNumberGeneratorTest extends AbstractTestCase
@@ -20,7 +21,7 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
         $privateKey  = new PrivateKey($math, $g, 1);
         $hash = hash('sha256', 'message', true);
 
-        new Hmac($math, $privateKey, $hash, 'sha256aaaa');
+        new HmacRandomNumberGenerator($math, $privateKey, $hash, 'sha256aaaa');
     }
 
 }
