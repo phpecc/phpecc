@@ -4,15 +4,14 @@ namespace Mdanter\Ecc\Tests\Random;
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Key\PrivateKey;
-use Mdanter\Ecc\Random\Hmac;
 use Mdanter\Ecc\Random\HmacRandomNumberGenerator;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class HmacRandomNumberGeneratorTest extends AbstractTestCase
 {
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Hashing algorithm not found
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unsupported hashing algorithm
      */
     public function testRequireValidAlgorithm()
     {
