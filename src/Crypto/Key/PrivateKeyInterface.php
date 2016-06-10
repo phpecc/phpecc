@@ -26,8 +26,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  * ***********************************************************************
  */
 
-use Mdanter\Ecc\Message\MessageFactory;
-use Mdanter\Ecc\Primitives\PointInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 /**
  * This is a contract for the PrivateKey portion of ECDSA.
@@ -41,7 +40,7 @@ interface PrivateKeyInterface
     public function getPublicKey();
 
     /**
-     * @return PointInterface
+     * @return GeneratorPoint
      */
     public function getPoint();
 
@@ -51,9 +50,8 @@ interface PrivateKeyInterface
     public function getSecret();
 
     /**
-     * @param  MessageFactory $messageFactory
      * @param  PublicKeyInterface $recipient
      * @return int|string
      */
-    public function createExchange(MessageFactory $messageFactory, PublicKeyInterface $recipient);
+    public function createExchange(PublicKeyInterface $recipient);
 }

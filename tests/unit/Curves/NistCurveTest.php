@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests;
 
-use Mdanter\Ecc\Message\MessageFactory;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Crypto\Signature\Signature;
@@ -293,22 +292,12 @@ class NistCurveTest extends AbstractTestCase
     public function testDiffieHellman(MathAdapterInterface $math, RandomNumberGeneratorInterface $rng)
     {
         $generator = EccFactory::getNistCurves($math)->generator192($rng);
-        $messages = new MessageFactory($math);
         $alicePrivKey = $generator->createPrivateKey();
         $bobPrivKey = $generator->createPrivateKey();
 
-        $alice = $alicePrivKey->createExchange($messages, $bobPrivKey->getPublicKey());
-        $bob = $bobPrivKey->createExchange($messages, $alicePrivKey->getPublicKey());
+        $alice = $alicePrivKey->createExchange($bobPrivKey->getPublicKey());
+        $bob = $bobPrivKey->createExchange($alicePrivKey->getPublicKey());
 
         $this->assertEquals($alice->calculateSharedKey(), $bob->calculateSharedKey());
-
-        // Test encrypt/decrypt by both parties
-        $unencrypted = $messages->plaintext('This is some text', 'sha256');
-
-        $encrypted = $alice->encrypt($unencrypted);
-        $this->assertEquals($unencrypted, $bob->decrypt($encrypted));
-
-        $encrypted = $bob->encrypt($unencrypted);
-        $this->assertEquals($unencrypted, $alice->decrypt($encrypted));
     }
 }
