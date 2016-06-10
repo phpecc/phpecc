@@ -257,7 +257,6 @@ abstract class BignumObjectParser implements Parsable
                 if (Identifier::isConstructed($identifierOctet)) {
                     return new UnknownConstructedObject($binaryData, $offsetIndex);
                 } else {
-
                     $identifier = self::parseBinaryIdentifier($binaryData, $offsetIndex);
                     $lengthOfUnknownObject = self::parseContentLength($binaryData, $offsetIndex);
                     $offsetIndex += $lengthOfUnknownObject;

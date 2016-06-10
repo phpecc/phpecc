@@ -3,12 +3,11 @@
 namespace Mdanter\Ecc\Tests\Curves;
 
 use Mdanter\Ecc\Message\MessageFactory;
+use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
-use Mdanter\Ecc\Util\NumberSize;
 use Symfony\Component\Yaml\Yaml;
 use Mdanter\Ecc\Curves\CurveFactory;
-use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 
 class SpecBasedCurveTest extends AbstractTestCase
@@ -144,7 +143,6 @@ class SpecBasedCurveTest extends AbstractTestCase
             foreach ($data['hmac'] as $sig) {
                 $datasets[] = [
                     $generator,
-                    isset($sig['size']) ? $sig['size'] : 0,
                     $sig['key'],
                     $sig['algo'],
                     $sig['message'],
@@ -161,7 +159,6 @@ class SpecBasedCurveTest extends AbstractTestCase
     /**
      * @dataProvider getHmacTestSet
      * @param GeneratorPoint $G
-     * @param integer $size
      * @param string $privKey
      * @param string $algo
      * @param string $message
@@ -169,34 +166,22 @@ class SpecBasedCurveTest extends AbstractTestCase
      * @param string $eR expected R hex
      * @param string $eS expected S hex
      */
-    public function testHmacSignatures(GeneratorPoint $G, $size, $privKey, $algo, $message, $eK, $eR, $eS)
+    public function testHmacSignatures(GeneratorPoint $G, $privKey, $algo, $message, $eK, $eR, $eS)
     {
-        //echo "Try {$test->curve} / {$test->algorithm} / '{$test->message}'\n";
-
         $math = $G->getAdapter();
-        
-        // Initialize private key and message hash (decimal)
-        $privateKey  = $G->getPrivateKeyFrom($math->hexDec($privKey));
-        $hashHex     = hash($algo, $message);
-        $messageHash = $math->hexDec($hashHex);
 
-        // Derive K
-        $drbg = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $messageHash, $algo);
-        $k    = $drbg->generate($G->getOrder());
-        $this->assertEquals($k, $math->hexdec($eK), 'k');
-
-        $hexSize = strlen($hashHex);
-        $hashBits = $math->baseConvert($messageHash, 10, 2);
-        if (strlen($hashBits) < $hexSize * 4) {
-            $hashBits = str_pad($hashBits, $hexSize * 4, '0', STR_PAD_LEFT);
-        }
-
-        $messageHash = $math->baseConvert(substr($hashBits, 0, NumberSize::bnNumBits($math, $G->getOrder())), 2, 10);
-
+        $privateKey = $G->getPrivateKeyFrom($math->hexDec($privKey));
         $signer = new Signer($math);
-        $sig    = $signer->sign($privateKey, $messageHash, $k);
-        // Should be consistent
-        $this->assertTrue($signer->verify($privateKey->getPublicKey(), $sig, $messageHash));
+        $hashDec = $signer->hashData($G, $algo, $message);
+        //$hash = pack("H*", $math->decHex($hashDec));
+
+        $hmac = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $hashDec, $algo);
+        $k = $hmac->generate($G->getOrder());
+        $this->assertEquals($k, $math->hexDec($eK), 'k');
+
+        $sig = $signer->sign($privateKey, $hashDec, $k);
+        // Should verify
+        $this->assertTrue($signer->verify($privateKey->getPublicKey(), $sig, $hashDec));
 
         // R and S should be correct
         $sR = $math->hexDec($eR);
@@ -204,5 +189,4 @@ class SpecBasedCurveTest extends AbstractTestCase
         $this->assertSame($sR, $sig->getR(), "r $sR == ".$sig->getR());
         $this->assertSame($sS, $sig->getS(), "s $sR == " . $sig->getS());
     }
-
 }

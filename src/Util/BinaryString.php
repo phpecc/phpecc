@@ -51,11 +51,11 @@ class BinaryString
     }
     
     /**
-     * Equivalent to hash_equals() in PHP 5.6 
-     * 
+     * Equivalent to hash_equals() in PHP 5.6
+     *
      * @param string $knownString
      * @param string $userString
-     * 
+     *
      * @return bool
      */
     public static function constantTimeCompare($knownString, $userString)
