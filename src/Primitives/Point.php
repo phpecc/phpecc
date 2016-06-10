@@ -303,18 +303,22 @@ class Point implements PointInterface
      */
     public function cswapValue(& $a, & $b, $cond)
     {
+
         $size = max(strlen($this->adapter->baseConvert($a, 10, 2)), strlen($this->adapter->baseConvert($b, 10, 2)));
 
         $mask = 1 - intval($cond);
         $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
-        $mask = $this->adapter->baseConvert($mask, 2, 10);
+        $mask = gmp_init($mask ?: 0, 2);
 
-        $tA = $this->adapter->bitwiseAnd($a, $mask);
-        $tB = $this->adapter->bitwiseAnd($b, $mask);
+        $taA = gmp_and(gmp_init($a, 10), $mask);
+        $taB = gmp_and(gmp_init($b, 10), $mask);
 
-        $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
-        $b = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tA);
-        $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
+        $a = gmp_xor(gmp_xor(gmp_init($a,10), gmp_init($b,10)), $taB);
+        $b = gmp_xor(gmp_xor($a, gmp_init($b,10)), $taA);
+        $a = gmp_xor(gmp_xor($a, $b), $taB);
+
+        $a = gmp_strval($a, 10);
+        $b = gmp_strval($b, 10);
     }
 
     /**
