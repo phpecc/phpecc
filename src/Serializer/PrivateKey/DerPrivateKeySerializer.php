@@ -8,7 +8,7 @@ use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\BitString;
 use FG\ASN1\Universal\OctetString;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
@@ -26,7 +26,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
     const VERSION = 1;
 
     /**
-     * @var \Mdanter\Ecc\Math\DebugDecorator|MathAdapterInterface|null
+     * @var GmpMathInterface|null
      */
     private $adapter;
 
@@ -36,10 +36,10 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
     private $pubKeySerializer;
 
     /**
-     * @param MathAdapterInterface   $adapter
+     * @param GmpMathInterface       $adapter
      * @param PemPublicKeySerializer $pubKeySerializer
      */
-    public function __construct(MathAdapterInterface $adapter = null, PemPublicKeySerializer $pubKeySerializer = null)
+    public function __construct(GmpMathInterface $adapter = null, PemPublicKeySerializer $pubKeySerializer = null)
     {
         $this->adapter = $adapter ?: MathAdapterFactory::getAdapter();
         $this->pubKeySerializer = $pubKeySerializer ?: new DerPublicKeySerializer($this->adapter);
@@ -78,7 +78,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
      */
     private function formatKey(PrivateKeyInterface $key)
     {
-        return $this->adapter->decHex($key->getSecret());
+        return gmp_strval($key->getSecret(), 16);
     }
 
     /**
@@ -103,7 +103,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
             throw new \RuntimeException('Invalid data: only version 1 (RFC5915) keys are supported.');
         }
 
-        $key = $this->adapter->hexDec($children[1]->getContent());
+        $key = gmp_init($children[1]->getContent(), 16);
         $oid = $children[2]->getContent();
 
         $generator = CurveOidMapper::getGeneratorFromOid($oid);

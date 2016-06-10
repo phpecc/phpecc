@@ -3,30 +3,30 @@
 namespace Mdanter\Ecc\Random;
 
 
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Util\NumberSize;
 
 class RandomNumberGenerator implements RandomNumberGeneratorInterface
 {
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
     /**
      * RandomNumberGenerator constructor.
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface $adapter
      */
-    public function __construct(MathAdapterInterface $adapter)
+    public function __construct(GmpMathInterface $adapter)
     {
         $this->adapter = $adapter;
     }
 
     /**
-     * @param int|string $max
+     * @param \GMP $max
      * @return int
      */
-    public function generate($max)
+    public function generate(\GMP $max)
     {
         $numBits = NumberSize::bnNumBits($this->adapter, $max);
         $numBytes = ceil($numBits / 8);

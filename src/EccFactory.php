@@ -5,9 +5,11 @@ namespace Mdanter\Ecc;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\CurveFp;
+use Mdanter\Ecc\Primitives\CurveParameters;
 
 /**
  * Static factory class providing factory methods to work with NIST and SECG recommended curves.
@@ -20,7 +22,7 @@ class EccFactory
      * @param $debug [optional] Set to true to get a trace of all mathematical operations
      *
      * @throws \RuntimeException
-     * @return MathAdapterInterface
+     * @return GmpMathInterface
      */
     public static function getAdapter($debug = false)
     {
@@ -43,10 +45,10 @@ class EccFactory
     /**
      * Returns a factory to create NIST Recommended curves and generators.
      *
-     * @param  MathAdapterInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
+     * @param  GmpMathInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return NistCurve
      */
-    public static function getNistCurves(MathAdapterInterface $adapter = null)
+    public static function getNistCurves(GmpMathInterface $adapter = null)
     {
         return new NistCurve($adapter ?: self::getAdapter());
     }
@@ -65,22 +67,21 @@ class EccFactory
     /**
      * Creates a new curve from arbitrary parameters.
      *
-     * @param  int|string           $prime
-     * @param  int|string           $a
-     * @param  int|string           $b
+     * @param  \GMP           $prime
+     * @param  \GMP           $a
+     * @param  \GMP           $b
      * @param  MathAdapterInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return \Mdanter\Ecc\Primitives\CurveFpInterface
      */
-    public static function createCurve($prime, $a, $b, MathAdapterInterface $adapter = null)
+    public static function createCurve($bitSize, \GMP $prime, \GMP $a, \GMP $b, MathAdapterInterface $adapter = null)
     {
-        return new CurveFp($prime, $a, $b, $adapter ?: self::getAdapter());
+        return new CurveFp(new CurveParameters($bitSize, $prime, $a, $b), $adapter ?: self::getAdapter());
     }
 
     /**
      *
      * @param  MathAdapterInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapteR()
-     * @return \Mdanter\Ecc\Crypto\Signature\Signer;
-
+     * @return \Mdanter\Ecc\Crypto\Signature\Signer
      */
     public static function getSigner(MathAdapterInterface $adapter = null)
     {

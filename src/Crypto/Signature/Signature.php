@@ -33,23 +33,23 @@ class Signature implements SignatureInterface
 {
     /**
      *
-     * @var int|string
+     * @var \GMP
      */
     protected $r;
 
     /**
      *
-     * @var int|string
+     * @var \GMP
      */
     protected $s;
 
     /**
      * Initialize a new instance with values
      *
-     * @param int|string $r
-     * @param int|string $s
+     * @param \GMP $r
+     * @param \GMP $s
      */
-    public function __construct($r, $s)
+    public function __construct(\GMP $r, \GMP $s)
     {
         $this->r = $r;
         $this->s = $s;

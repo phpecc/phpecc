@@ -72,10 +72,10 @@ interface PointInterface
     /**
      * Multiplies the point by a scalar value and returns the resulting point.
      *
-     * @param  mixed $multiplier
+     * @param  \GMP $multiplier
      * @return PointInterface
      */
-    public function mul($multiplier);
+    public function mul(\GMP $multiplier);
 
     /**
      * Returns the curve to which the point belongs.
@@ -94,21 +94,21 @@ interface PointInterface
     /**
      * Returns the order of the point.
      *
-     * @return int|string
+     * @return \GMP
      */
     public function getOrder();
 
     /**
      * Returns the X coordinate of the point.
      *
-     * @return int|string
+     * @return \GMP
      */
     public function getX();
 
     /**
      * Returns the Y coordinate of the point.
      *
-     * @return int|string
+     * @return \GMP
      */
     public function getY();
 

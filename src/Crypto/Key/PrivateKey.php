@@ -27,7 +27,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  */
 
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 /**
@@ -41,21 +41,21 @@ class PrivateKey implements PrivateKeyInterface
     private $generator;
 
     /**
-     * @var
+     * @var \GMP
      */
     private $secretMultiplier;
 
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
     /**
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface $adapter
      * @param GeneratorPoint $generator
-     * @param $secretMultiplier
+     * @param \GMP $secretMultiplier
      */
-    public function __construct(MathAdapterInterface $adapter, GeneratorPoint $generator, $secretMultiplier)
+    public function __construct(GmpMathInterface $adapter, GeneratorPoint $generator, \GMP $secretMultiplier)
     {
         $this->adapter = $adapter;
         $this->generator = $generator;

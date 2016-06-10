@@ -7,36 +7,36 @@ class CurveParameters
     /**
      * Elliptic curve over the field of integers modulo a prime.
      *
-     * @var int|string
+     * @var \GMP
      */
-    protected $a = 0;
+    protected $a;
 
     /**
      *
-     * @var int|string
+     * @var \GMP
      */
-    protected $b = 0;
+    protected $b;
 
     /**
      *
-     * @var int|string
+     * @var \GMP
      */
-    protected $prime = 0;
+    protected $prime;
 
     /**
      * Binary length of keys associated with these curve parameters
      *
-     * @var int
+     * @var \GMP
      */
-    protected $size = 0;
+    protected $size;
 
     /**
      * @param int $size
-     * @param int|string $prime
-     * @param int|string $a
-     * @param int|string $b
+     * @param \GMP $prime
+     * @param \GMP $a
+     * @param \GMP $b
      */
-    public function __construct($size, $prime, $a, $b)
+    public function __construct($size, \GMP $prime, \GMP $a, \GMP $b)
     {
         $this->size = $size;
         $this->prime = $prime;
@@ -45,7 +45,7 @@ class CurveParameters
     }
 
     /**
-     * @return int|string
+     * @return \GMP
      */
     public function getA()
     {
@@ -53,7 +53,7 @@ class CurveParameters
     }
 
     /**
-     * @return int|string
+     * @return \GMP
      */
     public function getB()
     {
@@ -61,7 +61,7 @@ class CurveParameters
     }
 
     /**
-     * @return int|string
+     * @return \GMP
      */
     public function getPrime()
     {

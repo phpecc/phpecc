@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Primitives;
 
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKey;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
@@ -19,19 +19,19 @@ class GeneratorPoint extends Point
     private $generator;
 
     /**
-     * @param MathAdapterInterface           $adapter
+     * @param GmpMathInterface               $adapter
      * @param CurveFpInterface               $curve
-     * @param int|string                     $x
-     * @param int|string                     $y
-     * @param null                           $order
+     * @param \GMP                           $x
+     * @param \GMP                           $y
+     * @param \GMP                           $order
      * @param RandomNumberGeneratorInterface $generator
      */
     public function __construct(
-        MathAdapterInterface $adapter,
+        GmpMathInterface $adapter,
         CurveFpInterface $curve,
-        $x,
-        $y,
-        $order = null,
+        \GMP $x,
+        \GMP $y,
+        \GMP $order = null,
         RandomNumberGeneratorInterface $generator = null
     ) {
         $this->generator = $generator ?: RandomGeneratorFactory::getRandomGenerator();
@@ -43,11 +43,11 @@ class GeneratorPoint extends Point
      * Verifies validity of given coordinates against the current point and its point.
      *
      * @todo   Check if really necessary here (only used for testing in lib)
-     * @param  int|string $x
-     * @param  int|string $y
+     * @param  \GMP $x
+     * @param  \GMP $y
      * @return boolean
      */
-    public function isValid($x, $y)
+    public function isValid(\GMP $x, \GMP $y)
     {
         $math = $this->getAdapter();
 
@@ -82,12 +82,12 @@ class GeneratorPoint extends Point
     }
 
     /**
-     * @param $x
-     * @param $y
-     * @param null $order
+     * @param \GMP $x
+     * @param \GMP $y
+     * @param \GMP $order
      * @return PublicKey
      */
-    public function getPublicKeyFrom($x, $y, $order = null)
+    public function getPublicKeyFrom(\GMP $x, \GMP $y, \GMP $order = null)
     {
         $pubPoint = $this->getCurve()->getPoint($x, $y, $order);
 
@@ -95,7 +95,7 @@ class GeneratorPoint extends Point
     }
 
     /**
-     * @param $secretMultiplier
+     * @param \GMP $secretMultiplier
      * @return PrivateKey
      */
     public function getPrivateKeyFrom($secretMultiplier)

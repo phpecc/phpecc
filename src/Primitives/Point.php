@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Primitives;
 
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\ModularArithmetic;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 
@@ -44,7 +45,7 @@ class Point implements PointInterface
     private $curve;
 
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
@@ -54,17 +55,17 @@ class Point implements PointInterface
     private $modAdapter;
 
     /**
-     * @var string
+     * @var \GMP
      */
     private $x;
 
     /**
-     * @var string
+     * @var \GMP
      */
     private $y;
 
     /**
-     * @var string
+     * @var \GMP
      */
     private $order;
 
@@ -76,28 +77,28 @@ class Point implements PointInterface
     /**
      * Initialize a new instance
      *
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface     $adapter
      * @param CurveFpInterface     $curve
-     * @param int|string           $x
-     * @param int|string           $y
-     * @param int|string           $order
+     * @param \GMP                 $x
+     * @param \GMP                 $y
+     * @param \GMP                 $order
      * @param bool                 $infinity
      *
      * @throws \RuntimeException    when either the curve does not contain the given coordinates or
      *                                      when order is not null and P(x, y) * order is not equal to infinity.
      */
-    public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order, $infinity = false)
+    public function __construct(GmpMathInterface $adapter, CurveFpInterface $curve, \GMP $x, \GMP $y, \GMP $order = null, $infinity = false)
     {
         $this->adapter    = $adapter;
         $this->modAdapter = $curve->getModAdapter();
         $this->curve      = $curve;
-        $this->x          = (string) $x;
-        $this->y          = (string) $y;
-        $this->order      = $order !== null ? (string) $order : '0';
+        $this->x          = $x;
+        $this->y          = $y;
+        $this->order      = $order !== null ? $order : '0';
         $this->infinity   = (bool) $infinity;
 
         if (! $infinity && ! $curve->contains($x, $y)) {
-            throw new \RuntimeException("Curve " . $curve . " does not contain point (" . $x . ", " . $y . ")");
+            throw new \RuntimeException("Curve " . $curve . " does not contain point (" . gmp_strval($x, 10) . ", " . gmp_strval($y, 10) . ")");
         }
 
         if ($order != null && ! $this->mul($order)->isInfinity()) {
@@ -137,7 +138,7 @@ class Point implements PointInterface
      */
     public function getOrder()
     {
-        return (string) $this->order;
+        return $this->order;
     }
 
     /**
@@ -183,7 +184,7 @@ class Point implements PointInterface
             if ($math->cmp($addend->getY(), $this->y) == 0) {
                 return $this->getDouble();
             } else {
-                return new self($this->adapter, $this->curve, 0, 0, 0, true);
+                return new self($this->adapter, $this->curve, gmp_init(0, 10), gmp_init(0, 10), gmp_init(0, 10), true);
             }
         }
 
@@ -193,7 +194,7 @@ class Point implements PointInterface
         );
 
         $xR = $modMath->sub(
-            $math->sub($math->pow($slope, 2), $this->x),
+            $math->sub($math->pow($slope, gmp_init(2, 10)), $this->x),
             $addend->getX()
         );
 
@@ -245,17 +246,18 @@ class Point implements PointInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::mul()
      */
-    public function mul($n)
+    public function mul(\GMP $n)
     {
         if ($this->isInfinity()) {
             return $this->curve->getInfinity();
         }
 
-        if ($this->adapter->cmp($this->order, '0') > 0) {
+        $zero = gmp_init(0, 10);
+        if ($this->adapter->cmp($this->order, $zero) > 0) {
             $n = $this->adapter->mod($n, $this->order);
         }
 
-        if ($this->adapter->cmp($n, '0') == 0) {
+        if ($this->adapter->cmp($n, $zero) == 0) {
             return $this->curve->getInfinity();
         }
 
@@ -306,8 +308,7 @@ class Point implements PointInterface
         $size = max(strlen($this->adapter->baseConvert($a, 10, 2)), strlen($this->adapter->baseConvert($b, 10, 2)));
 
         $mask = 1 - intval($cond);
-        $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
-        $mask = $this->adapter->baseConvert($mask, 2, 10);
+        $mask = gmp_init(str_pad('', $size, $mask, STR_PAD_LEFT), 2);
 
         $tA = $this->adapter->bitwiseAnd($a, $mask);
         $tB = $this->adapter->bitwiseAnd($b, $mask);
@@ -341,16 +342,16 @@ class Point implements PointInterface
         $modMath = $this->modAdapter;
 
         $a = $this->curve->getA();
-        $threeX2 = $math->mul(3, $math->pow($this->x, 2));
+        $threeX2 = $math->mul(gmp_init(3, 10), $math->pow($this->x, 2));
 
         $tangent  = $modMath->div(
             $math->add($threeX2, $a),
-            $math->mul(2, $this->y)
+            $math->mul(gmp_init(2, 10), $this->y)
         );
 
         $x3 = $modMath->sub(
             $math->pow($tangent, 2),
-            $math->mul(2, $this->x)
+            $math->mul(gmp_init(2, 10), $this->x)
         );
 
         $y3 = $modMath->sub(
@@ -381,9 +382,9 @@ class Point implements PointInterface
     {
         if ($this->infinity) {
             return [
-                'x' => 'inf (' . $this->x . ')',
-                'y' => 'inf (' . $this->y . ')',
-                'z' => 'inf (' . $this->order . ')',
+                'x' => 'inf (' . $this->adapter->toString($this->x) . ')',
+                'y' => 'inf (' . $this->adapter->toString($this->y) . ')',
+                'z' => 'inf (' . $this->adapter->toString($this->order) . ')',
                 'curve' => $this->curve
             ];
         }

@@ -16,10 +16,11 @@ class MathAdapterFactory
 
     /**
      * @param bool $debug
-     * @return DebugDecorator|MathAdapterInterface|null
+     * @return DebugDecorator|GmpMathInterface|null
      */
     public static function getAdapter($debug = false)
     {
+        return new GmpMath();
         if (self::$forcedAdapter !== null) {
             return self::$forcedAdapter;
         }

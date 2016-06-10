@@ -20,11 +20,11 @@ THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
 OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
-*************************************************************************/
+ *************************************************************************/
 namespace Mdanter\Ecc\Primitives;
 
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\ModularArithmetic;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
@@ -44,7 +44,7 @@ class CurveFp implements CurveFpInterface
 
     /**
      *
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     protected $adapter = null;
 
@@ -57,10 +57,10 @@ class CurveFp implements CurveFpInterface
     /**
      * Constructor that sets up the instance variables.
      *
-     * @param $parameters CurveParameters
-     * @param $adapter MathAdapterInterface
+     * @param CurveParameters $parameters
+     * @param GmpMathInterface $adapter
      */
-    public function __construct(CurveParameters $parameters, MathAdapterInterface $adapter)
+    public function __construct(CurveParameters $parameters, GmpMathInterface $adapter)
     {
         $this->parameters = $parameters;
         $this->adapter = $adapter;
@@ -82,14 +82,14 @@ class CurveFp implements CurveFpInterface
      */
     public function getInfinity()
     {
-        return new Point($this->adapter, $this, 0, 0, 0, true);
+        return new Point($this->adapter, $this, gmp_init(0, 10), gmp_init(0, 0), gmp_init(0, 10), true);
     }
 
     /**
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getPoint()
      */
-    public function getPoint($x, $y, $order = null)
+    public function getPoint(\GMP $x, \GMP $y, \GMP  $order = null)
     {
         return new Point($this->adapter, $this, $x, $y, $order);
     }
@@ -98,7 +98,7 @@ class CurveFp implements CurveFpInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getGenerator()
      */
-    public function getGenerator($x, $y, $order = null, RandomNumberGeneratorInterface $randomGenerator = null)
+    public function getGenerator(\GMP $x, \GMP $y, \GMP $order = null, RandomNumberGeneratorInterface $randomGenerator = null)
     {
         return new GeneratorPoint($this->adapter, $this, $x, $y, $order, $randomGenerator);
     }
@@ -107,11 +107,11 @@ class CurveFp implements CurveFpInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::contains()
      */
-    public function contains($x, $y)
+    public function contains(\GMP $x, \GMP $y)
     {
         $math = $this->adapter;
 
-        $eq_zero = $math->cmp($math->mod($math->sub($math->pow($y, 2), $math->add($math->add($math->pow($x, 3), $math->mul($this->getA(), $x)), $this->getB())), $this->getPrime()), 0);
+        $eq_zero = $math->cmp($math->mod($math->sub($math->pow($y, 2), $math->add($math->add($math->pow($x, 3), $math->mul($this->getA(), $x)), $this->getB())), $this->getPrime()), gmp_init(0, 10));
 
         return ($eq_zero == 0);
     }
@@ -181,7 +181,7 @@ class CurveFp implements CurveFpInterface
      */
     public function __toString()
     {
-        return 'curve(' . $this->getA() . ', ' . $this->getB() . ', ' . $this->getPrime() . ')';
+        return 'curve(' . $this->adapter->toString($this->getA()) . ', ' . $this->adapter->toString($this->getB()) . ', ' . $this->adapter->toString($this->getPrime()) . ')';
     }
 
     /**

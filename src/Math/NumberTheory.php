@@ -37,14 +37,14 @@ namespace Mdanter\Ecc\Math;
 class NumberTheory
 {
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     protected $adapter;
 
     /**
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface $adapter
      */
-    public function __construct(MathAdapterInterface $adapter)
+    public function __construct(GmpMathInterface $adapter)
     {
         $this->adapter = $adapter;
     }
@@ -122,33 +122,37 @@ class NumberTheory
     }
 
     /**
-     * @param $base
-     * @param $exponent
-     * @param $polymod
-     * @param $p
+     * @param array $base
+     * @param \GMP $exponent
+     * @param array $polymod
+     * @param \GMP $p
      * @return array|int
      */
-    public function polynomialPowMod($base, $exponent, $polymod, $p)
+    public function polynomialPowMod($base, \GMP $exponent, $polymod, \GMP $p)
     {
+        $zero = gmp_init(0, 10);
+        $one = gmp_init(1, 10);
+        $two = gmp_init(2, 10);
+
         if ($this->adapter->cmp($exponent, $p) < 0) {
-            if ($this->adapter->cmp($exponent, 0) == 0) {
+            if ($this->adapter->cmp($exponent, $zero) == 0) {
                 return 1;
             }
 
             $G = $base;
             $k = $exponent;
 
-            if ($this->adapter->cmp($this->adapter->mod($k, 2), 1) == 0) {
+            if ($this->adapter->cmp($this->adapter->mod($k, $two), $one) == 0) {
                 $s = $G;
             } else {
                 $s = array(1);
             }
 
-            while ($this->adapter->cmp($k, 1) > 0) {
-                $k = $this->adapter->div($k, 2);
+            while ($this->adapter->cmp($k, $one) > 0) {
+                $k = $this->adapter->div($k, $two);
 
                 $G = $this->polynomialMultiplyMod($G, $G, $polymod, $p);
-                if ($this->adapter->mod($k, 2) == 1) {
+                if ($this->adapter->mod($k, $two) == 1) {
                     $s = $this->polynomialMultiplyMod($G, $s, $polymod, $p);
                 }
             }
@@ -161,12 +165,14 @@ class NumberTheory
     }
 
     /**
-     * @param $a
-     * @param $p
-     * @return int|string
+     * @param \GMP $a
+     * @param \GMP $p
+     * @return \GMP
      */
-    public function squareRootModP($a, $p)
+    public function squareRootModP(\GMP $a, \GMP $p)
     {
+        $four = gmp_init(4, 10);
+        $eight = gmp_init(8, 10);
         if (0 <= $a && $a < $p && 1 < $p) {
             if ($a == 0) {
                 return 0;
@@ -178,36 +184,36 @@ class NumberTheory
             $jac = $this->adapter->jacobi($a, $p);
 
             if ($jac == -1) {
-                throw new \LogicException($a." has no square root modulo ".$p);
+                throw new \LogicException(gmp_strval($a, 10)." has no square root modulo ".gmp_strval($p, 10));
             }
 
-            if ($this->adapter->mod($p, 4) == 3) {
-                return $this->adapter->powmod($a, $this->adapter->div($this->adapter->add($p, 1), 4), $p);
+            if ($this->adapter->mod($p, $four) == 3) {
+                return $this->adapter->powmod($a, $this->adapter->div($this->adapter->add($p, gmp_init(1, 10)), $four), $p);
             }
 
-            if ($this->adapter->mod($p, 8) == 5) {
-                $d = $this->adapter->powmod($a, $this->adapter->div($this->adapter->sub($p, 1), 4), $p);
+            if ($this->adapter->mod($p, $eight) == 5) {
+                $d = $this->adapter->powmod($a, $this->adapter->div($this->adapter->sub($p, gmp_init(1, 10)), $four), $p);
                 if ($d == 1) {
-                    return $this->adapter->powmod($a, $this->adapter->div($this->adapter->add($p, 3), 8), $p);
+                    return $this->adapter->powmod($a, $this->adapter->div($this->adapter->add($p, gmp_init(3, 10)), $eight), $p);
                 }
                 if ($d == $p - 1) {
                     return $this->adapter->mod(
                         $this->adapter->mul(
                             $this->adapter->mul(
-                                2,
+                                gmp_init(2, 10),
                                 $a
                             ),
                             $this->adapter->powmod(
                                 $this->adapter->mul(
-                                    4,
+                                    $four,
                                     $a
                                 ),
                                 $this->adapter->div(
                                     $this->adapter->sub(
                                         $p,
-                                        5
+                                        gmp_init(5, 10)
                                     ),
-                                    8
+                                    $eight
                                 ),
                                 $p
                             )
@@ -221,8 +227,8 @@ class NumberTheory
             for ($b = 2; $b < $p; $b++) {
                 if ($this->adapter->jacobi(
                     $this->adapter->sub(
-                        $this->adapter->mul($b, $b),
-                        $this->adapter->mul(4, $a)
+                        $this->adapter->mul(gmp_init($b, 10), gmp_init($b, 10)),
+                        $this->adapter->mul($four, $a)
                     ),
                     $p
                 ) == -1
@@ -234,9 +240,9 @@ class NumberTheory
                         $this->adapter->div(
                             $this->adapter->add(
                                 $p,
-                                1
+                                gmp_init(1, 10)
                             ),
-                            2
+                            gmp_init(2, 10)
                         ),
                         $f,
                         $p

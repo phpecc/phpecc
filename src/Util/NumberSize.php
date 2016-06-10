@@ -2,12 +2,12 @@
 
 namespace Mdanter\Ecc\Util;
 
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 
 class NumberSize
 {
 
-    public static function getCeiledByteSize(MathAdapterInterface $adapter, $x)
+    public static function getCeiledByteSize(GmpMathInterface $adapter, \GMP $x)
     {
         $log2 = 0;
 
@@ -18,7 +18,7 @@ class NumberSize
         return ceil($log2 / 8);
     }
 
-    public static function getFlooredByteSize(MathAdapterInterface $adapter, $x)
+    public static function getFlooredByteSize(GmpMathInterface $adapter, \GMP $x)
     {
         $log2 = 0;
 
@@ -32,13 +32,13 @@ class NumberSize
     /**
      * Returns the number of mininum required bytes to store a given number. Non-significant upper bits are not counted.
      *
-     * @param  MathAdapterInterface $adapter
-     * @param  int|string           $x
+     * @param  GmpMathInterface $adapter
+     * @param  \GMP             $x
      * @return number
      *
      * @link https://www.openssl.org/docs/crypto/BN_num_bytes.html
      */
-    public static function bnNumBytes(MathAdapterInterface $adapter, $x)
+    public static function bnNumBytes(GmpMathInterface $adapter, \GMP $x)
     {
         // https://github.com/luvit/openssl/blob/master/openssl/crypto/bn/bn.h#L402
         return floor((self::bnNumBits($adapter, $x) + 7) / 8);
@@ -47,15 +47,15 @@ class NumberSize
     /**
      * Returns the number of bits used to store this number. Non-singicant upper bits are not counted.
      *
-     * @param  MathAdapterInterface $adapter
-     * @param  int|string           $x
+     * @param  GmpMathInterface $adapter
+     * @param  \GMP             $x
      * @return number
      *
      * @link https://www.openssl.org/docs/crypto/BN_num_bytes.html
      */
-    public static function bnNumBits(MathAdapterInterface $adapter, $x)
+    public static function bnNumBits(GmpMathInterface $adapter, \GMP $x)
     {
-        if ($adapter->cmp($x, '0') == 0) {
+        if ($adapter->cmp($x, gmp_init('0', 10)) == 0) {
             return 0;
         }
 

@@ -26,7 +26,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  * ***********************************************************************
  */
 
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Primitives\PointInterface;
@@ -56,20 +56,20 @@ class PublicKey implements PublicKeyInterface
 
     /**
      *
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     protected $adapter;
 
     /**
      * Initialize a new instance.
      *
-     * @param  MathAdapterInterface $adapter
+     * @param  GmpMathInterface $adapter
      * @param  GeneratorPoint       $generator
      * @param  PointInterface       $point
      * @throws \LogicException
      * @throws \RuntimeException
      */
-    public function __construct(MathAdapterInterface $adapter, GeneratorPoint $generator, PointInterface $point)
+    public function __construct(GmpMathInterface $adapter, GeneratorPoint $generator, PointInterface $point)
     {
         $this->curve = $generator->getCurve();
         $this->generator = $generator;
@@ -86,8 +86,8 @@ class PublicKey implements PublicKeyInterface
             throw new \RuntimeException("Generator point order is bad.");
         }
 
-        if ($adapter->cmp($point->getX(), 0) < 0 || $adapter->cmp($n, $point->getX()) <= 0
-            || $adapter->cmp($point->getY(), 0) < 0 || $adapter->cmp($n, $point->getY()) <= 0
+        if ($adapter->cmp($point->getX(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getX()) <= 0
+            || $adapter->cmp($point->getY(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getY()) <= 0
         ) {
             throw new \RuntimeException("Generator point has x and y out of range.");
         }

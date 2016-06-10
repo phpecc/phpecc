@@ -3,7 +3,7 @@
 namespace Mdanter\Ecc\Serializer\PublicKey;
 
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Serializer\PublicKey\Der\Formatter;
 use Mdanter\Ecc\Serializer\PublicKey\Der\Parser;
@@ -19,7 +19,7 @@ class DerPublicKeySerializer implements PublicKeySerializerInterface
 
     /**
      *
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
@@ -37,9 +37,9 @@ class DerPublicKeySerializer implements PublicKeySerializerInterface
 
     /**
      *
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface $adapter
      */
-    public function __construct(MathAdapterInterface $adapter = null)
+    public function __construct(GmpMathInterface $adapter = null)
     {
         $this->adapter = $adapter ?: MathAdapterFactory::getAdapter();
 

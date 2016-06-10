@@ -5,71 +5,71 @@ namespace Mdanter\Ecc\Math;
 class ModularArithmetic
 {
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
     /**
-     * @var
+     * @var \GMP
      */
     private $modulus;
 
     /**
-     * @param MathAdapterInterface $adapter
-     * @param $modulus
+     * @param GmpMathInterface $adapter
+     * @param \GMP $modulus
      */
-    public function __construct(MathAdapterInterface $adapter, $modulus)
+    public function __construct(GmpMathInterface $adapter, \GMP $modulus)
     {
         $this->adapter = $adapter;
         $this->modulus = $modulus;
     }
 
     /**
-     * @param $augend
-     * @param $addend
-     * @return int|string
+     * @param \GMP $augend
+     * @param \GMP$addend
+     * @return \GMP
      */
-    public function add($augend, $addend)
+    public function add(\GMP $augend, \GMP $addend)
     {
         return $this->adapter->mod($this->adapter->add($augend, $addend), $this->modulus);
     }
 
     /**
-     * @param $minuend
-     * @param $subtrahend
-     * @return int|string
+     * @param \GMP $minuend
+     * @param \GMP $subtrahend
+     * @return \GMP
      */
-    public function sub($minuend, $subtrahend)
+    public function sub(\GMP$minuend, \GMP $subtrahend)
     {
         return $this->adapter->mod($this->adapter->sub($minuend, $subtrahend), $this->modulus);
     }
 
     /**
-     * @param $multiplier
-     * @param $muliplicand
-     * @return int|string
+     * @param \GMP $multiplier
+     * @param \GMP $muliplicand
+     * @return \GMP
      */
-    public function mul($multiplier, $muliplicand)
+    public function mul(\GMP$multiplier, \GMP $muliplicand)
     {
         return $this->adapter->mod($this->adapter->mul($multiplier, $muliplicand), $this->modulus);
     }
 
     /**
-     * @param $dividend
-     * @param $divisor
-     * @return int|string
+     * @param \GMP $dividend
+     * @param \GMP $divisor
+     * @return \GMP
      */
-    public function div($dividend, $divisor)
+    public function div(\GMP $dividend, \GMP $divisor)
     {
         return $this->adapter->mod($this->adapter->mul($dividend, $this->adapter->inverseMod($divisor, $this->modulus)), $this->modulus);
     }
 
     /**
-     * @param $base
-     * @param $exponent
-     * @return mixed
+     * @param \GMP $base
+     * @param \GMP $exponent
+     * @return \GMP
      */
-    public function pow($base, $exponent)
+    public function pow(\GMP $base, \GMP $exponent)
     {
         return $this->adapter->powmod($base, $exponent, $this->modulus);
     }

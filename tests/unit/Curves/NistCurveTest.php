@@ -2,6 +2,8 @@
 
 namespace Mdanter\Ecc\Tests;
 
+
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Crypto\Signature\Signature;
@@ -15,25 +17,25 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getAdapters
      * @testdox Test 192-bit generated curves against ANSI X9.62 specifications
      */
-    public function testP192CurveAnsiX962ValidityTest(MathAdapterInterface $math)
+    public function testP192CurveAnsiX962ValidityTest(GmpMathInterface $math)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
 
-        $d = '651056770906015076056810763456358567190100156695615665659';
+        $d = gmp_init('651056770906015076056810763456358567190100156695615665659', 10);
         $Q = $generator->mul($d);
 
         $this->assertEquals($math->hexDec('0x62B12D60690CDCF330BABAB6E69763B471F994DD702D16A5'), $Q->getX());
 
-        $k = '6140507067065001063065065565667405560006161556565665656654';
+        $k = gmp_init('6140507067065001063065065565667405560006161556565665656654', 10);
         $R = $generator->mul($k);
         $expected = EccFactory::getNistCurves($math)->curve192()->getPoint(
-            $math->hexDec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD'),
-            $math->hexDec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835'));
+            gmp_init('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD', 16),
+            gmp_init('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835', 16));
 
         $this->assertTrue($expected->equals($R));
 
-        $u1 = '2563697409189434185194736134579731015366492496392189760599';
-        $u2 = '6266643813348617967186477710235785849136406323338782220568';
+        $u1 = gmp_init('2563697409189434185194736134579731015366492496392189760599', 10);
+        $u2 = gmp_init('6266643813348617967186477710235785849136406323338782220568', 10);
 
         $temp = $generator->mul($u1)->add($Q->mul($u2));
 
@@ -75,10 +77,10 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getB22Params
      * @testdox Test 192-bit generated curve points against ECDSAVS section B2.2 samples
      */
-    public function testP192CurveEcdsavsB22PointValidityTest(MathAdapterInterface $math, $x, $y, $expected)
+    public function testP192CurveEcdsavsB22PointValidityTest(GmpMathInterface $math, $x, $y, $expected)
     {
-        $x = $math->hexDec($x);
-        $y = $math->hexDec($y);
+        $x = gmp_init($x, 16);
+        $y = gmp_init($y, 16);
 
         $generator = EccFactory::getNistCurves($math)->generator192();
 
@@ -186,13 +188,13 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getB24Params
      * @testdox Test 192-bit generated curve points against ECDSAVS section B2.4 samples
      */
-    public function testP192CurveEcdsavsB24SignatureValidityTest(MathAdapterInterface $math, $msg, $Qx, $Qy, $R, $S, $expected)
+    public function testP192CurveEcdsavsB24SignatureValidityTest(GmpMathInterface $math, $msg, $Qx, $Qy, $R, $S, $expected)
     {
-        $msg = $math->hexDec($msg);
-        $Qx = $math->hexDec($Qx);
-        $Qy = $math->hexDec($Qy);
-        $R = $math->hexDec($R);
-        $S = $math->hexDec($S);
+        $msg = gmp_init($msg, 16);
+        $Qx = gmp_init($Qx, 16);
+        $Qy = gmp_init($Qy, 16);
+        $R = gmp_init($R, 16);
+        $S = gmp_init($S, 16);
 
         $generator = EccFactory::getNistCurves($math)->generator192();
 
@@ -220,7 +222,7 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getSignatureValidityAdapters
      * @testdox Valid hashes are correctly validated.
      */
-    public function testSignatureValidityWithCorrectHash(MathAdapterInterface $math, array $values)
+    public function testSignatureValidityWithCorrectHash(GmpMathInterface $math, array $values)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
 
@@ -240,7 +242,7 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getSignatureValidityAdapters
      * @testdox Forged hashes are correctly rejected.
      */
-    public function testSignatureValidityWithForgedHash(MathAdapterInterface $math, array $values)
+    public function testSignatureValidityWithForgedHash(GmpMathInterface $math, array $values)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
 
@@ -268,7 +270,7 @@ class NistCurveTest extends AbstractTestCase
     /**
      * @dataProvider getAdaptersWithRand
      */
-    public function testSignatureValidityWithGeneratedKeys(MathAdapterInterface $math, RandomNumberGeneratorInterface $rng)
+    public function testSignatureValidityWithGeneratedKeys(GmpMathInterface $math, RandomNumberGeneratorInterface $rng)
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
 
@@ -289,7 +291,7 @@ class NistCurveTest extends AbstractTestCase
      * @dataProvider getAdaptersWithRand
      * @testdox Test Diffie-Hellman key exchange and message encryption/decryption
      */
-    public function testDiffieHellman(MathAdapterInterface $math, RandomNumberGeneratorInterface $rng)
+    public function testDiffieHellman(GmpMathInterface $math, RandomNumberGeneratorInterface $rng)
     {
         $generator = EccFactory::getNistCurves($math)->generator192($rng);
         $alicePrivKey = $generator->createPrivateKey();

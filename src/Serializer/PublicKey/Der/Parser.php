@@ -4,7 +4,7 @@ namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 
 use FG\ASN1\Object;
 use FG\ASN1\Universal\Sequence;
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
@@ -19,7 +19,7 @@ class Parser
 
     private $pointSerializer;
 
-    public function __construct(MathAdapterInterface $adapter, PointSerializerInterface $pointSerializer = null)
+    public function __construct(GmpMathInterface $adapter, PointSerializerInterface $pointSerializer = null)
     {
         $this->adapter = $adapter;
         $this->pointSerializer = $pointSerializer ?: new UncompressedPointSerializer($adapter);
