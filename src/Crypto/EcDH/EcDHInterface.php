@@ -27,8 +27,6 @@ namespace Mdanter\Ecc\Crypto\EcDH;
  */
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
-use Mdanter\Ecc\Message\EncryptedMessage;
-use Mdanter\Ecc\Message\Message;
 
 /**
  * This is the contract for implementing EcDH (EC Diffie Hellman).
@@ -63,37 +61,4 @@ interface EcDHInterface
      */
     public function setRecipientKey(PublicKeyInterface $key);
 
-    /**
-     * Generates an encrypted version of the given text, that can be decoded by the other
-     * party.
-     *
-     * @param \Mdanter\Ecc\Message\Message $message
-     * @return \Mdanter\Ecc\Message\EncryptedMessage
-     */
-    public function encrypt(Message $message);
-
-    /**
-     * Decrypts a string that was encrypted by the other party.
-     *
-     * @param \Mdanter\Ecc\Message\EncryptedMessage $ciphertext The encrypted message.
-     * @return Message
-     */
-    public function decrypt(EncryptedMessage $ciphertext);
-
-    /**
-     * Generates an encrypted version of the given file, that can be decoded by the other
-     * party.
-     *
-     * @param  string $path
-     * @return \Mdanter\Ecc\Message\EncryptedMessage
-     */
-    public function encryptFile($path);
-
-    /**
-     * Decrypts a file that was encrypted by the other party.
-     *
-     * @param  string $path
-     * @return \Mdanter\Ecc\Message\Message
-     */
-    public function decryptFile($path);
 }
