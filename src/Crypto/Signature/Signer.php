@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Crypto\Signature;
 
+use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
@@ -32,8 +33,12 @@ class Signer
      * @param \GMP $hash
      * @return \GMP
      */
-    public function truncateHash(GeneratorPoint $G, \GMP $hash)
+    public function truncateHash(GeneratorPoint $G, $hash)
     {
+        if (!GmpMath::checkGmpValue($hash)) {
+            throw new \InvalidArgumentException('Invalid argument #1 to Signer::truncateHash - must pass GMP resource or \GMP instance');
+        }
+
         $dec = $this->adapter->toString($hash);
         $hexSize = strlen($this->adapter->decHex($dec));
         $hashBits = $this->adapter->baseConvert($dec, 10, 2);
@@ -67,8 +72,16 @@ class Signer
      * @param \GMP $randomK
      * @return Signature
      */
-    public function sign(PrivateKeyInterface $key, \GMP $hash, \GMP $randomK)
+    public function sign(PrivateKeyInterface $key, $hash, $randomK)
     {
+        if (!GmpMath::checkGmpValue($hash)) {
+            throw new \InvalidArgumentException('Invalid argument #2 to Signer::sign - must pass GMP resource or \GMP instance');
+        }
+
+        if (!GmpMath::checkGmpValue($randomK)) {
+            throw new \InvalidArgumentException('Invalid argument #3 to Signer::sign - must pass GMP resource or \GMP instance');
+        }
+
         $math = $this->adapter;
         $generator = $key->getPoint();
         $modMath = $math->getModularArithmetic($generator->getOrder());
@@ -98,6 +111,10 @@ class Signer
      */
     public function verify(PublicKeyInterface $key, SignatureInterface $signature, $hash)
     {
+        if (!GmpMath::checkGmpValue($hash)) {
+            throw new \InvalidArgumentException('Invalid argument #3 to Signer::verify - must pass GMP resource or \GMP instance');
+        }
+
         $generator = $key->getGenerator();
         $n = $generator->getOrder();
         $point = $key->getPoint();
@@ -121,6 +138,6 @@ class Signer
         $xy = $generator->mul($u1)->add($point->mul($u2));
         $v = $math->mod($xy->getX(), $n);
 
-        return BinaryString::constantTimeCompare(gmp_strval($v, 10), gmp_strval($r, 10));
+        return BinaryString::constantTimeCompare($math->toString($v), $math->toString($r));
     }
 }

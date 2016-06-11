@@ -23,6 +23,7 @@ OTHER DEALINGS IN THE SOFTWARE.
  *************************************************************************/
 namespace Mdanter\Ecc\Primitives;
 
+use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\ModularArithmetic;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
@@ -82,14 +83,14 @@ class CurveFp implements CurveFpInterface
      */
     public function getInfinity()
     {
-        return new Point($this->adapter, $this, gmp_init(0, 10), gmp_init(0, 0), gmp_init(0, 10), true);
+        return new Point($this->adapter, $this, gmp_init(0, 10), gmp_init(0, 10), null, true);
     }
 
     /**
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getPoint()
      */
-    public function getPoint(\GMP $x, \GMP $y, \GMP  $order = null)
+    public function getPoint($x, $y, $order = null)
     {
         return new Point($this->adapter, $this, $x, $y, $order);
     }
@@ -98,7 +99,7 @@ class CurveFp implements CurveFpInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getGenerator()
      */
-    public function getGenerator(\GMP $x, \GMP $y, \GMP $order = null, RandomNumberGeneratorInterface $randomGenerator = null)
+    public function getGenerator($x, $y, $order = null, RandomNumberGeneratorInterface $randomGenerator = null)
     {
         return new GeneratorPoint($this->adapter, $this, $x, $y, $order, $randomGenerator);
     }
@@ -107,8 +108,16 @@ class CurveFp implements CurveFpInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::contains()
      */
-    public function contains(\GMP $x, \GMP $y)
+    public function contains($x, $y)
     {
+        if (!GmpMath::checkGmpValue($x)) {
+            throw new \InvalidArgumentException('Invalid argument #1 to CurveFp::contains() - must pass GMP resource or \GMP instance');
+        }
+
+        if (!GmpMath::checkGmpValue($y)) {
+            throw new \InvalidArgumentException('Invalid argument #2 to CurveFp::contains() - must pass GMP resource or \GMP instance');
+        }
+
         $math = $this->adapter;
 
         $eq_zero = $math->cmp($math->mod($math->sub($math->pow($y, 2), $math->add($math->add($math->pow($x, 3), $math->mul($this->getA(), $x)), $this->getB())), $this->getPrime()), gmp_init(0, 10));

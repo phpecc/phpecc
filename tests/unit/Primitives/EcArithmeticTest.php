@@ -12,20 +12,13 @@ class EcArithmeticTest extends AbstractTestCase
 {
     private function add(GmpMathInterface $math, CurveFpInterface $c, $x1, $y1, $x2, $y2, $x3, $y3)
     {
-        $x1 = gmp_init($x1);
-        $y1 = gmp_init($y1);
-        $x2 = gmp_init($x2);
-        $y2 = gmp_init($y2);
-        $x3 = gmp_init($x3);
-        $y3 = gmp_init($y3);
-
-        $p1 = $c->getPoint($x1, $y1);
-        $p2 = $c->getPoint($x2, $y2);
+        $p1 = $c->getPoint(gmp_init($x1, 10), gmp_init($y1, 10));
+        $p2 = $c->getPoint(gmp_init($x2, 10), gmp_init($y2, 10));
 
         $p3 = $p1->add($p2);
 
-        $this->assertEquals($math->mod($p3->getX(), gmp_init(23, 10)), $x3);
-        $this->assertEquals($math->mod($p3->getY(), gmp_init(23, 10)), $y3);
+        $this->assertEquals($x3, $math->toString($math->mod($p3->getX(), gmp_init(23, 10))));
+        $this->assertEquals($y3, $math->toString($math->mod($p3->getY(), gmp_init(23, 10))));
     }
 
     /**
@@ -57,7 +50,7 @@ class EcArithmeticTest extends AbstractTestCase
         $p3a = $p1->add($p2);
         $p4a = $p2->add($p1);
 
-        $this->assertTrue($p3a == $p4a);
+        $this->assertTrue($p3a->equals($p4a));
 
         $c = new CurveFp($parameters, $math);
         $g = $c->getPoint(gmp_init(13, 10), gmp_init(7, 10), gmp_init(7, 10));
@@ -67,7 +60,7 @@ class EcArithmeticTest extends AbstractTestCase
             $a = $check->add($g);
             $b = $g->add($check);
 
-            $this->assertTrue($a == $b, "$a == $b ? with $check and $g");
+            $this->assertTrue($a->equals($b), "$a == $b ? with $check and $g");
 
             $check = $a;
         }
@@ -82,17 +75,17 @@ class EcArithmeticTest extends AbstractTestCase
         $parameters = new CurveParameters(32, gmp_init(23, 10), gmp_init(1, 10), gmp_init(1, 10));
         $c = new CurveFp($parameters, $math);
 
-        $x1 = gmp_init(3, 10);
-        $y1 = gmp_init(10, 10);
-        $x3 = gmp_init(7, 10);
-        $y3 = gmp_init(12, 10);
+        $x1 = 3;
+        $y1 = 10;
+        $x3 = 7;
+        $y3 = 12;
 
         // expect that on curve c, (x1, y1) + (x2, y2) = (x3, y3)
-        $p1 = $c->getPoint($x1, $y1);
+        $p1 = $c->getPoint(gmp_init($x1, 10), gmp_init($y1, 10));
         $p3 = $p1->getDouble();
 
-        $this->assertEquals($math->mod($p3->getX(), gmp_init(23, 10)), $x3);
-        $this->assertEquals($math->mod($p3->getY(), gmp_init(23, 10)), $y3);
+        $this->assertEquals($x3, $math->toString($math->mod($p3->getX(), gmp_init(23, 10))));
+        $this->assertEquals($y3, $math->toString($math->mod($p3->getY(), gmp_init(23, 10))));
     }
 
     /**
@@ -116,18 +109,18 @@ class EcArithmeticTest extends AbstractTestCase
         $parameters = new CurveParameters(32, gmp_init(23, 10), gmp_init(1, 10), gmp_init(1, 10));
         $c = new CurveFp($parameters, $math);
 
-        $x1 = gmp_init(3);
-        $y1 = gmp_init(10);
+        $x1 = 3;
+        $y1 = 10;
         $m = gmp_init(2);
-        $x3 = gmp_init(7);
-        $y3 = gmp_init(12);
+        $x3 = 7;
+        $y3 = 12;
 
-        $p1 = $c->getPoint($x1, $y1);
+        $p1 = $c->getPoint(gmp_init($x1, 10), gmp_init($y1, 10));
         $p3 = $p1->mul($m);
 
         $this->assertFalse($p3->isInfinity());
-        $this->assertEquals($x3, $math->mod($p3->getX(), gmp_init(23, 10)));
-        $this->assertEquals($y3, $math->mod($p3->getY(), gmp_init(23, 10)));
+        $this->assertEquals($x3, $math->toString($math->mod($p3->getX(), gmp_init(23, 10))));
+        $this->assertEquals($y3, $math->toString($math->mod($p3->getY(), gmp_init(23, 10))));
     }
 
     public function getMultAdapters()
@@ -199,9 +192,7 @@ class EcArithmeticTest extends AbstractTestCase
         for ($i = 0; $i < 8; $i++) {
             $mul = gmp_init($i % 7, 10);
             $p = $g->mul($mul);
-
-            $this->assertTrue($check->equals($p), "$g * $mul = $p, expected $check");
-
+            $this->assertTrue($check->equals($p), "$g * $p, expected $check  ");
             $check = $g->add($check);
         }
     }

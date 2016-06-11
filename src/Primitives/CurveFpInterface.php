@@ -45,12 +45,12 @@ interface CurveFpInterface
     /**
      * Returns the point identified by given coordinates.
      *
-     * @param  \GMP $x
-     * @param  \GMP $y
-     * @param  \GMP $order
+     * @param  resource|\GMP $x
+     * @param  resource|\GMP $y
+     * @param  resource|\GMP $order
      * @return PointInterface
      */
-    public function getPoint(\GMP $x, \GMP $y, \GMP $order = null);
+    public function getPoint($x, $y, $order = null);
 
     /**
      * Returns a point representing infinity on the curve.
@@ -61,41 +61,41 @@ interface CurveFpInterface
 
     /**
      *
-     * @param  \GMP                           $x
-     * @param  \GMP                           $y
-     * @param  \GMP                           $order
+     * @param  resource|\GMP $x
+     * @param  resource|\GMP $y
+     * @param  resource|\GMP $order
      * @param  RandomNumberGeneratorInterface $randomGenerator
      * @return GeneratorPoint
      */
-    public function getGenerator(\GMP $x, \GMP $y, \GMP $order = null, RandomNumberGeneratorInterface $randomGenerator = null);
+    public function getGenerator($x, $y, $order = null, RandomNumberGeneratorInterface $randomGenerator = null);
 
     /**
      * Checks whether the curve contains the given coordinates.
      *
-     * @param  \GMP $x
-     * @param  \GMP $y
+     * @param  resource|\GMP $x
+     * @param  resource|\GMP $y
      * @return bool
      */
-    public function contains(\GMP $x, \GMP $y);
+    public function contains($x, $y);
 
     /**
      * Returns the a parameter of the curve.
      *
-     * @return \GMP
+     * @return resource|\GMP
      */
     public function getA();
 
     /**
      * Returns the b parameter of the curve.
      *
-     * @return \GMP
+     * @return resource|\GMP
      */
     public function getB();
 
     /**
      * Returns the prime associated with the curve.
      *
-     * @return \GMP
+     * @return resource|\GMP
      */
     public function getPrime();
 

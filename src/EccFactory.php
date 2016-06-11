@@ -7,7 +7,6 @@ use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Primitives\CurveFp;
 use Mdanter\Ecc\Primitives\CurveParameters;
 

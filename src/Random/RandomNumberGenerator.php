@@ -22,10 +22,10 @@ class RandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @param \GMP $max
+     * @param resource|\GMP $max
      * @return int
      */
-    public function generate(\GMP $max)
+    public function generate($max)
     {
         $numBits = NumberSize::bnNumBits($this->adapter, $max);
         $numBytes = ceil($numBits / 8);

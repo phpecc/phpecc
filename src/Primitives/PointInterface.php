@@ -72,10 +72,10 @@ interface PointInterface
     /**
      * Multiplies the point by a scalar value and returns the resulting point.
      *
-     * @param  \GMP $multiplier
+     * @param  resource|\GMP $multiplier
      * @return PointInterface
      */
-    public function mul(\GMP $multiplier);
+    public function mul($multiplier);
 
     /**
      * Returns the curve to which the point belongs.

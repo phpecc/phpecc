@@ -44,17 +44,17 @@ class PointTest extends AbstractTestCase
 
         $point->cswapValue($a, $b, false);
 
-        $this->assertEquals($aa, $a);
-        $this->assertEquals($ab, $b);
+        $this->assertEquals($adapter->toString($aa), $adapter->toString($a));
+        $this->assertEquals($adapter->toString($ab), $adapter->toString($b));
 
         $point->cswapValue($a, $b, true);
 
-        $this->assertEquals($aa, $b);
-        $this->assertEquals($ab, $a);
+        $this->assertEquals($adapter->toString($aa), $adapter->toString($b));
+        $this->assertEquals($adapter->toString($ab), $adapter->toString($a));
 
         $point->cswapValue($a, $b, false);
 
-        $this->assertEquals($aa, $b);
-        $this->assertEquals($ab, $a);
+        $this->assertEquals($adapter->toString($aa), $adapter->toString($b));
+        $this->assertEquals($adapter->toString($ab), $adapter->toString($a));
     }
 }

@@ -37,8 +37,8 @@ class EcDhMultiPartyTest extends AbstractTestCase
         // Bob computes (g^{ca})^b = g^{cab} = g^{abc} and uses it as his secret.
         $bobSharedKey = $bobX->calculateSharedKey();
 
-        $this->assertTrue($bobSharedKey == $aliceSharedKey);
-        $this->assertTrue($aliceSharedKey == $carolSharedKey);
-        $this->assertTrue($carolSharedKey == $bobSharedKey);
+        $this->assertTrue($adapter->equals($bobSharedKey, $aliceSharedKey));
+        $this->assertTrue($adapter->equals($aliceSharedKey, $carolSharedKey));
+        $this->assertTrue($adapter->equals($carolSharedKey, $bobSharedKey));
     }
 }

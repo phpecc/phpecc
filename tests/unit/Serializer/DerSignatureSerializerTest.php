@@ -37,6 +37,7 @@ class DerSignatureSerializerTest extends AbstractTestCase
         $serialized = $serializer->serialize($signature);
         $parsed = $serializer->parse($serialized);
 
-        $this->assertEquals($signature, $parsed);
+        $this->assertTrue($math->equals($signature->getR(), $parsed->getR()));
+        $this->assertTrue($math->equals($signature->getS(), $parsed->getS()));
     }
 }

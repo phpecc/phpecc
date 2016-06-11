@@ -5,7 +5,6 @@ namespace Mdanter\Ecc\Tests\Math;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\NumberTheory;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class NumberTheoryTest extends AbstractTestCase
@@ -113,11 +112,11 @@ class NumberTheoryTest extends AbstractTestCase
                     );
 
             if ($y_byte == '02') {
-                $y_coordinate = ($adapter->mod($y0, gmp_init(2, 10)) == '0')
+                $y_coordinate = ($adapter->equals($adapter->mod($y0, gmp_init(2, 10)), gmp_init('0')))
                     ? gmp_strval($y0, 16)
                     : gmp_strval(gmp_sub($this->generator->getCurve()->getPrime(), $y0), 16);
             } else {
-                $y_coordinate = ($adapter->mod($y0, gmp_init(2, 10)) == '0')
+                $y_coordinate = ($adapter->equals($adapter->mod($y0, gmp_init(2, 10)), gmp_init('0')))
                     ? gmp_strval(gmp_sub($this->generator->getCurve()->getPrime(), $y0), 16)
                     : gmp_strval($y0, 16);
             }
@@ -146,7 +145,7 @@ class NumberTheoryTest extends AbstractTestCase
 
             // y % 2 == 0       - true: y is even(02) / false: y is odd(03)
             $mod = $math->mod(gmp_init($y, 16), gmp_init(2, 10));
-            $compressed = '0'.(($mod == 0) ? '2' : '3').$x;
+            $compressed = '0'.(($math->equals($mod, gmp_init(0))) ? '2' : '3').$x;
 
             // Check that the mod function reported the parity for the y value.
             $this->assertTrue($compressed === $o->compressed);

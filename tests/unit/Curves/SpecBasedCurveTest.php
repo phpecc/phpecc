@@ -184,7 +184,7 @@ class SpecBasedCurveTest extends AbstractTestCase
         // R and S should be correct
         $sR = $math->hexDec($eR);
         $sS = $math->hexDec($eS);
-        $this->assertSame($sR, gmp_strval($sig->getR(), 10), "r $sR == ".$sig->getR());
-        $this->assertSame($sS, gmp_strval($sig->getS(), 10), "s $sR == " . $sig->getS());
+        $this->assertSame($sR, $math->toString($sig->getR()));
+        $this->assertSame($sS, $math->toString($sig->getS()));
     }
 }

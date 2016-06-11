@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc\Random;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
+use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Util\NumberSize;
 
@@ -46,8 +47,12 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      * @param \GMP $messageHash - decimal hash of the message (*may* be truncated)
      * @param string $algorithm - hashing algorithm
      */
-    public function __construct(GmpMathInterface $math, PrivateKeyInterface $privateKey, \GMP $messageHash, $algorithm)
+    public function __construct(GmpMathInterface $math, PrivateKeyInterface $privateKey, $messageHash, $algorithm)
     {
+        if (!GmpMath::checkGmpValue($messageHash)) {
+            throw new \InvalidArgumentException('Invalid argument #3 to HmacRandomNumberGenerator constructor - must pass GMP resource or \GMP instance');
+        }
+
         if (!isset($this->algSize[$algorithm])) {
             throw new \InvalidArgumentException('Unsupported hashing algorithm');
         }
@@ -60,10 +65,10 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
     /**
      * @param string $bits - binary string of bits
-     * @param int $qlen - length of q in bits
+     * @param resource|\GMP $qlen - length of q in bits
      * @return \GMP
      */
-    public function bits2int($bits, \GMP $qlen)
+    public function bits2int($bits, $qlen)
     {
         $vlen = gmp_init(strlen($bits) * 8, 10);
         $hex = bin2hex($bits);
@@ -78,12 +83,12 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
     /**
      * @param string $bits - a byte string
-     * @param \GMP $q - generator order
-     * @param $qlen - length of q in bits
-     * @param $rlen - rounded octet length
+     * @param resource|\GMP $q - generator order
+     * @param resource|\GMP $qlen - length of q in bits
+     * @param resource|\GMP $rlen - rounded octet length
      * @return string
      */
-    public function bits2octets($bits, \GMP $q, \GMP $qlen, \GMP $rlen)
+    public function bits2octets($bits, $q, $qlen, $rlen)
     {
         $z1 = $this->bits2int($bits, $qlen);
         $z2 = $this->math->sub($z1, $q);
@@ -95,11 +100,11 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @param \GMP $int
-     * @param \GMP $rlen - rounded octet length
+     * @param resource|\GMP $int
+     * @param resource|\GMP $rlen - rounded octet length
      * @return string
      */
-    public function int2octets(\GMP $int, \GMP $rlen)
+    public function int2octets($int, $rlen)
     {
         $out = pack("H*", $this->math->decHex(gmp_strval($int, 10)));
         $length = gmp_init(strlen($out), 10);
@@ -124,11 +129,15 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @param \GMP $q
+     * @param resource|\GMP $q
      * @return int|string
      */
-    public function generate(\GMP $q)
+    public function generate($q)
     {
+        if (!GmpMath::checkGmpValue($q)) {
+            throw new \InvalidArgumentException('Invalid argument #3 to HmacRandomNumberGenerator::generate - must pass GMP resource or \GMP instance');
+        }
+
         $qlen = gmp_init(NumberSize::bnNumBits($this->math, $q), 10);
         $rlen = $this->math->rightShift($this->math->add($qlen, gmp_init(7, 10)), 3);
         $hlen = $this->getHashLength($this->algorithm);
@@ -145,13 +154,13 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
         $t = '';
         for (;;) {
-            $toff = 0;
-            while ($toff < $rlen) {
+            $toff = gmp_init(0, 10);
+            while ($this->math->cmp($toff, $rlen) < 0) {
                 $v = hash_hmac($this->algorithm, $v, $k, true);
 
                 $cc = min(strlen($v), gmp_strval(gmp_sub($rlen, $toff), 10));
                 $t .= substr($v, 0, $cc);
-                $toff += $cc;
+                $toff = gmp_add($toff, $cc);
             }
 
             $k = $this->bits2int($t, $qlen);

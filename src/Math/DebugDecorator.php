@@ -88,6 +88,26 @@ class DebugDecorator implements GmpMathInterface
         );
     }
 
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\GmpMathInterface::cmp()
+     */
+    public function equals(\GMP $first, \GMP $other)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(
+            array(
+                $this,
+                'call',
+            ),
+            $func,
+            $args
+        );
+    }
+
     /**
      * {@inheritDoc}
      * @see \Mdanter\Ecc\GmpMathInterface::mod()
@@ -367,7 +387,7 @@ class DebugDecorator implements GmpMathInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\GmpMathInterface::intToString()
      */
-    public function intToString($x)
+    public function intToString(\GMP $x)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -405,7 +425,7 @@ class DebugDecorator implements GmpMathInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\GmpMathInterface::digestInteger()
      */
-    public function digestInteger($m)
+    public function digestInteger(\GMP $m)
     {
         $func = __METHOD__;
         $args = func_get_args();

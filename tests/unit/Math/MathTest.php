@@ -2,8 +2,8 @@
 
 namespace Mdanter\Ecc\Tests\Math;
 
+use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class MathTest extends AbstractTestCase
@@ -53,6 +53,7 @@ class MathTest extends AbstractTestCase
 
     /**
      * @dataProvider getAdapters
+     * @param GmpMathInterface $adapter
      */
     public function testDecHex(GmpMathInterface $adapter)
     {
@@ -64,6 +65,7 @@ class MathTest extends AbstractTestCase
 
     /**
      * @dataProvider getAdapters
+     * @param GmpMathInterface $adapter
      */
     public function testHexDec(GmpMathInterface $adapter)
     {
@@ -75,6 +77,7 @@ class MathTest extends AbstractTestCase
 
     /**
      * @dataProvider getAdapters
+     * @param GmpMathInterface $math
      */
     public function testStrictIntegerReturnValues(GmpMathInterface $math)
     {
@@ -82,28 +85,28 @@ class MathTest extends AbstractTestCase
         $y = gmp_init(4, 10);
 
         $mod = $math->mod($x, $y);
-        $this->assertTrue(is_resource($mod) && get_resource_type($mod) === 'gmp'|| is_object($mod) && $mod instanceof \GMP);
+        $this->assertTrue(GmpMath::checkGmpValue($mod));
 
         $add = $math->add($x, $y);
-        $this->assertTrue(is_resource($add) && get_resource_type($add) === 'gmp'|| is_object($add) && $add instanceof \GMP);
+        $this->assertTrue(GmpMath::checkGmpValue($add));
 
         $sub = $math->sub($add, $y);
-        $this->assertTrue(is_resource($sub) && get_resource_type($sub) === 'gmp'|| is_object($sub) && $sub instanceof \GMP);
+        $this->assertTrue(GmpMath::checkGmpValue($sub));
 
         $mul = $math->mul($x, $y);
-        $this->assertTrue(is_resource($mul) && get_resource_type($mul) === 'gmp'|| is_object($mul) && $mul instanceof \GMP);
+        $this->assertTrue(GmpMath::checkGmpValue($sub));
 
         $div = $math->div($mul, $y);
-        $this->assertTrue(is_resource($div) && get_resource_type($div) === 'gmp'|| is_object($div) && $div instanceof \GMP);
+        $this->assertTrue(GmpMath::checkGmpValue($div));
 
         $pow = $math->pow($x, 4);
-        $this->assertTrue(is_resource($pow) && get_resource_type($pow) === 'gmp'|| is_object($pow) && $pow instanceof \GMP);
+        $this->assertTrue(GmpMath::checkGmpValue($pow));
 
         $powmod = $math->powmod($x, $y, $y);
-        $this->assertTrue(is_resource($powmod) && get_resource_type($powmod) === 'gmp'|| is_object($powmod) && $powmod instanceof \GMP);
+        $this->assertTrue(GmpMath::checkGmpValue($powmod));
 
         $bitwiseand = $math->bitwiseAnd($x, $y);
-        $this->assertTrue(is_resource($bitwiseand) && get_resource_type($bitwiseand) === 'gmp'|| is_object($bitwiseand) && $bitwiseand instanceof \GMP);
+        $this->assertTrue(GmpMath::checkGmpValue($bitwiseand));
 
         $hexdec = $math->decHex(10);
         $this->assertTrue(is_string($hexdec));
@@ -111,8 +114,10 @@ class MathTest extends AbstractTestCase
         $dechex = $math->hexDec($hexdec);
         $this->assertTrue(is_string($dechex));
     }
+
     /**
      * @dataProvider getAdapters
+     * @param GmpMathInterface $math
      */
     public function testKnownPrimesAreCorrectlyDetected(GmpMathInterface $math)
     {
@@ -122,12 +127,13 @@ class MathTest extends AbstractTestCase
             }
 
             $prime = gmp_init($prime, 10);
-            $this->assertTrue($math->isPrime($prime), 'Prime "'.$prime.'" is not detected as prime.');
+            $this->assertTrue($math->isPrime($prime), 'Prime "'.$math->toString($prime).'" is not detected as prime.');
         }
     }
 
     /**
      * @dataProvider getAdapters
+     * @param GmpMathInterface $math
      */
     public function testGetNextPrimes(GmpMathInterface $math)
     {
@@ -144,18 +150,23 @@ class MathTest extends AbstractTestCase
 
     /**
      * @dataProvider getAdapters
+     * @param GmpMathInterface $math
      */
     public function testMultInverseModP(GmpMathInterface $math)
     {
+        $one = gmp_init(1, 10);
         for ($i = 0; $i < 100; $i ++) {
             $m = gmp_init(rand(20, 10000), 10);
 
             for ($j = 0; $j < 100; $j ++) {
                 $a = gmp_init(rand(1, gmp_strval(gmp_sub($m, 1), 10)), 10);
 
-                if ($math->gcd2($a, $m) == 1) {
+                if ($math->cmp($math->gcd2($a, $m), $one) == 0) {
                     $inv = $math->inverseMod($a, $m);
-                    $this->assertFalse($inv <= 0 || $inv >= $m || ($a * $inv) % $m != 1);
+                    $check = $math->cmp($inv, gmp_init(0)) <= 0
+                        && $math->cmp($inv, $m) >= 0
+                        && $math->cmp($math->mod($math->mul($a, $inv), $m), $one) !== 0;
+                    $this->assertFalse($check);
                 }
             }
         }

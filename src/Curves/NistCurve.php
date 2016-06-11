@@ -41,15 +41,14 @@ class NistCurve
 {
 
     const NAME_P192 = 'nist-p192';
-
     const NAME_P224 = 'nist-p224';
-
     const NAME_P256 = 'nist-p256';
-
     const NAME_P384 = 'nist-p384';
-
     const NAME_P521 = 'nist-p521';
 
+    /**
+     * @var GmpMathInterface
+     */
     private $adapter;
 
     /**
@@ -149,8 +148,10 @@ class NistCurve
     {
         $curve = $this->curve256();
         $order = gmp_init('115792089210356248762697446949407573529996955224135760342422259061068512044369', 10);
+
         $x = gmp_init('0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296', 16);
         $y = gmp_init('0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5', 16);
+
         return $curve->getGenerator($x, $y, $order, $randomGenerator);
     }
 

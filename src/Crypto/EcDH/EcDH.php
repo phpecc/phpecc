@@ -31,7 +31,6 @@ use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 
 /**
  * This class is the implementation of ECDH.

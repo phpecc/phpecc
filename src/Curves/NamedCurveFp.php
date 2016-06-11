@@ -9,14 +9,14 @@ use Mdanter\Ecc\Primitives\CurveParameters;
 class NamedCurveFp extends CurveFp
 {
     /**
-     * @var int|string
+     * @var string
      */
     private $name;
 
     /**
-     * @param int|string           $name
-     * @param CurveParameters      $parameters
-     * @param GmpMathInterface     $adapter
+     * @param string           $name
+     * @param CurveParameters  $parameters
+     * @param GmpMathInterface $adapter
      */
     public function __construct($name, CurveParameters $parameters, GmpMathInterface $adapter)
     {
@@ -26,7 +26,7 @@ class NamedCurveFp extends CurveFp
     }
 
     /**
-     * @return int|string
+     * @return string
      */
     public function getName()
     {

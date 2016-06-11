@@ -10,66 +10,70 @@ class ModularArithmetic
     private $adapter;
 
     /**
-     * @var \GMP
+     * @var resource|\GMP
      */
     private $modulus;
 
     /**
      * @param GmpMathInterface $adapter
-     * @param \GMP $modulus
+     * @param resource|\GMP $modulus
      */
-    public function __construct(GmpMathInterface $adapter, \GMP $modulus)
+    public function __construct(GmpMathInterface $adapter, $modulus)
     {
+        if (!GmpMath::checkGmpValue($modulus)) {
+            throw new \InvalidArgumentException('Invalid argument #2 to ModularArithmetic constructor - must pass GMP resource or \GMP instance');
+        }
+
         $this->adapter = $adapter;
         $this->modulus = $modulus;
     }
 
     /**
-     * @param \GMP $augend
-     * @param \GMP$addend
+     * @param resource|\GMP $augend
+     * @param resource|\GMP $addend
      * @return \GMP
      */
-    public function add(\GMP $augend, \GMP $addend)
+    public function add($augend, $addend)
     {
         return $this->adapter->mod($this->adapter->add($augend, $addend), $this->modulus);
     }
 
     /**
-     * @param \GMP $minuend
-     * @param \GMP $subtrahend
+     * @param resource|\GMP $minuend
+     * @param resource|\GMP $subtrahend
      * @return \GMP
      */
-    public function sub(\GMP$minuend, \GMP $subtrahend)
+    public function sub($minuend, $subtrahend)
     {
         return $this->adapter->mod($this->adapter->sub($minuend, $subtrahend), $this->modulus);
     }
 
     /**
-     * @param \GMP $multiplier
-     * @param \GMP $muliplicand
+     * @param resource|\GMP $multiplier
+     * @param resource|\GMP $muliplicand
      * @return \GMP
      */
-    public function mul(\GMP$multiplier, \GMP $muliplicand)
+    public function mul($multiplier, $muliplicand)
     {
         return $this->adapter->mod($this->adapter->mul($multiplier, $muliplicand), $this->modulus);
     }
 
     /**
-     * @param \GMP $dividend
-     * @param \GMP $divisor
+     * @param resource|\GMP $dividend
+     * @param resource|\GMP $divisor
      * @return \GMP
      */
-    public function div(\GMP $dividend, \GMP $divisor)
+    public function div($dividend, $divisor)
     {
         return $this->adapter->mod($this->adapter->mul($dividend, $this->adapter->inverseMod($divisor, $this->modulus)), $this->modulus);
     }
 
     /**
-     * @param \GMP $base
-     * @param \GMP $exponent
+     * @param resource|\GMP $base
+     * @param resource|\GMP $exponent
      * @return \GMP
      */
-    public function pow(\GMP $base, \GMP $exponent)
+    public function pow($base, $exponent)
     {
         return $this->adapter->powmod($base, $exponent, $this->modulus);
     }

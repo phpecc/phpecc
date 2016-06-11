@@ -11,6 +11,9 @@ use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 class PemPublicKeySerializer implements PublicKeySerializerInterface
 {
 
+    /**
+     * @var DerPublicKeySerializer
+     */
     private $derSerializer;
 
     /**

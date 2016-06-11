@@ -3,7 +3,6 @@
 namespace Mdanter\Ecc\Tests\Curves;
 
 use Mdanter\Ecc\Math\GmpMathInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Signature\Signer;
@@ -63,7 +62,7 @@ class SecCurveTest extends AbstractTestCase
      *
      * @dataProvider getAdapters
      */
-    public function testSecp256r1EquivalenceToNistP192(GmpMathInterface $adapter)
+    public function testSecp256r1EquivalenceToNistP256(GmpMathInterface $adapter)
     {
         $secpFactory = EccFactory::getSecgCurves($adapter);
         $nistFactory = EccFactory::getNistCurves($adapter);
@@ -81,7 +80,32 @@ class SecCurveTest extends AbstractTestCase
         $sigSecp = $signer->sign($secpKey, $message, $randomK);
         $sigNist = $signer->sign($nistKey, $message, $randomK);
 
-        $this->assertEquals($sigNist->getR(), $sigSecp->getR());
-        $this->assertEquals($sigNist->getS(), $sigSecp->getS());
+        $this->assertTrue($adapter->equals($sigNist->getR(), $sigSecp->getR()));
+        $this->assertTrue($adapter->equals($sigNist->getS(), $sigSecp->getS()));
+    }
+
+    /**
+     * @dataProvider getAdapters
+     */
+    public function testSecp384r1EquivalenceToNistP384(GmpMathInterface $adapter)
+    {
+        $secpFactory = EccFactory::getSecgCurves($adapter);
+        $nistFactory = EccFactory::getNistCurves($adapter);
+
+        $signer = new Signer($adapter);
+
+        $secret = gmp_init('DC51D3866A15BACDE33D96F992FCA99DA7E6EF0934E7097559C27F1614C88A7F', 16);
+
+        $secpKey = $secpFactory->generator384r1()->getPrivateKeyFrom($secret);
+        $nistKey = $nistFactory->generator384()->getPrivateKeyFrom($secret);
+
+        $randomK = RandomGeneratorFactory::getRandomGenerator()->generate($secpKey->getPoint()->getOrder());
+        $message = RandomGeneratorFactory::getRandomGenerator()->generate($secpKey->getPoint()->getOrder());
+
+        $sigSecp = $signer->sign($secpKey, $message, $randomK);
+        $sigNist = $signer->sign($nistKey, $message, $randomK);
+
+        $this->assertTrue($adapter->equals($sigNist->getR(), $sigSecp->getR()));
+        $this->assertTrue($adapter->equals($sigNist->getS(), $sigSecp->getS()));
     }
 }
