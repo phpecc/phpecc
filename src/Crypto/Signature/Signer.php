@@ -35,13 +35,13 @@ class Signer
     public function truncateHash(GeneratorPoint $G, \GMP $hash)
     {
         $dec = $this->adapter->toString($hash);
-        $hexSize = strlen($this->adapter->decHex($dec));
+        $hexSize = BinaryString::length($this->adapter->decHex($dec));
         $hashBits = $this->adapter->baseConvert($dec, 10, 2);
-        if (strlen($hashBits) < $hexSize * 4) {
+        if (BinaryString::length($hashBits) < $hexSize * 4) {
             $hashBits = str_pad($hashBits, $hexSize * 4, '0', STR_PAD_LEFT);
         }
 
-        $messageHash = gmp_init(substr($hashBits, 0, NumberSize::bnNumBits($this->adapter, $G->getOrder())), 2);
+        $messageHash = gmp_init(BinaryString::substring($hashBits, 0, NumberSize::bnNumBits($this->adapter, $G->getOrder())), 2);
         return $messageHash;
     }
 

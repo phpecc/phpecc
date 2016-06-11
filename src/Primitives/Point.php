@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\Primitives;
 use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\ModularArithmetic;
+use Mdanter\Ecc\Util\BinaryString;
 
 /**
  * *********************************************************************
@@ -312,7 +313,7 @@ class Point implements PointInterface
 
         $sa = $isGMP ? $a : gmp_init(intval($a), 10);
         $sb = $isGMP ? $b : gmp_init(intval($b), 10);
-        $size = max(strlen(gmp_strval($sa, 2)), strlen(gmp_strval($sb, 2)));
+        $size = max(BinaryString::length(gmp_strval($sa, 2)), BinaryString::length(gmp_strval($sb, 2)));
 
         $mask = 1 - intval($cond);
         $mask = str_pad('', $size, $mask, STR_PAD_LEFT);

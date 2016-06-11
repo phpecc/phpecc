@@ -11,6 +11,7 @@
 namespace Mdanter\Ecc\Serializer\Signature\Der;
 
 use FG\ASN1\Exception\ParserException;
+use FG\ASN1\ExplicitlyTaggedObject;
 use FG\ASN1\Universal\BitString;
 use FG\ASN1\Universal\Boolean;
 use FG\ASN1\Universal\Enumerated;
@@ -37,7 +38,10 @@ use FG\ASN1\Universal\T61String;
 use FG\ASN1\Universal\ObjectDescriptor;
 use FG\ASN1\Parsable;
 use FG\ASN1\Identifier;
+use FG\ASN1\UnknownConstructedObject;
+use FG\ASN1\UnknownObject;
 use LogicException;
+use Mdanter\Ecc\Util\BinaryString;
 
 /**
  * Class Object is the base class for all concrete ASN.1 objects.
@@ -164,7 +168,7 @@ abstract class BignumObjectParser implements Parsable
      */
     public function getObjectLength()
     {
-        $nrOfIdentifierOctets = strlen($this->getIdentifier());
+        $nrOfIdentifierOctets = BinaryString::length($this->getIdentifier());
         $contentLength = $this->getContentLength();
         $nrOfLengthOctets = $this->getNumberOfLengthOctets($contentLength);
 
@@ -194,7 +198,7 @@ abstract class BignumObjectParser implements Parsable
      */
     public static function fromBinary(&$binaryData, &$offsetIndex = 0)
     {
-        if (strlen($binaryData) < $offsetIndex) {
+        if (BinaryString::length($binaryData) < $offsetIndex) {
             throw new ParserException("Can not parse binary from data: Offset index larger than input size", $offsetIndex);
         }
 
