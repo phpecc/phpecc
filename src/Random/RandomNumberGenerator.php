@@ -23,7 +23,7 @@ class RandomNumberGenerator implements RandomNumberGeneratorInterface
 
     /**
      * @param resource|\GMP $max
-     * @return int
+     * @return resource|\GMP
      */
     public function generate($max)
     {

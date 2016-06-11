@@ -130,7 +130,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
     /**
      * @param resource|\GMP $q
-     * @return int|string
+     * @return resource|\GMP
      */
     public function generate($q)
     {

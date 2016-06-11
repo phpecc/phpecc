@@ -10,13 +10,13 @@ class DebugDecorator implements RandomNumberGeneratorInterface
     private $generator;
 
     /**
-     * @var
+     * @var string
      */
     private $generatorName;
 
     /**
      * @param RandomNumberGeneratorInterface $generator
-     * @param $name
+     * @param string $name
      */
     public function __construct(RandomNumberGeneratorInterface $generator, $name)
     {
@@ -25,8 +25,8 @@ class DebugDecorator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @param int|string $max
-     * @return mixed
+     * @param resource|\GMP $max
+     * @return resource|\GMP
      */
     public function generate($max)
     {
