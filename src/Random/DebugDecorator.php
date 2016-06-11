@@ -25,10 +25,10 @@ class DebugDecorator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @param resource|\GMP $max
-     * @return resource|\GMP
+     * @param \GMP $max
+     * @return \GMP
      */
-    public function generate($max)
+    public function generate(\GMP $max)
     {
         echo $this->generatorName.'::rand() = ';
 

@@ -50,7 +50,7 @@ class NumberTheory
     }
 
     /**
-     * @param $poly
+     * @param \GMP[] $poly
      * @param $polymod
      * @param $p
      * @return array
@@ -131,7 +131,7 @@ class NumberTheory
      * @param \GMP $p
      * @return array|int
      */
-    public function polynomialPowMod($base, $exponent, $polymod, $p)
+    public function polynomialPowMod($base, \GMP $exponent, $polymod, \GMP $p)
     {
         $adapter = $this->adapter;
         $zero = gmp_init(0, 10);
@@ -173,7 +173,7 @@ class NumberTheory
      * @param \GMP $p
      * @return \GMP
      */
-    public function squareRootModP($a, $p)
+    public function squareRootModP(\GMP $a, \GMP $p)
     {
         $math = $this->adapter;
         $zero = gmp_init(0, 10);

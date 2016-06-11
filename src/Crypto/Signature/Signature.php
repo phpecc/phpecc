@@ -33,33 +33,24 @@ use Mdanter\Ecc\Math\GmpMath;
 class Signature implements SignatureInterface
 {
     /**
-     *
-     * @var resource|\GMP
+     * @var \GMP
      */
     protected $r;
 
     /**
      *
-     * @var resource|\GMP
+     * @var \GMP
      */
     protected $s;
 
     /**
      * Initialize a new instance with values
      *
-     * @param resource|\GMP $r
-     * @param resource|\GMP $s
+     * @param \GMP $r
+     * @param \GMP $s
      */
-    public function __construct($r, $s)
+    public function __construct(\GMP $r, \GMP $s)
     {
-        if (!GmpMath::checkGmpValue($r)) {
-            throw new \InvalidArgumentException('Invalid argument #1 to Signature constructor - must pass GMP resource or \GMP instance');
-        }
-
-        if (!GmpMath::checkGmpValue($s)) {
-            throw new \InvalidArgumentException('Invalid argument #2 to Signature constructor - must pass GMP resource or \GMP instance');
-        }
-
         $this->r = $r;
         $this->s = $s;
     }

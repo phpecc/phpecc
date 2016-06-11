@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Crypto\Signature;
 
-use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
@@ -30,15 +29,11 @@ class Signer
 
     /**
      * @param GeneratorPoint $G
-     * @param resource|\GMP $hash
-     * @return resource|\GMP
+     * @param \GMP $hash
+     * @return \GMP
      */
-    public function truncateHash(GeneratorPoint $G, $hash)
+    public function truncateHash(GeneratorPoint $G, \GMP $hash)
     {
-        if (!GmpMath::checkGmpValue($hash)) {
-            throw new \InvalidArgumentException('Invalid argument #1 to Signer::truncateHash - must pass GMP resource or \GMP instance');
-        }
-
         $dec = $this->adapter->toString($hash);
         $hexSize = strlen($this->adapter->decHex($dec));
         $hashBits = $this->adapter->baseConvert($dec, 10, 2);
@@ -68,20 +63,12 @@ class Signer
 
     /**
      * @param PrivateKeyInterface $key
-     * @param resource|\GMP $hash
-     * @param resource|\GMP $randomK
+     * @param \GMP $hash
+     * @param \GMP $randomK
      * @return Signature
      */
-    public function sign(PrivateKeyInterface $key, $hash, $randomK)
+    public function sign(PrivateKeyInterface $key, \GMP $hash, \GMP $randomK)
     {
-        if (!GmpMath::checkGmpValue($hash)) {
-            throw new \InvalidArgumentException('Invalid argument #2 to Signer::sign - must pass GMP resource or \GMP instance');
-        }
-
-        if (!GmpMath::checkGmpValue($randomK)) {
-            throw new \InvalidArgumentException('Invalid argument #3 to Signer::sign - must pass GMP resource or \GMP instance');
-        }
-
         $math = $this->adapter;
         $generator = $key->getPoint();
         $modMath = $math->getModularArithmetic($generator->getOrder());
@@ -106,14 +93,11 @@ class Signer
     /**
      * @param PublicKeyInterface $key
      * @param SignatureInterface $signature
-     * @param resource|\GMP $hash
+     * @param \GMP $hash
      * @return bool
      */
-    public function verify(PublicKeyInterface $key, SignatureInterface $signature, $hash)
+    public function verify(PublicKeyInterface $key, SignatureInterface $signature, \GMP $hash)
     {
-        if (!GmpMath::checkGmpValue($hash)) {
-            throw new \InvalidArgumentException('Invalid argument #3 to Signer::verify - must pass GMP resource or \GMP instance');
-        }
 
         $generator = $key->getGenerator();
         $n = $generator->getOrder();
