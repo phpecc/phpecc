@@ -60,7 +60,6 @@ class NumberTheory
         $adapter = $this->adapter;
         $count_polymod = count($polymod);
         if ($adapter->equals(end($polymod), gmp_init(1)) && $count_polymod > 1) {
-
             $zero = gmp_init(0);
             while (count($poly) >= $count_polymod) {
                 if (!$adapter->equals(end($poly), $zero)) {

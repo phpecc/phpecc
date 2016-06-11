@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Math;
 
-
 class GmpMath implements GmpMathInterface
 {
     /**

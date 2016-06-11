@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests;
 
-
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Signature\Signature;
@@ -29,7 +28,8 @@ class NistCurveTest extends AbstractTestCase
         $R = $generator->mul($k);
         $expected = EccFactory::getNistCurves($math)->curve192()->getPoint(
             gmp_init('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD', 16),
-            gmp_init('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835', 16));
+            gmp_init('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835', 16)
+        );
 
         $this->assertTrue($expected->equals($R));
 
@@ -69,7 +69,11 @@ class NistCurveTest extends AbstractTestCase
                 array('0x146479d944e6bda87e5b35818aa666a4c998a71f4e95edbc',
                       '0xa86d6fe62bc8fbd88139693f842635f687f132255858e7f6', false, ),
                 array('0xe594d4a598046f3598243f50fd2c7bd7d380edb055802253',
-                      '0x509014c0c4d6b536e3ca750ec09066af39b4c8616a53a923', false, ), ));
+                '0x509014c0c4d6b536e3ca750ec09066af39b4c8616a53a923',
+                false,
+                ),
+            )
+        );
     }
 
     /**
@@ -180,7 +184,8 @@ class NistCurveTest extends AbstractTestCase
                     '0x6f4a6c906316a6afc6d98fe1f0399d056f128fe0270b0f22',
                     '0x9db679a3dafe48f7ccad122933acfe9da0970b71c94c21c1',
                     '0x984c2db99827576c0a41a5da41e07d8cc768bc82f18c9da9', false, ),
-            ));
+            )
+        );
     }
 
     /**
@@ -214,7 +219,8 @@ class NistCurveTest extends AbstractTestCase
                 'e' => '968236873715988614170569073515315707566766479517',
                 'R' => '3342403536405981729393488334694600415596881826869351677613',
                 'S' => '5735822328888155254683894997897571951568553642892029982342'
-            ))));
+            )))
+        );
     }
 
     /**
@@ -249,7 +255,7 @@ class NistCurveTest extends AbstractTestCase
         $publicKey = $privateKey->getPublicKey();
         $signer = new Signer($math);
 
-        $sig = $signer->sign($privateKey, gmp_init($values['e'],10), gmp_init($values['k'],10));
+        $sig = $signer->sign($privateKey, gmp_init($values['e'], 10), gmp_init($values['k'], 10));
 
         $this->assertEquals($values['R'], $math->toString($sig->getR()));
         $this->assertEquals($values['S'], $math->toString($sig->getS()));

@@ -22,5 +22,4 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
 
         new HmacRandomNumberGenerator($math, $privateKey, $hash, 'sha256aaaa');
     }
-
 }

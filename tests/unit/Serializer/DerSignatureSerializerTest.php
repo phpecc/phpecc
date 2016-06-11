@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Serializer;
 
-
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;

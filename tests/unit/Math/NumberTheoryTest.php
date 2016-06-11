@@ -101,15 +101,15 @@ class NumberTheoryTest extends AbstractTestCase
 
             // y^2
             $y2 = $adapter->add(
-                        $x3,
-                        $this->generator->getCurve()->getB()
-                    );
+                $x3,
+                $this->generator->getCurve()->getB()
+            );
 
             // y0 = sqrt(y^2)
             $y0 = $theory->squareRootModP(
-                        $y2,
-                        $this->generator->getCurve()->getPrime()
-                    );
+                $y2,
+                $this->generator->getCurve()->getPrime()
+            );
 
             if ($y_byte == '02') {
                 $y_coordinate = ($adapter->equals($adapter->mod($y0, gmp_init(2, 10)), gmp_init('0')))
