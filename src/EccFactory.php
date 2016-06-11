@@ -33,10 +33,10 @@ class EccFactory
      * Returns a number theory library initialized with the respective math adaptor.
      * Contains useful modular/polynomial functions
      *
-     * @param  MathAdapterInterface $adapter [optional] Defaults to the return value EccFactory::getAdapter().
+     * @param  GmpMathInterface $adapter [optional] Defaults to the return value EccFactory::getAdapter().
      * @return \Mdanter\Ecc\Math\NumberTheory
      */
-    public static function getNumberTheory(MathAdapterInterface $adapter = null)
+    public static function getNumberTheory(GmpMathInterface $adapter = null)
     {
         $adapter = $adapter ?: self::getAdapter();
         return $adapter->getNumberTheory();
@@ -56,10 +56,10 @@ class EccFactory
     /**
      * Returns a factory to return SECG Recommended curves and generators.
      *
-     * @param  MathAdapterInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
+     * @param  GmpMathInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return SecgCurve
      */
-    public static function getSecgCurves(MathAdapterInterface $adapter = null)
+    public static function getSecgCurves(GmpMathInterface $adapter = null)
     {
         return new SecgCurve($adapter ?: self::getAdapter());
     }
@@ -67,23 +67,23 @@ class EccFactory
     /**
      * Creates a new curve from arbitrary parameters.
      *
-     * @param  \GMP           $prime
-     * @param  \GMP           $a
-     * @param  \GMP           $b
-     * @param  MathAdapterInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
+     * @param  \GMP             $prime
+     * @param  \GMP             $a
+     * @param  \GMP             $b
+     * @param  GmpMathInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
      * @return \Mdanter\Ecc\Primitives\CurveFpInterface
      */
-    public static function createCurve($bitSize, \GMP $prime, \GMP $a, \GMP $b, MathAdapterInterface $adapter = null)
+    public static function createCurve($bitSize, \GMP $prime, \GMP $a, \GMP $b, GmpMathInterface $adapter = null)
     {
         return new CurveFp(new CurveParameters($bitSize, $prime, $a, $b), $adapter ?: self::getAdapter());
     }
 
     /**
      *
-     * @param  MathAdapterInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapteR()
+     * @param  GmpMathInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapteR()
      * @return \Mdanter\Ecc\Crypto\Signature\Signer
      */
-    public static function getSigner(MathAdapterInterface $adapter = null)
+    public static function getSigner(GmpMathInterface $adapter = null)
     {
         return new Signer($adapter ?: self::getAdapter());
     }

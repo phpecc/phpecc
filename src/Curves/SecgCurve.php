@@ -75,8 +75,8 @@ class SecgCurve
     {
         $curve = $this->curve112r1();
 
-        $order = gmp_init('0xDB7C2ABF62E35E7628DFAC6561C5', 16 );
-        $x = gmp_init('0x09487239995A5EE76B55F9C2F098', 16 );
+        $order = gmp_init('0xDB7C2ABF62E35E7628DFAC6561C5', 16);
+        $x = gmp_init('0x09487239995A5EE76B55F9C2F098', 16);
         $y = gmp_init('0xA89CE5AF8724C0A23E0E0FF77500', 16);
 
         return $curve->getGenerator($x, $y, $order, $randomGenerator);

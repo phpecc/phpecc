@@ -39,7 +39,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         switch (MATH_LIB) {
             case 'gmp':
             default:
-                $adapter = MathAdapterFactory::getGmpAdapter(PHPUNIT_DEBUG);
+                $adapter = MathAdapterFactory::getAdapter(PHPUNIT_DEBUG);
         }
 
         if ($extra == null) {

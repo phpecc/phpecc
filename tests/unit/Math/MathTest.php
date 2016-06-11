@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Math;
 
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
@@ -53,7 +54,7 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testDecHex(MathAdapterInterface $adapter)
+    public function testDecHex(GmpMathInterface $adapter)
     {
         foreach ($this->decHexMap as $hex => $dec) {
             $actual = $adapter->decHex($dec);
@@ -64,7 +65,7 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testHexDec(MathAdapterInterface $adapter)
+    public function testHexDec(GmpMathInterface $adapter)
     {
         foreach ($this->decHexMap as $hex => $dec) {
             $actual = $adapter->hexDec($hex);
@@ -75,51 +76,52 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testStrictIntegerReturnValues(MathAdapterInterface $math)
+    public function testStrictIntegerReturnValues(GmpMathInterface $math)
     {
-        $x = 10;
-        $y = 4;
+        $x = gmp_init(10, 10);
+        $y = gmp_init(4, 10);
 
         $mod = $math->mod($x, $y);
-        $this->assertTrue(is_string($mod) && ! is_resource($mod));
+        $this->assertTrue(is_resource($mod) && get_resource_type($mod) === 'gmp'|| is_object($mod) && $mod instanceof \GMP);
 
         $add = $math->add($x, $y);
-        $this->assertTrue(is_string($add) && ! is_resource($add));
+        $this->assertTrue(is_resource($add) && get_resource_type($add) === 'gmp'|| is_object($add) && $add instanceof \GMP);
 
         $sub = $math->sub($add, $y);
-        $this->assertTrue(is_string($sub) && ! is_resource($sub));
+        $this->assertTrue(is_resource($sub) && get_resource_type($sub) === 'gmp'|| is_object($sub) && $sub instanceof \GMP);
 
         $mul = $math->mul($x, $y);
-        $this->assertTrue(is_string($mul) && ! is_resource($mul));
+        $this->assertTrue(is_resource($mul) && get_resource_type($mul) === 'gmp'|| is_object($mul) && $mul instanceof \GMP);
 
         $div = $math->div($mul, $y);
-        $this->assertTrue(is_string($div) && ! is_resource($div));
+        $this->assertTrue(is_resource($div) && get_resource_type($div) === 'gmp'|| is_object($div) && $div instanceof \GMP);
 
-        $pow = $math->pow($x, $y);
-        $this->assertTrue(is_string($pow) && ! is_resource($div));
+        $pow = $math->pow($x, 4);
+        $this->assertTrue(is_resource($pow) && get_resource_type($pow) === 'gmp'|| is_object($pow) && $pow instanceof \GMP);
 
         $powmod = $math->powmod($x, $y, $y);
-        $this->assertTrue(is_string($powmod) && ! is_resource($powmod));
+        $this->assertTrue(is_resource($powmod) && get_resource_type($powmod) === 'gmp'|| is_object($powmod) && $powmod instanceof \GMP);
 
         $bitwiseand = $math->bitwiseAnd($x, $y);
-        $this->assertTrue(is_string($bitwiseand) && ! is_resource($bitwiseand));
+        $this->assertTrue(is_resource($bitwiseand) && get_resource_type($bitwiseand) === 'gmp'|| is_object($bitwiseand) && $bitwiseand instanceof \GMP);
 
-        $hexdec = $math->decHex($x);
-        $this->assertTrue(is_string($hexdec) && ! is_resource($hexdec));
+        $hexdec = $math->decHex(10);
+        $this->assertTrue(is_string($hexdec));
 
         $dechex = $math->hexDec($hexdec);
-        $this->assertTrue(is_string($dechex) && ! is_resource($dechex));
+        $this->assertTrue(is_string($dechex));
     }
     /**
      * @dataProvider getAdapters
      */
-    public function testKnownPrimesAreCorrectlyDetected(MathAdapterInterface $math)
+    public function testKnownPrimesAreCorrectlyDetected(GmpMathInterface $math)
     {
         foreach ($this->knownPrimes as $key => $prime) {
             if (trim($prime) == '') {
                 user_error('Empty prime number detected from line #'.($key + 1), E_USER_WARNING);
             }
 
+            $prime = gmp_init($prime, 10);
             $this->assertTrue($math->isPrime($prime), 'Prime "'.$prime.'" is not detected as prime.');
         }
     }
@@ -127,28 +129,29 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getAdapters
      */
-    public function testGetNextPrimes(MathAdapterInterface $math)
+    public function testGetNextPrimes(GmpMathInterface $math)
     {
-        $currentPrime = $math->nextPrime($this->startPrime);
+
+        $currentPrime = $math->nextPrime(gmp_init($this->startPrime));
 
         for ($i = 0; $i < $this->primeCount; $i ++) {
             $currentPrime = $math->nextPrime($currentPrime);
             $this->assertTrue($math->isPrime($currentPrime));
 
-            $this->assertContains($currentPrime, $this->knownPrimes);
+            $this->assertContains(gmp_strval($currentPrime, 10), $this->knownPrimes);
         }
     }
 
     /**
      * @dataProvider getAdapters
      */
-    public function testMultInverseModP(MathAdapterInterface $math)
+    public function testMultInverseModP(GmpMathInterface $math)
     {
         for ($i = 0; $i < 100; $i ++) {
-            $m = rand(20, 10000);
+            $m = gmp_init(rand(20, 10000), 10);
 
             for ($j = 0; $j < 100; $j ++) {
-                $a = rand(1, $m - 1);
+                $a = gmp_init(rand(1, gmp_strval(gmp_sub($m, 1), 10)), 10);
 
                 if ($math->gcd2($a, $m) == 1) {
                     $inv = $math->inverseMod($a, $m);
@@ -170,8 +173,9 @@ class MathTest extends AbstractTestCase
     /**
      * @dataProvider getIntegers
      */
-    public function testDigestInteger(MathAdapterInterface $math, $integer, $result)
+    public function testDigestInteger(GmpMathInterface $math, $integer, $result)
     {
-        $this->assertEquals($result, $math->digestInteger($integer));
+        $integer = gmp_init($integer, 10);
+        $this->assertEquals($result, gmp_strval($math->digestInteger($integer), 10));
     }
 }

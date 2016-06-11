@@ -15,8 +15,8 @@ class Formatter
     public function toAsn(SignatureInterface $signature)
     {
         return new Sequence(
-            new BignumInt(gmp_strval($signature->getR(), 16)),
-            new BignumInt(gmp_strval($signature->getS(), 16))
+            new BignumInt(gmp_strval($signature->getR(), 10)),
+            new BignumInt(gmp_strval($signature->getS(), 10))
         );
     }
 

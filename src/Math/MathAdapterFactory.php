@@ -20,7 +20,6 @@ class MathAdapterFactory
      */
     public static function getAdapter($debug = false)
     {
-        return new GmpMath();
         if (self::$forcedAdapter !== null) {
             return self::$forcedAdapter;
         }
@@ -52,7 +51,7 @@ class MathAdapterFactory
     private static function getAdapterClass()
     {
         if (self::canLoad('gmp')) {
-            return '\Mdanter\Ecc\Math\Gmp';
+            return '\Mdanter\Ecc\Math\GmpMath';
         }
 
         throw new \RuntimeException('Please install GMP extension.');
@@ -72,7 +71,7 @@ class MathAdapterFactory
      * @param $debug
      * @return DebugDecorator|MathAdapterInterface
      */
-    private static function wrapAdapter(MathAdapterInterface $adapter, $debug)
+    private static function wrapAdapter(GmpMathInterface $adapter, $debug)
     {
         if ($debug === true) {
             return new DebugDecorator($adapter);

@@ -14,8 +14,15 @@ interface GmpMathInterface
      * @param  \GMP $other
      * @return int        less than 0 if first is less than second, 0 if equal, greater than 0 if greater than.
      */
-    public function cmp(\GMP $first, \GMP$other);
+    public function cmp(\GMP $first, \GMP $other);
 
+    /**
+     * @param \GMP $first
+     * @param \GMP $other
+     * @return bool
+     */
+    public function equals(\GMP $first, \GMP $other);
+    
     /**
      * Returns the remainder of a division
      *

@@ -41,7 +41,7 @@ class Signer
             $hashBits = str_pad($hashBits, $hexSize * 4, '0', STR_PAD_LEFT);
         }
 
-        $messageHash = $this->adapter->baseConvert(substr($hashBits, 0, NumberSize::bnNumBits($this->adapter, $G->getOrder())), 2, 10);
+        $messageHash = gmp_init(substr($hashBits, 0, NumberSize::bnNumBits($this->adapter, $G->getOrder())), 2);
         return $messageHash;
     }
 
@@ -49,7 +49,7 @@ class Signer
      * @param GeneratorPoint $G
      * @param string $algorithm
      * @param string $data
-     * @return int|string
+     * @return \GMP
      */
     public function hashData(GeneratorPoint $G, $algorithm, $data)
     {

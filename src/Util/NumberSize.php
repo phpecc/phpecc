@@ -55,13 +55,12 @@ class NumberSize
      */
     public static function bnNumBits(GmpMathInterface $adapter, \GMP $x)
     {
-        if ($adapter->cmp($x, gmp_init('0', 10)) == 0) {
+        if ($adapter->cmp($x, gmp_init(0, 10)) == 0) {
             return 0;
         }
 
         $log2 = 0;
-
-        while ($x = $adapter->rightShift($x, 1)) {
+        while (($x = $adapter->rightShift($x, 1)) && $adapter->cmp($x, gmp_init(0, 10)) != 0) {
             $log2++;
         }
 

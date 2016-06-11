@@ -5,7 +5,6 @@ namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
@@ -24,7 +23,7 @@ class NistCurveTest extends AbstractTestCase
         $d = gmp_init('651056770906015076056810763456358567190100156695615665659', 10);
         $Q = $generator->mul($d);
 
-        $this->assertEquals($math->hexDec('0x62B12D60690CDCF330BABAB6E69763B471F994DD702D16A5'), $Q->getX());
+        $this->assertEquals($math->hexDec('0x62B12D60690CDCF330BABAB6E69763B471F994DD702D16A5'), $math->toString($Q->getX()));
 
         $k = gmp_init('6140507067065001063065065565667405560006161556565665656654', 10);
         $R = $generator->mul($k);
@@ -39,8 +38,8 @@ class NistCurveTest extends AbstractTestCase
 
         $temp = $generator->mul($u1)->add($Q->mul($u2));
 
-        $this->assertEquals($math->hexDec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD'), $temp->getX());
-        $this->assertEquals($math->hexDec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835'), $temp->getY());
+        $this->assertEquals($math->hexDec('0x885052380FF147B734C330C43D39B2C4A89F29B0F749FEAD'), $math->toString($temp->getX()));
+        $this->assertEquals($math->hexDec('0x9CF9FA1CBEFEFB917747A3BB29C072B9289C2547884FD835'), $math->toString($temp->getY()));
     }
 
     public function getB22Params()
@@ -226,16 +225,16 @@ class NistCurveTest extends AbstractTestCase
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
 
-        $privateKey = $generator->getPrivateKeyFrom($values['d']);
+        $privateKey = $generator->getPrivateKeyFrom(gmp_init($values['d'], 10));
         $publicKey = $privateKey->getPublicKey();
         $signer = new Signer($math);
 
-        $sig = $signer->sign($privateKey, $values['e'], $values['k']);
+        $sig = $signer->sign($privateKey, gmp_init($values['e'], 10), gmp_init($values['k'], 10));
 
-        $this->assertEquals($values['R'], $sig->getR());
-        $this->assertEquals($values['S'], $sig->getS());
+        $this->assertEquals($values['R'], $math->toString($sig->getR()));
+        $this->assertEquals($values['S'], $math->toString($sig->getS()));
 
-        $this->assertTrue($signer->verify($publicKey, $sig, $values['e']));
+        $this->assertTrue($signer->verify($publicKey, $sig, gmp_init($values['e'], 10)));
     }
 
     /**
@@ -246,16 +245,16 @@ class NistCurveTest extends AbstractTestCase
     {
         $generator = EccFactory::getNistCurves($math)->generator192();
 
-        $privateKey = $generator->getPrivateKeyFrom($values['d']);
+        $privateKey = $generator->getPrivateKeyFrom(gmp_init($values['d'], 10));
         $publicKey = $privateKey->getPublicKey();
         $signer = new Signer($math);
 
-        $sig = $signer->sign($privateKey, $values['e'], $values['k']);
+        $sig = $signer->sign($privateKey, gmp_init($values['e'],10), gmp_init($values['k'],10));
 
-        $this->assertEquals($values['R'], $sig->getR());
-        $this->assertEquals($values['S'], $sig->getS());
+        $this->assertEquals($values['R'], $math->toString($sig->getR()));
+        $this->assertEquals($values['S'], $math->toString($sig->getS()));
 
-        $this->assertFalse($signer->verify($publicKey, $sig, $math->sub($values['e'], 1)));
+        $this->assertFalse($signer->verify($publicKey, $sig, $math->sub(gmp_init($values['e'], 10), gmp_init(1, 10))));
     }
 
     public function getAdaptersWithRand()
@@ -284,7 +283,7 @@ class NistCurveTest extends AbstractTestCase
         $signature = $signer->sign($privateKey, $hash, $randomK);
 
         $this->assertTrue($signer->verify($publicKey, $signature, $hash), 'Correctly validates valid hash.');
-        $this->assertFalse($signer->verify($publicKey, $signature, $math->sub($hash, 1)), 'Correctly rejects tampered hash.');
+        $this->assertFalse($signer->verify($publicKey, $signature, $math->sub($hash, gmp_init(1, 10))), 'Correctly rejects tampered hash.');
     }
 
     /**

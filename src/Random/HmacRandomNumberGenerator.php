@@ -63,15 +63,14 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      * @param int $qlen - length of q in bits
      * @return \GMP
      */
-    public function bits2int($bits, $qlen)
+    public function bits2int($bits, \GMP $qlen)
     {
-        $vlen = strlen($bits) * 8;
+        $vlen = gmp_init(strlen($bits) * 8, 10);
         $hex = bin2hex($bits);
-        $hex = strlen($hex) % 2 == 0 ? $hex : '0' . $hex;
         $v = gmp_init($hex, 16);
 
-        if ($vlen > $qlen) {
-            $v = $this->math->rightShift($v, ($vlen - $qlen));
+        if ($this->math->cmp($vlen, $qlen) > 0) {
+            $v = $this->math->rightShift($v, $this->math->toString($this->math->sub($vlen, $qlen)));
         }
 
         return $v;
@@ -84,7 +83,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      * @param $rlen - rounded octet length
      * @return string
      */
-    public function bits2octets($bits, \GMP $q, $qlen, $rlen)
+    public function bits2octets($bits, \GMP $q, \GMP $qlen, \GMP $rlen)
     {
         $z1 = $this->bits2int($bits, $qlen);
         $z2 = $this->math->sub($z1, $q);
@@ -149,7 +148,8 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
             $toff = 0;
             while ($toff < $rlen) {
                 $v = hash_hmac($this->algorithm, $v, $k, true);
-                $cc = min(strlen($v), $rlen - $toff);
+
+                $cc = min(strlen($v), gmp_strval(gmp_sub($rlen, $toff), 10));
                 $t .= substr($v, 0, $cc);
                 $toff += $cc;
             }

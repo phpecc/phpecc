@@ -35,7 +35,6 @@ class GeneratorPoint extends Point
         RandomNumberGeneratorInterface $generator = null
     ) {
         $this->generator = $generator ?: RandomGeneratorFactory::getRandomGenerator();
-
         parent::__construct($adapter, $curve, $x, $y, $order);
     }
 
@@ -52,9 +51,10 @@ class GeneratorPoint extends Point
         $math = $this->getAdapter();
 
         $n = $this->getOrder();
+        $zero = gmp_init(0, 10);
         $curve = $this->getCurve();
 
-        if ($math->cmp($x, 0) < 0 || $math->cmp($n, $x) <= 0 || $math->cmp($y, 0) < 0 || $math->cmp($n, $y) <= 0) {
+        if ($math->cmp($x, $zero) < 0 || $math->cmp($n, $x) <= 0 || $math->cmp($y, $zero) < 0 || $math->cmp($n, $y) <= 0) {
             return false;
         }
 
@@ -98,7 +98,7 @@ class GeneratorPoint extends Point
      * @param \GMP $secretMultiplier
      * @return PrivateKey
      */
-    public function getPrivateKeyFrom($secretMultiplier)
+    public function getPrivateKeyFrom(\GMP $secretMultiplier)
     {
         return new PrivateKey($this->getAdapter(), $this, $secretMultiplier);
     }

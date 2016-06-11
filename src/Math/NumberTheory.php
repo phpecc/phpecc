@@ -102,7 +102,7 @@ class NumberTheory
             for ($j = 0; $j < $cm2; $j++) {
                 $index = $i + $j;
                 if (!isset($prod[$index])) {
-                    $prod[$index] = 0;
+                    $prod[$index] = gmp_init(0, 10);
                 }
                 $prod[$index] =
                     $this->adapter->mod(
@@ -136,7 +136,7 @@ class NumberTheory
 
         if ($this->adapter->cmp($exponent, $p) < 0) {
             if ($this->adapter->cmp($exponent, $zero) == 0) {
-                return 1;
+                return gmp_init(1, 10);
             }
 
             $G = $base;
@@ -145,14 +145,14 @@ class NumberTheory
             if ($this->adapter->cmp($this->adapter->mod($k, $two), $one) == 0) {
                 $s = $G;
             } else {
-                $s = array(1);
+                $s = array(gmp_init(1, 10));
             }
 
             while ($this->adapter->cmp($k, $one) > 0) {
                 $k = $this->adapter->div($k, $two);
 
                 $G = $this->polynomialMultiplyMod($G, $G, $polymod, $p);
-                if ($this->adapter->mod($k, $two) == 1) {
+                if ($this->adapter->cmp($this->adapter->mod($k, $two), gmp_init(1, 10)) === 0) {
                     $s = $this->polynomialMultiplyMod($G, $s, $polymod, $p);
                 }
             }
@@ -171,14 +171,15 @@ class NumberTheory
      */
     public function squareRootModP(\GMP $a, \GMP $p)
     {
+        $zero = gmp_init(0, 10);
         $four = gmp_init(4, 10);
         $eight = gmp_init(8, 10);
-        if (0 <= $a && $a < $p && 1 < $p) {
-            if ($a == 0) {
-                return 0;
+        if ($this->adapter->cmp(gmp_init(0, 10), $a) <= 0 && $this->adapter->cmp($a, $p) < 0 && $this->adapter->cmp(gmp_init(1, 10), $p) < 0) {
+            if ($this->adapter->cmp($a, gmp_init(0, 10)) === 0) {
+                return gmp_init(0, 10);
             }
 
-            if ($p == 2) {
+            if ($this->adapter->cmp($p, gmp_init(2, 10)) === 0) {
                 return $a;
             }
             $jac = $this->adapter->jacobi($a, $p);
@@ -225,18 +226,19 @@ class NumberTheory
             }
 
             for ($b = 2; $b < $p; $b++) {
+                $bGMP = gmp_init($b, 10);
                 if ($this->adapter->jacobi(
                     $this->adapter->sub(
-                        $this->adapter->mul(gmp_init($b, 10), gmp_init($b, 10)),
+                        $this->adapter->mul($bGMP, $bGMP),
                         $this->adapter->mul($four, $a)
                     ),
                     $p
                 ) == -1
                 ) {
-                    $f = array($a, -$b, 1);
+                    $f = array($a, $this->adapter->sub($zero, $bGMP), gmp_init(1, 10));
 
                     $ff = $this->polynomialPowMod(
-                        array(0, 1),
+                        array(gmp_init(0, 10), gmp_init(1, 10)),
                         $this->adapter->div(
                             $this->adapter->add(
                                 $p,

@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Math;
 
-
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 
@@ -17,6 +16,16 @@ class GmpMath implements GmpMathInterface
         return gmp_cmp($first, $other);
     }
 
+    /**
+     * @param \GMP $first
+     * @param \GMP $other
+     * @return bool
+     */
+    public function equals(\GMP $first, \GMP $other)
+    {
+        return gmp_cmp($first, $other) === 0;
+    }
+    
     /**
      * {@inheritDoc}
      * @see \Mdanter\Ecc\GmpMathInterface::mod()
@@ -87,7 +96,7 @@ class GmpMath implements GmpMathInterface
     public function rightShift(\GMP $number, $positions)
     {
         // Shift 1 right = div / 2
-        return gmp_div($number, gmp_pow(2, $positions));
+        return gmp_div($number, gmp_pow(gmp_init(2, 10), $positions));
     }
 
     /**
@@ -148,11 +157,11 @@ class GmpMath implements GmpMathInterface
      */
     public function powmod(\GMP $base, \GMP $exponent, \GMP $modulus)
     {
-        if ($exponent < 0) {
+        if ($this->cmp($exponent, gmp_init(0, 10)) < 0) {
             throw new \InvalidArgumentException("Negative exponents ($exponent) not allowed.");
         }
 
-        return gmp_strval(gmp_powm(gmp_init($base, 10), gmp_init($exponent, 10), gmp_init($modulus, 10)));
+        return gmp_powm($base, $exponent, $modulus);
     }
 
     /**
@@ -258,7 +267,7 @@ class GmpMath implements GmpMathInterface
      */
     public function gcd2(\GMP $a, \GMP $b)
     {
-        while ($a) {
+        while ($this->cmp($a, gmp_init(0)) > 0) {
             $temp = $a;
             $a = $this->mod($b, $a);
             $b = $temp;
