@@ -83,7 +83,7 @@ class NumberSize
         }
 
         $zero = gmp_init(0, 10);
-        if ($adapter->cmp($x, $zero) == 0) {
+        if ($adapter->equals($x, $zero)) {
             return 0;
         }
 

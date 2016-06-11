@@ -194,8 +194,8 @@ class Point implements PointInterface
         $math = $this->adapter;
         $modMath = $this->modAdapter;
 
-        if ($math->cmp($addend->getX(), $this->x) == 0) {
-            if ($math->cmp($addend->getY(), $this->y) == 0) {
+        if ($math->equals($addend->getX(), $this->x)) {
+            if ($math->equals($addend->getY(), $this->y)) {
                 return $this->getDouble();
             } else {
                 return $this->curve->getInfinity();
@@ -235,8 +235,8 @@ class Point implements PointInterface
         }
 
         $math = $this->adapter;
-        $equal = ($math->cmp($this->x, $other->getX()) == 0);
-        $equal &= ($math->cmp($this->y, $other->getY()) == 0);
+        $equal = ($math->equals($this->x, $other->getX()));
+        $equal &= ($math->equals($this->y, $other->getY()));
         $equal &= $this->isInfinity() == $other->isInfinity();
         $equal &= $this->curve->equals($other->getCurve());
 
@@ -275,7 +275,7 @@ class Point implements PointInterface
             $n = $this->adapter->mod($n, $this->order);
         }
 
-        if ($this->adapter->cmp($n, $zero) == 0) {
+        if ($this->adapter->equals($n, $zero)) {
             return $this->curve->getInfinity();
         }
 

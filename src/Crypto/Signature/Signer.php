@@ -30,8 +30,8 @@ class Signer
 
     /**
      * @param GeneratorPoint $G
-     * @param \GMP $hash
-     * @return \GMP
+     * @param resource|\GMP $hash
+     * @return resource|\GMP
      */
     public function truncateHash(GeneratorPoint $G, $hash)
     {
@@ -68,8 +68,8 @@ class Signer
 
     /**
      * @param PrivateKeyInterface $key
-     * @param \GMP $hash
-     * @param \GMP $randomK
+     * @param resource|\GMP $hash
+     * @param resource|\GMP $randomK
      * @return Signature
      */
     public function sign(PrivateKeyInterface $key, $hash, $randomK)
@@ -90,13 +90,13 @@ class Signer
         $p1 = $generator->mul($k);
         $r = $p1->getX();
         $zero = gmp_init(0, 10);
-        if ($math->cmp($r, $zero) == 0) {
+        if ($math->equals($r, $zero)) {
             throw new \RuntimeException("Error: random number R = 0");
         }
 
         $hash = $this->truncateHash($generator, $hash);
         $s = $modMath->div($modMath->add($hash, $math->mul($key->getSecret(), $r)), $k);
-        if ($math->cmp($s, $zero) == 0) {
+        if ($math->equals($s, $zero)) {
             throw new \RuntimeException("Error: random number S = 0");
         }
 
@@ -106,7 +106,7 @@ class Signer
     /**
      * @param PublicKeyInterface $key
      * @param SignatureInterface $signature
-     * @param $hash
+     * @param resource|\GMP $hash
      * @return bool
      */
     public function verify(PublicKeyInterface $key, SignatureInterface $signature, $hash)

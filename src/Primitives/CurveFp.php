@@ -120,9 +120,24 @@ class CurveFp implements CurveFpInterface
 
         $math = $this->adapter;
 
-        $eq_zero = $math->cmp($math->mod($math->sub($math->pow($y, 2), $math->add($math->add($math->pow($x, 3), $math->mul($this->getA(), $x)), $this->getB())), $this->getPrime()), gmp_init(0, 10));
+        $eq_zero = $math->equals(
+            $math->mod(
+                $math->sub(
+                    $math->pow($y, 2),
+                    $math->add(
+                        $math->add(
+                            $math->pow($x, 3),
+                            $math->mul($this->getA(), $x)
+                        ),
+                        $this->getB()
+                    )
+                ),
+                $this->getPrime()
+            ),
+            gmp_init(0, 10)
+        );
 
-        return ($eq_zero == 0);
+        return $eq_zero;
     }
 
     /**
@@ -168,9 +183,9 @@ class CurveFp implements CurveFpInterface
     {
         $math = $this->adapter;
 
-        $equal  = ($math->cmp($this->getA(), $other->getA()) == 0);
-        $equal &= ($math->cmp($this->getB(), $other->getB()) == 0);
-        $equal &= ($math->cmp($this->getPrime(), $other->getPrime()) == 0);
+        $equal  = $math->equals($this->getA(), $other->getA());
+        $equal &= $math->equals($this->getB(), $other->getB());
+        $equal &= $math->equals($this->getPrime(), $other->getPrime());
 
         return ($equal) ? 0 : 1;
     }
