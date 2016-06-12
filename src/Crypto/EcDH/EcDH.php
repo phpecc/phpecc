@@ -29,8 +29,8 @@ namespace Mdanter\Ecc\Crypto\EcDH;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 
 /**
  * This class is the implementation of ECDH.
@@ -45,7 +45,7 @@ class EcDH implements EcDHInterface
     /**
      * Adapter used for math calculations
      *
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
@@ -71,9 +71,9 @@ class EcDH implements EcDHInterface
     /**
      * Initialize a new exchange from a generator point.
      *
-     * @param MathAdapterInterface $adapter A math adapter instance.
+     * @param GmpMathInterface $adapter A math adapter instance.
      */
-    public function __construct(MathAdapterInterface $adapter)
+    public function __construct(GmpMathInterface $adapter)
     {
         $this->adapter = $adapter;
     }

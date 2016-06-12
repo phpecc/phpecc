@@ -25,6 +25,7 @@ namespace Mdanter\Ecc\Crypto\Signature;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
+use Mdanter\Ecc\Math\GmpMath;
 
 /**
  * Plain Old PHP Object that stores the signature r,s for ECDSA
@@ -33,24 +34,32 @@ class Signature implements SignatureInterface
 {
     /**
      *
-     * @var int|string
+     * @var resource|\GMP
      */
     protected $r;
 
     /**
      *
-     * @var int|string
+     * @var resource|\GMP
      */
     protected $s;
 
     /**
      * Initialize a new instance with values
      *
-     * @param int|string $r
-     * @param int|string $s
+     * @param resource|\GMP $r
+     * @param resource|\GMP $s
      */
     public function __construct($r, $s)
     {
+        if (!GmpMath::checkGmpValue($r)) {
+            throw new \InvalidArgumentException('Invalid argument #1 to Signature constructor - must pass GMP resource or \GMP instance');
+        }
+
+        if (!GmpMath::checkGmpValue($s)) {
+            throw new \InvalidArgumentException('Invalid argument #2 to Signature constructor - must pass GMP resource or \GMP instance');
+        }
+
         $this->r = $r;
         $this->s = $s;
     }

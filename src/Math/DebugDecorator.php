@@ -8,10 +8,10 @@ use Mdanter\Ecc\Primitives\GeneratorPoint;
 /**
  * Debug helper class to trace all calls to math functions along with the provided params and result.
  */
-class DebugDecorator implements MathAdapterInterface
+class DebugDecorator implements GmpMathInterface
 {
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
@@ -21,10 +21,10 @@ class DebugDecorator implements MathAdapterInterface
     private $writer;
 
     /**
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface     $adapter
      * @param callable|null        $callback
      */
-    public function __construct(MathAdapterInterface $adapter, callable $callback = null)
+    public function __construct(GmpMathInterface $adapter, callable $callback = null)
     {
         $this->adapter = $adapter;
         $this->writer = $callback ?: function ($message) {
@@ -71,9 +71,48 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::cmp()
+     * @see \Mdanter\Ecc\GmpMathInterface::cmp()
      */
-    public function cmp($first, $other)
+    public function cmp(\GMP $first, \GMP $other)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(
+            array(
+            $this,
+            'call',
+            ),
+            $func,
+            $args
+        );
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\GmpMathInterface::cmp()
+     */
+    public function equals(\GMP $first, \GMP $other)
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(
+            array(
+                $this,
+                'call',
+            ),
+            $func,
+            $args
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\GmpMathInterface::mod()
+     */
+    public function mod(\GMP $number, \GMP $modulus)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -90,9 +129,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::mod()
+     * @see \Mdanter\Ecc\GmpMathInterface::add()
      */
-    public function mod($number, $modulus)
+    public function add(\GMP $augend, \GMP $addend)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -109,9 +148,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::add()
+     * @see \Mdanter\Ecc\GmpMathInterface::sub()
      */
-    public function add($augend, $addend)
+    public function sub(\GMP $minuend, \GMP $subtrahend)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -128,9 +167,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::sub()
+     * @see \Mdanter\Ecc\GmpMathInterface::mul()
      */
-    public function sub($minuend, $subtrahend)
+    public function mul(\GMP $multiplier, \GMP $multiplicand)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -147,9 +186,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::mul()
+     * @see \Mdanter\Ecc\GmpMathInterface::div()
      */
-    public function mul($multiplier, $multiplicand)
+    public function div(\GMP $dividend, \GMP $divisor)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -166,9 +205,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::div()
+     * @see \Mdanter\Ecc\GmpMathInterface::pow()
      */
-    public function div($dividend, $divisor)
+    public function pow(\GMP $base, $exponent)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -185,47 +224,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::pow()
+     * @see \Mdanter\Ecc\GmpMathInterface::bitwiseAnd()
      */
-    public function pow($base, $exponent)
-    {
-        $func = __METHOD__;
-        $args = func_get_args();
-
-        return call_user_func(
-            array(
-            $this,
-            'call',
-            ),
-            $func,
-            $args
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::rand()
-     */
-    public function rand($n)
-    {
-        $func = __METHOD__;
-        $args = func_get_args();
-
-        return call_user_func(
-            array(
-            $this,
-            'call',
-            ),
-            $func,
-            $args
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseAnd()
-     */
-    public function bitwiseAnd($first, $other)
+    public function bitwiseAnd(\GMP $first, \GMP $other)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -244,14 +245,14 @@ class DebugDecorator implements MathAdapterInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\MathAdapter::toString()
      */
-    public function toString($value)
+    public function toString(\GMP $value)
     {
         return $this->adapter->toString($value);
     }
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::hexDec()
+     * @see \Mdanter\Ecc\GmpMathInterface::hexDec()
      */
     public function hexDec($hexString)
     {
@@ -270,7 +271,7 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::decHex()
+     * @see \Mdanter\Ecc\GmpMathInterface::decHex()
      */
     public function decHex($decString)
     {
@@ -289,9 +290,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::powmod()
+     * @see \Mdanter\Ecc\GmpMathInterface::powmod()
      */
-    public function powmod($base, $exponent, $modulus)
+    public function powmod(\GMP $base, \GMP $exponent, \GMP $modulus)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -308,9 +309,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::isPrime()
+     * @see \Mdanter\Ecc\GmpMathInterface::isPrime()
      */
-    public function isPrime($n)
+    public function isPrime(\GMP $n)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -327,9 +328,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::nextPrime()
+     * @see \Mdanter\Ecc\GmpMathInterface::nextPrime()
      */
-    public function nextPrime($currentPrime)
+    public function nextPrime(\GMP $currentPrime)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -346,9 +347,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::inverseMod()
+     * @see \Mdanter\Ecc\GmpMathInterface::inverseMod()
      */
-    public function inverseMod($a, $m)
+    public function inverseMod(\GMP $a, \GMP $m)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -365,9 +366,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::jacobi()
+     * @see \Mdanter\Ecc\GmpMathInterface::jacobi()
      */
-    public function jacobi($a, $p)
+    public function jacobi(\GMP $a, \GMP $p)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -384,9 +385,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::intToString()
+     * @see \Mdanter\Ecc\GmpMathInterface::intToString()
      */
-    public function intToString($x)
+    public function intToString(\GMP $x)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -403,7 +404,7 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::stringToInt()
+     * @see \Mdanter\Ecc\GmpMathInterface::stringToInt()
      */
     public function stringToInt($s)
     {
@@ -422,9 +423,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::digestInteger()
+     * @see \Mdanter\Ecc\GmpMathInterface::digestInteger()
      */
-    public function digestInteger($m)
+    public function digestInteger(\GMP $m)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -441,9 +442,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::gcd2()
+     * @see \Mdanter\Ecc\GmpMathInterface::gcd2()
      */
-    public function gcd2($a, $m)
+    public function gcd2(\GMP $a, \GMP $m)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -460,9 +461,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::rightShift()
+     * @see \Mdanter\Ecc\GmpMathInterface::rightShift()
      */
-    public function rightShift($number, $positions)
+    public function rightShift(\GMP $number, $positions)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -479,9 +480,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::leftShift()
+     * @see \Mdanter\Ecc\GmpMathInterface::leftShift()
      */
-    public function leftShift($number, $positions)
+    public function leftShift(\GMP $number, $positions)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -498,9 +499,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::bitwiseXor()
+     * @see \Mdanter\Ecc\GmpMathInterface::bitwiseXor()
      */
-    public function bitwiseXor($first, $other)
+    public function bitwiseXor(\GMP $first, \GMP $other)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -517,7 +518,7 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::baseConvert()
+     * @see \Mdanter\Ecc\GmpMathInterface::baseConvert()
      */
     public function baseConvert($value, $fromBase, $toBase)
     {
@@ -536,7 +537,7 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::getEcMath()
+     * @see \Mdanter\Ecc\GmpMathInterface::getEcMath()
      */
     public function getEcMath(GeneratorPoint $generatorPoint, $input)
     {
@@ -555,7 +556,7 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::getPrimeFieldArithmetic()
+     * @see \Mdanter\Ecc\GmpMathInterface::getPrimeFieldArithmetic()
      */
     public function getPrimeFieldArithmetic(CurveFpInterface $curve)
     {
@@ -574,9 +575,9 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::getModularArithmetic()
+     * @see \Mdanter\Ecc\GmpMathInterface::getModularArithmetic()
      */
-    public function getModularArithmetic($modulus)
+    public function getModularArithmetic(\GMP $modulus)
     {
         $func = __METHOD__;
         $args = func_get_args();
@@ -593,7 +594,7 @@ class DebugDecorator implements MathAdapterInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\MathAdapterInterface::getNumberTheory()
+     * @see \Mdanter\Ecc\GmpMathInterface::getNumberTheory()
      */
     public function getNumberTheory()
     {

@@ -6,10 +6,6 @@ use Mdanter\Ecc\Math\MathAdapterFactory;
 
 abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var string
-     */
-    public $classEcMath = 'Mdanter\Ecc\Math\EcMath';
 
     /**
      * @var string
@@ -39,7 +35,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         switch (MATH_LIB) {
             case 'gmp':
             default:
-                $adapter = MathAdapterFactory::getGmpAdapter(PHPUNIT_DEBUG);
+                $adapter = MathAdapterFactory::getAdapter(PHPUNIT_DEBUG);
         }
 
         if ($extra == null) {

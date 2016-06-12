@@ -32,8 +32,8 @@ class Parser
         }
 
         return new Signature(
-            $r->getContent(),
-            $s->getContent()
+            gmp_init($r->getContent(), 10),
+            gmp_init($s->getContent(), 10)
         );
     }
 }

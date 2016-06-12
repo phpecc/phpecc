@@ -60,5 +60,4 @@ interface EcDHInterface
      * @return void
      */
     public function setRecipientKey(PublicKeyInterface $key);
-
 }

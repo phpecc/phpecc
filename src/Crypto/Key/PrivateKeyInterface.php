@@ -45,7 +45,7 @@ interface PrivateKeyInterface
     public function getPoint();
 
     /**
-     * @return int|string
+     * @return resource|\GMP
      */
     public function getSecret();
 

@@ -2,7 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Signature\Signer;
@@ -24,15 +24,15 @@ class SecCurveTest extends AbstractTestCase
      *
      * @dataProvider getCurveParams
      */
-    public function testCurveGeneration(MathAdapterInterface $math, $function, $a, $b, $prime)
+    public function testCurveGeneration(GmpMathInterface $math, $function, $a, $b, $prime)
     {
         $factory = EccFactory::getSecgCurves($math);
         $curve = $factory->{$function}();
 
         $this->assertInstanceOf($this->classCurveFpInterface, $curve);
-        $this->assertEquals($a, $curve->getA());
-        $this->assertEquals($b, $curve->getB());
-        $this->assertEquals($prime, $curve->getPrime());
+        $this->assertEquals($a, $math->toString($curve->getA()));
+        $this->assertEquals($b, $math->toString($curve->getB()));
+        $this->assertEquals($prime, $math->toString($curve->getPrime()));
     }
 
     public function getGeneratorParams()
@@ -48,28 +48,28 @@ class SecCurveTest extends AbstractTestCase
      *
      * @dataProvider getGeneratorParams
      */
-    public function testGeneratorGeneration(MathAdapterInterface $math, $function, $order, $prime)
+    public function testGeneratorGeneration(GmpMathInterface $math, $function, $order, $prime)
     {
         $factory = EccFactory::getSecgCurves($math);
         $generator = $factory->{$function}();
 
         $this->assertInstanceOf($this->classPointInterface, $generator);
-        $this->assertEquals($order, $generator->getOrder());
-        $this->assertEquals($prime, $generator->getCurve()->getPrime());
+        $this->assertEquals($order, $math->toString($generator->getOrder()));
+        $this->assertEquals($prime, $math->toString($generator->getCurve()->getPrime()));
     }
 
     /**
      *
      * @dataProvider getAdapters
      */
-    public function testSecp256r1EquivalenceToNistP192(MathAdapterInterface $adapter)
+    public function testSecp256r1EquivalenceToNistP256(GmpMathInterface $adapter)
     {
         $secpFactory = EccFactory::getSecgCurves($adapter);
         $nistFactory = EccFactory::getNistCurves($adapter);
 
         $signer = new Signer($adapter);
 
-        $secret = $adapter->hexDec('DC51D3866A15BACDE33D96F992FCA99DA7E6EF0934E7097559C27F1614C88A7F');
+        $secret = gmp_init('DC51D3866A15BACDE33D96F992FCA99DA7E6EF0934E7097559C27F1614C88A7F', 16);
 
         $secpKey = $secpFactory->generator256r1()->getPrivateKeyFrom($secret);
         $nistKey = $nistFactory->generator256()->getPrivateKeyFrom($secret);
@@ -80,7 +80,32 @@ class SecCurveTest extends AbstractTestCase
         $sigSecp = $signer->sign($secpKey, $message, $randomK);
         $sigNist = $signer->sign($nistKey, $message, $randomK);
 
-        $this->assertEquals($sigNist->getR(), $sigSecp->getR());
-        $this->assertEquals($sigNist->getS(), $sigSecp->getS());
+        $this->assertTrue($adapter->equals($sigNist->getR(), $sigSecp->getR()));
+        $this->assertTrue($adapter->equals($sigNist->getS(), $sigSecp->getS()));
+    }
+
+    /**
+     * @dataProvider getAdapters
+     */
+    public function testSecp384r1EquivalenceToNistP384(GmpMathInterface $adapter)
+    {
+        $secpFactory = EccFactory::getSecgCurves($adapter);
+        $nistFactory = EccFactory::getNistCurves($adapter);
+
+        $signer = new Signer($adapter);
+
+        $secret = gmp_init('DC51D3866A15BACDE33D96F992FCA99DA7E6EF0934E7097559C27F1614C88A7F', 16);
+
+        $secpKey = $secpFactory->generator384r1()->getPrivateKeyFrom($secret);
+        $nistKey = $nistFactory->generator384()->getPrivateKeyFrom($secret);
+
+        $randomK = RandomGeneratorFactory::getRandomGenerator()->generate($secpKey->getPoint()->getOrder());
+        $message = RandomGeneratorFactory::getRandomGenerator()->generate($secpKey->getPoint()->getOrder());
+
+        $sigSecp = $signer->sign($secpKey, $message, $randomK);
+        $sigNist = $signer->sign($nistKey, $message, $randomK);
+
+        $this->assertTrue($adapter->equals($sigNist->getR(), $sigSecp->getR()));
+        $this->assertTrue($adapter->equals($sigNist->getS(), $sigSecp->getS()));
     }
 }

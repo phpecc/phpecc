@@ -34,14 +34,14 @@ interface SignatureInterface
     /**
      * Returns the r parameter of the signature.
      *
-     * @return int|string
+     * @return \GMP
      */
     public function getR();
 
     /**
      * Returns the s parameter of the signature.
      *
-     * @return int|string
+     * @return \GMP
      */
     public function getS();
 }

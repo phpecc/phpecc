@@ -2,15 +2,15 @@
 
 namespace Mdanter\Ecc\Serializer\Point;
 
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 
 class UncompressedPointSerializer implements PointSerializerInterface
 {
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
@@ -20,10 +20,10 @@ class UncompressedPointSerializer implements PointSerializerInterface
     private $debug = false;
 
     /**
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface     $adapter
      * @param bool                 $debug
      */
-    public function __construct(MathAdapterInterface $adapter, $debug = false)
+    public function __construct(GmpMathInterface $adapter, $debug = false)
     {
         $this->adapter = $adapter;
         $this->debug = (bool) $debug;
@@ -45,8 +45,8 @@ class UncompressedPointSerializer implements PointSerializerInterface
         }
 
         $hexString = '04';
-        $hexString .= str_pad($this->adapter->decHex($point->getX()), $length, '0', STR_PAD_LEFT);
-        $hexString .= str_pad($this->adapter->decHex($point->getY()), $length, '0', STR_PAD_LEFT);
+        $hexString .= str_pad(gmp_strval($point->getX(), 16), $length, '0', STR_PAD_LEFT);
+        $hexString .= str_pad(gmp_strval($point->getY(), 16), $length, '0', STR_PAD_LEFT);
 
         if ($this->debug) {
             error_log('Resulting length: '.strlen($hexString));
@@ -70,8 +70,8 @@ class UncompressedPointSerializer implements PointSerializerInterface
         $data = substr($data, 2);
         $dataLength = strlen($data);
 
-        $x = $this->adapter->hexDec(substr($data, 0, $dataLength / 2));
-        $y = $this->adapter->hexDec(substr($data, $dataLength / 2));
+        $x = gmp_init(substr($data, 0, $dataLength / 2), 16);
+        $y = gmp_init(substr($data, $dataLength / 2), 16);
 
         return $curve->getPoint($x, $y);
     }

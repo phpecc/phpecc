@@ -67,11 +67,11 @@ class SpecBasedCurveTest extends AbstractTestCase
     {
         $adapter = $generator->getAdapter();
 
-        $privateKey = $generator->getPrivateKeyFrom($k);
+        $privateKey = $generator->getPrivateKeyFrom(gmp_init($k, 10));
         $publicKey = $privateKey->getPublicKey();
 
-        $this->assertEquals($adapter->hexDec($expectedX), $publicKey->getPoint()->getX(), $name);
-        $this->assertEquals($adapter->hexDec($expectedY), $publicKey->getPoint()->getY(), $name);
+        $this->assertEquals($adapter->hexDec($expectedX), $adapter->toString($publicKey->getPoint()->getX()), $name);
+        $this->assertEquals($adapter->hexDec($expectedY), $adapter->toString($publicKey->getPoint()->getY()), $name);
     }
 
     /**
@@ -110,14 +110,14 @@ class SpecBasedCurveTest extends AbstractTestCase
     public function testGetDiffieHellmanSharedSecret(GeneratorPoint $generator, $alice, $bob, $expectedX)
     {
         $adapter = $generator->getAdapter();
-        $alicePrivKey = $generator->getPrivateKeyFrom($alice);
-        $bobPrivKey = $generator->getPrivateKeyFrom($bob);
+        $alicePrivKey = $generator->getPrivateKeyFrom(gmp_init($alice, 10));
+        $bobPrivKey = $generator->getPrivateKeyFrom(gmp_init($bob, 10));
 
         $aliceDh = $alicePrivKey->createExchange($bobPrivKey->getPublicKey());
         $bobDh = $bobPrivKey->createExchange($alicePrivKey->getPublicKey());
 
-        $this->assertEquals($adapter->baseConvert($expectedX, 16, 10), $aliceDh->calculateSharedKey());
-        $this->assertEquals($adapter->baseConvert($expectedX, 16, 10), $bobDh->calculateSharedKey());
+        $this->assertEquals($adapter->hexDec($expectedX), $adapter->toString($aliceDh->calculateSharedKey()));
+        $this->assertEquals($adapter->hexDec($expectedX), $adapter->toString($bobDh->calculateSharedKey()));
     }
 
     /**
@@ -168,14 +168,14 @@ class SpecBasedCurveTest extends AbstractTestCase
     {
         $math = $G->getAdapter();
 
-        $privateKey = $G->getPrivateKeyFrom($math->hexDec($privKey));
+        $privateKey = $G->getPrivateKeyFrom(gmp_init($privKey, 16));
         $signer = new Signer($math);
         $hashDec = $signer->hashData($G, $algo, $message);
         //$hash = pack("H*", $math->decHex($hashDec));
 
         $hmac = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $hashDec, $algo);
         $k = $hmac->generate($G->getOrder());
-        $this->assertEquals($k, $math->hexDec($eK), 'k');
+        $this->assertEquals($math->hexDec($eK), gmp_strval($k, 10), 'k');
 
         $sig = $signer->sign($privateKey, $hashDec, $k);
         // Should verify
@@ -184,7 +184,7 @@ class SpecBasedCurveTest extends AbstractTestCase
         // R and S should be correct
         $sR = $math->hexDec($eR);
         $sS = $math->hexDec($eS);
-        $this->assertSame($sR, $sig->getR(), "r $sR == ".$sig->getR());
-        $this->assertSame($sS, $sig->getS(), "s $sR == " . $sig->getS());
+        $this->assertSame($sR, $math->toString($sig->getR()));
+        $this->assertSame($sS, $math->toString($sig->getS()));
     }
 }

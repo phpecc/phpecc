@@ -2,29 +2,28 @@
 
 namespace Mdanter\Ecc\Random;
 
-
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Util\NumberSize;
 
 class RandomNumberGenerator implements RandomNumberGeneratorInterface
 {
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
     /**
      * RandomNumberGenerator constructor.
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface $adapter
      */
-    public function __construct(MathAdapterInterface $adapter)
+    public function __construct(GmpMathInterface $adapter)
     {
         $this->adapter = $adapter;
     }
 
     /**
-     * @param int|string $max
-     * @return int
+     * @param resource|\GMP $max
+     * @return resource|\GMP
      */
     public function generate($max)
     {
@@ -33,7 +32,7 @@ class RandomNumberGenerator implements RandomNumberGeneratorInterface
 
         // Generate an integer of size >= $numBits
         $bytes = random_bytes($numBytes);
-        $value = gmp_init(0, 10);
+        $value = gmp_init('0', 10);
         for ($i = 0; $i < $numBytes; $i++) {
             $value = gmp_or($value, gmp_mul(ord($bytes[$i]), gmp_pow(2, $i * 8)));
         }
@@ -41,6 +40,6 @@ class RandomNumberGenerator implements RandomNumberGeneratorInterface
         $mask = gmp_sub(gmp_pow(2, $numBits), 1);
         $integer = gmp_and($value, $mask);
 
-        return gmp_strval($integer, 10);
+        return $integer;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Mdanter\Ecc\Tests\Util;
 
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Util\NumberSize;
 
 class NumberSizeTest extends AbstractTestCase
@@ -20,10 +20,13 @@ class NumberSizeTest extends AbstractTestCase
 
     /**
      * @dataProvider getBnNumBitsNumbers
+     * @param GmpMathInterface $adapter
+     * @param string $number hex number
+     * @param int $expected
      */
-    public function testNumBits(MathAdapterInterface $adapter, $number, $expected)
+    public function testNumBits(GmpMathInterface $adapter, $number, $expected)
     {
-        $size = NumberSize::bnNumBits($adapter, $adapter->hexDec($number));
+        $size = NumberSize::bnNumBits($adapter, gmp_init($number, 16));
 
         $this->assertEquals($expected, $size);
     }
@@ -39,10 +42,13 @@ class NumberSizeTest extends AbstractTestCase
 
     /**
      * @dataProvider getBnNumBytesNumbers
+     * @param GmpMathInterface $adapter
+     * @param string $number hex number
+     * @param int $expected
      */
-    public function testNumBytes(MathAdapterInterface $adapter, $number, $expected)
+    public function testNumBytes(GmpMathInterface $adapter, $number, $expected)
     {
-        $size = NumberSize::bnNumBytes($adapter, $adapter->hexDec($number));
+        $size = NumberSize::bnNumBytes($adapter, gmp_init($number, 16));
 
         $this->assertEquals($expected, $size);
     }

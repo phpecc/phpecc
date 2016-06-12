@@ -2,110 +2,117 @@
 
 namespace Mdanter\Ecc\Math;
 
-use Mdanter\Ecc\Primitives\CurveFpInterface;
-use Mdanter\Ecc\Primitives\GeneratorPoint;
-
-interface MathAdapterInterface
+interface GmpMathInterface
 {
     /**
      * Compares two numbers
      *
-     * @param  int|string $first
-     * @param  int|string $other
+     * @param  resource|\GMP $first
+     * @param  resource|\GMP $other
      * @return int        less than 0 if first is less than second, 0 if equal, greater than 0 if greater than.
      */
     public function cmp($first, $other);
 
     /**
+     * @param resource|\GMP $first
+     * @param resource|\GMP $other
+     * @return bool
+     */
+    public function equals($first, $other);
+    
+    /**
      * Returns the remainder of a division
      *
-     * @param  int|string $number
-     * @param  int|string $modulus
-     * @return int|string
+     * @param  resource|\GMP $number
+     * @param  resource|\GMP $modulus
+     * @return resource|\GMP
      */
     public function mod($number, $modulus);
 
     /**
      * Adds two numbers
      *
-     * @param  int|string $augend
-     * @param  int|string $addend
-     * @return int|string
+     * @param  resource|\GMP $augend
+     * @param  resource|\GMP $addend
+     * @return resource|\GMP
      */
     public function add($augend, $addend);
 
     /**
      * Substract one number from another
      *
-     * @param  int|string $minuend
-     * @param  int|string $subtrahend
-     * @return int|string
+     * @param  resource|\GMP $minuend
+     * @param  resource|\GMP $subtrahend
+     * @return resource|\GMP
      */
     public function sub($minuend, $subtrahend);
 
     /**
      * Multiplies a number by another.
      *
-     * @param  int|string $multiplier
-     * @param  int|string $multiplicand
-     * @return int|string
+     * @param  resource|\GMP $multiplier
+     * @param  resource|\GMP $multiplicand
+     * @return resource|\GMP
      */
     public function mul($multiplier, $multiplicand);
 
     /**
      * Divides a number by another.
      *
-     * @param  int|string $dividend
-     * @param  int|string $divisor
-     * @return int|string
+     * @param  resource|\GMP $dividend
+     * @param  resource|\GMP $divisor
+     * @return resource|\GMP
      */
     public function div($dividend, $divisor);
 
     /**
      * Raises a number to a power.
      *
-     * @param  int|string $base     The number to raise.
+     * @param  resource|\GMP $base     The number to raise.
      * @param  int|string $exponent The power to raise the number to.
-     * @return int|string
+     * @return resource|\GMP
      */
     public function pow($base, $exponent);
 
     /**
      * Performs a logical AND between two values.
      *
-     * @param  int|string $first
-     * @param  int|string $other
-     * @return int|string
+     * @param  resource|\GMP $first
+     * @param  resource|\GMP $other
+     * @return resource|\GMP
      */
     public function bitwiseAnd($first, $other);
 
     /**
      * Performs a logical XOR between two values.
      *
-     * @param  int|string $first
-     * @param  int|string $other
-     * @return int|string
+     * @param  resource|\GMP $first
+     * @param  resource|\GMP $other
+     * @return resource|\GMP
      */
     public function bitwiseXor($first, $other);
 
     /**
      * Shifts bits to the right
-     * @param int|string $number    Number to shift
-     * @param int|string $positions Number of positions to shift
+     * @param resource|\GMP        $number    Number to shift
+     * @param int|string  $positions Number of positions to shift
+     * @return \GMP
      */
     public function rightShift($number, $positions);
 
     /**
      * Shifts bits to the left
-     * @param int|string $number    Number to shift
+     * @param resource|\GMP       $number    Number to shift
      * @param int|string $positions Number of positions to shift
+     * @return \GMP
      */
     public function leftShift($number, $positions);
 
     /**
      * Returns the string representation of a returned value.
      *
-     * @param int|string $value
+     * @param resource|\GMP $value
+     * @return int|string
      */
     public function toString($value);
 
@@ -128,9 +135,9 @@ interface MathAdapterInterface
     /**
      * Calculates the modular exponent of a number.
      *
-     * @param int|string $base
-     * @param int|string $exponent
-     * @param int|string $modulus
+     * @param resource|\GMP $base
+     * @param resource|\GMP $exponent
+     * @param resource|\GMP $modulus
      */
     public function powmod($base, $exponent, $modulus);
 
@@ -145,27 +152,27 @@ interface MathAdapterInterface
     /**
      * Gets the next known prime that is greater than a given prime.
      *
-     * @param  int|string $currentPrime
-     * @return int|string
+     * @param  resource|\GMP $currentPrime
+     * @return resource|\GMP
      */
     public function nextPrime($currentPrime);
 
     /**
-     *
-     * @param int|string $a
-     * @param int|string $m
+     * @param resource|\GMP $a
+     * @param resource|\GMP $m
+     * @return \GMP
      */
     public function inverseMod($a, $m);
 
     /**
-     *
-     * @param int|string $a
-     * @param int|string $p
+     * @param resource|\GMP $a
+     * @param resource|\GMP $p
+     * @return \GMP
      */
     public function jacobi($a, $p);
 
     /**
-     * @param  int|string $x
+     * @param  resource|\GMP $x
      * @return string|null
      */
     public function intToString($x);
@@ -179,16 +186,15 @@ interface MathAdapterInterface
 
     /**
      *
-     * @param  int|string $m
+     * @param  resource|\GMP $m
      * @return int|string
      */
     public function digestInteger($m);
 
     /**
-     *
-     * @param  int|string $a
-     * @param  int|string $m
-     * @return int|string
+     * @param  resource|\GMP $a
+     * @param  resource|\GMP $m
+     * @return resource|\GMP
      */
     public function gcd2($a, $m);
 
@@ -206,18 +212,8 @@ interface MathAdapterInterface
     public function getNumberTheory();
 
     /**
-     * @return ModularArithmetic
-     */
-    public function getPrimeFieldArithmetic(CurveFpInterface $curve);
-
-    /**
-     * @param $modulus
+     * @param resource|\GMP $modulus
      * @return ModularArithmetic
      */
     public function getModularArithmetic($modulus);
-
-    /**
-     * @return EcMath
-     */
-    public function getEcMath(GeneratorPoint $generatorPoint, $input);
 }

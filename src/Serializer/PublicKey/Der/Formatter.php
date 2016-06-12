@@ -5,9 +5,9 @@ namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 use FG\ASN1\Universal\Sequence;
 use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\BitString;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
@@ -17,16 +17,31 @@ use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 class Formatter
 {
 
+    /**
+     * @var GmpMathInterface
+     */
     private $adapter;
 
+    /**
+     * @var UncompressedPointSerializer
+     */
     private $pointSerializer;
 
-    public function __construct(MathAdapterInterface $adapter, PointSerializerInterface $pointSerializer = null)
+    /**
+     * Formatter constructor.
+     * @param GmpMathInterface $adapter
+     * @param PointSerializerInterface|null $pointSerializer
+     */
+    public function __construct(GmpMathInterface $adapter, PointSerializerInterface $pointSerializer = null)
     {
         $this->adapter = $adapter;
         $this->pointSerializer = $pointSerializer ?: new UncompressedPointSerializer($adapter);
     }
 
+    /**
+     * @param PublicKeyInterface $key
+     * @return string
+     */
     public function format(PublicKeyInterface $key)
     {
         if (! ($key->getCurve() instanceof NamedCurveFp)) {
@@ -44,6 +59,10 @@ class Formatter
         return $sequence->getBinary();
     }
 
+    /**
+     * @param PointInterface $point
+     * @return string
+     */
     public function encodePoint(PointInterface $point)
     {
         return $this->pointSerializer->serialize($point);

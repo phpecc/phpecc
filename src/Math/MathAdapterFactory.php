@@ -7,16 +7,16 @@ class MathAdapterFactory
     private static $forcedAdapter = null;
 
     /**
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface $adapter
      */
-    public static function forceAdapter(MathAdapterInterface $adapter = null)
+    public static function forceAdapter(GmpMathInterface $adapter = null)
     {
         self::$forcedAdapter = $adapter;
     }
 
     /**
      * @param bool $debug
-     * @return DebugDecorator|MathAdapterInterface|null
+     * @return DebugDecorator|GmpMathInterface|null
      */
     public static function getAdapter($debug = false)
     {
@@ -33,25 +33,12 @@ class MathAdapterFactory
     }
 
     /**
-     * @param bool $debug
-     * @return DebugDecorator|MathAdapterInterface
-     */
-    public static function getGmpAdapter($debug = false)
-    {
-        if (self::canLoad('gmp')) {
-            return self::wrapAdapter(new Gmp(), $debug);
-        }
-
-        throw new \RuntimeException('Please install GMP extension.');
-    }
-
-    /**
      * @return string
      */
     private static function getAdapterClass()
     {
         if (self::canLoad('gmp')) {
-            return '\Mdanter\Ecc\Math\Gmp';
+            return '\Mdanter\Ecc\Math\GmpMath';
         }
 
         throw new \RuntimeException('Please install GMP extension.');
@@ -67,11 +54,11 @@ class MathAdapterFactory
     }
 
     /**
-     * @param MathAdapterInterface $adapter
-     * @param $debug
-     * @return DebugDecorator|MathAdapterInterface
+     * @param GmpMathInterface $adapter
+     * @param bool $debug
+     * @return DebugDecorator|GmpMathInterface
      */
-    private static function wrapAdapter(MathAdapterInterface $adapter, $debug)
+    private static function wrapAdapter(GmpMathInterface $adapter, $debug)
     {
         if ($debug === true) {
             return new DebugDecorator($adapter);

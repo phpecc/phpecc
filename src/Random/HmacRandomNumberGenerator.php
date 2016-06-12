@@ -3,13 +3,14 @@
 namespace Mdanter\Ecc\Random;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMath;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Util\NumberSize;
 
 class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 {
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $math;
 
@@ -41,13 +42,17 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
     /**
      * Hmac constructor.
-     * @param MathAdapterInterface $math
+     * @param GmpMathInterface $math
      * @param PrivateKeyInterface $privateKey
-     * @param int $messageHash - decimal hash of the message (*may* be truncated)
+     * @param \GMP $messageHash - decimal hash of the message (*may* be truncated)
      * @param string $algorithm - hashing algorithm
      */
-    public function __construct(MathAdapterInterface $math, PrivateKeyInterface $privateKey, $messageHash, $algorithm)
+    public function __construct(GmpMathInterface $math, PrivateKeyInterface $privateKey, $messageHash, $algorithm)
     {
+        if (!GmpMath::checkGmpValue($messageHash)) {
+            throw new \InvalidArgumentException('Invalid argument #3 to HmacRandomNumberGenerator constructor - must pass GMP resource or \GMP instance');
+        }
+
         if (!isset($this->algSize[$algorithm])) {
             throw new \InvalidArgumentException('Unsupported hashing algorithm');
         }
@@ -60,18 +65,17 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
     /**
      * @param string $bits - binary string of bits
-     * @param int $qlen - length of q in bits
-     * @return int|string
+     * @param resource|\GMP $qlen - length of q in bits
+     * @return \GMP
      */
     public function bits2int($bits, $qlen)
     {
-        $vlen = strlen($bits) * 8;
+        $vlen = gmp_init(strlen($bits) * 8, 10);
         $hex = bin2hex($bits);
-        $hex = strlen($hex) % 2 == 0 ? $hex : '0' . $hex;
-        $v = $this->math->baseConvert($hex, 16, 10);
+        $v = gmp_init($hex, 16);
 
-        if ($vlen > $qlen) {
-            $v = $this->math->rightShift($v, ($vlen - $qlen));
+        if ($this->math->cmp($vlen, $qlen) > 0) {
+            $v = $this->math->rightShift($v, $this->math->toString($this->math->sub($vlen, $qlen)));
         }
 
         return $v;
@@ -79,16 +83,16 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
     /**
      * @param string $bits - a byte string
-     * @param $q - generator order
-     * @param $qlen - length of q in bits
-     * @param $rlen - rounded octet length
+     * @param resource|\GMP $q - generator order
+     * @param resource|\GMP $qlen - length of q in bits
+     * @param resource|\GMP $rlen - rounded octet length
      * @return string
      */
     public function bits2octets($bits, $q, $qlen, $rlen)
     {
         $z1 = $this->bits2int($bits, $qlen);
         $z2 = $this->math->sub($z1, $q);
-        if ($this->math->cmp($z2, 0) < 0) {
+        if ($this->math->cmp($z2, gmp_init(0, 10)) < 0) {
             return $this->int2octets($z1, $rlen);
         }
 
@@ -96,19 +100,20 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @param int $int
-     * @param int $rlen - rounded octet length
+     * @param resource|\GMP $int
+     * @param resource|\GMP $rlen - rounded octet length
      * @return string
      */
     public function int2octets($int, $rlen)
     {
-        $out = pack("H*", $this->math->decHex($int));
-        if (strlen($out) < $rlen) {
-            return str_pad('', $rlen - strlen($out), "\x00") . $out;
+        $out = pack("H*", $this->math->decHex(gmp_strval($int, 10)));
+        $length = gmp_init(strlen($out), 10);
+        if ($this->math->cmp($length, $rlen) < 0) {
+            return str_pad('', $this->math->toString($this->math->sub($rlen, $length)), "\x00") . $out;
         }
 
-        if (strlen($out) > $rlen) {
-            return substr($out, 0, $rlen);
+        if ($this->math->cmp($length, $rlen) > 0) {
+            return substr($out, 0, $this->math->toString($rlen));
         }
 
         return $out;
@@ -124,13 +129,17 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @param $q
-     * @return int|string
+     * @param resource|\GMP $q
+     * @return resource|\GMP
      */
     public function generate($q)
     {
-        $qlen = NumberSize::bnNumBits($this->math, $q);
-        $rlen = $this->math->rightShift($this->math->add($qlen, 7), 3);
+        if (!GmpMath::checkGmpValue($q)) {
+            throw new \InvalidArgumentException('Invalid argument #3 to HmacRandomNumberGenerator::generate - must pass GMP resource or \GMP instance');
+        }
+
+        $qlen = gmp_init(NumberSize::bnNumBits($this->math, $q), 10);
+        $rlen = $this->math->rightShift($this->math->add($qlen, gmp_init(7, 10)), 3);
         $hlen = $this->getHashLength($this->algorithm);
         $bx = $this->int2octets($this->privateKey->getSecret(), $rlen) . $this->int2octets($this->messageHash, $rlen);
 
@@ -145,16 +154,17 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
         $t = '';
         for (;;) {
-            $toff = 0;
-            while ($toff < $rlen) {
+            $toff = gmp_init(0, 10);
+            while ($this->math->cmp($toff, $rlen) < 0) {
                 $v = hash_hmac($this->algorithm, $v, $k, true);
-                $cc = min(strlen($v), $rlen - $toff);
+
+                $cc = min(strlen($v), gmp_strval(gmp_sub($rlen, $toff), 10));
                 $t .= substr($v, 0, $cc);
-                $toff += $cc;
+                $toff = gmp_add($toff, $cc);
             }
 
             $k = $this->bits2int($t, $qlen);
-            if ($this->math->cmp($k, 0) > 0 && $this->math->cmp($k, $q) < 0) {
+            if ($this->math->cmp($k, gmp_init(0, 10)) > 0 && $this->math->cmp($k, $q) < 0) {
                 return $k;
             }
 

@@ -2,8 +2,9 @@
 
 namespace Mdanter\Ecc\Primitives;
 
+use Mdanter\Ecc\Math\GmpMath;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\ModularArithmetic;
-use Mdanter\Ecc\Math\MathAdapterInterface;
 
 /**
  * *********************************************************************
@@ -44,7 +45,7 @@ class Point implements PointInterface
     private $curve;
 
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
@@ -54,17 +55,17 @@ class Point implements PointInterface
     private $modAdapter;
 
     /**
-     * @var string
+     * @var resource|\GMP
      */
     private $x;
 
     /**
-     * @var string
+     * @var resource|\GMP
      */
     private $y;
 
     /**
-     * @var string
+     * @var resource|\GMP
      */
     private $order;
 
@@ -76,37 +77,51 @@ class Point implements PointInterface
     /**
      * Initialize a new instance
      *
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface     $adapter
      * @param CurveFpInterface     $curve
-     * @param int|string           $x
-     * @param int|string           $y
-     * @param int|string           $order
+     * @param resource|\GMP        $x
+     * @param resource|\GMP        $y
+     * @param resource|\GMP        $order
      * @param bool                 $infinity
      *
      * @throws \RuntimeException    when either the curve does not contain the given coordinates or
      *                                      when order is not null and P(x, y) * order is not equal to infinity.
      */
-    public function __construct(MathAdapterInterface $adapter, CurveFpInterface $curve, $x, $y, $order, $infinity = false)
+    public function __construct(GmpMathInterface $adapter, CurveFpInterface $curve, $x, $y, $order = null, $infinity = false)
     {
+        if (!GmpMath::checkGmpValue($x)) {
+            throw new \InvalidArgumentException('Invalid argument #1 to Point constructor - must pass GMP resource or \GMP instance');
+        }
+
+        if (!GmpMath::checkGmpValue($y)) {
+            throw new \InvalidArgumentException('Invalid argument #2 to Point constructor - must pass GMP resource or \GMP instance');
+        }
+
+        if ($order !== null && !GmpMath::checkGmpValue($order)) {
+            throw new \InvalidArgumentException('Invalid argument #3 to Point constructor - must pass GMP resource or \GMP instance');
+        }
+
         $this->adapter    = $adapter;
         $this->modAdapter = $curve->getModAdapter();
         $this->curve      = $curve;
-        $this->x          = (string) $x;
-        $this->y          = (string) $y;
-        $this->order      = $order !== null ? (string) $order : '0';
+        $this->x          = $x;
+        $this->y          = $y;
+        $this->order      = $order !== null ? $order : gmp_init(0, 10);
         $this->infinity   = (bool) $infinity;
-
         if (! $infinity && ! $curve->contains($x, $y)) {
-            throw new \RuntimeException("Curve " . $curve . " does not contain point (" . $x . ", " . $y . ")");
+            throw new \RuntimeException("Curve " . $curve . " does not contain point (" . $adapter->toString($x) . ", " . $adapter->toString($y) . ")");
         }
 
-        if ($order != null && ! $this->mul($order)->isInfinity()) {
-            throw new \RuntimeException("SELF * ORDER MUST EQUAL INFINITY. (" . (string)$this->mul($order) . " found instead)");
+        if (!is_null($order)) {
+            $mul = $this->mul($order);
+            if (!$mul->isInfinity()) {
+                throw new \RuntimeException("SELF * ORDER MUST EQUAL INFINITY. (" . (string)$mul . " found instead)");
+            }
         }
     }
 
     /**
-     * @return MathAdapterInterface
+     * @return GmpMathInterface
      */
     public function getAdapter()
     {
@@ -137,7 +152,7 @@ class Point implements PointInterface
      */
     public function getOrder()
     {
-        return (string) $this->order;
+        return $this->order;
     }
 
     /**
@@ -179,11 +194,11 @@ class Point implements PointInterface
         $math = $this->adapter;
         $modMath = $this->modAdapter;
 
-        if ($math->cmp($addend->getX(), $this->x) == 0) {
-            if ($math->cmp($addend->getY(), $this->y) == 0) {
+        if ($math->equals($addend->getX(), $this->x)) {
+            if ($math->equals($addend->getY(), $this->y)) {
                 return $this->getDouble();
             } else {
-                return new self($this->adapter, $this->curve, 0, 0, 0, true);
+                return $this->curve->getInfinity();
             }
         }
 
@@ -220,8 +235,8 @@ class Point implements PointInterface
         }
 
         $math = $this->adapter;
-        $equal = ($math->cmp($this->x, $other->getX()) == 0);
-        $equal &= ($math->cmp($this->y, $other->getY()) == 0);
+        $equal = ($math->equals($this->x, $other->getX()));
+        $equal &= ($math->equals($this->y, $other->getY()));
         $equal &= $this->isInfinity() == $other->isInfinity();
         $equal &= $this->curve->equals($other->getCurve());
 
@@ -247,25 +262,31 @@ class Point implements PointInterface
      */
     public function mul($n)
     {
+        if (!GmpMath::checkGmpValue($n)) {
+            throw new \InvalidArgumentException('Invalid argument #1 to Point::mul - must pass GMP resource or \GMP instance');
+        }
+
         if ($this->isInfinity()) {
             return $this->curve->getInfinity();
         }
 
-        if ($this->adapter->cmp($this->order, '0') > 0) {
+        $zero = gmp_init(0, 10);
+        if ($this->adapter->cmp($this->order, $zero) > 0) {
             $n = $this->adapter->mod($n, $this->order);
         }
 
-        if ($this->adapter->cmp($n, '0') == 0) {
+        if ($this->adapter->equals($n, $zero)) {
             return $this->curve->getInfinity();
         }
 
+        /** @var self[] $r */
         $r = [
             $this->curve->getInfinity(),
             clone $this
         ];
 
         $k = $this->curve->getSize();
-        $n = str_pad($this->adapter->baseConvert($n, 10, 2), $k, '0', STR_PAD_LEFT);
+        $n = str_pad($this->adapter->baseConvert($this->adapter->toString($n), 10, 2), $k, '0', STR_PAD_LEFT);
 
         for ($i = 0; $i < $k; $i++) {
             $j = $n[$i];
@@ -303,18 +324,25 @@ class Point implements PointInterface
      */
     public function cswapValue(& $a, & $b, $cond)
     {
-        $size = max(strlen($this->adapter->baseConvert($a, 10, 2)), strlen($this->adapter->baseConvert($b, 10, 2)));
+        $isGMP = GmpMath::checkGmpValue($a);
+
+        $sa = $isGMP ? $a : gmp_init(intval($a), 10);
+        $sb = $isGMP ? $b : gmp_init(intval($b), 10);
+        $size = max(strlen(gmp_strval($sa, 2)), strlen(gmp_strval($sb, 2)));
 
         $mask = 1 - intval($cond);
         $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
-        $mask = $this->adapter->baseConvert($mask, 2, 10);
+        $mask = gmp_init($mask, 2);
 
-        $tA = $this->adapter->bitwiseAnd($a, $mask);
-        $tB = $this->adapter->bitwiseAnd($b, $mask);
+        $taA = gmp_and($sa, $mask);
+        $taB = gmp_and($sb, $mask);
 
-        $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
-        $b = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tA);
-        $a = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($a, $b), $tB);
+        $sa = gmp_xor(gmp_xor($sa, $sb), $taB);
+        $sb = gmp_xor(gmp_xor($sa, $sb), $taA);
+        $sa = gmp_xor(gmp_xor($sa, $sb), $taB);
+
+        $a = $isGMP ? $sa : (bool) gmp_strval($sa, 10);
+        $b = $isGMP ? $sb : (bool) gmp_strval($sb, 10);
     }
 
     /**
@@ -341,16 +369,16 @@ class Point implements PointInterface
         $modMath = $this->modAdapter;
 
         $a = $this->curve->getA();
-        $threeX2 = $math->mul(3, $math->pow($this->x, 2));
+        $threeX2 = $math->mul(gmp_init(3, 10), $math->pow($this->x, 2));
 
-        $tangent  = $modMath->div(
+        $tangent = $modMath->div(
             $math->add($threeX2, $a),
-            $math->mul(2, $this->y)
+            $math->mul(gmp_init(2, 10), $this->y)
         );
 
         $x3 = $modMath->sub(
             $math->pow($tangent, 2),
-            $math->mul(2, $this->x)
+            $math->mul(gmp_init(2, 10), $this->x)
         );
 
         $y3 = $modMath->sub(
@@ -381,9 +409,9 @@ class Point implements PointInterface
     {
         if ($this->infinity) {
             return [
-                'x' => 'inf (' . $this->x . ')',
-                'y' => 'inf (' . $this->y . ')',
-                'z' => 'inf (' . $this->order . ')',
+                'x' => 'inf (' . $this->adapter->toString($this->x) . ')',
+                'y' => 'inf (' . $this->adapter->toString($this->y) . ')',
+                'z' => 'inf (' . $this->adapter->toString($this->order) . ')',
                 'curve' => $this->curve
             ];
         }

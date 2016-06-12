@@ -5,29 +5,33 @@ namespace Mdanter\Ecc\Math;
 class ModularArithmetic
 {
     /**
-     * @var MathAdapterInterface
+     * @var GmpMathInterface
      */
     private $adapter;
 
     /**
-     * @var
+     * @var resource|\GMP
      */
     private $modulus;
 
     /**
-     * @param MathAdapterInterface $adapter
-     * @param $modulus
+     * @param GmpMathInterface $adapter
+     * @param resource|\GMP $modulus
      */
-    public function __construct(MathAdapterInterface $adapter, $modulus)
+    public function __construct(GmpMathInterface $adapter, $modulus)
     {
+        if (!GmpMath::checkGmpValue($modulus)) {
+            throw new \InvalidArgumentException('Invalid argument #2 to ModularArithmetic constructor - must pass GMP resource or \GMP instance');
+        }
+
         $this->adapter = $adapter;
         $this->modulus = $modulus;
     }
 
     /**
-     * @param $augend
-     * @param $addend
-     * @return int|string
+     * @param resource|\GMP $augend
+     * @param resource|\GMP $addend
+     * @return \GMP
      */
     public function add($augend, $addend)
     {
@@ -35,9 +39,9 @@ class ModularArithmetic
     }
 
     /**
-     * @param $minuend
-     * @param $subtrahend
-     * @return int|string
+     * @param resource|\GMP $minuend
+     * @param resource|\GMP $subtrahend
+     * @return \GMP
      */
     public function sub($minuend, $subtrahend)
     {
@@ -45,9 +49,9 @@ class ModularArithmetic
     }
 
     /**
-     * @param $multiplier
-     * @param $muliplicand
-     * @return int|string
+     * @param resource|\GMP $multiplier
+     * @param resource|\GMP $muliplicand
+     * @return \GMP
      */
     public function mul($multiplier, $muliplicand)
     {
@@ -55,9 +59,9 @@ class ModularArithmetic
     }
 
     /**
-     * @param $dividend
-     * @param $divisor
-     * @return int|string
+     * @param resource|\GMP $dividend
+     * @param resource|\GMP $divisor
+     * @return \GMP
      */
     public function div($dividend, $divisor)
     {
@@ -65,9 +69,9 @@ class ModularArithmetic
     }
 
     /**
-     * @param $base
-     * @param $exponent
-     * @return mixed
+     * @param resource|\GMP $base
+     * @param resource|\GMP $exponent
+     * @return \GMP
      */
     public function pow($base, $exponent)
     {
