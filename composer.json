@@ -3,6 +3,7 @@
     "description": "PHP Elliptic Curve Cryptography library",
     "type": "library",
     "homepage": "https://github.com/phpecc/phpecc",
+    "keywords": ["secp256k1", "nistp192", "nistp224", "nistp256", "nistp521", "ECDSA", "diffie", "hellman", "ECDH", "elliptic", "curve", "phpecc"],
     "license": "MIT",
     "authors": [
         {

@@ -204,3 +204,4 @@ $bob = $privKeySerializer->parse($loader->loadPrivateKeyData($bobPublicKeyPath))
 $bobDh = $bob->createExchange($alice);
 $messageForBob = $bobDh->decrypt('... the encrypted message... too lazy to actually generate the encoded message');
 ```
+

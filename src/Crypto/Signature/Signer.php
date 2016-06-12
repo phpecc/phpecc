@@ -73,6 +73,7 @@ class Signer
         $generator = $key->getPoint();
         $modMath = $math->getModularArithmetic($generator->getOrder());
 
+        $hash = $this->truncateHash($generator, $hash);
         $k = $math->mod($randomK, $generator->getOrder());
         $p1 = $generator->mul($k);
         $r = $p1->getX();
@@ -101,7 +102,6 @@ class Signer
 
         $generator = $key->getGenerator();
         $n = $generator->getOrder();
-        $point = $key->getPoint();
         $r = $signature->getR();
         $s = $signature->getS();
 
@@ -119,7 +119,7 @@ class Signer
         $c = $math->inverseMod($s, $n);
         $u1 = $modMath->mul($hash, $c);
         $u2 = $modMath->mul($r, $c);
-        $xy = $generator->mul($u1)->add($point->mul($u2));
+        $xy = $generator->mul($u1)->add($key->getPoint()->mul($u2));
         $v = $math->mod($xy->getX(), $n);
 
         return BinaryString::constantTimeCompare($math->toString($v), $math->toString($r));

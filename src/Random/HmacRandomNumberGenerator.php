@@ -49,7 +49,6 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      */
     public function __construct(GmpMathInterface $math, PrivateKeyInterface $privateKey, \GMP $messageHash, $algorithm)
     {
-        
         if (!isset($this->algSize[$algorithm])) {
             throw new \InvalidArgumentException('Unsupported hashing algorithm');
         }
@@ -76,24 +75,6 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
         }
 
         return $v;
-    }
-
-    /**
-     * @param string $bits - a byte string
-     * @param \GMP $q - generator order
-     * @param \GMP $qlen - length of q in bits
-     * @param \GMP $rlen - rounded octet length
-     * @return string
-     */
-    public function bits2octets($bits, \GMP $q, \GMP $qlen, \GMP$rlen)
-    {
-        $z1 = $this->bits2int($bits, $qlen);
-        $z2 = $this->math->sub($z1, $q);
-        if ($this->math->cmp($z2, gmp_init(0, 10)) < 0) {
-            return $this->int2octets($z1, $rlen);
-        }
-
-        return $this->int2octets($z2, $rlen);
     }
 
     /**

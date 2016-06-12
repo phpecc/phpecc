@@ -78,6 +78,15 @@ class CurveFp implements CurveFpInterface
 
     /**
      * {@inheritDoc}
+     * @see \Mdanter\Ecc\CurveFpInterface::getPoint()
+     */
+    public function getPoint(\GMP $x, \GMP $y, \GMP $order = null)
+    {
+        return new Point($this->adapter, $this, $x, $y, $order);
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getInfinity()
      */
     public function getInfinity()
@@ -87,18 +96,9 @@ class CurveFp implements CurveFpInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\CurveFpInterface::getPoint()
-     */
-    public function getPoint(\GMP $x, \GMP $y, \GMP $order = null)
-    {
-        return new Point($this->adapter, $this, $x, $y, $order);
-    }
-
-    /**
-     * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getGenerator()
      */
-    public function getGenerator(\GMP $x, \GMP $y, \GMP $order = null, RandomNumberGeneratorInterface $randomGenerator = null)
+    public function getGenerator(\GMP $x, \GMP $y, \GMP $order, RandomNumberGeneratorInterface $randomGenerator = null)
     {
         return new GeneratorPoint($this->adapter, $this, $x, $y, $order, $randomGenerator);
     }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Mdanter\Ecc\Tests\Crypto;
+namespace Mdanter\Ecc\Tests\Crypto\EcDH;
 
-use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
+use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class EcDhMultiPartyTest extends AbstractTestCase
 {

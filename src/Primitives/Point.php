@@ -205,7 +205,7 @@ class Point implements PointInterface
             $this->y
         );
 
-        return new self($this->adapter, $this->curve, $xR, $yR, $this->order, false);
+        return $this->curve->getPoint($xR, $yR, $this->order);
     }
 
     /**
@@ -370,7 +370,7 @@ class Point implements PointInterface
             $this->y
         );
 
-        return new self($this->adapter, $this->curve, $x3, $y3, $this->order);
+        return $this->curve->getPoint($x3, $y3, $this->order);
     }
 
     /**
