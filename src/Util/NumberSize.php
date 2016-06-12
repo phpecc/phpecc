@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Util;
 
-use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 
 class NumberSize

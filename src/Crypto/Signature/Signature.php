@@ -25,7 +25,6 @@ namespace Mdanter\Ecc\Crypto\Signature;
  * OTHER DEALINGS IN THE SOFTWARE.
  * ***********************************************************************
  */
-use Mdanter\Ecc\Math\GmpMath;
 
 /**
  * Plain Old PHP Object that stores the signature r,s for ECDSA

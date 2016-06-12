@@ -38,7 +38,7 @@ class MathAdapterFactory
     private static function getAdapterClass()
     {
         if (self::canLoad('gmp')) {
-            return '\Mdanter\Ecc\Math\GmpMath';
+            return GmpMath::class;
         }
 
         throw new \RuntimeException('Please install GMP extension.');

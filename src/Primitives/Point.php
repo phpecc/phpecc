@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Primitives;
 
-use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\ModularArithmetic;
 use Mdanter\Ecc\Util\BinaryString;
