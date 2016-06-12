@@ -23,7 +23,6 @@ OTHER DEALINGS IN THE SOFTWARE.
  *************************************************************************/
 namespace Mdanter\Ecc\Primitives;
 
-use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\ModularArithmetic;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
@@ -90,7 +89,7 @@ class CurveFp implements CurveFpInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getPoint()
      */
-    public function getPoint($x, $y, $order = null)
+    public function getPoint(\GMP $x, \GMP $y, \GMP $order = null)
     {
         return new Point($this->adapter, $this, $x, $y, $order);
     }
@@ -99,7 +98,7 @@ class CurveFp implements CurveFpInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::getGenerator()
      */
-    public function getGenerator($x, $y, $order = null, RandomNumberGeneratorInterface $randomGenerator = null)
+    public function getGenerator(\GMP $x, \GMP $y, \GMP $order = null, RandomNumberGeneratorInterface $randomGenerator = null)
     {
         return new GeneratorPoint($this->adapter, $this, $x, $y, $order, $randomGenerator);
     }
@@ -108,16 +107,8 @@ class CurveFp implements CurveFpInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::contains()
      */
-    public function contains($x, $y)
+    public function contains(\GMP $x, \GMP $y)
     {
-        if (!GmpMath::checkGmpValue($x)) {
-            throw new \InvalidArgumentException('Invalid argument #1 to CurveFp::contains() - must pass GMP resource or \GMP instance');
-        }
-
-        if (!GmpMath::checkGmpValue($y)) {
-            throw new \InvalidArgumentException('Invalid argument #2 to CurveFp::contains() - must pass GMP resource or \GMP instance');
-        }
-
         $math = $this->adapter;
 
         $eq_zero = $math->equals(

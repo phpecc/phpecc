@@ -47,10 +47,10 @@ class BignumInt extends Object implements Parsable
     }
 
     /**
-     * @param resource|\GMP $number
+     * @param \GMP $number
      * @param int $positions
      *
-     * @return resource|\GMP
+     * @return \GMP
      */
     private function rightShift($number, $positions)
     {

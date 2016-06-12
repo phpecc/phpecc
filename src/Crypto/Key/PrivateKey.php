@@ -27,7 +27,6 @@ namespace Mdanter\Ecc\Crypto\Key;
  */
 
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
-use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 
@@ -56,12 +55,8 @@ class PrivateKey implements PrivateKeyInterface
      * @param GeneratorPoint $generator
      * @param \GMP $secretMultiplier
      */
-    public function __construct(GmpMathInterface $adapter, GeneratorPoint $generator, $secretMultiplier)
+    public function __construct(GmpMathInterface $adapter, GeneratorPoint $generator, \GMP $secretMultiplier)
     {
-        if (!GmpMath::checkGmpValue($secretMultiplier)) {
-            throw new \InvalidArgumentException('Invalid argument #1 to PrivateKey constructor - must pass GMP resource or \GMP instance');
-        }
-
         $this->adapter = $adapter;
         $this->generator = $generator;
         $this->secretMultiplier = $secretMultiplier;

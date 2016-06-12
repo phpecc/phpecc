@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Math;
 
-use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
@@ -85,28 +84,28 @@ class MathTest extends AbstractTestCase
         $y = gmp_init(4, 10);
 
         $mod = $math->mod($x, $y);
-        $this->assertTrue(GmpMath::checkGmpValue($mod));
+        $this->assertTrue(is_object($mod) && $mod instanceof \GMP);
 
         $add = $math->add($x, $y);
-        $this->assertTrue(GmpMath::checkGmpValue($add));
+        $this->assertTrue(is_object($add) && $add instanceof \GMP);
 
         $sub = $math->sub($add, $y);
-        $this->assertTrue(GmpMath::checkGmpValue($sub));
+        $this->assertTrue(is_object($sub) && $sub instanceof \GMP);
 
         $mul = $math->mul($x, $y);
-        $this->assertTrue(GmpMath::checkGmpValue($sub));
+        $this->assertTrue(is_object($mul) && $mul instanceof \GMP);
 
         $div = $math->div($mul, $y);
-        $this->assertTrue(GmpMath::checkGmpValue($div));
+        $this->assertTrue(is_object($div) && $div instanceof \GMP);
 
         $pow = $math->pow($x, 4);
-        $this->assertTrue(GmpMath::checkGmpValue($pow));
+        $this->assertTrue(is_object($pow) && $pow instanceof \GMP);
 
         $powmod = $math->powmod($x, $y, $y);
-        $this->assertTrue(GmpMath::checkGmpValue($powmod));
+        $this->assertTrue(is_object($powmod) && $powmod instanceof \GMP);
 
         $bitwiseand = $math->bitwiseAnd($x, $y);
-        $this->assertTrue(GmpMath::checkGmpValue($bitwiseand));
+        $this->assertTrue(is_object($bitwiseand) && $bitwiseand instanceof \GMP);
 
         $hexdec = $math->decHex(10);
         $this->assertTrue(is_string($hexdec));

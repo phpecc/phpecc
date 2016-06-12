@@ -38,12 +38,12 @@ class RandomGeneratorFactory
 
     /**
      * @param PrivateKeyInterface $privateKey
-     * @param $messageHash
-     * @param $algo
+     * @param \GMP                $messageHash
+     * @param string              $algo
      * @param bool                $debug
      * @return DebugDecorator|RandomNumberGeneratorInterface
      */
-    public static function getHmacRandomGenerator(PrivateKeyInterface $privateKey, $messageHash, $algo, $debug = false)
+    public static function getHmacRandomGenerator(PrivateKeyInterface $privateKey, \GMP $messageHash, $algo, $debug = false)
     {
         return self::wrapAdapter(
             new HmacRandomNumberGenerator(

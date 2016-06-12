@@ -25,7 +25,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     private $privateKey;
 
     /**
-     * @var int
+     * @var \GMP
      */
     private $messageHash;
 
@@ -47,12 +47,9 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
      * @param \GMP $messageHash - decimal hash of the message (*may* be truncated)
      * @param string $algorithm - hashing algorithm
      */
-    public function __construct(GmpMathInterface $math, PrivateKeyInterface $privateKey, $messageHash, $algorithm)
+    public function __construct(GmpMathInterface $math, PrivateKeyInterface $privateKey, \GMP $messageHash, $algorithm)
     {
-        if (!GmpMath::checkGmpValue($messageHash)) {
-            throw new \InvalidArgumentException('Invalid argument #3 to HmacRandomNumberGenerator constructor - must pass GMP resource or \GMP instance');
-        }
-
+        
         if (!isset($this->algSize[$algorithm])) {
             throw new \InvalidArgumentException('Unsupported hashing algorithm');
         }
@@ -65,7 +62,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
     /**
      * @param string $bits - binary string of bits
-     * @param resource|\GMP $qlen - length of q in bits
+     * @param \GMP $qlen - length of q in bits
      * @return \GMP
      */
     public function bits2int($bits, $qlen)
@@ -83,12 +80,12 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
 
     /**
      * @param string $bits - a byte string
-     * @param resource|\GMP $q - generator order
-     * @param resource|\GMP $qlen - length of q in bits
-     * @param resource|\GMP $rlen - rounded octet length
+     * @param \GMP $q - generator order
+     * @param \GMP $qlen - length of q in bits
+     * @param \GMP $rlen - rounded octet length
      * @return string
      */
-    public function bits2octets($bits, $q, $qlen, $rlen)
+    public function bits2octets($bits, \GMP $q, \GMP $qlen, \GMP$rlen)
     {
         $z1 = $this->bits2int($bits, $qlen);
         $z2 = $this->math->sub($z1, $q);
@@ -100,11 +97,11 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @param resource|\GMP $int
-     * @param resource|\GMP $rlen - rounded octet length
+     * @param \GMP $int
+     * @param \GMP $rlen - rounded octet length
      * @return string
      */
-    public function int2octets($int, $rlen)
+    public function int2octets(\GMP $int, \GMP $rlen)
     {
         $out = pack("H*", $this->math->decHex(gmp_strval($int, 10)));
         $length = gmp_init(strlen($out), 10);
@@ -129,15 +126,11 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
-     * @param resource|\GMP $q
-     * @return resource|\GMP
+     * @param \GMP $q
+     * @return \GMP
      */
-    public function generate($q)
+    public function generate(\GMP $q)
     {
-        if (!GmpMath::checkGmpValue($q)) {
-            throw new \InvalidArgumentException('Invalid argument #3 to HmacRandomNumberGenerator::generate - must pass GMP resource or \GMP instance');
-        }
-
         $qlen = gmp_init(NumberSize::bnNumBits($this->math, $q), 10);
         $rlen = $this->math->rightShift($this->math->add($qlen, gmp_init(7, 10)), 3);
         $hlen = $this->getHashLength($this->algorithm);
