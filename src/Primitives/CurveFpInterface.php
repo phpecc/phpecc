@@ -67,7 +67,7 @@ interface CurveFpInterface
      * @param  RandomNumberGeneratorInterface $randomGenerator
      * @return GeneratorPoint
      */
-    public function getGenerator(\GMP $x, \GMP $y, \GMP $order = null, RandomNumberGeneratorInterface $randomGenerator = null);
+    public function getGenerator(\GMP $x, \GMP $y, \GMP $order, RandomNumberGeneratorInterface $randomGenerator = null);
 
     /**
      * Checks whether the curve contains the given coordinates.

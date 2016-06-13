@@ -63,9 +63,9 @@ class PublicKey implements PublicKeyInterface
     /**
      * Initialize a new instance.
      *
-     * @param  GmpMathInterface $adapter
-     * @param  GeneratorPoint       $generator
-     * @param  PointInterface       $point
+     * @param  GmpMathInterface  $adapter
+     * @param  GeneratorPoint    $generator
+     * @param  PointInterface    $point
      * @throws \LogicException
      * @throws \RuntimeException
      */
@@ -77,14 +77,6 @@ class PublicKey implements PublicKeyInterface
         $this->adapter = $adapter;
 
         $n = $generator->getOrder();
-
-        if ($n == null) {
-            throw new \LogicException("Generator must have order.");
-        }
-
-        if (! $point->mul($n)->isInfinity()) {
-            throw new \RuntimeException("Generator point order is bad.");
-        }
 
         if ($adapter->cmp($point->getX(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getX()) <= 0
             || $adapter->cmp($point->getY(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getY()) <= 0

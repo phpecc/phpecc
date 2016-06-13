@@ -9,30 +9,17 @@ use Mdanter\Ecc\Math\MathAdapterFactory;
 class RandomGeneratorFactory
 {
     /**
-     * @var RandomNumberGeneratorInterface|null
-     */
-    private static $forcedGenerator = null;
-
-    /**
-     * @param RandomNumberGeneratorInterface $generator
-     */
-    public static function forceGenerator(RandomNumberGeneratorInterface $generator = null)
-    {
-        self::$forcedGenerator = $generator;
-    }
-
-    /**
      * @param bool $debug
      * @return DebugDecorator|RandomNumberGeneratorInterface|null
      */
     public static function getRandomGenerator($debug = false)
     {
-        if (self::$forcedGenerator !== null) {
-            return self::$forcedGenerator;
-        }
-
-        return new RandomNumberGenerator(
-            MathAdapterFactory::getAdapter($debug)
+        return self::wrapAdapter(
+            new RandomNumberGenerator(
+                MathAdapterFactory::getAdapter($debug)
+            ),
+            'random_bytes',
+            $debug
         );
     }
 
