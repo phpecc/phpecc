@@ -1,6 +1,12 @@
 # http://point-at-infinity.org/ecc/nisttv
 name: nist-p192
-diffie: []
+diffie:
+  -
+    alice: 1232091652477720970182628823699856632766861994001762104358
+    bob: 2430498168086027075235323291965700904647968956044338515810
+    shared: AD420182633F8526BFE954ACDA376F05E5FF4F837F54FEBE
+    # https://tools.ietf.org/html/rfc5114.html
+
 keypairs:
   -
     k: 1
