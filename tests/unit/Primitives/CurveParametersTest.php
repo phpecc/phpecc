@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Primitives;
 
-
 use Mdanter\Ecc\Primitives\CurveParameters;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 

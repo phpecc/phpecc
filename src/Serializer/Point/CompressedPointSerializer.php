@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Serializer\Point;
 
-
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\PointInterface;

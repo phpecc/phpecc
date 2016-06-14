@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Crypto\EcDH;
 
-
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Tests\AbstractTestCase;

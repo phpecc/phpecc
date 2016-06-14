@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
-
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;

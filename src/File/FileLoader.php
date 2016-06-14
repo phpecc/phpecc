@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\File;
 
-
 interface FileLoader
 {
     /**
