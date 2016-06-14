@@ -187,7 +187,7 @@ interface GmpMathInterface
     /**
      *
      * @param  \GMP $m
-     * @return int|string
+     * @return \GMP
      */
     public function digestInteger(\GMP $m);
 
