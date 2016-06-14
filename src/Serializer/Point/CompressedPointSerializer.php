@@ -7,7 +7,7 @@ use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 
-class CompressedPointSerializer
+class CompressedPointSerializer implements PointSerializerInterface
 {
     /**
      * @var GmpMathInterface
