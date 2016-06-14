@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc\Tests\Serializer;
 
 
+use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
@@ -10,7 +11,6 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class PemPublicKeySerializerTest extends AbstractTestCase
 {
-
     public function testConsistent()
     {
         $adapter = EccFactory::getAdapter();
