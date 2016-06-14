@@ -24,9 +24,7 @@ class MathAdapterFactory
             return self::$forcedAdapter;
         }
 
-        $adapter = null;
         $adapterClass = self::getAdapterClass();
-
         $adapter = new $adapterClass();
 
         return self::wrapAdapter($adapter, (bool) $debug);
