@@ -53,6 +53,13 @@ interface CurveFpInterface
     public function getPoint(\GMP $x, \GMP $y, \GMP $order = null);
 
     /**
+     * @param bool $wasOdd
+     * @param \GMP $x
+     * @return \GMP
+     */
+    public function recoverYfromX($wasOdd, \GMP $x);
+
+    /**
      * Returns a point representing infinity on the curve.
      *
      * @return PointInterface

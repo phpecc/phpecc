@@ -104,6 +104,37 @@ class CurveFp implements CurveFpInterface
     }
 
     /**
+     * @param bool $wasOdd
+     * @param \GMP $xCoord
+     * @return \GMP
+     */
+    public function recoverYfromX($wasOdd, \GMP $xCoord)
+    {
+        $math = $this->adapter;
+        $prime = $this->getPrime();
+
+        $root = $this->adapter->getNumberTheory()->squareRootModP(
+            $math->add(
+                $math->add(
+                    $math->powmod(
+                        $xCoord,
+                        gmp_init(3, 10),
+                        $prime
+                    ),
+                    $math->mul($this->getA(), $xCoord)
+                ),
+                $this->getB()
+            ),
+            $prime
+        );
+
+        if ($math->equals($math->mod($root, gmp_init(2, 10)), gmp_init(1)) === $wasOdd) {
+            return $root;
+        } else {
+            return $math->sub($prime, $root);
+        }
+    }
+    /**
      * {@inheritDoc}
      * @see \Mdanter\Ecc\CurveFpInterface::contains()
      */

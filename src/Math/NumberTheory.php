@@ -269,37 +269,4 @@ class NumberTheory
         throw new \InvalidArgumentException('Unable to calculate square root mod p!');
 
     }
-
-    /**
-     * @param CurveFpInterface $curve
-     * @param bool $wasOdd
-     * @param \GMP $xCoord
-     * @return \GMP
-     */
-    public function recoverYfromX(CurveFpInterface $curve, $wasOdd, $xCoord)
-    {
-        $math = $this->adapter;
-        $prime = $curve->getPrime();
-
-        $root = $this->squareRootModP(
-            $math->add(
-                $math->add(
-                    $math->powmod(
-                        $xCoord,
-                        gmp_init(3, 10),
-                        $prime
-                    ),
-                    $math->mul($curve->getA(), $xCoord)
-                ),
-                $curve->getB()
-            ),
-            $prime
-        );
-
-        if ($math->equals($math->mod($root, gmp_init(2, 10)), gmp_init(1)) === $wasOdd) {
-            return $root;
-        } else {
-            return $math->sub($prime, $root);
-        }
-    }
 }
