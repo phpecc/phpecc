@@ -104,8 +104,11 @@ class PrivateKey implements PrivateKeyInterface
      */
     public function createExchange(PublicKeyInterface $recipient = null)
     {
-        return (new EcDH($this->adapter))
+        $ecdh = new EcDH($this->adapter);
+        $ecdh
             ->setSenderKey($this)
             ->setRecipientKey($recipient);
+
+        return $ecdh;
     }
 }
