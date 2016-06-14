@@ -107,6 +107,7 @@ class EcDH implements EcDHInterface
     public function setRecipientKey(PublicKeyInterface $key = null)
     {
         $this->recipientKey = $key;
+        return $this;
     }
 
     /**
@@ -116,6 +117,7 @@ class EcDH implements EcDHInterface
     public function setSenderKey(PrivateKeyInterface $key)
     {
         $this->senderKey = $key;
+        return $this;
     }
 
     /**
