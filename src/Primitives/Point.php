@@ -164,6 +164,7 @@ class Point implements PointInterface
     /**
      * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::add()
+     * @return self
      */
     public function add(PointInterface $addend)
     {
@@ -263,7 +264,7 @@ class Point implements PointInterface
             return $this->curve->getInfinity();
         }
 
-        /** @var self[] $r */
+        /** @var Point[] $r */
         $r = [
             $this->curve->getInfinity(),
             clone $this
@@ -342,6 +343,7 @@ class Point implements PointInterface
     /**
      * {@inheritDoc}
      * @see \Mdanter\Ecc\PointInterface::getDouble()
+     * @return self
      */
     public function getDouble()
     {
