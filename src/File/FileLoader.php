@@ -2,20 +2,18 @@
 
 namespace Mdanter\Ecc\File;
 
-use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
-use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 
 interface FileLoader
 {
     /**
-     * @param $file
-     * @return PublicKeyInterface
+     * @param string $file
+     * @return string
      */
     public function loadPublicKeyData($file);
 
     /**
-     * @param $file
-     * @return PrivateKeyInterface
+     * @param string $file
+     * @return string
      */
     public function loadPrivateKeyData($file);
 }
