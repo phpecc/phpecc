@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Primitives;
 
-
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\ModularArithmetic;
 use Mdanter\Ecc\Tests\AbstractTestCase;

@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Serializer;
 
-
 use Mdanter\Ecc\Crypto\Key\PrivateKey;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;

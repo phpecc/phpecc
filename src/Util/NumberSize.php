@@ -42,7 +42,7 @@ class NumberSize
      *
      * @param  GmpMathInterface $adapter
      * @param  \GMP             $x
-     * @return number
+     * @return integer
      *
      * @link https://www.openssl.org/docs/crypto/BN_num_bytes.html
      */

@@ -2,13 +2,12 @@
 
 namespace Mdanter\Ecc\Serializer\Point;
 
-
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 
-class CompressedPointSerializer
+class CompressedPointSerializer implements PointSerializerInterface
 {
     /**
      * @var GmpMathInterface
@@ -65,6 +64,9 @@ class CompressedPointSerializer
     public function unserialize(CurveFpInterface $curve, $data)
     {
         $prefix = substr($data, 0, 2);
+        if ($prefix !== '03' && $prefix !== '02') {
+            throw new \InvalidArgumentException('Invalid data: only compressed keys are supported.');
+        }
 
         $x = gmp_init(substr($data, 2), 16);
         $y = $curve->recoverYfromX($prefix === '03', $x);

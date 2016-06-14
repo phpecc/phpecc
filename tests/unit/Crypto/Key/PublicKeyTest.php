@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Crypto\Key;
 
-
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Primitives\CurveFp;

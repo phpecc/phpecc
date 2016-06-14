@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Crypto\Signature;
 
-
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 

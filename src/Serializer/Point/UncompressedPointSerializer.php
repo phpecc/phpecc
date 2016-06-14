@@ -5,7 +5,6 @@ namespace Mdanter\Ecc\Serializer\Point;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
-use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Util\BinaryString;
 
 class UncompressedPointSerializer implements PointSerializerInterface

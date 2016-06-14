@@ -49,7 +49,7 @@ class PemPublicKeySerializer implements PublicKeySerializerInterface
     {
         $formattedKey = str_replace('-----BEGIN PUBLIC KEY-----', '', $formattedKey);
         $formattedKey = str_replace('-----END PUBLIC KEY-----', '', $formattedKey);
-
+        
         $data = base64_decode($formattedKey);
 
         return $this->derSerializer->parse($data);
