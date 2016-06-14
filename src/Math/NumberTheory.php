@@ -29,6 +29,7 @@ namespace Mdanter\Ecc\Math;
  *
  * @author Matyas Danter
  */
+use Mdanter\Ecc\Primitives\CurveFpInterface;
 
 /**
  * Rewritten to take a MathAdaptor to handle different environments. Has
@@ -181,8 +182,7 @@ class NumberTheory
         $two = gmp_init(2, 10);
         $four = gmp_init(4, 10);
         $eight = gmp_init(8, 10);
-
-        if ($math->cmp($zero, $a) <= 0 && $math->cmp($a, $p) < 0 && $math->cmp($one, $p) < 0) {
+        if ($math->cmp($one, $p) < 0) {
             if ($math->equals($a, $zero)) {
                 return $zero;
             }
@@ -192,7 +192,6 @@ class NumberTheory
             }
 
             $jac = $math->jacobi($a, $p);
-
             if ($jac == -1) {
                 throw new \LogicException($math->toString($a)." has no square root modulo ".$math->toString($p));
             }
@@ -235,7 +234,7 @@ class NumberTheory
                 //shouldn't get here
             }
 
-            for ($b = gmp_init(2, 10); $math->cmp($b, $p) < 0; $b = gmp_add($b, 1)) {
+            for ($b = gmp_init(2, 10); $math->cmp($b, $p) < 0; $b = gmp_add($b, gmp_init(1, 10))) {
                 if ($math->jacobi(
                     $math->sub(
                         $math->mul($b, $b),
