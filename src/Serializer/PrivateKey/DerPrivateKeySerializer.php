@@ -74,7 +74,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     /**
      * @param PrivateKeyInterface $key
-     * @return int|mixed|string
+     * @return string
      */
     private function formatKey(PrivateKeyInterface $key)
     {

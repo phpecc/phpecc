@@ -292,7 +292,7 @@ class Point implements PointInterface
     /**
      * @param Point $a
      * @param Point $b
-     * @param $cond
+     * @param int $cond
      */
     private function cswap(self $a, self $b, $cond)
     {

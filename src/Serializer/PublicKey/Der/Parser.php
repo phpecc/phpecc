@@ -37,7 +37,7 @@ class Parser
     }
 
     /**
-     * @param $binaryData
+     * @param string $binaryData
      * @return PublicKey
      * @throws \FG\ASN1\Exception\ParserException
      */

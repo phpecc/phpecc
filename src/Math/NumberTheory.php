@@ -29,7 +29,6 @@ namespace Mdanter\Ecc\Math;
  *
  * @author Matyas Danter
  */
-use Mdanter\Ecc\Primitives\CurveFpInterface;
 
 /**
  * Rewritten to take a MathAdaptor to handle different environments. Has
