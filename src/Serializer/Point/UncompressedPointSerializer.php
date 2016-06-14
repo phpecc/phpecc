@@ -29,7 +29,7 @@ class UncompressedPointSerializer implements PointSerializerInterface
      */
     public function serialize(PointInterface $point)
     {
-        $length = CurveOidMapper::getByteSize($point->getCurve()) * 2;
+        $length = ceil($point->getCurve()->getSize() + 7 / 8);
 
         $hexString = '04';
         $hexString .= str_pad(gmp_strval($point->getX(), 16), $length, '0', STR_PAD_LEFT);

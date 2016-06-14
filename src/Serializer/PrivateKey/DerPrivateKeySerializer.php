@@ -104,8 +104,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
         }
 
         $key = gmp_init($children[1]->getContent(), 16);
-        $oid = $children[2]->getContent();
-
+        $oid = $children[2]->getContent()[0];
         $generator = CurveOidMapper::getGeneratorFromOid($oid);
 
         return $generator->getPrivateKeyFrom($key);

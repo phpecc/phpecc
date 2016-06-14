@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\Tests\Curves;
 use Mdanter\Ecc\Math\NumberTheory;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Serializer\Point\CompressedPointSerializer;
+use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Symfony\Component\Yaml\Yaml;
@@ -75,9 +76,14 @@ class SpecBasedCurveTest extends AbstractTestCase
         $this->assertEquals($adapter->hexDec($expectedX), $adapter->toString($publicKey->getPoint()->getX()), $name);
         $this->assertEquals($adapter->hexDec($expectedY), $adapter->toString($publicKey->getPoint()->getY()), $name);
 
-        $compressor = new CompressedPointSerializer($adapter);
-        $serialized = $compressor->serialize($publicKey->getPoint());
-        $parsed = $compressor->unserialize($generator->getCurve(), $serialized);
+        $serializer = new UncompressedPointSerializer($adapter);
+        $serialized = $serializer->serialize($publicKey->getPoint());
+        $parsed = $serializer->unserialize($generator->getCurve(), $serialized);
+        $this->assertTrue($parsed->equals($publicKey->getPoint()));
+
+        $compressingSerializer = new CompressedPointSerializer($adapter);
+        $serialized = $compressingSerializer->serialize($publicKey->getPoint());
+        $parsed = $compressingSerializer->unserialize($generator->getCurve(), $serialized);
         $this->assertTrue($parsed->equals($publicKey->getPoint()));
     }
 
