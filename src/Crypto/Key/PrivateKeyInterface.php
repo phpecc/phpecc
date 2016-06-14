@@ -26,6 +26,7 @@ namespace Mdanter\Ecc\Crypto\Key;
  * ***********************************************************************
  */
 
+use Mdanter\Ecc\Crypto\EcDH\EcDHInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 
 /**
@@ -51,7 +52,7 @@ interface PrivateKeyInterface
 
     /**
      * @param  PublicKeyInterface $recipient
-     * @return int|string
+     * @return EcDHInterface
      */
     public function createExchange(PublicKeyInterface $recipient);
 }

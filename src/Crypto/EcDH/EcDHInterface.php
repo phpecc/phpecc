@@ -37,7 +37,7 @@ interface EcDHInterface
     /**
      * Calculates and returns the shared key for the exchange.
      *
-     * @return string
+     * @return \GMP
      */
     public function calculateSharedKey();
 
