@@ -146,11 +146,10 @@ use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 
-# ECDSA domain is defined by curve/generator/hash algorithm
+# Same parameters as creating_signature.php
 
 $adapter = EccFactory::getAdapter();
 $generator = EccFactory::getNistCurves()->generator384();
-$useDerandomizedSignatures = true;
 $algorithm = 'sha256';
 $sigData = base64_decode('MEQCIBe/A2tKKv2ZPEqpjNnh552rEa4NKEIstOF2O3vGG6pAAiB47qyR8FXMTy/ubso8cEjeh4jLPf1nVeErFZyEiNL+Yg==');
 $document = 'I am writing today...';
@@ -174,11 +173,10 @@ if ($check) {
 } else {
     echo "Signature validation failed\n";
 }
+
 ```
 
 #### Asymmetric encryption
-
-##### The dead simple example:
 
 ```php
 <?php
