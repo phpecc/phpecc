@@ -40,11 +40,11 @@ use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 class NistCurve
 {
 
-    const NAME_P192 = 'nist-p192';
-    const NAME_P224 = 'nist-p224';
-    const NAME_P256 = 'nist-p256';
-    const NAME_P384 = 'nist-p384';
-    const NAME_P521 = 'nist-p521';
+    const NAME_P192 = 'nistp192';
+    const NAME_P224 = 'nistp224';
+    const NAME_P256 = 'nistp256';
+    const NAME_P384 = 'nistp384';
+    const NAME_P521 = 'nistp521';
 
     /**
      * @var GmpMathInterface
