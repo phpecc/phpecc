@@ -184,7 +184,6 @@ class SpecBasedCurveTest extends AbstractTestCase
         $privateKey = $G->getPrivateKeyFrom(gmp_init($privKey, 16));
         $signer = new Signer($math);
         $hashDec = $signer->hashData($G, $algo, $message);
-        //$hash = pack("H*", $math->decHex($hashDec));
 
         $hmac = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $hashDec, $algo);
         $k = $hmac->generate($G->getOrder());
