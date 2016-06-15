@@ -22,8 +22,8 @@ class SpecBasedCurveTest extends AbstractTestCase
         return [
             __DIR__ . '/../../specs/secp-112r1.yml',
             __DIR__ . '/../../specs/secp-256k1.yml',
-            __DIR__ . '/../../specs/secg-256r1.yml',
-            __DIR__ . '/../../specs/secg-384r1.yml',
+            __DIR__ . '/../../specs/secp-256r1.yml',
+            __DIR__ . '/../../specs/secp-384r1.yml',
             __DIR__ . '/../../specs/nist-p192.yml',
             __DIR__ . '/../../specs/nist-p224.yml',
             __DIR__ . '/../../specs/nist-p256.yml',
