@@ -1,5 +1,5 @@
 # http://point-at-infinity.org/ecc/nisttv
-name: nist-p192
+name: nistp192
 diffie:
   -
     alice: 1232091652477720970182628823699856632766861994001762104358

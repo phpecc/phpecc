@@ -1,5 +1,5 @@
 # http://point-at-infinity.org/ecc/nisttv
-name: nist-p256
+name: nistp256
 diffie:
   -
     alice: 58465660097374491973818086175594961879443174043623131473779129263141356544943
