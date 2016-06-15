@@ -1,0 +1,24 @@
+name: secp112r1
+# Another curve lacking known test vectors
+
+keypairs:
+# https://github.com/johndoe31415/joeecc/blob/28e112174b924dd264f43b82577a4e5ca07e66df/ecc/tests/PointSerializationTests.py#L55
+  -
+    k: 1150006935877392410123302408654323
+    x: 20b65a4224192dab5255eee17d
+    y: 470a3471917b1672ed341a571b73
+  -
+    k: 2064809010051183441879192690292545
+    x: 24021cce683926bf0c6ac6b0
+    y: cd71d968563e2646d9382e27b801
+  -
+  # https://github.com/johndoe31415/joeecc/blob/28e112174b924dd264f43b82577a4e5ca07e66df/ecc/tests/CryptoOpsTests.py#L34
+    k: 3735928559
+    x: 955aa20b8a7f86333ab5aca80d39
+    y: 8fe0a1befae6b884b2f1bbf5790d
+diffie:
+  -
+    alice: 2064809010051183441879192690292545
+    bob: 1150006935877392410123302408654323
+    shared: 50a78c813b49f9a6a7255a2ab725
+hmac: []

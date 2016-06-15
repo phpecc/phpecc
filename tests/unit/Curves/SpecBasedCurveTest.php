@@ -20,6 +20,7 @@ class SpecBasedCurveTest extends AbstractTestCase
     public function getFiles()
     {
         return [
+            __DIR__ . '/../../specs/secp-112r1.yml',
             __DIR__ . '/../../specs/secp-256k1.yml',
             __DIR__ . '/../../specs/secg-256r1.yml',
             __DIR__ . '/../../specs/secg-384r1.yml',
@@ -183,7 +184,6 @@ class SpecBasedCurveTest extends AbstractTestCase
         $privateKey = $G->getPrivateKeyFrom(gmp_init($privKey, 16));
         $signer = new Signer($math);
         $hashDec = $signer->hashData($G, $algo, $message);
-        //$hash = pack("H*", $math->decHex($hashDec));
 
         $hmac = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, $hashDec, $algo);
         $k = $hmac->generate($G->getOrder());
