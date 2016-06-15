@@ -3,7 +3,6 @@
 require "../vendor/autoload.php";
 
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\File\PemLoader;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
@@ -19,8 +18,7 @@ $algorithm = 'sha256';
 
 ## You'll be restoring from a key, as opposed to generating one.
 $pemSerializer = new PemPrivateKeySerializer(new DerPrivateKeySerializer($adapter));
-$pemLoader = new PemLoader();
-$keyData = $pemLoader->loadPrivateKeyData('../tests/data/openssl-priv.pem');
+$keyData = file_get_contents('../tests/data/openssl-priv.pem');
 $key = $pemSerializer->parse($keyData);
 
 $document = 'I am writing today...';
