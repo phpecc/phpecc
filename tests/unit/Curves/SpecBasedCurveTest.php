@@ -2,7 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
-use Mdanter\Ecc\Math\NumberTheory;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Serializer\Point\CompressedPointSerializer;
 use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
@@ -21,8 +20,8 @@ class SpecBasedCurveTest extends AbstractTestCase
     public function getFiles()
     {
         return [
+            __DIR__ . '/../../specs/secp-256k1.yml',
             __DIR__ . '/../../specs/secg-256r1.yml',
-            __DIR__ . '/../../specs/secg-256k1.yml',
             __DIR__ . '/../../specs/secg-384r1.yml',
             __DIR__ . '/../../specs/nist-p192.yml',
             __DIR__ . '/../../specs/nist-p224.yml',
