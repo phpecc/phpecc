@@ -1,5 +1,5 @@
 {
-    "name": "mdanter/ecc",
+    "name": "afk11/ecc",
     "description": "PHP Elliptic Curve Cryptography library",
     "type": "library",
     "homepage": "https://github.com/phpecc/phpecc",
