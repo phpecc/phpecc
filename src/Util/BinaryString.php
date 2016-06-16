@@ -60,21 +60,6 @@ class BinaryString
      */
     public static function constantTimeCompare($knownString, $userString)
     {
-        if (PHP_VERSION_ID >= 50600) {
-            return hash_equals($knownString, $userString);
-        }
-        
-        // We have to roll our own
-        $kLen = self::length($knownString);
-        $uLen = self::length($userString);
-        if ($kLen !== $uLen) {
-            return false;
-        }
-        $result = 0;
-        for ($i = 0; $i < $kLen; $i++) {
-            $result |= (ord($knownString[$i]) ^ ord($userString[$i]));
-        }
-        // They are only identical strings if $result is exactly 0...
-        return 0 === $result;
+        return hash_equals($knownString, $userString);
     }
 }
