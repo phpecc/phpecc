@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Tests\Util;
+namespace Mdanter\Ecc\Tests\Serializer\Util;
 
 
 use FG\ASN1\Universal\ObjectIdentifier;

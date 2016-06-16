@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Tests\Serializer;
+namespace Mdanter\Ecc\Tests\Serializer\Signature;
 
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Math\GmpMath;

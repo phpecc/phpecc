@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Tests\Serializer;
+namespace Mdanter\Ecc\Tests\Serializer\PublicKey;
 
 use FG\ASN1\Universal\Integer;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;

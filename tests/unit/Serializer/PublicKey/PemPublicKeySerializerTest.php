@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Tests\Serializer;
+namespace Mdanter\Ecc\Tests\Serializer\PublicKey;
 
 
 use Mdanter\Ecc\Crypto\Key\PublicKey;

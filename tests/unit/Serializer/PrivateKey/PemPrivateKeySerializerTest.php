@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Tests\Serializer;
+namespace Mdanter\Ecc\Tests\Serializer\PrivateKey;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKey;
 use Mdanter\Ecc\EccFactory;
