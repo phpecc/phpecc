@@ -24,31 +24,9 @@ class MathAdapterFactory
             return self::$forcedAdapter;
         }
 
-        $adapterClass = self::getAdapterClass();
-        $adapter = new $adapterClass();
+        $adapter = new GmpMath();
 
         return self::wrapAdapter($adapter, (bool) $debug);
-    }
-
-    /**
-     * @return string
-     */
-    private static function getAdapterClass()
-    {
-        if (self::canLoad('gmp')) {
-            return GmpMath::class;
-        }
-
-        throw new \RuntimeException('Please install GMP extension.');
-    }
-
-    /**
-     * @param $target
-     * @return bool
-     */
-    private static function canLoad($target)
-    {
-        return extension_loaded($target);
     }
 
     /**
