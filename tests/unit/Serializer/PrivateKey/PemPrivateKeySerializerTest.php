@@ -1,6 +1,6 @@
 <?php
 
-namespace Mdanter\Ecc\Tests\Serializer;
+namespace Mdanter\Ecc\Tests\Serializer\PrivateKey;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKey;
 use Mdanter\Ecc\EccFactory;
@@ -12,7 +12,7 @@ class PemPrivateKeySerializerTest extends AbstractTestCase
 {
     public function testReadsDer()
     {
-        $der = file_get_contents(__DIR__ . "/../../data/openssl-priv.pem");
+        $der = file_get_contents(__DIR__ . "/../../../data/openssl-priv.pem");
         $adapter = EccFactory::getAdapter();
         $derSerializer = new DerPrivateKeySerializer($adapter);
         $pemSerializer = new PemPrivateKeySerializer($derSerializer);

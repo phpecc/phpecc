@@ -106,7 +106,7 @@ class CurveOidMapper
         $invertedMap = array_flip(self::$oidMap);
 
         if (array_key_exists($oidString, $invertedMap)) {
-            return CurveFactory::getGeneratorByName($invertedMap[$oidString]);
+            return CurveFactory::getCurveByName($invertedMap[$oidString]);
         }
 
         throw new \RuntimeException('Invalid data: unsupported curve.');
