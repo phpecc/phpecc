@@ -35,4 +35,22 @@ class CurveFactoryTest extends AbstractTestCase
         $this->assertEquals($name, $curve->getName());
         $this->assertEquals($name, $generator->getCurve()->getName());
     }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Unknown curve.
+     */
+    public function testFailsOnUnknownCurve()
+    {
+        CurveFactory::getCurveByName('unknown');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Unknown generator.
+     */
+    public function testFailsOnUnknownGenerator()
+    {
+        CurveFactory::getGeneratorByName('unknown');
+    }
 }
