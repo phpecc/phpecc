@@ -8,7 +8,7 @@ class GmpMath implements GmpMathInterface
 {
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::cmp()
+     * @see GmpMathInterface::cmp()
      */
     public function cmp(\GMP $first, \GMP $other)
     {
@@ -27,7 +27,7 @@ class GmpMath implements GmpMathInterface
     
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::mod()
+     * @see GmpMathInterface::mod()
      */
     public function mod(\GMP $number, \GMP $modulus)
     {
@@ -36,7 +36,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::add()
+     * @see GmpMathInterface::add()
      */
     public function add(\GMP $augend, \GMP $addend)
     {
@@ -45,7 +45,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::sub()
+     * @see GmpMathInterface::sub()
      */
     public function sub(\GMP $minuend, \GMP $subtrahend)
     {
@@ -54,7 +54,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::mul()
+     * @see GmpMathInterface::mul()
      */
     public function mul(\GMP $multiplier, \GMP $multiplicand)
     {
@@ -63,7 +63,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::div()
+     * @see GmpMathInterface::div()
      */
     public function div(\GMP $dividend, \GMP $divisor)
     {
@@ -72,7 +72,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::pow()
+     * @see GmpMathInterface::pow()
      */
     public function pow(\GMP $base, $exponent)
     {
@@ -81,7 +81,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::bitwiseAnd()
+     * @see GmpMathInterface::bitwiseAnd()
      */
     public function bitwiseAnd(\GMP $first, \GMP $other)
     {
@@ -90,7 +90,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::rightShift()
+     * @see GmpMathInterface::rightShift()
      */
     public function rightShift(\GMP $number, $positions)
     {
@@ -100,7 +100,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::bitwiseXor()
+     * @see GmpMathInterface::bitwiseXor()
      */
     public function bitwiseXor(\GMP $first, \GMP $other)
     {
@@ -109,7 +109,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::leftShift()
+     * @see GmpMathInterface::leftShift()
      */
     public function leftShift(\GMP $number, $positions)
     {
@@ -119,7 +119,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::toString()
+     * @see GmpMathInterface::toString()
      */
     public function toString(\GMP $value)
     {
@@ -128,7 +128,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::hexDec()
+     * @see GmpMathInterface::hexDec()
      */
     public function hexDec($hex)
     {
@@ -137,7 +137,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::decHex()
+     * @see GmpMathInterface::decHex()
      */
     public function decHex($dec)
     {
@@ -152,7 +152,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::powmod()
+     * @see GmpMathInterface::powmod()
      */
     public function powmod(\GMP $base, \GMP $exponent, \GMP $modulus)
     {
@@ -165,7 +165,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::isPrime()
+     * @see GmpMathInterface::isPrime()
      */
     public function isPrime(\GMP $n)
     {
@@ -180,7 +180,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::nextPrime()
+     * @see GmpMathInterface::nextPrime()
      */
     public function nextPrime(\GMP $starting_value)
     {
@@ -189,7 +189,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::inverseMod()
+     * @see GmpMathInterface::inverseMod()
      */
     public function inverseMod(\GMP $a, \GMP $m)
     {
@@ -198,7 +198,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::jacobi()
+     * @see GmpMathInterface::jacobi()
      */
     public function jacobi(\GMP $a, \GMP $n)
     {
@@ -207,7 +207,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::intToString()
+     * @see GmpMathInterface::intToString()
      */
     public function intToString(\GMP $x)
     {
@@ -236,7 +236,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::stringToInt()
+     * @see GmpMathInterface::stringToInt()
      */
     public function stringToInt($s)
     {
@@ -252,7 +252,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::digestInteger()
+     * @see GmpMathInterface::digestInteger()
      */
     public function digestInteger(\GMP $m)
     {
@@ -261,7 +261,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::gcd2()
+     * @see GmpMathInterface::gcd2()
      */
     public function gcd2(\GMP $a, \GMP $b)
     {
@@ -276,7 +276,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::baseConvert()
+     * @see GmpMathInterface::baseConvert()
      */
     public function baseConvert($number, $from, $to)
     {
@@ -285,7 +285,7 @@ class GmpMath implements GmpMathInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\GmpMathInterface::getNumberTheory()
+     * @see GmpMathInterface::getNumberTheory()
      */
     public function getNumberTheory()
     {
