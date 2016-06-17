@@ -69,7 +69,7 @@ interface GmpMathInterface
      * Raises a number to a power.
      *
      * @param  \GMP $base     The number to raise.
-     * @param  int|string $exponent The power to raise the number to.
+     * @param  int $exponent The power to raise the number to.
      * @return \GMP
      */
     public function pow(\GMP $base, $exponent);
@@ -95,7 +95,7 @@ interface GmpMathInterface
     /**
      * Shifts bits to the right
      * @param \GMP        $number    Number to shift
-     * @param int|string  $positions Number of positions to shift
+     * @param int  $positions Number of positions to shift
      * @return \GMP
      */
     public function rightShift(\GMP $number, $positions);
@@ -103,7 +103,7 @@ interface GmpMathInterface
     /**
      * Shifts bits to the left
      * @param \GMP       $number    Number to shift
-     * @param int|string $positions Number of positions to shift
+     * @param int $positions Number of positions to shift
      * @return \GMP
      */
     public function leftShift(\GMP $number, $positions);
