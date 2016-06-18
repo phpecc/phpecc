@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\Serializer\Point;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
+use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Util\BinaryString;
 
 class UncompressedPointSerializer implements PointSerializerInterface
@@ -28,7 +29,7 @@ class UncompressedPointSerializer implements PointSerializerInterface
      */
     public function serialize(PointInterface $point)
     {
-        $length = ceil($point->getCurve()->getSize() + 7 / 8);
+        $length = CurveOidMapper::getByteSize($point->getCurve()) * 2;
 
         $hexString = '04';
         $hexString .= str_pad(gmp_strval($point->getX(), 16), $length, '0', STR_PAD_LEFT);
