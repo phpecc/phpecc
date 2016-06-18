@@ -49,7 +49,7 @@ class CurveOidMapper
      * @var array
      */
     private static $sizeMap = array(
-        NistCurve::NAME_P192 => 12,
+        NistCurve::NAME_P192 => 24,
         NistCurve::NAME_P224 => 28,
         NistCurve::NAME_P256 => 32,
         NistCurve::NAME_P384 => 48,
