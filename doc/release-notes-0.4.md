@@ -14,8 +14,10 @@ v0.4 marks the following updates to the library:
 ## Dependency changes
 
 Minimum PHP version is now 5.6.
-symfony/console requirement was removed.
-ext-mcrypt requirement was removed.
+
+`symfony/console` requirement was removed.
+
+`ext-mcrypt` requirement was removed.
 
 ## Notable changes:
 
