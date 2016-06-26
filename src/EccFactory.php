@@ -29,19 +29,6 @@ class EccFactory
     }
 
     /**
-     * Returns a number theory library initialized with the respective math adaptor.
-     * Contains useful modular/polynomial functions
-     *
-     * @param  GmpMathInterface $adapter [optional] Defaults to the return value EccFactory::getAdapter().
-     * @return \Mdanter\Ecc\Math\NumberTheory
-     */
-    public static function getNumberTheory(GmpMathInterface $adapter = null)
-    {
-        $adapter = $adapter ?: self::getAdapter();
-        return $adapter->getNumberTheory();
-    }
-
-    /**
      * Returns a factory to create NIST Recommended curves and generators.
      *
      * @param  GmpMathInterface $adapter [optional] Defaults to the return value of EccFactory::getAdapter().
