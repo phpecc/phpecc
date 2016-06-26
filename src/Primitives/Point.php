@@ -319,12 +319,12 @@ class Point implements PointInterface
         $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
         $mask = gmp_init($mask, 2);
 
-        $taA = gmp_and($sa, $mask);
-        $taB = gmp_and($sb, $mask);
+        $taA = $this->adapter->bitwiseAnd($sa, $mask);
+        $taB = $this->adapter->bitwiseAnd($sb, $mask);
 
-        $sa = gmp_xor(gmp_xor($sa, $sb), $taB);
-        $sb = gmp_xor(gmp_xor($sa, $sb), $taA);
-        $sa = gmp_xor(gmp_xor($sa, $sb), $taB);
+        $sa = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($sa, $sb), $taB);
+        $sb = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($sa, $sb), $taA);
+        $sa = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($sa, $sb), $taB);
 
         $a = $isGMP ? $sa : (bool) gmp_strval($sa, 10);
         $b = $isGMP ? $sb : (bool) gmp_strval($sb, 10);
