@@ -182,6 +182,12 @@ class MathTest extends AbstractTestCase
         $math->intToString(gmp_init(-1, 10));
     }
 
+    public function testIsPrime_Not()
+    {
+        $math = new GmpMath();
+        $this->assertFalse($math->isPrime(gmp_init(4, 10)));
+    }
+
     public function getIntegers()
     {
         return $this->_getAdapters([
