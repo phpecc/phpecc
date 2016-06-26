@@ -139,18 +139,15 @@ class CurveFp implements CurveFpInterface
         $math = $this->adapter;
 
         $eq_zero = $math->equals(
-            $math->mod(
-                $math->sub(
-                    $math->pow($y, 2),
+            $this->modAdapter->sub(
+                $math->pow($y, 2),
+                $math->add(
                     $math->add(
-                        $math->add(
-                            $math->pow($x, 3),
-                            $math->mul($this->getA(), $x)
-                        ),
-                        $this->getB()
-                    )
-                ),
-                $this->getPrime()
+                        $math->pow($x, 3),
+                        $math->mul($this->getA(), $x)
+                    ),
+                    $this->getB()
+                )
             ),
             gmp_init(0, 10)
         );
