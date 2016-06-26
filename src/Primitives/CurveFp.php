@@ -229,9 +229,9 @@ class CurveFp implements CurveFpInterface
     public function __debugInfo()
     {
         return [
-            'a' => (string) $this->getA(),
-            'b' => (string) $this->getB(),
-            'prime' => (string) $this->getPrime()
+            'a' => $this->adapter->toString($this->getA()),
+            'b' => $this->adapter->toString($this->getB()),
+            'prime' => $this->adapter->toString($this->getPrime())
         ];
     }
 }
