@@ -8,10 +8,8 @@ use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\Sequence;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Primitives\CurveFp;
 use Mdanter\Ecc\Primitives\CurveParameters;
-use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Tests\AbstractTestCase;
@@ -71,7 +69,6 @@ class DerPublicKeySerializerTest extends AbstractTestCase
         $y = gmp_init('07192b95ffc8da78631011ed6b24cdd573f977a11e794811', 16);
 
         $generator = $curve->getGenerator($x, $y, $order);
-
         $private = $generator->getPrivateKeyFrom(gmp_init(12));
         $public = $private->getPublicKey();
 
