@@ -51,7 +51,11 @@ class DebugDecorator implements GmpMathInterface
     {
         $strArgs = array_map(
             function ($arg) {
-                return var_export($this->adapter->toString($arg), true);
+                if ($arg instanceof \GMP) {
+                    return var_export($this->adapter->toString($arg), true);
+                } else {
+                    return var_export($arg, true);
+                }
             },
             $args
         );
@@ -64,7 +68,11 @@ class DebugDecorator implements GmpMathInterface
 
         $res = call_user_func_array([ $this->adapter, $func ], $args);
 
-        $this->write(' => ' . var_export($this->adapter->toString($res), true) . PHP_EOL);
+        if ($res instanceof \GMP) {
+            $this->write(' => ' . var_export($this->adapter->toString($res), true) . PHP_EOL);
+        } else {
+            $this->write(' => ' . var_export($res, true) . PHP_EOL);
+        }
 
         return $res;
     }

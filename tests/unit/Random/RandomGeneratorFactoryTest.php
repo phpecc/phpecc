@@ -30,5 +30,7 @@ class RandomGeneratorFactoryTest extends AbstractTestCase
         $rng = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, gmp_init(1), 'sha256', $debugOn);
         $this->assertInstanceOf(DebugDecorator::class, $rng);
         $this->assertInstanceOf(\GMP::class, $rng->generate(gmp_init(111)));
+
+        ob_clean();
     }
 }
