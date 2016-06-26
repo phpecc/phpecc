@@ -167,7 +167,7 @@ interface GmpMathInterface
     /**
      * @param \GMP $a
      * @param \GMP $p
-     * @return \GMP
+     * @return int
      */
     public function jacobi(\GMP $a, \GMP $p);
 
