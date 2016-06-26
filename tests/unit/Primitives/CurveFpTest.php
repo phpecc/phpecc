@@ -3,7 +3,10 @@
 namespace Mdanter\Ecc\Tests\Primitives;
 
 use Mdanter\Ecc\EccFactory;
+use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\ModularArithmetic;
+use Mdanter\Ecc\Primitives\CurveFp;
+use Mdanter\Ecc\Primitives\CurveParameters;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class CurveFpTest extends AbstractTestCase
@@ -34,5 +37,18 @@ class CurveFpTest extends AbstractTestCase
         $this->assertFalse($curve->equals($differentCurve));
         $this->assertTrue($curve->equals($curve));
 
+    }
+
+
+    public function testDebugInfo()
+    {
+        $adapter = new GmpMath();
+        $parameters = new CurveParameters(32, gmp_init(23, 10), gmp_init(1, 10), gmp_init(1, 10));
+        $curve = new CurveFp($parameters, $adapter);
+
+        $debug = $curve->__debugInfo();
+        $this->assertTrue(isset($debug['a']));
+        $this->assertTrue(isset($debug['b']));
+        $this->assertTrue(isset($debug['prime']));
     }
 }
