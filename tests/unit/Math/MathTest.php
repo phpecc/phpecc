@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Math;
 
+use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
@@ -169,6 +170,32 @@ class MathTest extends AbstractTestCase
                 }
             }
         }
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Unable to convert int to string
+     */
+    public function testIntToStringFailure()
+    {
+        $math = new GmpMath();
+        $math->intToString(gmp_init(-1, 10));
+    }
+
+    public function testIsPrime_Not()
+    {
+        $math = new GmpMath();
+        $this->assertFalse($math->isPrime(gmp_init(4, 10)));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Negative exponents (-1) not allowed
+     */
+    public function testPowModNegativeExponent()
+    {
+        $math = new GmpMath();
+        $this->assertFalse($math->powmod(gmp_init(4, 10), gmp_init(-1), gmp_init(10)));
     }
 
     public function getIntegers()

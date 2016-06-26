@@ -157,7 +157,7 @@ class GmpMath implements GmpMathInterface
     public function powmod(\GMP $base, \GMP $exponent, \GMP $modulus)
     {
         if ($this->cmp($exponent, gmp_init(0, 10)) < 0) {
-            throw new \InvalidArgumentException("Negative exponents ($exponent) not allowed.");
+            throw new \InvalidArgumentException("Negative exponents (" . $this->toString($exponent) . ") not allowed.");
         }
 
         return gmp_powm($base, $exponent, $modulus);
