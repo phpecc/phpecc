@@ -17,7 +17,7 @@ class Parser
     {
         $object = Object::fromBinary($binary);
         if ($object->getType() !== Identifier::SEQUENCE) {
-            throw new \RuntimeException('Failed to parse signature');
+            throw new \RuntimeException('Invalid data');
         }
 
         $content = $object->getContent();

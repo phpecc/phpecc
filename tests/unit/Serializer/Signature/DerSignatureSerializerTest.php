@@ -2,6 +2,8 @@
 
 namespace Mdanter\Ecc\Tests\Serializer\Signature;
 
+use FG\ASN1\Universal\BitString;
+use FG\ASN1\Universal\Sequence;
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
@@ -19,6 +21,48 @@ class DerSignatureSerializerTest extends AbstractTestCase
         $serializer = new DerSignatureSerializer();
         $serialized = bin2hex($serializer->serialize($signature));
         $this->assertEquals($expected, $serialized);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Invalid data
+     */
+    public function testInvalidASN1()
+    {
+        // Bitstring is not a sequence..
+        $bitString = new BitString('ab');
+        $binary = $bitString->getBinary();
+        $serializer = new DerSignatureSerializer();
+        $serializer->parse($binary);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Failed to parse signature
+     */
+    public function testInvalidASN2()
+    {
+        // Sequence != 2 items
+        $sequence = new Sequence();
+        $binary = $sequence->getBinary();
+        $serializer = new DerSignatureSerializer();
+        $serializer->parse($binary);
+    }
+    
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Failed to parse signature
+     */
+    public function testInvalidASN3()
+    {
+        // bitstring isn't an integer
+        $sequence = new Sequence(
+            new BitString('41'),
+            new BitString('ab')
+        );
+        $binary = $sequence->getBinary();
+        $serializer = new DerSignatureSerializer();
+        $serializer->parse($binary);
     }
 
     public function testIsConsistent()
