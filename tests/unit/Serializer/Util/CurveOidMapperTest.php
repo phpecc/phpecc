@@ -12,7 +12,7 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class CurveOidMapperTest extends AbstractTestCase
 {
-    public function getNames()
+    public function testGetNames()
     {
         $this->assertInternalType('array', CurveOidMapper::getNames());
     }
