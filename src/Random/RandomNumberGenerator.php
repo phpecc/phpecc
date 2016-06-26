@@ -32,10 +32,7 @@ class RandomNumberGenerator implements RandomNumberGeneratorInterface
 
         // Generate an integer of size >= $numBits
         $bytes = random_bytes($numBytes);
-        $value = gmp_init('0', 10);
-        for ($i = 0; $i < $numBytes; $i++) {
-            $value = gmp_or($value, gmp_mul(ord($bytes[$i]), gmp_pow(2, $i * 8)));
-        }
+        $value = $this->adapter->stringToInt($bytes);
 
         $mask = gmp_sub(gmp_pow(2, $numBits), 1);
         $integer = gmp_and($value, $mask);
