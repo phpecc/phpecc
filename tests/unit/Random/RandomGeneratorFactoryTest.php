@@ -16,13 +16,19 @@ class RandomGeneratorFactoryTest extends AbstractTestCase
     public function testDebug()
     {
         $debugOn = true;
-        $this->assertInstanceOf(DebugDecorator::class, RandomGeneratorFactory::getRandomGenerator($debugOn));
+
+        $rng = RandomGeneratorFactory::getRandomGenerator($debugOn);
+        $this->assertInstanceOf(DebugDecorator::class, $rng);
+        $this->assertInstanceOf(\GMP::class, $rng->generate(gmp_init(111)));
 
         $adapter = new GmpMath();
         $parameters = new CurveParameters(32, gmp_init(23, 10), gmp_init(1, 10), gmp_init(1, 10));
         $curve = new CurveFp($parameters, $adapter);
         $point = new GeneratorPoint($adapter, $curve, gmp_init(13, 10), gmp_init(7, 10), gmp_init(7, 10));
+
         $privateKey = $point->getPrivateKeyFrom(gmp_init(1));
-        $this->assertInstanceOf(DebugDecorator::class, RandomGeneratorFactory::getHmacRandomGenerator($privateKey, gmp_init(1), 'sha256', $debugOn));
+        $rng = RandomGeneratorFactory::getHmacRandomGenerator($privateKey, gmp_init(1), 'sha256', $debugOn);
+        $this->assertInstanceOf(DebugDecorator::class, $rng);
+        $this->assertInstanceOf(\GMP::class, $rng->generate(gmp_init(111)));
     }
 }
