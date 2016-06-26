@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Math;
 
+use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
@@ -169,6 +170,16 @@ class MathTest extends AbstractTestCase
                 }
             }
         }
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Unable to convert int to string
+     */
+    public function testIntToStringFailure()
+    {
+        $math = new GmpMath();
+        $math->intToString(gmp_init(-1, 10));
     }
 
     public function getIntegers()
