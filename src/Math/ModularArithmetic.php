@@ -61,7 +61,7 @@ class ModularArithmetic
      */
     public function div(\GMP $dividend, \GMP $divisor)
     {
-        return $this->adapter->mod($this->adapter->mul($dividend, $this->adapter->inverseMod($divisor, $this->modulus)), $this->modulus);
+        return $this->mul($dividend, $this->adapter->inverseMod($divisor, $this->modulus));
     }
 
     /**

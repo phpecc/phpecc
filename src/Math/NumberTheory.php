@@ -181,6 +181,8 @@ class NumberTheory
         $two = gmp_init(2, 10);
         $four = gmp_init(4, 10);
         $eight = gmp_init(8, 10);
+
+        $modMath = $math->getModularArithmetic($p);
         if ($math->cmp($one, $p) < 0) {
             if ($math->equals($a, $zero)) {
                 return $zero;
@@ -196,38 +198,34 @@ class NumberTheory
             }
 
             if ($math->equals($math->mod($p, $four), gmp_init(3, 10))) {
-                return $math->powmod($a, $math->div($math->add($p, $one), $four), $p);
+                return $modMath->pow($a, $math->div($math->add($p, $one), $four));
             }
 
             if ($math->equals($math->mod($p, $eight), gmp_init(5, 10))) {
-                $d = $math->powmod($a, $math->div($math->sub($p, $one), $four), $p);
+                $d = $modMath->pow($a, $math->div($math->sub($p, $one), $four));
                 if ($math->equals($d, $one)) {
-                    return $math->powmod($a, $math->div($math->add($p, gmp_init(3, 10)), $eight), $p);
+                    return $modMath->pow($a, $math->div($math->add($p, gmp_init(3, 10)), $eight));
                 }
 
                 if ($math->equals($d, $math->sub($p, $one))) {
-                    return $math->mod(
+                    return $modMath->mul(
                         $math->mul(
+                            $two,
+                            $a
+                        ),
+                        $modMath->pow(
                             $math->mul(
-                                $two,
+                                $four,
                                 $a
                             ),
-                            $math->powmod(
-                                $math->mul(
-                                    $four,
-                                    $a
+                            $math->div(
+                                $math->sub(
+                                    $p,
+                                    gmp_init(5, 10)
                                 ),
-                                $math->div(
-                                    $math->sub(
-                                        $p,
-                                        gmp_init(5, 10)
-                                    ),
-                                    $eight
-                                ),
-                                $p
+                                $eight
                             )
-                        ),
-                        $p
+                        )
                     );
                 }
                 //shouldn't get here

@@ -393,20 +393,19 @@ class Point implements PointInterface
      */
     public function __debugInfo()
     {
-        if ($this->infinity) {
-            return [
-                'x' => 'inf (' . $this->adapter->toString($this->x) . ')',
-                'y' => 'inf (' . $this->adapter->toString($this->y) . ')',
-                'z' => 'inf (' . $this->adapter->toString($this->order) . ')',
-                'curve' => $this->curve
-            ];
-        }
-
-        return [
-            'x' => (string) $this->x,
-            'y' => (string) $this->y,
-            'z' => (string) $this->order,
+        $info = [
+            'x' => $this->adapter->toString($this->x),
+            'y' => $this->adapter->toString($this->y),
+            'z' => $this->adapter->toString($this->order),
             'curve' => $this->curve
         ];
+
+        if ($this->infinity) {
+            $info['x'] = 'inf (' . $info['x'] . ')';
+            $info['y'] = 'inf (' . $info['y'] . ')';
+            $info['z'] = 'inf (' . $info['z'] . ')';
+        }
+
+        return $info;
     }
 }
