@@ -116,11 +116,7 @@ class CurveFp implements CurveFpInterface
         $root = $this->adapter->getNumberTheory()->squareRootModP(
             $math->add(
                 $math->add(
-                    $math->powmod(
-                        $xCoord,
-                        gmp_init(3, 10),
-                        $prime
-                    ),
+                    $this->modAdapter->pow($xCoord, gmp_init(3, 10)),
                     $math->mul($this->getA(), $xCoord)
                 ),
                 $this->getB()
