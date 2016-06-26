@@ -60,6 +60,28 @@ class PointTest extends AbstractTestCase
         $this->assertFalse($point2->equals($point));
     }
 
+    public function testDebugInfo()
+    {
+        $adapter = new GmpMath();
+        $parameters = new CurveParameters(32, gmp_init(23, 10), gmp_init(1, 10), gmp_init(1, 10));
+        $curve = new CurveFp($parameters, $adapter);
+
+        $infinity = $curve->getInfinity();
+
+        $debug = $infinity->__debugInfo();
+        $this->assertTrue(isset($debug['x']));
+        $this->assertTrue(isset($debug['y']));
+        $this->assertTrue(isset($debug['z']));
+        $this->assertTrue(isset($debug['curve']));
+
+        $point = new Point($adapter, $curve, gmp_init(13, 10), gmp_init(7, 10), gmp_init(7, 10));
+        $debug = $point->__debugInfo();
+        $this->assertTrue(isset($debug['x']));
+        $this->assertTrue(isset($debug['y']));
+        $this->assertTrue(isset($debug['z']));
+        $this->assertTrue(isset($debug['curve']));
+    }
+
     public function testMulAlreadyInfinity()
     {
         $adapter = new GmpMath();
