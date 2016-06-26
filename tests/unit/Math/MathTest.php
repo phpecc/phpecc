@@ -182,6 +182,13 @@ class MathTest extends AbstractTestCase
         $math->intToString(gmp_init(-1, 10));
     }
 
+    public function testIntToStringEmpty()
+    {
+        $math = new GmpMath();
+        $string = $math->intToString(gmp_init(0, 10));
+        $this->assertEquals(chr(0), $string);
+    }
+
     public function testIsPrime_Not()
     {
         $math = new GmpMath();
