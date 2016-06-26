@@ -188,6 +188,16 @@ class MathTest extends AbstractTestCase
         $this->assertFalse($math->isPrime(gmp_init(4, 10)));
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Negative exponents (-1) not allowed
+     */
+    public function testPowModNegativeExponent()
+    {
+        $math = new GmpMath();
+        $this->assertFalse($math->powmod(gmp_init(4, 10), gmp_init(-1), gmp_init(10)));
+    }
+
     public function getIntegers()
     {
         return $this->_getAdapters([
