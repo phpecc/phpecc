@@ -21,7 +21,7 @@
     "require": {
         "php": ">=5.6.0",
         "ext-gmp": "*",
-        "paragonie/random_compat": "1.4.1|2.0.2",
+        "paragonie/random_compat": "^1|^2",
         "fgrosse/phpasn1": "~1.5"
     },
     "require-dev": {
