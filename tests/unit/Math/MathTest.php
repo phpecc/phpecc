@@ -52,6 +52,15 @@ class MathTest extends AbstractTestCase
     );
 
     /**
+     * @expectedException  \InvalidArgumentException
+     * @expectedExceptionMessage Unable to convert negative integer to hex
+     */
+    public function testDecHexNegative()
+    {
+        (new GmpMath)->decHex(-1);
+    }
+
+    /**
      * @dataProvider getAdapters
      * @param GmpMathInterface $adapter
      */

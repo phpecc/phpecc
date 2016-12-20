@@ -141,13 +141,11 @@ class GmpMath implements GmpMathInterface
      */
     public function decHex($dec)
     {
-        $hex = gmp_strval(gmp_init($dec, 10), 16);
-
-        if (BinaryString::length($hex) % 2 != 0) {
-            $hex = '0'.$hex;
+        if ($dec < 0) {
+            throw new \InvalidArgumentException('Unable to convert negative integer to hex');
         }
 
-        return $hex;
+        return unpack('H*', $this->intToString(gmp_init($dec)))[1];
     }
 
     /**
