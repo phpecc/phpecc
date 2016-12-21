@@ -141,7 +141,13 @@ class GmpMath implements GmpMathInterface
      */
     public function decHex($dec)
     {
-        $hex = gmp_strval(gmp_init($dec, 10), 16);
+        $dec = gmp_init($dec, 10);
+
+        if (gmp_cmp($dec, 0) < 0) {
+            throw new \InvalidArgumentException('Unable to convert negative integer to string');
+        }
+
+        $hex = gmp_strval($dec, 16);
 
         if (BinaryString::length($hex) % 2 != 0) {
             $hex = '0'.$hex;
@@ -211,27 +217,17 @@ class GmpMath implements GmpMathInterface
      */
     public function intToString(\GMP $x)
     {
-        if (gmp_cmp($x, 0) == 0) {
-            return chr(0);
+        if (gmp_cmp($x, 0) < 0) {
+            throw new \InvalidArgumentException('Unable to convert negative integer to string');
         }
 
-        if (gmp_cmp($x, 0) > 0) {
-            $result = "";
+        $hex = gmp_strval($x, 16);
 
-            while (gmp_cmp($x, 0) > 0) {
-                $q = gmp_div($x, 256, 0);
-                $r = gmp_mod($x, 256);
-
-                $ascii = chr(gmp_strval($r));
-
-                $result = $ascii . $result;
-                $x = $q;
-            }
-
-            return $result;
+        if (BinaryString::length($hex) % 2 != 0) {
+            $hex = '0'.$hex;
         }
 
-        throw new \RuntimeException('Unable to convert int to string');
+        return pack('H*', $hex);
     }
 
     /**
