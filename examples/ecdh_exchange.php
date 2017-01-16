@@ -1,6 +1,6 @@
 <?php
 
-require "../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\GmpMathInterface;
@@ -21,8 +21,8 @@ $pemPub = new PemPublicKeySerializer($derPub);
 $pemPriv = new PemPrivateKeySerializer(new DerPrivateKeySerializer($adapter, $derPub));
 
 # These .pem and .key are for different keys
-$alicePriv = $pemPriv->parse(file_get_contents('../tests/data/openssl-priv.pem'));
-$bobPub = $pemPub->parse(file_get_contents('../tests/data/openssl-pub.key'));
+$alicePriv = $pemPriv->parse(file_get_contents(__DIR__ . '/../tests/data/openssl-priv.pem'));
+$bobPub = $pemPub->parse(file_get_contents(__DIR__ . '/../tests/data/openssl-pub.key'));
 
 $exchange = $alicePriv->createExchange($bobPub);
 $shared = $exchange->calculateSharedKey();

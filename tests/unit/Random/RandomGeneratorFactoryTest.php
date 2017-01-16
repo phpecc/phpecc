@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Random;
-
 
 use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Primitives\CurveFp;

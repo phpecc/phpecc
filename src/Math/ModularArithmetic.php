@@ -29,7 +29,7 @@ class ModularArithmetic
      * @param \GMP $addend
      * @return \GMP
      */
-    public function add(\GMP $augend, \GMP $addend)
+    public function add(\GMP $augend, \GMP $addend): \GMP
     {
         return $this->adapter->mod($this->adapter->add($augend, $addend), $this->modulus);
     }
@@ -39,7 +39,7 @@ class ModularArithmetic
      * @param \GMP $subtrahend
      * @return \GMP
      */
-    public function sub(\GMP $minuend, \GMP $subtrahend)
+    public function sub(\GMP $minuend, \GMP $subtrahend): \GMP
     {
         return $this->adapter->mod($this->adapter->sub($minuend, $subtrahend), $this->modulus);
     }
@@ -49,7 +49,7 @@ class ModularArithmetic
      * @param \GMP $muliplicand
      * @return \GMP
      */
-    public function mul(\GMP $multiplier, \GMP $muliplicand)
+    public function mul(\GMP $multiplier, \GMP $muliplicand): \GMP
     {
         return $this->adapter->mod($this->adapter->mul($multiplier, $muliplicand), $this->modulus);
     }
@@ -59,7 +59,7 @@ class ModularArithmetic
      * @param \GMP $divisor
      * @return \GMP
      */
-    public function div(\GMP $dividend, \GMP $divisor)
+    public function div(\GMP $dividend, \GMP $divisor): \GMP
     {
         return $this->mul($dividend, $this->adapter->inverseMod($divisor, $this->modulus));
     }
@@ -69,7 +69,7 @@ class ModularArithmetic
      * @param \GMP $exponent
      * @return \GMP
      */
-    public function pow(\GMP $base, \GMP $exponent)
+    public function pow(\GMP $base, \GMP $exponent): \GMP
     {
         return $this->adapter->powmod($base, $exponent, $this->modulus);
     }

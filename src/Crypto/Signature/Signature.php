@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Crypto\Signature;
 
@@ -34,13 +35,13 @@ class Signature implements SignatureInterface
     /**
      * @var \GMP
      */
-    protected $r;
+    private $r;
 
     /**
      *
      * @var \GMP
      */
-    protected $s;
+    private $s;
 
     /**
      * Initialize a new instance with values
@@ -58,7 +59,7 @@ class Signature implements SignatureInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\Signature\SignatureInterface::getR()
      */
-    public function getR()
+    public function getR(): \GMP
     {
         return $this->r;
     }
@@ -67,7 +68,7 @@ class Signature implements SignatureInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\Signature\SignatureInterface::getS()
      */
-    public function getS()
+    public function getS(): \GMP
     {
         return $this->s;
     }

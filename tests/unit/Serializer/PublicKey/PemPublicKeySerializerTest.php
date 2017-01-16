@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Serializer\PublicKey;
-
 
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\EccFactory;

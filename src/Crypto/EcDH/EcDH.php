@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Crypto\EcDH;
 
@@ -82,7 +83,7 @@ class EcDH implements EcDHInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::calculateSharedKey()
      */
-    public function calculateSharedKey()
+    public function calculateSharedKey(): \GMP
     {
         $this->calculateKey();
 
@@ -93,7 +94,7 @@ class EcDH implements EcDHInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\EcDH\EcDHInterface::createMultiPartyKey()
      */
-    public function createMultiPartyKey()
+    public function createMultiPartyKey(): PublicKeyInterface
     {
         $this->calculateKey();
 

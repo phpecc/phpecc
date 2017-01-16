@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Random;
 
@@ -25,11 +26,10 @@ class RandomNumberGenerator implements RandomNumberGeneratorInterface
      * @param \GMP $max
      * @return \GMP
      */
-    public function generate(\GMP $max)
+    public function generate(\GMP $max): \GMP
     {
         $numBits = NumberSize::bnNumBits($this->adapter, $max);
-        $numBytes = ceil($numBits / 8);
-
+        $numBytes = (int) ceil($numBits / 8);
         // Generate an integer of size >= $numBits
         $bytes = random_bytes($numBytes);
         $value = $this->adapter->stringToInt($bytes);

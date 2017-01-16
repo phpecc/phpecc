@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Serializer\Util;
-
 
 use FG\ASN1\Universal\ObjectIdentifier;
 use Mdanter\Ecc\Curves\NamedCurveFp;
@@ -19,14 +19,14 @@ class CurveOidMapperTest extends AbstractTestCase
 
     public function testValidValues()
     {
+        $nistCurve = EccFactory::getNistCurves()->curve521();
         $G = EccFactory::getNistCurves()->generator521();
-        $nistp521 = $G->getCurve();
-        $nistp521oid = CurveOidMapper::getCurveOid($nistp521);
-        $this->assertEquals(66, CurveOidMapper::getByteSize($nistp521));
+        $nistp521oid = CurveOidMapper::getCurveOid($nistCurve);
+        $this->assertEquals(66, CurveOidMapper::getByteSize($nistCurve));
         $this->assertInstanceOf(ObjectIdentifier::class, $nistp521oid);
 
         $curve = CurveOidMapper::getCurveFromOid($nistp521oid);
-        $this->assertTrue($curve->equals($nistp521));
+        $this->assertTrue($curve->equals($nistCurve));
 
         $gen = CurveOidMapper::getGeneratorFromOid($nistp521oid);
         $this->assertTrue($G->equals($gen));

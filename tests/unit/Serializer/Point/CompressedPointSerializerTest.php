@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Serializer\Point;
-
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Serializer\Point\CompressedPointSerializer;

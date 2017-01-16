@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 
 use FG\ASN1\Object;
 use FG\ASN1\Universal\Sequence;
+use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
@@ -38,10 +40,10 @@ class Parser
 
     /**
      * @param string $binaryData
-     * @return PublicKey
+     * @return PublicKeyInterface
      * @throws \FG\ASN1\Exception\ParserException
      */
-    public function parse($binaryData)
+    public function parse(string $binaryData): PublicKeyInterface
     {
         $asnObject = Object::fromBinary($binaryData);
 
@@ -66,10 +68,10 @@ class Parser
 
     /**
      * @param GeneratorPoint $generator
-     * @param $data
-     * @return PublicKey
+     * @param string $data
+     * @return PublicKeyInterface
      */
-    public function parseKey(GeneratorPoint $generator, $data)
+    public function parseKey(GeneratorPoint $generator, string $data): PublicKeyInterface
     {
         $point = $this->pointSerializer->unserialize($generator->getCurve(), $data);
 

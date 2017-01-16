@@ -3,7 +3,7 @@
     "description": "PHP Elliptic Curve Cryptography library",
     "type": "library",
     "homepage": "https://github.com/phpecc/phpecc",
-    "keywords": ["secp256k1", "nistp192", "nistp224", "nistp256", "nistp521", "ECDSA", "diffie", "hellman", "ECDH", "elliptic", "curve", "phpecc"],
+    "keywords": ["secp256k1", "secp256r1", "nistp192", "nistp224", "nistp256", "nistp384", "nistp521", "ECDSA", "diffie", "hellman", "ECDH", "elliptic", "curve", "phpecc"],
     "license": "MIT",
     "authors": [
         {
@@ -16,13 +16,18 @@
             "email": "thibaud@aztech.io",
             "homepage": "http://aztech.io",
             "role": "Maintainer"
+        },
+        {
+            "name": "Thomas Kerin",
+            "email": "afk11@users.noreply.github.com",
+            "role": "Maintainer"
         }
     ],
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.0",
         "ext-gmp": "*",
         "paragonie/random_compat": "^1|^2",
-        "fgrosse/phpasn1": "~1.5"
+        "fgrosse/phpasn1": "v1.5.*"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.1|~5.0",

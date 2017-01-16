@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Crypto\EcDH;
 
@@ -39,12 +40,12 @@ interface EcDHInterface
      *
      * @return \GMP
      */
-    public function calculateSharedKey();
+    public function calculateSharedKey(): \GMP;
 
     /**
      * @return PublicKeyInterface
      */
-    public function createMultiPartyKey();
+    public function createMultiPartyKey(): PublicKeyInterface;
 
     /**
      * Sets the sender's key.

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Random;
 
@@ -18,7 +19,7 @@ class DebugDecorator implements RandomNumberGeneratorInterface
      * @param RandomNumberGeneratorInterface $generator
      * @param string $name
      */
-    public function __construct(RandomNumberGeneratorInterface $generator, $name)
+    public function __construct(RandomNumberGeneratorInterface $generator, string $name)
     {
         $this->generator = $generator;
         $this->generatorName = $name;
@@ -28,7 +29,7 @@ class DebugDecorator implements RandomNumberGeneratorInterface
      * @param \GMP $max
      * @return \GMP
      */
-    public function generate(\GMP $max)
+    public function generate(\GMP $max): \GMP
     {
         echo $this->generatorName.'::rand() = ';
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Primitives;
 
@@ -115,7 +116,6 @@ class PointTest extends AbstractTestCase
 
         $sum = $infinity->add($point);
         $this->assertTrue($point->equals($sum));
-
     }
 
     public function testConditionalSwap()
@@ -132,17 +132,17 @@ class PointTest extends AbstractTestCase
 
         $point = $curve->getPoint(gmp_init(13, 10), gmp_init(7, 10), gmp_init(7, 10));
 
-        $point->cswapValue($a, $b, false);
+        $point->cswapValue($a, $b, (int) false);
 
         $this->assertEquals($adapter->toString($aa), $adapter->toString($a));
         $this->assertEquals($adapter->toString($ab), $adapter->toString($b));
 
-        $point->cswapValue($a, $b, true);
+        $point->cswapValue($a, $b, (int) true);
 
         $this->assertEquals($adapter->toString($aa), $adapter->toString($b));
         $this->assertEquals($adapter->toString($ab), $adapter->toString($a));
 
-        $point->cswapValue($a, $b, false);
+        $point->cswapValue($a, $b, (int) false);
 
         $this->assertEquals($adapter->toString($aa), $adapter->toString($b));
         $this->assertEquals($adapter->toString($ab), $adapter->toString($a));

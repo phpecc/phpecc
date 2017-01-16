@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Mdanter\Ecc\Random;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
@@ -10,9 +10,9 @@ class RandomGeneratorFactory
 {
     /**
      * @param bool $debug
-     * @return DebugDecorator|RandomNumberGeneratorInterface|null
+     * @return DebugDecorator|RandomNumberGeneratorInterface
      */
-    public static function getRandomGenerator($debug = false)
+    public static function getRandomGenerator(bool $debug = false): RandomNumberGeneratorInterface
     {
         return self::wrapAdapter(
             new RandomNumberGenerator(
@@ -26,18 +26,18 @@ class RandomGeneratorFactory
     /**
      * @param PrivateKeyInterface $privateKey
      * @param \GMP                $messageHash
-     * @param string              $algo
+     * @param string              $algorithm
      * @param bool                $debug
      * @return DebugDecorator|RandomNumberGeneratorInterface
      */
-    public static function getHmacRandomGenerator(PrivateKeyInterface $privateKey, \GMP $messageHash, $algo, $debug = false)
+    public static function getHmacRandomGenerator(PrivateKeyInterface $privateKey, \GMP $messageHash, string $algorithm, bool $debug = false): RandomNumberGeneratorInterface
     {
         return self::wrapAdapter(
             new HmacRandomNumberGenerator(
                 MathAdapterFactory::getAdapter($debug),
                 $privateKey,
                 $messageHash,
-                $algo
+                $algorithm
             ),
             'rfc6979',
             $debug
@@ -46,11 +46,11 @@ class RandomGeneratorFactory
 
     /**
      * @param RandomNumberGeneratorInterface $generator
-     * @param $name
+     * @param string                         $name
      * @param bool                           $debug
      * @return DebugDecorator|RandomNumberGeneratorInterface
      */
-    private static function wrapAdapter(RandomNumberGeneratorInterface $generator, $name, $debug = false)
+    private static function wrapAdapter(RandomNumberGeneratorInterface $generator, string $name, bool $debug = false): RandomNumberGeneratorInterface
     {
         if ($debug === true) {
             return new DebugDecorator($generator, $name);

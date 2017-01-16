@@ -1,19 +1,21 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\Signature\Der;
 
 use FG\ASN1\Identifier;
 use FG\ASN1\Object;
 use Mdanter\Ecc\Crypto\Signature\Signature;
+use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 
 class Parser
 {
     /**
      * @param string $binary
-     * @return Signature
+     * @return SignatureInterface
      * @throws \FG\ASN1\Exception\ParserException
      */
-    public function parse($binary)
+    public function parse(string $binary): SignatureInterface
     {
         $object = Object::fromBinary($binary);
         if ($object->getType() !== Identifier::SEQUENCE) {

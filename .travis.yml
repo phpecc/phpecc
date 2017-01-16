@@ -1,30 +1,45 @@
 language: php
 
 php:
-    - 5.6
     - 7.0
     - nightly
-    - hhvm
-
-sudo: false
 
 env:
-    - MATH_LIB=gmp
+    # The default env behaviour: phpunit, no coverage, no style checks
+  - PHPUNIT=true
+
+matrix:
+  fast_finish: true
+
+  exclude:
+      # Disable phpunit test on 7.0, reenable with COVERAGE
+    - php: 7.0
+      env: PHPUNIT=true
+
+  include:
+      # This reenables php7.0/phpunit test with COVERAGE
+    - php: 7.0
+      env: PHPUNIT=true COVERAGE=true
+
+      # This runs phpcs on php7.0 - only code style
+    - php: 7.0
+      env: CODESTYLE=true
+
+      # This runs phpcs on php7.0 - only examples
+    - php: 7.0
+      env: EXAMPLES=true
+
+sudo: false
 
 before_script:
     - travis_retry composer selfupdate
     - travis_retry composer install --prefer-source
+    - if [ "${COVERAGE}" != "true" ]; then phpenv config-rm xdebug.ini && echo "xdebug disabled" || exit 0; fi
 
 script:
-    - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+    - if [ "${PHPUNIT}" = "true" ]; then make phpunit-ci; fi
+    - if [ "${CODESTYLE}" = "true" ]; then make phpcs && echo "PHPCS OK"; fi
+    - if [ "${EXAMPLES}" = "true" ]; then make test-examples && echo "Examples OK"; fi
 
 after_success:
-    - sh -c 'cd tests && ./validate_examples.sh'
-    - wget https://scrutinizer-ci.com/ocular.phar
-    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "nightly" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi;'
-
-
-matrix:
-    fast_finish: true
-    allow_failures:
-        - php: nightly
+    - sh -c 'if [ "${COVERAGE}" = "true" && "$TRAVIS_PHP_VERSION" != "hhvm" && "$TRAVIS_PHP_VERSION" != "nightly" ]; then make scrutinizer; fi;'
