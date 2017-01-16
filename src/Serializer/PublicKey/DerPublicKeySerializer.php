@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\PublicKey;
 
@@ -52,12 +53,16 @@ class DerPublicKeySerializer implements PublicKeySerializerInterface
      * @param  PublicKeyInterface $key
      * @return string
      */
-    public function serialize(PublicKeyInterface $key)
+    public function serialize(PublicKeyInterface $key): string
     {
         return $this->formatter->format($key);
     }
 
-    public function getUncompressedKey(PublicKeyInterface $key)
+    /**
+     * @param PublicKeyInterface $key
+     * @return string
+     */
+    public function getUncompressedKey(PublicKeyInterface $key): string
     {
         return $this->formatter->encodePoint($key->getPoint());
     }
@@ -66,7 +71,7 @@ class DerPublicKeySerializer implements PublicKeySerializerInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Serializer\PublicKey\PublicKeySerializerInterface::parse()
      */
-    public function parse($string)
+    public function parse(string $string): PublicKeyInterface
     {
         return $this->parser->parse($string);
     }

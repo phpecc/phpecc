@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Crypto\EcDH;
 
@@ -7,7 +8,6 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class EcDhMultiPartyTest extends AbstractTestCase
 {
-
     public function testMultiPartyKeyGeneration()
     {
         $adapter = EccFactory::getAdapter();

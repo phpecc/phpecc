@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Curves;
 
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\CurveParameters;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 
 /**
@@ -56,7 +58,7 @@ class SecgCurve
     /**
      * @return NamedCurveFp
      */
-    public function curve112r1()
+    public function curve112r1(): NamedCurveFp
     {
         $p = gmp_init('0xDB7C2ABF62E35E668076BEAD208B', 16);
         $a = gmp_init('0xDB7C2ABF62E35E668076BEAD2088', 16);
@@ -69,9 +71,9 @@ class SecgCurve
 
     /**
      * @param RandomNumberGeneratorInterface $randomGenerator
-     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     * @return GeneratorPoint
      */
-    public function generator112r1(RandomNumberGeneratorInterface $randomGenerator = null)
+    public function generator112r1(RandomNumberGeneratorInterface $randomGenerator = null): GeneratorPoint
     {
         $curve = $this->curve112r1();
 
@@ -85,7 +87,7 @@ class SecgCurve
     /**
      * @return NamedCurveFp
      */
-    public function curve256k1()
+    public function curve256k1(): NamedCurveFp
     {
         $p = gmp_init('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F', 16);
         $a = gmp_init(0, 10);
@@ -98,9 +100,9 @@ class SecgCurve
 
     /**
      * @param RandomNumberGeneratorInterface $randomGenerator
-     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     * @return GeneratorPoint
      */
-    public function generator256k1(RandomNumberGeneratorInterface $randomGenerator = null)
+    public function generator256k1(RandomNumberGeneratorInterface $randomGenerator = null): GeneratorPoint
     {
         $curve = $this->curve256k1();
 
@@ -114,7 +116,7 @@ class SecgCurve
     /**
      * @return NamedCurveFp
      */
-    public function curve256r1()
+    public function curve256r1(): NamedCurveFp
     {
         $p = gmp_init('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF', 16);
         $a = gmp_init('0xFFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC', 16);
@@ -127,9 +129,9 @@ class SecgCurve
 
     /**
      * @param RandomNumberGeneratorInterface $randomGenerator
-     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     * @return GeneratorPoint
      */
-    public function generator256r1(RandomNumberGeneratorInterface $randomGenerator = null)
+    public function generator256r1(RandomNumberGeneratorInterface $randomGenerator = null): GeneratorPoint
     {
         $curve = $this->curve256r1();
 
@@ -143,7 +145,7 @@ class SecgCurve
     /**
      * @return NamedCurveFp
      */
-    public function curve384r1()
+    public function curve384r1(): NamedCurveFp
     {
         $p = gmp_init('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFF', 16);
         $a = gmp_init('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFC', 16);
@@ -156,9 +158,9 @@ class SecgCurve
 
     /**
      * @param RandomNumberGeneratorInterface $randomGenerator
-     * @return \Mdanter\Ecc\Primitives\GeneratorPoint
+     * @return GeneratorPoint
      */
-    public function generator384r1(RandomNumberGeneratorInterface $randomGenerator = null)
+    public function generator384r1(RandomNumberGeneratorInterface $randomGenerator = null): GeneratorPoint
     {
         $curve = $this->curve384r1();
 

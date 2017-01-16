@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Crypto\Signature;
 
@@ -36,12 +37,12 @@ interface SignatureInterface
      *
      * @return \GMP
      */
-    public function getR();
+    public function getR(): \GMP;
 
     /**
      * Returns the s parameter of the signature.
      *
      * @return \GMP
      */
-    public function getS();
+    public function getS(): \GMP;
 }

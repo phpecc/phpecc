@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Util;
 
@@ -12,7 +13,7 @@ class NumberSize
      * @param \GMP             $x
      * @return float
      */
-    public static function getCeiledByteSize(GmpMathInterface $adapter, \GMP $x)
+    public static function getCeiledByteSize(GmpMathInterface $adapter, \GMP $x): float
     {
         $log2 = 0;
         while ($x = $adapter->rightShift($x, 1)) {
@@ -27,7 +28,7 @@ class NumberSize
      * @param \GMP             $x
      * @return float
      */
-    public static function getFlooredByteSize(GmpMathInterface $adapter, \GMP $x)
+    public static function getFlooredByteSize(GmpMathInterface $adapter, \GMP $x): float
     {
         $log2 = 0;
         while ($x = $adapter->rightShift($x, 1)) {
@@ -42,14 +43,14 @@ class NumberSize
      *
      * @param  GmpMathInterface $adapter
      * @param  \GMP             $x
-     * @return integer
+     * @return int
      *
      * @link https://www.openssl.org/docs/crypto/BN_num_bytes.html
      */
-    public static function bnNumBytes(GmpMathInterface $adapter, \GMP $x)
+    public static function bnNumBytes(GmpMathInterface $adapter, \GMP $x): int
     {
         // https://github.com/luvit/openssl/blob/master/openssl/crypto/bn/bn.h#L402
-        return floor((self::bnNumBits($adapter, $x) + 7) / 8);
+        return (int) floor((self::bnNumBits($adapter, $x) + 7) / 8);
     }
 
     /**
@@ -57,11 +58,11 @@ class NumberSize
      *
      * @param  GmpMathInterface $adapter
      * @param  \GMP             $x
-     * @return number
+     * @return int
      *
      * @link https://www.openssl.org/docs/crypto/BN_num_bytes.html
      */
-    public static function bnNumBits(GmpMathInterface $adapter, \GMP $x)
+    public static function bnNumBits(GmpMathInterface $adapter, \GMP $x): int
     {
         $zero = gmp_init(0, 10);
         if ($adapter->equals($x, $zero)) {

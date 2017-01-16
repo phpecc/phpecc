@@ -1,8 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Curves;
 
 use Mdanter\Ecc\Math\GmpMathInterface;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
+use Mdanter\Ecc\Primitives\GeneratorPoint;
+use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Signature\Signer;
@@ -21,15 +25,20 @@ class SecCurveTest extends AbstractTestCase
     }
 
     /**
-     *
+     * @param GmpMathInterface $math
+     * @param string $function
+     * @param string $a
+     * @param string $b
+     * @param string $prime
      * @dataProvider getCurveParams
      */
-    public function testCurveGeneration(GmpMathInterface $math, $function, $a, $b, $prime)
+    public function testCurveGeneration(GmpMathInterface $math, string $function, string $a, string $b, string $prime)
     {
         $factory = EccFactory::getSecgCurves($math);
+        /** @var CurveFpInterface $curve */
         $curve = $factory->{$function}();
 
-        $this->assertInstanceOf($this->classCurveFpInterface, $curve);
+        $this->assertInstanceOf(CurveFpInterface::class, $curve);
         $this->assertEquals($a, $math->toString($curve->getA()));
         $this->assertEquals($b, $math->toString($curve->getB()));
         $this->assertEquals($prime, $math->toString($curve->getPrime()));
@@ -45,22 +54,26 @@ class SecCurveTest extends AbstractTestCase
     }
 
     /**
-     *
+     * @param GmpMathInterface $math
+     * @param string $function
+     * @param string $order
+     * @param string $prime
      * @dataProvider getGeneratorParams
      */
-    public function testGeneratorGeneration(GmpMathInterface $math, $function, $order, $prime)
+    public function testGeneratorGeneration(GmpMathInterface $math, string $function, string $order, string $prime)
     {
         $factory = EccFactory::getSecgCurves($math);
+        /** @var GeneratorPoint $generator */
         $generator = $factory->{$function}();
 
-        $this->assertInstanceOf($this->classPointInterface, $generator);
+        $this->assertInstanceOf(PointInterface::class, $generator);
         $this->assertEquals($order, $math->toString($generator->getOrder()));
         $this->assertEquals($prime, $math->toString($generator->getCurve()->getPrime()));
     }
 
     /**
-     *
      * @dataProvider getAdapters
+     * @param GmpMathInterface $adapter
      */
     public function testSecp256r1EquivalenceToNistP256(GmpMathInterface $adapter)
     {
@@ -85,6 +98,7 @@ class SecCurveTest extends AbstractTestCase
     }
 
     /**
+     * @param GmpMathInterface $adapter
      * @dataProvider getAdapters
      */
     public function testSecp384r1EquivalenceToNistP384(GmpMathInterface $adapter)

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Crypto\Key;
 
@@ -27,8 +28,11 @@ namespace Mdanter\Ecc\Crypto\Key;
  */
 
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
+use Mdanter\Ecc\Crypto\EcDH\EcDHInterface;
 use Mdanter\Ecc\Math\GmpMathInterface;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
+use Mdanter\Ecc\Primitives\PointInterface;
 
 /**
  * This class serves as public - private key exchange for signature verification.
@@ -66,7 +70,7 @@ class PrivateKey implements PrivateKeyInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::getPublicKey()
      */
-    public function getPublicKey()
+    public function getPublicKey(): PublicKeyInterface
     {
         return new PublicKey($this->adapter, $this->generator, $this->generator->mul($this->secretMultiplier));
     }
@@ -75,7 +79,7 @@ class PrivateKey implements PrivateKeyInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::getPoint()
      */
-    public function getPoint()
+    public function getPoint(): GeneratorPoint
     {
         return $this->generator;
     }
@@ -84,7 +88,7 @@ class PrivateKey implements PrivateKeyInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::getCurve()
      */
-    public function getCurve()
+    public function getCurve(): CurveFpInterface
     {
         return $this->generator->getCurve();
     }
@@ -93,7 +97,7 @@ class PrivateKey implements PrivateKeyInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::getSecret()
      */
-    public function getSecret()
+    public function getSecret(): \GMP
     {
         return $this->secretMultiplier;
     }
@@ -102,7 +106,7 @@ class PrivateKey implements PrivateKeyInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Crypto\Key\PrivateKeyInterface::createExchange()
      */
-    public function createExchange(PublicKeyInterface $recipient = null)
+    public function createExchange(PublicKeyInterface $recipient = null): EcDHInterface
     {
         $ecdh = new EcDH($this->adapter);
         $ecdh

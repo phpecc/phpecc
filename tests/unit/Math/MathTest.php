@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Math;
 
@@ -58,7 +59,7 @@ class MathTest extends AbstractTestCase
     public function testDecHex(GmpMathInterface $adapter)
     {
         foreach ($this->decHexMap as $hex => $dec) {
-            $actual = $adapter->decHex($dec);
+            $actual = $adapter->decHex((string) $dec);
             $this->assertTrue($hex === $actual, "$hex === $actual");
         }
     }
@@ -70,7 +71,7 @@ class MathTest extends AbstractTestCase
     public function testDecHexFailure()
     {
         $math = new GmpMath();
-        $math->decHex(-1);
+        $math->decHex('-1');
     }
 
     /**
@@ -118,7 +119,7 @@ class MathTest extends AbstractTestCase
         $bitwiseand = $math->bitwiseAnd($x, $y);
         $this->assertTrue(is_object($bitwiseand) && $bitwiseand instanceof \GMP);
 
-        $hexdec = $math->decHex(10);
+        $hexdec = $math->decHex('10');
         $this->assertTrue(is_string($hexdec));
 
         $dechex = $math->hexDec($hexdec);
@@ -132,7 +133,7 @@ class MathTest extends AbstractTestCase
     public function testKnownPrimesAreCorrectlyDetected(GmpMathInterface $math)
     {
         foreach ($this->knownPrimes as $key => $prime) {
-            if (trim($prime) == '') {
+            if ($prime === null || $prime === '') {
                 user_error('Empty prime number detected from line #'.($key + 1), E_USER_WARNING);
             }
 
@@ -169,7 +170,7 @@ class MathTest extends AbstractTestCase
             $m = gmp_init(rand(20, 10000), 10);
 
             for ($j = 0; $j < 100; $j ++) {
-                $a = gmp_init(rand(1, gmp_strval(gmp_sub($m, 1), 10)), 10);
+                $a = gmp_init(rand(1, (int) gmp_strval(gmp_sub($m, 1), 10)), 10);
 
                 if ($math->cmp($math->gcd2($a, $m), $one) == 0) {
                     $inv = $math->inverseMod($a, $m);
@@ -199,7 +200,7 @@ class MathTest extends AbstractTestCase
         $this->assertEquals(chr(0), $string);
     }
 
-    public function testIsPrime_Not()
+    public function testIsPrimeNot()
     {
         $math = new GmpMath();
         $this->assertFalse($math->isPrime(gmp_init(4, 10)));
@@ -212,7 +213,7 @@ class MathTest extends AbstractTestCase
     public function testPowModNegativeExponent()
     {
         $math = new GmpMath();
-        $this->assertFalse($math->powmod(gmp_init(4, 10), gmp_init(-1), gmp_init(10)));
+        $math->powmod(gmp_init(4, 10), gmp_init(-1), gmp_init(10));
     }
 
     public function getIntegers()

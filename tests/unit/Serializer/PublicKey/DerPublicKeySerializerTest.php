@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Serializer\PublicKey;
 
@@ -47,7 +48,6 @@ class DerPublicKeySerializerTest extends AbstractTestCase
 
         $serializer = new DerPublicKeySerializer();
         $serializer->parse($binary);
-
     }
 
     /**
@@ -74,6 +74,5 @@ class DerPublicKeySerializerTest extends AbstractTestCase
 
         $serializer = new DerPublicKeySerializer();
         $serializer->serialize($public);
-
     }
 }

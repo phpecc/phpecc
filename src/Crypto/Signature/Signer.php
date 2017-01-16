@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Crypto\Signature;
 
@@ -32,7 +33,7 @@ class Signer
      * @param \GMP $hash
      * @return \GMP
      */
-    public function truncateHash(GeneratorPoint $G, \GMP $hash)
+    public function truncateHash(GeneratorPoint $G, \GMP $hash): \GMP
     {
         $dec = $this->adapter->toString($hash);
         $hexSize = BinaryString::length($this->adapter->decHex($dec));
@@ -51,7 +52,7 @@ class Signer
      * @param string $data
      * @return \GMP
      */
-    public function hashData(GeneratorPoint $G, $algorithm, $data)
+    public function hashData(GeneratorPoint $G, string $algorithm, string $data): \GMP
     {
         if (!in_array($algorithm, hash_algos())) {
             throw new \InvalidArgumentException('Unsupported hashing algorithm');
@@ -65,9 +66,9 @@ class Signer
      * @param PrivateKeyInterface $key
      * @param \GMP $hash
      * @param \GMP $randomK
-     * @return Signature
+     * @return SignatureInterface
      */
-    public function sign(PrivateKeyInterface $key, \GMP $hash, \GMP $randomK)
+    public function sign(PrivateKeyInterface $key, \GMP $hash, \GMP $randomK): SignatureInterface
     {
         $math = $this->adapter;
         $generator = $key->getPoint();
@@ -97,7 +98,7 @@ class Signer
      * @param \GMP $hash
      * @return bool
      */
-    public function verify(PublicKeyInterface $key, SignatureInterface $signature, \GMP $hash)
+    public function verify(PublicKeyInterface $key, SignatureInterface $signature, \GMP $hash): bool
     {
 
         $generator = $key->getGenerator();

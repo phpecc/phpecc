@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Curves;
 
@@ -18,7 +19,7 @@ class NamedCurveFp extends CurveFp
      * @param CurveParameters  $parameters
      * @param GmpMathInterface $adapter
      */
-    public function __construct($name, CurveParameters $parameters, GmpMathInterface $adapter)
+    public function __construct(string $name, CurveParameters $parameters, GmpMathInterface $adapter)
     {
         $this->name = $name;
 
@@ -28,7 +29,7 @@ class NamedCurveFp extends CurveFp
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

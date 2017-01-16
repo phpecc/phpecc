@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Crypto\Signature;
-
 
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\EccFactory;

@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Curves;
-
 
 use Mdanter\Ecc\Tests\AbstractTestCase;
 

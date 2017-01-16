@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 
@@ -33,7 +34,7 @@ class Formatter
      * @param PublicKeyInterface $key
      * @return string
      */
-    public function format(PublicKeyInterface $key)
+    public function format(PublicKeyInterface $key): string
     {
         if (! ($key->getCurve() instanceof NamedCurveFp)) {
             throw new \RuntimeException('Not implemented for unnamed curves');
@@ -54,7 +55,7 @@ class Formatter
      * @param PointInterface $point
      * @return string
      */
-    public function encodePoint(PointInterface $point)
+    public function encodePoint(PointInterface $point): string
     {
         return $this->pointSerializer->serialize($point);
     }

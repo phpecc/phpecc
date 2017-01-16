@@ -1,6 +1,6 @@
 <?php
 
-require "../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
