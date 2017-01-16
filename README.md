@@ -92,7 +92,6 @@ echo $data.PHP_EOL;
 require "../vendor/autoload.php";
 
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\File\PemLoader;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
@@ -107,9 +106,8 @@ $useDerandomizedSignatures = true;
 $algorithm = 'sha256';
 
 ## You'll be restoring from a key, as opposed to generating one.
+$keyData = file_get_contents('../tests/data/openssl-priv.pem');
 $pemSerializer = new PemPrivateKeySerializer(new DerPrivateKeySerializer($adapter));
-$pemLoader = new PemLoader();
-$keyData = $pemLoader->loadPrivateKeyData('../tests/data/openssl-priv.pem');
 $key = $pemSerializer->parse($keyData);
 
 $document = 'I am writing today...';
@@ -131,7 +129,7 @@ $signature = $signer->sign($key, $hash, $randomK);
 $serializer = new DerSignatureSerializer();
 $serializedSig = $serializer->serialize($signature);
 echo base64_encode($serializedSig) . PHP_EOL;
-```php
+```
 
 #### ECDSA - Signature verification
 
