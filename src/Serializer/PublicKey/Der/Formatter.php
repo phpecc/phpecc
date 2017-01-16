@@ -35,7 +35,7 @@ class Formatter
     public function __construct(GmpMathInterface $adapter, PointSerializerInterface $pointSerializer = null)
     {
         $this->adapter = $adapter;
-        $this->pointSerializer = $pointSerializer ?: new UncompressedPointSerializer($adapter);
+        $this->pointSerializer = $pointSerializer ?: new UncompressedPointSerializer();
     }
 
     /**

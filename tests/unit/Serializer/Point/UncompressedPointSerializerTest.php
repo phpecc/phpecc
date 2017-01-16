@@ -16,7 +16,7 @@ class UncompressedPointSerializerTest extends AbstractTestCase
     public function testChecksPrefix()
     {
         $data = '01aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-        $serializer = new UncompressedPointSerializer(EccFactory::getAdapter());
+        $serializer = new UncompressedPointSerializer();
         $serializer->unserialize(EccFactory::getNistCurves()->curve192(), $data);
     }
 }
