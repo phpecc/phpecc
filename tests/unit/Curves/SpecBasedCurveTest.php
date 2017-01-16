@@ -76,7 +76,7 @@ class SpecBasedCurveTest extends AbstractTestCase
         $this->assertEquals($adapter->hexDec($expectedX), $adapter->toString($publicKey->getPoint()->getX()), $name);
         $this->assertEquals($adapter->hexDec($expectedY), $adapter->toString($publicKey->getPoint()->getY()), $name);
 
-        $serializer = new UncompressedPointSerializer($adapter);
+        $serializer = new UncompressedPointSerializer();
         $serialized = $serializer->serialize($publicKey->getPoint());
         $parsed = $serializer->unserialize($generator->getCurve(), $serialized);
         $this->assertTrue($parsed->equals($publicKey->getPoint()));
