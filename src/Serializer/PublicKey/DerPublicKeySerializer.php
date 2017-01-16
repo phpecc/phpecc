@@ -43,7 +43,7 @@ class DerPublicKeySerializer implements PublicKeySerializerInterface
     {
         $this->adapter = $adapter ?: MathAdapterFactory::getAdapter();
 
-        $this->formatter = new Formatter($this->adapter);
+        $this->formatter = new Formatter();
         $this->parser = new Parser($this->adapter);
     }
 

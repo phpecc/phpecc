@@ -5,7 +5,6 @@ namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 use FG\ASN1\Universal\Sequence;
 use FG\ASN1\Universal\ObjectIdentifier;
 use FG\ASN1\Universal\BitString;
-use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Curves\NamedCurveFp;
@@ -16,12 +15,6 @@ use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 
 class Formatter
 {
-
-    /**
-     * @var GmpMathInterface
-     */
-    private $adapter;
-
     /**
      * @var UncompressedPointSerializer
      */
@@ -29,12 +22,10 @@ class Formatter
 
     /**
      * Formatter constructor.
-     * @param GmpMathInterface $adapter
      * @param PointSerializerInterface|null $pointSerializer
      */
-    public function __construct(GmpMathInterface $adapter, PointSerializerInterface $pointSerializer = null)
+    public function __construct(PointSerializerInterface $pointSerializer = null)
     {
-        $this->adapter = $adapter;
         $this->pointSerializer = $pointSerializer ?: new UncompressedPointSerializer();
     }
 
