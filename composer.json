@@ -26,8 +26,7 @@
     "require": {
         "php": ">=7.0",
         "ext-gmp": "*",
-        "paragonie/random_compat": "^1|^2",
-        "fgrosse/phpasn1": "v1.5.*"
+        "fgrosse/phpasn1": "^1.5"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.1|~5.0",
