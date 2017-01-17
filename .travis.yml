@@ -42,4 +42,4 @@ script:
     - if [ "${EXAMPLES}" = "true" ]; then make test-examples && echo "Examples OK"; fi
 
 after_success:
-    - sh -c 'if [ "${COVERAGE}" = "true" && "$TRAVIS_PHP_VERSION" != "hhvm" && "$TRAVIS_PHP_VERSION" != "nightly" ]; then make scrutinizer; fi;'
+    - if [ "${COVERAGE}" = "true" ]; then make scrutinizer; fi
