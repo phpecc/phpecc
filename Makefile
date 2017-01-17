@@ -13,7 +13,7 @@ test-examples:
 		./validate_examples.sh
 
 phpunit-ci: pretest
-		vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+		vendor/bin/phpunit --coverage-text --coverage-clover=tests/output/coverage.clover
 
 ifndef STRICT
 STRICT = 0
@@ -30,13 +30,14 @@ endif
 phpcbf: pretest
 		vendor/bin/phpcbf --standard=PSR2 -n src tests/unit/
 
+ocular:
+		wget https://scrutinizer-ci.com/ocular.phar
+
 ifdef OCULAR_TOKEN
 scrutinizer: ocular
-                wget https://scrutinizer-ci.com/ocular.phar
 		@php ocular.phar code-coverage:upload --format=php-clover tests/output/coverage.clover --access-token=$(OCULAR_TOKEN);
 else
 scrutinizer: ocular
-                wget https://scrutinizer-ci.com/ocular.phar
 		php ocular.phar code-coverage:upload --format=php-clover tests/output/coverage.clover;
 endif
 
