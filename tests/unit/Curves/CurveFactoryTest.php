@@ -19,6 +19,7 @@ class CurveFactoryTest extends AbstractTestCase
             [NistCurve::NAME_P384],
             [NistCurve::NAME_P521],
             [SecgCurve::NAME_SECP_112R1],
+            [SecgCurve::NAME_SECP_192K1],
             [SecgCurve::NAME_SECP_256R1],
             [SecgCurve::NAME_SECP_256K1],
             [SecgCurve::NAME_SECP_384R1],
