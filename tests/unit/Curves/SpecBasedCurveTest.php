@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Curves;
 
+use Mdanter\Ecc\Crypto\Key\PublicKey;
+use Mdanter\Ecc\Primitives\Point;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Serializer\Point\CompressedPointSerializer;
 use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
@@ -22,6 +24,7 @@ class SpecBasedCurveTest extends AbstractTestCase
     {
         return [
             __DIR__ . '/../../specs/secp-112r1.yml',
+            __DIR__ . '/../../specs/secp-192k1.yml',
             __DIR__ . '/../../specs/secp-256k1.yml',
             __DIR__ . '/../../specs/secp-256r1.yml',
             __DIR__ . '/../../specs/secp-384r1.yml',
