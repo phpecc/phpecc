@@ -24,6 +24,8 @@ class CurveOidMapper
 
     const SECP_112R1_OID = '1.3.132.0.6';
 
+    const SECP_192K1_OID = '1.3.132.0.31';
+
     const SECP_256K1_OID = '1.3.132.0.10';
 
     const SECP_256R1_OID = '1.2.840.10045.3.1.7';
@@ -40,6 +42,7 @@ class CurveOidMapper
         NistCurve::NAME_P384 => self::NIST_P384_OID,
         NistCurve::NAME_P521 => self::NIST_P521_OID,
         SecgCurve::NAME_SECP_112R1 => self::SECP_112R1_OID,
+        SecgCurve::NAME_SECP_192K1 => self::SECP_192K1_OID,
         SecgCurve::NAME_SECP_256K1 => self::SECP_256K1_OID,
         SecgCurve::NAME_SECP_256R1 => self::SECP_256R1_OID,
         SecgCurve::NAME_SECP_384R1 => self::SECP_384R1_OID,
@@ -55,6 +58,7 @@ class CurveOidMapper
         NistCurve::NAME_P384 => 48,
         NistCurve::NAME_P521 => 66,
         SecgCurve::NAME_SECP_112R1 => 14,
+        SecgCurve::NAME_SECP_192K1 => 24,
         SecgCurve::NAME_SECP_256K1 => 32,
         SecgCurve::NAME_SECP_256R1 => 32,
         SecgCurve::NAME_SECP_384R1 => 48,
