@@ -16,8 +16,9 @@ $adapter = EccFactory::getAdapter();
 $generator = EccFactory::getNistCurves()->generator384();
 $useDerandomizedSignatures = true;
 
-$pemPriv = new PemPrivateKeySerializer(new DerPrivateKeySerializer());
-$pemPub = new PemPublicKeySerializer(new DerPublicKeySerializer());
+$derPub = new DerPublicKeySerializer();
+$pemPub = new PemPublicKeySerializer($derPub);
+$pemPriv = new PemPrivateKeySerializer(new DerPrivateKeySerializer($adapter, $derPub));
 
 # These .pem and .key are for different keys
 $alicePriv = $pemPriv->parse(file_get_contents('../tests/data/openssl-priv.pem'));
