@@ -165,7 +165,6 @@ class NumberTheory
         }
 
         throw new \InvalidArgumentException('Unable to calculate polynomialPowMod');
-
     }
 
     /**
@@ -264,6 +263,5 @@ class NumberTheory
         }
 
         throw new \InvalidArgumentException('Unable to calculate square root mod p!');
-
     }
 }

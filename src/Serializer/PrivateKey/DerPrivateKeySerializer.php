@@ -11,7 +11,6 @@ use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
-use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use FG\ASN1\ExplicitlyTaggedObject;
 
@@ -37,9 +36,9 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     /**
      * @param GmpMathInterface       $adapter
-     * @param PemPublicKeySerializer $pubKeySerializer
+     * @param DerPublicKeySerializer $pubKeySerializer
      */
-    public function __construct(GmpMathInterface $adapter = null, PemPublicKeySerializer $pubKeySerializer = null)
+    public function __construct(GmpMathInterface $adapter = null, DerPublicKeySerializer $pubKeySerializer = null)
     {
         $this->adapter = $adapter ?: MathAdapterFactory::getAdapter();
         $this->pubKeySerializer = $pubKeySerializer ?: new DerPublicKeySerializer($this->adapter);
@@ -47,7 +46,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::serialize()
+     * @see \Mdanter\Ecc\Serializer\PrivateKey\PrivateKeySerializerInterface::serialize()
      */
     public function serialize(PrivateKeyInterface $key)
     {
@@ -84,7 +83,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
     /**
      * @param string $data
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::parse()
+     * @see \Mdanter\Ecc\Serializer\PrivateKey\PrivateKeySerializerInterface::parse()
      * @throws \FG\ASN1\Exception\ParserException
      */
     public function parse($data)
