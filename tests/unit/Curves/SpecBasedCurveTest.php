@@ -2,6 +2,7 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
+use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Serializer\Point\CompressedPointSerializer;
 use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
@@ -13,7 +14,10 @@ use Mdanter\Ecc\Crypto\Signature\Signer;
 
 class SpecBasedCurveTest extends AbstractTestCase
 {
-
+    const CAUSE_MSG = "message"; // 1
+    const CAUSE_R = "r"; // 2
+    const CAUSE_S = "s"; // 3
+    const CAUSE_Q = "publicKey"; // 4
     /**
      * @return array
      */
@@ -204,7 +208,7 @@ class SpecBasedCurveTest extends AbstractTestCase
     /**
      * @return array
      */
-    public function getECDSATestSet()
+    public function getEcdsaSignFixtures()
     {
         $yaml = new Yaml();
         $files = $this->getFiles();
@@ -250,7 +254,7 @@ class SpecBasedCurveTest extends AbstractTestCase
     }
 
     /**
-     * @dataProvider getECDSATestSet
+     * @dataProvider getEcdsaSignFixtures
      * @param GeneratorPoint $G
      * @param $privKeyHex
      * @param $hashHex
@@ -283,5 +287,96 @@ class SpecBasedCurveTest extends AbstractTestCase
 
         // Should verify
         $this->assertTrue($signer->verify($privateKey->getPublicKey(), $sig, $hash));
+    }
+
+
+    /**
+     * @return array
+     */
+    public function GetEcdsaVerifyFixtures()
+    {
+        $yaml = new Yaml();
+        $files = $this->getFiles();
+        $datasets = [];
+
+        foreach ($files as $file) {
+            $data = $yaml->parse(file_get_contents($file));
+            $generator = CurveFactory::getGeneratorByName($data['name']);
+
+            if (array_key_exists('ecdsa-verify', $data)) {
+                foreach ($data['ecdsa-verify'] as $testKeyPair) {
+                    $algo = null;
+                    $msg = null; // full message, not the digest
+                    $hashRaw = null;
+                    $cause = null;
+                    if (!array_key_exists('msg', $testKeyPair)) {
+                        if (!array_key_exists('msg_full', $testKeyPair)) {
+                            throw new \RuntimeException("Need full message if not given raw hash value");
+                        }
+                        if (!array_key_exists('algo', $testKeyPair)) {
+                            throw new \RuntimeException("Need algorithm in order to hash message");
+                        }
+                        $algo = $testKeyPair['algo'];
+                        $msg = $testKeyPair['msg_full'];
+                    } else {
+                        $hashRaw = $testKeyPair['msg'];
+                    }
+
+                    if (!$testKeyPair['result'] && array_key_exists("cause", $testKeyPair)) {
+                        $cause = $testKeyPair["cause"];
+                    }
+
+                    $datasets[] = [
+                        $generator,
+                        (string) $testKeyPair['r'],
+                        (string) $testKeyPair['s'],
+                        (string) $testKeyPair['x'],
+                        (string) $testKeyPair['y'],
+                        $testKeyPair['result'],
+                        $cause,
+                        $hashRaw,
+                        $msg,
+                        $algo,
+                    ];
+                }
+            }
+        }
+
+        return $datasets;
+    }
+
+    /**
+     * @dataProvider GetEcdsaVerifyFixtures
+     * @param GeneratorPoint $G
+     * @param $hashHex
+     * @param $eR
+     * @param $eS
+     * @param $x
+     * @param $y
+     * @param bool $result
+     * @param string $cause
+     * @param string|null $algo
+     */
+    public function testEcdsaSignatureVerification(GeneratorPoint $G, $eR, $eS, $x, $y, $result, $cause = null, $hashHex = null, $msg = null, $algo = null)
+    {
+        $math = $G->getAdapter();
+        $signer = new Signer($math);
+        try {
+            $publicKey = $G->getPublicKeyFrom(gmp_init($x, 16), gmp_init($y, 16));
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Unexpected exception parsing public key");
+        }
+
+        if ($hashHex != null) {
+            $hash = gmp_init($hashHex, 16);
+        } else {
+            $hash = $signer->hashData($G, $algo, hex2bin($msg));
+        }
+
+        $sig = new Signature(gmp_init($eR, 16), gmp_init($eS, 16));
+
+        // Should verify
+        $verify = $signer->verify($publicKey, $sig, $hash);
+        $this->assertEquals($result, $verify);
     }
 }
