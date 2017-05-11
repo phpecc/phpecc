@@ -293,7 +293,7 @@ class SpecBasedCurveTest extends AbstractTestCase
     /**
      * @return array
      */
-    public function GetEcdsaVerifyFixtures()
+    public function getEcdsaVerifyFixtures()
     {
         $yaml = new Yaml();
         $files = $this->getFiles();
@@ -346,7 +346,7 @@ class SpecBasedCurveTest extends AbstractTestCase
     }
 
     /**
-     * @dataProvider GetEcdsaVerifyFixtures
+     * @dataProvider getEcdsaVerifyFixtures
      * @param GeneratorPoint $G
      * @param $hashHex
      * @param $eR
