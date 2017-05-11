@@ -1,5 +1,15 @@
 #http://www.secg.org/sec2-v2.pdf
 name: secp192k1
+
+ecdsa:
+  # http://cryptomanager.com/tv.html
+  -
+    private: 88E0D092A0A8C714E37FB6542E2E97532E8D0D640E892421
+    msg: "1122334455"
+    k: "12345678"
+    r: 2A6A183888C8C00591B23A1A4D158C186D7877A4EEC0942D
+    s: 8021DC06F39AC6F0064D5D109B7A394DAD9E57BE7E00B5B7
+
 keypairs:
   #http://cryptomanager.com/tv.html
   -
