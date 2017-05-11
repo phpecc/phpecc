@@ -216,13 +216,28 @@ class SpecBasedCurveTest extends AbstractTestCase
 
             if (array_key_exists('ecdsa', $data)) {
                 foreach ($data['ecdsa'] as $testKeyPair) {
+                    $algo = null;
+                    $msg = null; // full message, not the digest
+                    $hashRaw = null;
+                    if (!array_key_exists('msg', $testKeyPair)) {
+                        if (!array_key_exists('msg_full', $testKeyPair)) {
+                            throw new \RuntimeException("Need full message if not given raw hash value");
+                        }
+                        $algo = "sha1";
+                        $msg = $testKeyPair['msg_full'];
+                    } else {
+                        $hashRaw = $testKeyPair['msg'];
+                    }
+
                     $datasets[] = [
                         $generator,
                         $testKeyPair['private'],
-                        (string) $testKeyPair['msg'],
                         (string) $testKeyPair['k'],
                         (string) $testKeyPair['r'],
                         (string) $testKeyPair['s'],
+                        $hashRaw,
+                        $msg,
+                        $algo,
                     ];
                 }
             }
@@ -239,16 +254,22 @@ class SpecBasedCurveTest extends AbstractTestCase
      * @param $kHex
      * @param $eR
      * @param $eS
+     * @param string|null $algo
      */
-    public function testEcdsaSignatures(GeneratorPoint $G, $privKeyHex, $hashHex, $kHex, $eR, $eS)
+    public function testEcdsaSignatureGeneration(GeneratorPoint $G, $privKeyHex, $kHex, $eR, $eS, $hashHex = null, $msg = null, $algo = null)
     {
         $math = $G->getAdapter();
+        $signer = new Signer($math);
+        $privateKey = $G->getPrivateKeyFrom(gmp_init($privKeyHex, 10));
 
-        $privateKey = $G->getPrivateKeyFrom(gmp_init($privKeyHex, 16));
-        $hash = gmp_init($hashHex, 16);
+        if ($hashHex != null) {
+            $hash = gmp_init($hashHex, 16);
+        } else {
+            $hash = $signer->hashData($G, $algo, hex2bin($msg));
+        }
+
         $k = gmp_init($kHex, 16);
 
-        $signer = new Signer($math);
         $sig = $signer->sign($privateKey, $hash, $k);
 
         // R and S should be correct
