@@ -223,7 +223,10 @@ class SpecBasedCurveTest extends AbstractTestCase
                         if (!array_key_exists('msg_full', $testKeyPair)) {
                             throw new \RuntimeException("Need full message if not given raw hash value");
                         }
-                        $algo = "sha1";
+                        if (!array_key_exists('algo', $testKeyPair)) {
+                            throw new \RuntimeException("Need algorithm in order to hash message");
+                        }
+                        $algo = $testKeyPair['algo'];
                         $msg = $testKeyPair['msg_full'];
                     } else {
                         $hashRaw = $testKeyPair['msg'];
