@@ -85,7 +85,7 @@ class SecgCurve
         return $curve->getGenerator($x, $y, $order, $randomGenerator);
     }
 
-    public function curve192k1()
+    public function curve192k1(): NamedCurveFp
     {
         $p = gmp_init('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFEE37', 16);
         $a = gmp_init(0, 10);
@@ -100,7 +100,7 @@ class SecgCurve
      * @param RandomNumberGeneratorInterface $randomGenerator
      * @return \Mdanter\Ecc\Primitives\GeneratorPoint
      */
-    public function generator192k1(RandomNumberGeneratorInterface $randomGenerator = null)
+    public function generator192k1(RandomNumberGeneratorInterface $randomGenerator = null): GeneratorPoint
     {
         $curve = $this->curve192k1();
 
