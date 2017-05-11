@@ -2,8 +2,6 @@
 
 namespace Mdanter\Ecc\Tests\Curves;
 
-use Mdanter\Ecc\Crypto\Key\PublicKey;
-use Mdanter\Ecc\Primitives\Point;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Serializer\Point\CompressedPointSerializer;
 use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
@@ -201,5 +199,65 @@ class SpecBasedCurveTest extends AbstractTestCase
         $sS = $math->hexDec($eS);
         $this->assertSame($sR, $math->toString($sig->getR()));
         $this->assertSame($sS, $math->toString($sig->getS()));
+    }
+
+    /**
+     * @return array
+     */
+    public function getECDSATestSet()
+    {
+        $yaml = new Yaml();
+        $files = $this->getFiles();
+        $datasets = [];
+
+        foreach ($files as $file) {
+            $data = $yaml->parse(file_get_contents($file));
+            $generator = CurveFactory::getGeneratorByName($data['name']);
+
+            if (array_key_exists('ecdsa', $data)) {
+                foreach ($data['ecdsa'] as $testKeyPair) {
+                    $datasets[] = [
+                        $generator,
+                        $testKeyPair['private'],
+                        (string) $testKeyPair['msg'],
+                        (string) $testKeyPair['k'],
+                        (string) $testKeyPair['r'],
+                        (string) $testKeyPair['s'],
+                    ];
+                }
+            }
+        }
+
+        return $datasets;
+    }
+
+    /**
+     * @dataProvider getECDSATestSet
+     * @param GeneratorPoint $G
+     * @param $privKeyHex
+     * @param $hashHex
+     * @param $kHex
+     * @param $eR
+     * @param $eS
+     */
+    public function testEcdsaSignatures(GeneratorPoint $G, $privKeyHex, $hashHex, $kHex, $eR, $eS)
+    {
+        $math = $G->getAdapter();
+
+        $privateKey = $G->getPrivateKeyFrom(gmp_init($privKeyHex, 16));
+        $hash = gmp_init($hashHex, 16);
+        $k = gmp_init($kHex, 16);
+
+        $signer = new Signer($math);
+        $sig = $signer->sign($privateKey, $hash, $k);
+
+        // R and S should be correct
+        $sR = $math->hexDec($eR);
+        $sS = $math->hexDec($eS);
+        $this->assertSame($sR, $math->toString($sig->getR()));
+        $this->assertSame($sS, $math->toString($sig->getS()));
+
+        // Should verify
+        $this->assertTrue($signer->verify($privateKey->getPublicKey(), $sig, $hash));
     }
 }
