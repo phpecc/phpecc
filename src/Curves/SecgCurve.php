@@ -85,6 +85,9 @@ class SecgCurve
         return $curve->getGenerator($x, $y, $order, $randomGenerator);
     }
 
+    /**
+     * @return NamedCurveFp
+     */
     public function curve192k1(): NamedCurveFp
     {
         $p = gmp_init('0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFEE37', 16);
