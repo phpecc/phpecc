@@ -19,6 +19,12 @@ class SpecBasedCurveTest extends AbstractTestCase
     const CAUSE_R = "r"; // 2
     const CAUSE_S = "s"; // 3
     const CAUSE_Q = "publicKey"; // 4
+
+    /**
+     * @var array
+     */
+    private $fileCache = [];
+
     /**
      * @return array
      */
@@ -39,25 +45,79 @@ class SpecBasedCurveTest extends AbstractTestCase
     }
 
     /**
+     * @param Yaml $yaml
+     * @param $fileName
+     * @return mixed
+     */
+    public function readFile(Yaml $yaml, $fileName)
+    {
+        if (!isset($this->fileCache[$fileName])) {
+            if (!file_exists($fileName)) {
+                throw new \PHPUnit_Runner_Exception("Test fixture file {$fileName} does not exist");
+            }
+
+            $this->fileCache[$fileName] = $yaml->parse(file_get_contents($fileName));
+        }
+        return $this->fileCache[$fileName];
+    }
+
+    /**
+     * @param string $fixtureName
+     * @return array
+     */
+    public function readTestFixture($fixtureName)
+    {
+        $yaml = new Yaml();
+        $files = $this->getFiles();
+
+        $sharding = 1;
+        if (getenv('COVERAGE')) {
+            $sharding = 2;
+        }
+
+        $results = [];
+        foreach ($files as $fileName) {
+            $data = $this->readFile($yaml, $fileName);
+            if (!array_key_exists($fixtureName, $data)) {
+                continue;
+            }
+
+            $filesWorth = [
+                'name' => $data['name'],
+                'fixtures' => []
+            ];
+
+            foreach ($data[$fixtureName] as $i => $fixture) {
+                if ($i % $sharding != 0) {
+                    continue;
+                }
+
+                $filesWorth['fixtures'][] = $fixture;
+            }
+
+            $results[] = $filesWorth;
+        }
+
+        return $results;
+    }
+
+    /**
      * @return array
      */
     public function getKeypairsTestSet()
     {
-        $yaml = new Yaml();
-        $files = $this->getFiles();
+        $files = $this->readTestFixture('keypairs');
         $datasets = [];
 
         foreach ($files as $file) {
-            $data = $yaml->parse(file_get_contents($file));
-            $generator = CurveFactory::getGeneratorByName($data['name']);
-
-            foreach ($data['keypairs'] as $testKeyPair) {
+            $generator = CurveFactory::getGeneratorByName($file['name']);
+            foreach ($file['fixtures'] as $fixture) {
                 $datasets[] = [
-                    $data['name'],
+                    $file['name'],
                     $generator,
-                    $testKeyPair['k'],
-                    $testKeyPair['x'],
-                    $testKeyPair['y']
+                    $fixture['k'],
+                    $fixture['x'],
+                    $fixture['y']
                 ];
             }
         }
@@ -98,20 +158,17 @@ class SpecBasedCurveTest extends AbstractTestCase
      */
     public function getDiffieHellmanTestSet()
     {
-        $yaml = new Yaml();
-        $files = $this->getFiles();
+        $files = $this->readTestFixture('diffie');
         $datasets = [];
 
         foreach ($files as $file) {
-            $data = $yaml->parse(file_get_contents($file));
-            $generator = CurveFactory::getGeneratorByName($data['name']);
-
-            foreach ($data['diffie'] as $testKeyPair) {
+            $generator = CurveFactory::getGeneratorByName($file['name']);
+            foreach ($file['fixtures'] as $fixture) {
                 $datasets[] = [
                     $generator,
-                    $testKeyPair['alice'],
-                    $testKeyPair['bob'],
-                    $testKeyPair['shared']
+                    $fixture['alice'],
+                    $fixture['bob'],
+                    $fixture['shared']
                 ];
             }
         }
@@ -144,28 +201,20 @@ class SpecBasedCurveTest extends AbstractTestCase
      */
     public function getHmacTestSet()
     {
-        $yaml = new Yaml();
-        $files = $this->getFiles();
+        $files = $this->readTestFixture('hmac');
         $datasets = [];
 
         foreach ($files as $file) {
-            $data = $yaml->parse(file_get_contents($file));
-
-            if (! isset($data['hmac'])) {
-                continue;
-            }
-
-            $generator = CurveFactory::getGeneratorByName($data['name']);
-
-            foreach ($data['hmac'] as $sig) {
+            $generator = CurveFactory::getGeneratorByName($file['name']);
+            foreach ($file['fixtures'] as $fixture) {
                 $datasets[] = [
                     $generator,
-                    $sig['key'],
-                    $sig['algo'],
-                    $sig['message'],
-                    strtolower($sig['k']),
-                    strtolower($sig['r']),
-                    strtolower($sig['s'])
+                    $fixture['key'],
+                    $fixture['algo'],
+                    $fixture['message'],
+                    strtolower($fixture['k']),
+                    strtolower($fixture['r']),
+                    strtolower($fixture['s'])
                 ];
             }
         }
@@ -211,43 +260,38 @@ class SpecBasedCurveTest extends AbstractTestCase
      */
     public function getEcdsaSignFixtures()
     {
-        $yaml = new Yaml();
-        $files = $this->getFiles();
+        $files = $this->readTestFixture('ecdsa');
         $datasets = [];
 
         foreach ($files as $file) {
-            $data = $yaml->parse(file_get_contents($file));
-            $generator = CurveFactory::getGeneratorByName($data['name']);
-
-            if (array_key_exists('ecdsa', $data)) {
-                foreach ($data['ecdsa'] as $testKeyPair) {
-                    $algo = null;
-                    $msg = null; // full message, not the digest
-                    $hashRaw = null;
-                    if (!array_key_exists('msg', $testKeyPair)) {
-                        if (!array_key_exists('msg_full', $testKeyPair)) {
-                            throw new \RuntimeException("Need full message if not given raw hash value");
-                        }
-                        if (!array_key_exists('algo', $testKeyPair)) {
-                            throw new \RuntimeException("Need algorithm in order to hash message");
-                        }
-                        $algo = $testKeyPair['algo'];
-                        $msg = $testKeyPair['msg_full'];
-                    } else {
-                        $hashRaw = $testKeyPair['msg'];
+            $generator = CurveFactory::getGeneratorByName($file['name']);
+            foreach ($file['fixtures'] as $testKeyPair) {
+                $algo = null;
+                $msg = null; // full message, not the digest
+                $hashRaw = null;
+                if (!array_key_exists('msg', $testKeyPair)) {
+                    if (!array_key_exists('msg_full', $testKeyPair)) {
+                        throw new \RuntimeException("Need full message if not given raw hash value");
                     }
-
-                    $datasets[] = [
-                        $generator,
-                        $testKeyPair['private'],
-                        (string) $testKeyPair['k'],
-                        (string) $testKeyPair['r'],
-                        (string) $testKeyPair['s'],
-                        $hashRaw,
-                        $msg,
-                        $algo,
-                    ];
+                    if (!array_key_exists('algo', $testKeyPair)) {
+                        throw new \RuntimeException("Need algorithm in order to hash message");
+                    }
+                    $algo = $testKeyPair['algo'];
+                    $msg = $testKeyPair['msg_full'];
+                } else {
+                    $hashRaw = $testKeyPair['msg'];
                 }
+
+                $datasets[] = [
+                    $generator,
+                    $testKeyPair['private'],
+                    (string) $testKeyPair['k'],
+                    (string) $testKeyPair['r'],
+                    (string) $testKeyPair['s'],
+                    $hashRaw,
+                    $msg,
+                    $algo,
+                ];
             }
         }
 
@@ -290,56 +334,50 @@ class SpecBasedCurveTest extends AbstractTestCase
         $this->assertTrue($signer->verify($privateKey->getPublicKey(), $sig, $hash));
     }
 
-
     /**
      * @return array
      */
     public function getEcdsaVerifyFixtures()
     {
-        $yaml = new Yaml();
-        $files = $this->getFiles();
+        $files = $this->readTestFixture('ecdsa-verify');
         $datasets = [];
 
         foreach ($files as $file) {
-            $data = $yaml->parse(file_get_contents($file));
-            $generator = CurveFactory::getGeneratorByName($data['name']);
-
-            if (array_key_exists('ecdsa-verify', $data)) {
-                foreach ($data['ecdsa-verify'] as $testKeyPair) {
-                    $algo = null;
-                    $msg = null; // full message, not the digest
-                    $hashRaw = null;
-                    $cause = null;
-                    if (!array_key_exists('msg', $testKeyPair)) {
-                        if (!array_key_exists('msg_full', $testKeyPair)) {
-                            throw new \RuntimeException("Need full message if not given raw hash value");
-                        }
-                        if (!array_key_exists('algo', $testKeyPair)) {
-                            throw new \RuntimeException("Need algorithm in order to hash message");
-                        }
-                        $algo = $testKeyPair['algo'];
-                        $msg = $testKeyPair['msg_full'];
-                    } else {
-                        $hashRaw = $testKeyPair['msg'];
+            $generator = CurveFactory::getGeneratorByName($file['name']);
+            foreach ($file['fixtures'] as $testKeyPair) {
+                $algo = null;
+                $msg = null; // full message, not the digest
+                $hashRaw = null;
+                $cause = null;
+                if (!array_key_exists('msg', $testKeyPair)) {
+                    if (!array_key_exists('msg_full', $testKeyPair)) {
+                        throw new \RuntimeException("Need full message if not given raw hash value");
                     }
-
-                    if (!$testKeyPair['result'] && array_key_exists("cause", $testKeyPair)) {
-                        $cause = $testKeyPair["cause"];
+                    if (!array_key_exists('algo', $testKeyPair)) {
+                        throw new \RuntimeException("Need algorithm in order to hash message");
                     }
-
-                    $datasets[] = [
-                        $generator,
-                        (string) $testKeyPair['r'],
-                        (string) $testKeyPair['s'],
-                        (string) $testKeyPair['x'],
-                        (string) $testKeyPair['y'],
-                        $testKeyPair['result'],
-                        $cause,
-                        $hashRaw,
-                        $msg,
-                        $algo,
-                    ];
+                    $algo = $testKeyPair['algo'];
+                    $msg = $testKeyPair['msg_full'];
+                } else {
+                    $hashRaw = $testKeyPair['msg'];
                 }
+
+                if (!$testKeyPair['result'] && array_key_exists("cause", $testKeyPair)) {
+                    $cause = $testKeyPair["cause"];
+                }
+
+                $datasets[] = [
+                    $generator,
+                    (string) $testKeyPair['r'],
+                    (string) $testKeyPair['s'],
+                    (string) $testKeyPair['x'],
+                    (string) $testKeyPair['y'],
+                    $testKeyPair['result'],
+                    $cause,
+                    $hashRaw,
+                    $msg,
+                    $algo,
+                ];
             }
         }
 
