@@ -35,7 +35,8 @@ class Signer
     public function truncateHash(GeneratorPoint $G, \GMP $hash)
     {
         $dec = $this->adapter->toString($hash);
-        $hexSize = BinaryString::length($this->adapter->decHex($dec));
+        $hexSize = (int) ceil(BinaryString::length($this->adapter->decHex($dec)) / 4) * 4;
+
         $hashBits = $this->adapter->baseConvert($dec, 10, 2);
         if (BinaryString::length($hashBits) < $hexSize * 4) {
             $hashBits = str_pad($hashBits, $hexSize * 4, '0', STR_PAD_LEFT);
