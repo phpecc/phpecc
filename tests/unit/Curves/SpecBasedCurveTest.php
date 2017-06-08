@@ -152,6 +152,76 @@ class SpecBasedCurveTest extends AbstractTestCase
         $this->assertTrue($parsed->equals($publicKey->getPoint()));
     }
 
+
+    /**
+     * @return array
+     */
+    public function getPublicKeyVerifyTestSet()
+    {
+        $files = $this->readTestFixture('pubkey');
+        $datasets = [];
+
+        foreach ($files as $file) {
+            $generator = CurveFactory::getGeneratorByName($file['name']);
+            foreach ($file['fixtures'] as $fixture) {
+                $datasets[] = [
+                    $file['name'],
+                    $generator,
+                    $fixture['x'],
+                    $fixture['y'],
+                    $fixture['result'],
+                ];
+            }
+        }
+
+        return $datasets;
+    }
+
+    /**
+     * @dataProvider getPublicKeyVerifyTestSet
+     * @param GeneratorPoint $generator
+     * @param string $expectedX
+     * @param string $expectedY
+     */
+    public function testPublicKeyVerify($name, GeneratorPoint $generator, $xHex, $yHex, $expectedResult)
+    {
+        $curve = $generator->getCurve();
+
+        $x = gmp_init($xHex, 16);
+        $y = gmp_init($yHex, 16);
+
+        // The true test
+        try {
+            $generator->getPublicKeyFrom($x, $y);
+            $fCurveHasPoint = true;
+        } catch (\Exception $e) {
+            $fCurveHasPoint = false;
+        }
+
+        $this->assertEquals($expectedResult, $fCurveHasPoint);
+
+        if ($expectedResult) {
+            // CurveFp.contains ...
+            // can only check the point exists on the curve after
+            // the fields have been checked against the subgroup
+            // order. If our fixture is valid, this method MUST
+            // return true.
+            $fCurveContains = $curve->contains($x, $y);
+
+            // Curve.getPoint must also succeed if the fixture is
+            // valid when the order isn't provided.
+            try {
+                $curve->getPoint($x, $y);
+                $fCurveGetPoint = true;
+            } catch (\Exception $e) {
+                $fCurveGetPoint = false;
+            }
+
+            $this->assertEquals(true, $fCurveContains);
+            $this->assertEquals(true, $fCurveGetPoint);
+        }
+    }
+
     /**
      * @return array
      */
