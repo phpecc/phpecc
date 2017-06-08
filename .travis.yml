@@ -20,7 +20,7 @@ matrix:
   include:
       # This reenables php7.0/phpunit test with COVERAGE
     - php: 7.0
-      env: PHPUNIT=true COVERAGE=true
+      env: PHPUNIT=true COVERAGE_SHARDS=5 COVERAGE=true
 
       # This runs phpcs on php7.0 - only code style
     - php: 7.0
