@@ -180,9 +180,11 @@ class SpecBasedCurveTest extends AbstractTestCase
 
     /**
      * @dataProvider getPublicKeyVerifyTestSet
+     * @param string $name
      * @param GeneratorPoint $generator
-     * @param string $expectedX
-     * @param string $expectedY
+     * @param string $xHex
+     * @param string $yHex
+     * @param bool $expectedResult
      */
     public function testPublicKeyVerify($name, GeneratorPoint $generator, $xHex, $yHex, $expectedResult)
     {
@@ -391,7 +393,6 @@ class SpecBasedCurveTest extends AbstractTestCase
         }
 
         $k = gmp_init($kHex, 16);
-
         $sig = $signer->sign($privateKey, $hash, $k);
 
         // R and S should be correct
