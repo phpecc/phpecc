@@ -5,6 +5,110 @@ diffie:
     alice: 1232091652477720970182628823699856632766861994001762104358
     bob: 2430498168086027075235323291965700904647968956044338515810
     shared: AD420182633F8526BFE954ACDA376F05E5FF4F837F54FEBE
+pubkey:
+  # FIPS 186-4 http://csrc.nist.gov/groups/STM/cavp/documents/dss/186-3ecdsatestvectors.zip
+  # sha256sum: e0d9bee3f760ca3fabb82bd43dd04c13ee64ca9e0b719c6ea64fd52c9f0dd929  186-3ecdsatestvectors.zip
+ -
+   x: 472a620598e6715eff9cc022805d8cc8e8219f0e32042538
+   y: 1971ca86edb3471b2a16b9aae9de90f366f371b26385027e6
+   result: false
+ -
+   x: 192a2b854bf4e70d5a8fecc98f43b4a744b26808f8cf4c60d
+   y: 2c0b29190588eabf08dfe160ac8d3ab6f5d5cc73678ebae8
+   result: false
+ -
+   x: c07ce28e4c846d7327f0554119ddb7e865fa1dd448ba2b40
+   y: 33aefa3177b99901d9ab6c12eb0749197420296ccb9d4e4a
+   result: false
+ -
+   x: f77c2e5946d99932b2a01c1c73a296ecde568978103d8e2b
+   y: de46b2d5c94dc11b53578eafaa23f96de9747b086979416c
+   result: false
+ -
+   x: a9ee43654ce0b400c40b8d4ad9a4a53cac9662c56f3c4bde
+   y: f376f44a79c50ac3fdfd25ab684af439b5938bee11a63f21
+   result: true
+ -
+   x: 1016451af3e7a7fa2ce3cf2acbe07fa7fa19a5f14455bf2ec
+   y: c074630aea063e00bb41e6fbf752dd4f8e5bc742bf3363eb
+   result: false
+ -
+   x: 18eea61787fbcd90f73f947346cdf13f05b4170e3e7456165
+   y: 5514c7b6e0eecc4e9c1ad99710f009a550bf3f952bb16593
+   result: false
+ -
+   x: 39ed11c88869f6c4705125d9d5fc7c6b1e3d22b2fa7a6b57
+   y: d0cf50208f6b1a61ba346a3f3f8f58128c8199e5405a6f11
+   result: false
+ -
+   x: 2addae388ff40a6176fe562b161da7b4957efc897d2a3c90
+   y: a3f0772b1cd64f64dc0c84e59a21ac2dedb0e952e73d772a
+   result: true
+ -
+   x: b4e02a84d98e3f0be8893538f23dc647fdfa7440169198fc
+   y: 7b26155e6d89a42e4bb3eb4d2dee6b39f42166b365774eb9
+   result: true
+ -
+   x: 87d67f9b7cced918d827ffc086cfd6a181fc61b2f56e000b
+   y: c6c8d686c61a816d25c085db665f018e31ad6f71ee24d895
+   result: false
+ -
+   x: b88fe1ee132f0e2c4e3fe10d580461120cf32f64ec4204eb
+   y: 92e65bc720f0360755d23dd8ca42f9705310f4d432850d84
+   result: true
+
+ # FIPS 186-2 http://csrc.nist.gov/groups/STM/cavp/documents/dss/186-2ecdsatestvectors.zip
+ # sha256sum: 4c5d7c93858fa90be65fe94f7d8941e5a0eab3ca291937e046513ad2f0886e47  186-2ecdsatestvectors.zip
+ 
+ -
+   x: 491c0c4761b0a4a147b5e4ce03a531546644f5d1e3d05e57
+   y: 6fa5addd47c5d6be3933fbff88f57a6c8ca0232c471965de
+   result: false
+ -
+   x: 646c22e8aa5f7833390e0399155ac198ae42470bba4fc834
+   y: 8d4afcfffd80e69a4d180178b37c44572495b7b267ee32a9
+   result: true
+ -
+   x: 4c6b9ea0dec92ecfff7799470be6a2277b9169daf45d54bb
+   y: f0eab42826704f51b26ae98036e83230becb639dd1964627
+   result: false
+ -
+   x: 0673c8bb717b055c3d6f55c06acfcfb7260361ed3ec0f414
+   y: ba8b172826eb0b854026968d2338a180450a27906f6eddea
+   result: true
+ -
+   x: 82c949295156192df0b52480e38c810751ac570daec460a3
+   y: 200057ada615c80b8ff256ce8d47f2562b74a438f1921ac3
+   result: false
+ -
+   x: 284fbaa76ce0faae2ca4867d01092fa1ace5724cd12c8dd0
+   y: e42af3dbf3206be3fcbcc3a7ccaf60c73dc29e7bb9b44fca
+   result: true
+ -
+   x: 1b574acd4fb0f60dde3e3b5f3f0e94211f95112e43cba6fd2
+   y: bcc1b8a770f01a22e84d7f14e44932ffe094d8e3b1e6ac26
+   result: false
+ -
+   x: 16ba109f1f1bb44e0d05b80181c03412ea764a59601d17e9f
+   y: 0569a843dbb4e287db420d6b9fe30cd7b5d578b052315f56
+   result: false
+ -
+   x: 1333308a7c833ede5189d25ea3525919c9bd16370d904938d
+   y: b10fd01d67df75ff9b726c700c1b50596c9f0766ea56f80e
+   result: false
+ -
+   x: 9671ec444cff24c8a5be80b018fa505ed6109a731e88c91a
+   y: fe79dae23008e46bf4230c895aab261a95845a77f06d0655
+   result: true
+ -
+   x: 158e8b6f0b14216bc52fe8897b4305d870ede70436a96741d
+   y: fb3f970b19a313571a1a23be310923f85acc1cab0a157cbd
+   result: false
+ -
+   x: ace95b650c08f73dbb4fa7b4bbdebd6b809a25b28ed135ef
+   y: e9b8679404166d1329dd539ad52aad9a1b6681f5f26bb9aa
+   result: false
+
 ecdsa-verify:
  # FIPS 186-4 http://csrc.nist.gov/groups/STM/cavp/documents/dss/186-3ecdsatestvectors.zip
  # sha256sum: e0d9bee3f760ca3fabb82bd43dd04c13ee64ca9e0b719c6ea64fd52c9f0dd929  186-3ecdsatestvectors.zip
