@@ -18,7 +18,7 @@ class SpecBasedCurveTest extends AbstractTestCase
     const CAUSE_R = "r"; // 2
     const CAUSE_S = "s"; // 3
     const CAUSE_Q = "publicKey"; // 4
-
+    const DEFAULT_COVERAGE_SHARDS = 5;
     /**
      * @var array
      */
@@ -66,12 +66,30 @@ class SpecBasedCurveTest extends AbstractTestCase
      */
     public function readTestFixture($fixtureName)
     {
+        static $useShard;
         $yaml = new Yaml();
         $files = $this->getFiles();
 
-        $sharding = 1;
+        $shards = 1;
         if (getenv('COVERAGE')) {
-            $sharding = 2;
+            $shards = getenv('COVERAGE_SHARDS');
+            if (null === $shards || (int) $shards === 0) {
+                $shards = self::DEFAULT_COVERAGE_SHARDS;
+            }
+
+            if (null === $useShard) {
+                $useShard = mt_rand(0, $shards - 1);
+                fwrite(STDERR, <<<TEXT
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+NOTICE:
+Sharding enabled for coverage run - testing shard {$useShard} of {$shards}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+TEXT
+                );
+            }
         }
 
         $results = [];
@@ -87,7 +105,7 @@ class SpecBasedCurveTest extends AbstractTestCase
             ];
 
             foreach ($data[$fixtureName] as $i => $fixture) {
-                if ($i % $sharding != 0) {
+                if ($i % $shards != 0) {
                     continue;
                 }
 
