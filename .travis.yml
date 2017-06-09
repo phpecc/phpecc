@@ -44,4 +44,4 @@ script:
 
 after_success:
     - wget https://scrutinizer-ci.com/ocular.phar
-    - if [ "${COVERAGE}" = "true" ] && [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "nightly" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi;']; then make scrutinizer; fi
+    - if [ "${COVERAGE}" = "true" ] && [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "nightly" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi;
