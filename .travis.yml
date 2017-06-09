@@ -8,6 +8,8 @@ php:
     - nightly
     - hhvm
 
+dist: trusty 
+
 env:
     # The default env behaviour: phpunit, no coverage, no style checks
   - PHPUNIT=true
