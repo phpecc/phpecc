@@ -40,7 +40,6 @@ before_script:
 
 script:
     - if [ "${PHPUNIT}" = "true" ]; then vendor/bin/phpunit --coverage-text --coverage-clover=tests/output/coverage.clover; fi
-    - if [ "${CODESTYLE}" = "true" ]; then vendor/bin/phpcs --standard=PSR2 src tests/unit/ && echo "PHPCS OK"; fi
 
 after_success:
     - wget https://scrutinizer-ci.com/ocular.phar
