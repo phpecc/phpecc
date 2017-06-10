@@ -18,14 +18,14 @@ matrix:
   fast_finish: true
 
   exclude:
-      # Disable phpunit test on 7.0, reenable with COVERAGE
+      # Disable phpunit test on 5.6, reenable with COVERAGE
     - php: 5.6
       env: PHPUNIT=true
 
   include:
-      # This reenables php7.0/phpunit test with COVERAGE
+      # This reenables php5.6/phpunit test with COVERAGE
     - php: 5.6
-      env: PHPUNIT=true COVERAGE=true
+      env: PHPUNIT=true COVERAGE_SHARDS=10 COVERAGE=true
 
       # This runs phpcs on php7.0 - only code style
     - php: 5.6
