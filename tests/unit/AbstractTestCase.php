@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace Mdanter\Ecc\Tests;
 
 use Mdanter\Ecc\Math\MathAdapterFactory;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractTestCase extends TestCase
 {
     /**
      * @param array $extra
