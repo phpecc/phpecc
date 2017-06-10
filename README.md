@@ -1,7 +1,6 @@
 ## Pure PHP Elliptic Curve DSA and DH
 
 [![Build Status](https://travis-ci.org/phpecc/phpecc.svg?branch=master)](https://travis-ci.org/phpecc/phpecc)
-[![HHVM Status](http://hhvm.h4cc.de/badge/mdanter/ecc.svg)](http://hhvm.h4cc.de/package/mdanter/ecc)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phpecc/phpecc/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phpecc/phpecc?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/phpecc/phpecc/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/phpecc/phpecc/?branch=master)
@@ -27,9 +26,6 @@ The library supports the following curves:
  - nistp384 / secg384r1
  - nistp521
 
-The library exposes a class for random byte generation, for PHP7+ users is provided by `random_bytes`. 
-PHP5.6 users will use the paragonie/random_bytes polyfill. 
-
 During ECDSA, a random value `k` is required. It is acceptable to use a true RNG to generate this value, but 
 should the same `k` value ever be repeatedly used for a key, an attacker can recover that signing key. 
 The HMAC random generator can derive a deterministic k value from the message hash and private key, voiding
@@ -44,7 +40,7 @@ This package is released under the MIT license.
 
 ### Requirements
 
-* PHP 5.6+
+* PHP 7.0+
 * composer
 * ext-gmp
 
