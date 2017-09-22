@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\PrivateKey;
 
-use FG\ASN1\Object;
+use FG\ASN1\ASNObject;
 use FG\ASN1\Universal\Sequence;
 use FG\ASN1\Universal\Integer;
 use FG\ASN1\Universal\BitString;
@@ -88,7 +88,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
      */
     public function parse(string $data): PrivateKeyInterface
     {
-        $asnObject = Object::fromBinary($data);
+        $asnObject = ASNObject::fromBinary($data);
 
         if (! ($asnObject instanceof Sequence) || $asnObject->getNumberofChildren() !== 4) {
             throw new \RuntimeException('Invalid data.');
