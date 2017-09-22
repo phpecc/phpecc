@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 
-use FG\ASN1\Object;
+use FG\ASN1\ASNObject;
 use FG\ASN1\Universal\Sequence;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Math\GmpMathInterface;
@@ -45,7 +45,7 @@ class Parser
      */
     public function parse(string $binaryData): PublicKeyInterface
     {
-        $asnObject = Object::fromBinary($binaryData);
+        $asnObject = ASNObject::fromBinary($binaryData);
 
         if (! ($asnObject instanceof Sequence) || $asnObject->getNumberofChildren() != 2) {
             throw new \RuntimeException('Invalid data.');
