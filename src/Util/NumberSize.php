@@ -15,11 +15,7 @@ class NumberSize
      */
     public static function getCeiledByteSize(GmpMathInterface $adapter, \GMP $x): float
     {
-        $log2 = 0;
-        while ($x = $adapter->rightShift($x, 1)) {
-            $log2++;
-        }
-
+        $log2 = self::bnNumBits($adapter, $x);
         return ceil($log2 / 8);
     }
 
@@ -30,16 +26,12 @@ class NumberSize
      */
     public static function getFlooredByteSize(GmpMathInterface $adapter, \GMP $x): float
     {
-        $log2 = 0;
-        while ($x = $adapter->rightShift($x, 1)) {
-            $log2++;
-        }
-
+        $log2 = self::bnNumBits($adapter, $x);
         return floor($log2 / 8) + 1;
     }
 
     /**
-     * Returns the number of mininum required bytes to store a given number. Non-significant upper bits are not counted.
+     * Returns the number of minimum required bytes to store a given number. Non-significant upper bits are not counted.
      *
      * @param  GmpMathInterface $adapter
      * @param  \GMP             $x
@@ -54,7 +46,7 @@ class NumberSize
     }
 
     /**
-     * Returns the number of bits used to store this number. Non-singicant upper bits are not counted.
+     * Returns the number of bits used to store this number. Non-significant upper bits are not counted.
      *
      * @param  GmpMathInterface $adapter
      * @param  \GMP             $x
