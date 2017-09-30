@@ -61,115 +61,12 @@ It's also always a good idea to check the results of the [Scrutinizer analysis](
 
 ### Usage
 
-#### Key generation
-
-```php
-<?php
-
-require "../vendor/autoload.php";
-
-use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
-use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
-
-$adapter = EccFactory::getAdapter();
-$generator = EccFactory::getNistCurves()->generator384();
-$private = $generator->createPrivateKey();
-
-$keySerializer = new PemPrivateKeySerializer(new DerPrivateKeySerializer($adapter));
-$data = $keySerializer->serialize($private);
-echo $data.PHP_EOL;
-```
-
-#### ECDSA - Signature creation
-```php
-<?php
-
-require "../vendor/autoload.php";
-
-use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Crypto\Signature\Signer;
-use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
-use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
-use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
-
-// ECDSA domain is defined by curve/generator/hash algorithm,
-// which a verifier must be aware of.
-
-$adapter = EccFactory::getAdapter();
-$generator = EccFactory::getNistCurves()->generator384();
-$useDerandomizedSignatures = true;
-$algorithm = 'sha256';
-
-## You'll be restoring from a key, as opposed to generating one.
-$keyData = file_get_contents('../tests/data/openssl-priv.pem');
-$pemSerializer = new PemPrivateKeySerializer(new DerPrivateKeySerializer($adapter));
-$key = $pemSerializer->parse($keyData);
-
-$document = 'I am writing today...';
-
-$signer = new Signer($adapter);
-$hash = $signer->hashData($generator, $algorithm, $document);
-
-# Derandomized signatures are not necessary, but can reduce
-# the attack surface for a private key that is to be used often.
-if ($useDerandomizedSignatures) {
-    $random = \Mdanter\Ecc\Random\RandomGeneratorFactory::getHmacRandomGenerator($key, $hash, $algorithm);
-} else {
-    $random = \Mdanter\Ecc\Random\RandomGeneratorFactory::getRandomGenerator();
-}
-
-$randomK = $random->generate($generator->getOrder());
-$signature = $signer->sign($key, $hash, $randomK);
-
-$serializer = new DerSignatureSerializer();
-$serializedSig = $serializer->serialize($signature);
-echo base64_encode($serializedSig) . PHP_EOL;
-```
-
-#### ECDSA - Signature verification
-
-```php
-<?php
-
-require "../vendor/autoload.php";
-
-use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Crypto\Signature\Signer;
-use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
-use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
-use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
-
-# Same parameters as creating_signature.php
-
-$adapter = EccFactory::getAdapter();
-$generator = EccFactory::getNistCurves()->generator384();
-$algorithm = 'sha256';
-$sigData = base64_decode('MEQCIBe/A2tKKv2ZPEqpjNnh552rEa4NKEIstOF2O3vGG6pAAiB47qyR8FXMTy/ubso8cEjeh4jLPf1nVeErFZyEiNL+Yg==');
-$document = 'I am writing today...';
-
-// Parse signature
-$sigSerializer = new DerSignatureSerializer();
-$sig = $sigSerializer->parse($sigData);
-
-// Parse public key
-$keyData = file_get_contents('../tests/data/openssl-pub.pem');
-$derSerializer = new DerPublicKeySerializer($adapter);
-$pemSerializer = new PemPublicKeySerializer($derSerializer);
-$key = $pemSerializer->parse($keyData);
-
-$signer = new Signer($adapter);
-$hash = $signer->hashData($generator, $algorithm, $document);
-$check = $signer->verify($key, $sig, $hash);
-
-if ($check) {
-    echo "Signature verified\n";
-} else {
-    echo "Signature validation failed\n";
-}
-
-```
-
+Examples:
+ * [Key generation](./examples/key_generation.php)
+ * [ECDH exchange](./examples/ecdh_exchange.php)
+ * [Signature creation](./examples/creating_signature.php)
+ * [Signature verification](./examples/verify_signature.php)
+ 
 #### Asymmetric encryption
 
 ```php
@@ -205,6 +102,7 @@ echo "Shared secret: " . gmp_strval($shared, 10).PHP_EOL;
 # The shared key is never used directly, but used with a key derivation function (KDF)
 $kdf = function (GmpMathInterface $math, \GMP $sharedSecret) {
     $binary = $math->intToString($sharedSecret);
+    
     $hash = hash('sha256', $binary, true);
     return $hash;
 };
