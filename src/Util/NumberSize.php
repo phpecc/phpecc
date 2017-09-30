@@ -15,7 +15,8 @@ class NumberSize
     public static function getCeiledByteSize(GmpMathInterface $adapter, \GMP $x)
     {
         $log2 = 0;
-        while ($x = $adapter->rightShift($x, 1)) {
+        while(gmp_cmp($x, 0) > 0) {
+            $x = $adapter->rightShift($x, 1);
             $log2++;
         }
 
