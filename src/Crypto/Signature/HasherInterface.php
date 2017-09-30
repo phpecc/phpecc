@@ -7,6 +7,16 @@ use Mdanter\Ecc\Primitives\GeneratorPoint;
 interface HasherInterface
 {
     /**
+     * @return string
+     */
+    public function getAlgorithm(): string;
+
+    /**
+     * @return int
+     */
+    public function getLengthInBytes(): int;
+
+    /**
      * @param string $data
      * @return string
      */
