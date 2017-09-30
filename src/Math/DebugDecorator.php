@@ -394,6 +394,25 @@ class DebugDecorator implements GmpMathInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Math\GmpMathInterface::intToString()
      */
+    public function intToFixedSizeString(\GMP $x, int $byteSize): string
+    {
+        $func = __METHOD__;
+        $args = func_get_args();
+
+        return call_user_func(
+            array(
+                $this,
+                'call',
+            ),
+            $func,
+            $args
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Mdanter\Ecc\Math\GmpMathInterface::intToString()
+     */
     public function intToString(\GMP $x): string
     {
         $func = __METHOD__;
