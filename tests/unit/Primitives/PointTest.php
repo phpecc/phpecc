@@ -128,22 +128,22 @@ class PointTest extends AbstractTestCase
         $b = $ab;
 
         $adapter = new GmpMath();
-        $parameters = new CurveParameters(32, gmp_init(23, 10), gmp_init(1, 10), gmp_init(1, 10));
+        $parameters = new CurveParameters(67, gmp_init(23, 10), gmp_init(1, 10), gmp_init(1, 10));
         $curve = new CurveFp($parameters, $adapter);
 
         $point = $curve->getPoint(gmp_init(13, 10), gmp_init(7, 10), gmp_init(7, 10));
 
-        $point->cswapValue($a, $b, false);
+        $point->cswapValue($a, $b, (int) false, $curve->getSize());
 
         $this->assertEquals($adapter->toString($aa), $adapter->toString($a));
         $this->assertEquals($adapter->toString($ab), $adapter->toString($b));
 
-        $point->cswapValue($a, $b, true);
+        $point->cswapValue($a, $b, (int) true, $curve->getSize());
 
         $this->assertEquals($adapter->toString($aa), $adapter->toString($b));
         $this->assertEquals($adapter->toString($ab), $adapter->toString($a));
 
-        $point->cswapValue($a, $b, false);
+        $point->cswapValue($a, $b, (int) false, $curve->getSize());
 
         $this->assertEquals($adapter->toString($aa), $adapter->toString($b));
         $this->assertEquals($adapter->toString($ab), $adapter->toString($a));

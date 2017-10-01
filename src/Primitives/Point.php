@@ -276,12 +276,12 @@ class Point implements PointInterface
         for ($i = 0; $i < $k; $i++) {
             $j = $n[$i];
 
-            $this->cswap($r[0], $r[1], $j ^ 1);
+            $this->cswap($r[0], $r[1], $j ^ 1, $k);
 
             $r[0] = $r[0]->add($r[1]);
             $r[1] = $r[1]->getDouble();
 
-            $this->cswap($r[0], $r[1], $j ^ 1);
+            $this->cswap($r[0], $r[1], $j ^ 1, $k);
         }
 
         $r[0]->validate();
@@ -293,30 +293,33 @@ class Point implements PointInterface
      * @param Point $a
      * @param Point $b
      * @param int $cond
+     * @param int $curveSize
      */
-    private function cswap(self $a, self $b, $cond)
+    private function cswap(self $a, self $b, $cond, $curveSize)
     {
-        $this->cswapValue($a->x, $b->x, $cond);
-        $this->cswapValue($a->y, $b->y, $cond);
-        $this->cswapValue($a->order, $b->order, $cond);
-        $this->cswapValue($a->infinity, $b->infinity, $cond);
+        $this->cswapValue($a->x, $b->x, $cond, $curveSize);
+        $this->cswapValue($a->y, $b->y, $cond, $curveSize);
+        $this->cswapValue($a->order, $b->order, $cond, $curveSize);
+        $this->cswapValue($a->infinity, $b->infinity, $cond, 8);
     }
 
     /**
-     * @param $a
-     * @param $b
-     * @param $cond
+     * @param bool|\GMP $a
+     * @param bool|\GMP $b
+     * @param int $cond
+     * @param int $maskBitSize
      */
-    public function cswapValue(& $a, & $b, $cond)
+    public function cswapValue(& $a, & $b, $cond, $maskBitSize = null)
     {
         $isGMP = is_object($a) && $a instanceof \GMP;
 
         $sa = $isGMP ? $a : gmp_init(intval($a), 10);
         $sb = $isGMP ? $b : gmp_init(intval($b), 10);
-        $size = max(BinaryString::length(gmp_strval($sa, 2)), BinaryString::length(gmp_strval($sb, 2)));
 
-        $mask = 1 - intval($cond);
-        $mask = str_pad('', $size, $mask, STR_PAD_LEFT);
+        if (null === $maskBitSize) {
+            $maskBitSize = max(BinaryString::length(gmp_strval($sa, 2)), BinaryString::length(gmp_strval($sb, 2)));
+        }
+        $mask = str_pad('', $maskBitSize, (string) (1 - intval($cond)), STR_PAD_LEFT);
         $mask = gmp_init($mask, 2);
 
         $taA = $this->adapter->bitwiseAnd($sa, $mask);

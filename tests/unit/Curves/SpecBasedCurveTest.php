@@ -52,7 +52,7 @@ class SpecBasedCurveTest extends AbstractTestCase
     {
         if (!isset($this->fileCache[$fileName])) {
             if (!file_exists($fileName)) {
-                throw new \PHPUnit_Runner_Exception("Test fixture file {$fileName} does not exist");
+                throw new \RuntimeException("Test fixture file {$fileName} does not exist");
             }
 
             $this->fileCache[$fileName] = $yaml->parse(file_get_contents($fileName));
@@ -158,6 +158,21 @@ TEXT
 
         $this->assertEquals($adapter->hexDec($expectedX), $adapter->toString($publicKey->getPoint()->getX()), $name);
         $this->assertEquals($adapter->hexDec($expectedY), $adapter->toString($publicKey->getPoint()->getY()), $name);
+    }
+
+    /**
+     * @dataProvider getKeypairsTestSet()
+     * @param string $name
+     * @param GeneratorPoint $generator
+     * @param string $k - decimal private key
+     * @param $expectedX
+     * @param $expectedY
+     */
+    public function testKeyCompression($name, GeneratorPoint $generator, $k, $expectedX, $expectedY)
+    {
+        $adapter = $generator->getAdapter();
+
+        $publicKey = $generator->getPublicKeyFrom(gmp_init($expectedX, 16), gmp_init($expectedY, 16), $generator->getOrder());
 
         $serializer = new UncompressedPointSerializer($adapter);
         $serialized = $serializer->serialize($publicKey->getPoint());
@@ -169,7 +184,6 @@ TEXT
         $parsed = $compressingSerializer->unserialize($generator->getCurve(), $serialized);
         $this->assertTrue($parsed->equals($publicKey->getPoint()));
     }
-
 
     /**
      * @return array
