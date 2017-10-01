@@ -294,6 +294,14 @@ class MathTest extends AbstractTestCase
         (new GmpMath())->intToFixedSizeString(gmp_init(0), -1);
     }
 
+    public function testNegativeValueDisallowed()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("x was negative - not yet supported");
+
+        (new GmpMath())->intToFixedSizeString(gmp_init(-1), 1);
+    }
+
     /**
      * @return array
      */
