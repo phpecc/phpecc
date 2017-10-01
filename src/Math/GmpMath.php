@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\Util\BinaryString;
+use Mdanter\Ecc\Util\NumberSize;
 
 class GmpMath implements GmpMathInterface
 {
@@ -218,9 +219,18 @@ class GmpMath implements GmpMathInterface
      */
     public function intToFixedSizeString(\GMP $x, int $byteSize): string
     {
+        if ($byteSize < 0) {
+            throw new \RuntimeException("Byte size cannot be negative");
+        }
+
         $two = gmp_init(2);
+        $range = gmp_pow($two, $byteSize * 8);
+        if (NumberSize::bnNumBits($this, $x) >= NumberSize::bnNumBits($this, $range)) {
+            throw new \RuntimeException("Number overflows byte size");
+        }
+
         $maskShift = gmp_pow($two, 8);
-        $mask = gmp_mul(gmp_init(255), gmp_pow($two, $byteSize*8));
+        $mask = gmp_mul(gmp_init(255), $range);
 
         $binary = '';
         for ($i = $byteSize - 1; $i >= 0; $i--) {
