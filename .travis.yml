@@ -3,6 +3,7 @@ language: php
 php:
     - 7.0
     - 7.1
+    - 7.2
     - nightly
 
 env:
@@ -35,7 +36,7 @@ sudo: false
 before_script:
     - travis_retry composer selfupdate
     - travis_retry composer install --prefer-source
-    - if [ "${COVERAGE}" != "true" ]; then phpenv config-rm xdebug.ini && echo "xdebug disabled" || exit 0; fi
+    - if [ "${COVERAGE}" != "true" ] && [ "${TRAVIS_PHP_VERSION}" != "nightly" ]; then phpenv config-rm xdebug.ini && echo "xdebug disabled"; fi
 
 script:
     - if [ "${PHPUNIT}" = "true" ]; then make phpunit-ci; fi
