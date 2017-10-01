@@ -14,13 +14,7 @@ class NumberSize
      */
     public static function getCeiledByteSize(GmpMathInterface $adapter, \GMP $x)
     {
-        $log2 = 0;
-        while(gmp_cmp($x, 0) > 0) {
-            $x = $adapter->rightShift($x, 1);
-            $log2++;
-        }
-
-        return ceil($log2 / 8);
+        return ceil(self::bnNumBits($adapter, $x) / 8);
     }
 
     /**
@@ -30,12 +24,7 @@ class NumberSize
      */
     public static function getFlooredByteSize(GmpMathInterface $adapter, \GMP $x)
     {
-        $log2 = 0;
-        while ($x = $adapter->rightShift($x, 1)) {
-            $log2++;
-        }
-
-        return floor($log2 / 8) + 1;
+        return floor(self::bnNumBits($adapter, $x) / 8) + 1;
     }
 
     /**
@@ -43,14 +32,14 @@ class NumberSize
      *
      * @param  GmpMathInterface $adapter
      * @param  \GMP             $x
-     * @return integer
+     * @return int
      *
      * @link https://www.openssl.org/docs/crypto/BN_num_bytes.html
      */
     public static function bnNumBytes(GmpMathInterface $adapter, \GMP $x)
     {
         // https://github.com/luvit/openssl/blob/master/openssl/crypto/bn/bn.h#L402
-        return floor((self::bnNumBits($adapter, $x) + 7) / 8);
+        return (int) floor((self::bnNumBits($adapter, $x) + 7) / 8);
     }
 
     /**
@@ -58,7 +47,7 @@ class NumberSize
      *
      * @param  GmpMathInterface $adapter
      * @param  \GMP             $x
-     * @return number
+     * @return int
      *
      * @link https://www.openssl.org/docs/crypto/BN_num_bytes.html
      */
@@ -75,6 +64,6 @@ class NumberSize
             $log2++;
         }
 
-        return $log2 ;
+        return $log2;
     }
 }

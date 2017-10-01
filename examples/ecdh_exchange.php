@@ -31,7 +31,8 @@ echo "Shared secret: " . gmp_strval($shared, 10).PHP_EOL;
 # The shared key is never used directly, but used with a key derivation function (KDF)
 $kdf = function (GeneratorPoint $G, \GMP $sharedSecret) {
     $adapter = $G->getAdapter();
-    $binary = $adapter->intToFixedSizeString($sharedSecret, NumberSize::getCeiledByteSize($adapter, $G->getOrder()));
+    $byteSize = NumberSize::bnNumBytes($adapter, $G->getOrder());
+    $binary = $adapter->intToFixedSizeString($sharedSecret, $byteSize);
     $hash = hash('sha256', $binary, true);
     return $hash;
 };
