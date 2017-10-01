@@ -179,6 +179,13 @@ interface GmpMathInterface
     public function intToString(\GMP $x): string;
 
     /**
+     * @param \GMP $x
+     * @param int $byteSize
+     * @return string
+     */
+    public function intToFixedSizeString(\GMP $x, int $byteSize): string;
+
+    /**
      *
      * @param  int|string $s
      * @return \GMP

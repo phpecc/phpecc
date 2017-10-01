@@ -7,8 +7,6 @@ namespace Mdanter\Ecc\Crypto\Signature;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
-use Mdanter\Ecc\Primitives\GeneratorPoint;
-use Mdanter\Ecc\Util\NumberSize;
 use Mdanter\Ecc\Util\BinaryString;
 
 class Signer
@@ -30,53 +28,17 @@ class Signer
     }
 
     /**
-     * @param GeneratorPoint $G
-     * @param \GMP $hash
-     * @return \GMP
-     */
-    public function truncateHash(GeneratorPoint $G, \GMP $hash): \GMP
-    {
-        $dec = $this->adapter->toString($hash);
-        $hexSize = (int) ceil(BinaryString::length($this->adapter->decHex($dec)) / 4) * 4;
-
-        $hashBits = $this->adapter->baseConvert($dec, 10, 2);
-        if (BinaryString::length($hashBits) < $hexSize * 4) {
-            $hashBits = str_pad($hashBits, $hexSize * 4, '0', STR_PAD_LEFT);
-        }
-
-        $messageHash = gmp_init(BinaryString::substring($hashBits, 0, NumberSize::bnNumBits($this->adapter, $G->getOrder())), 2);
-        return $messageHash;
-    }
-
-    /**
-     * @param GeneratorPoint $G
-     * @param string $algorithm
-     * @param string $data
-     * @return \GMP
-     */
-    public function hashData(GeneratorPoint $G, string $algorithm, string $data): \GMP
-    {
-        if (!in_array($algorithm, hash_algos())) {
-            throw new \InvalidArgumentException('Unsupported hashing algorithm');
-        }
-
-        $hash = gmp_init(hash($algorithm, $data, false), 16);
-        return $this->truncateHash($G, $hash);
-    }
-
-    /**
      * @param PrivateKeyInterface $key
-     * @param \GMP $hash
+     * @param \GMP $truncatedHash - hash truncated for use in ECDSA
      * @param \GMP $randomK
      * @return SignatureInterface
      */
-    public function sign(PrivateKeyInterface $key, \GMP $hash, \GMP $randomK): SignatureInterface
+    public function sign(PrivateKeyInterface $key, \GMP $truncatedHash, \GMP $randomK): SignatureInterface
     {
         $math = $this->adapter;
         $generator = $key->getPoint();
         $modMath = $math->getModularArithmetic($generator->getOrder());
 
-        $hash = $this->truncateHash($generator, $hash);
         $k = $math->mod($randomK, $generator->getOrder());
         $p1 = $generator->mul($k);
         $r = $p1->getX();
@@ -85,8 +47,7 @@ class Signer
             throw new \RuntimeException("Error: random number R = 0");
         }
 
-        $hash = $this->truncateHash($generator, $hash);
-        $s = $modMath->div($modMath->add($hash, $math->mul($key->getSecret(), $r)), $k);
+        $s = $modMath->div($modMath->add($truncatedHash, $math->mul($key->getSecret(), $r)), $k);
         if ($math->equals($s, $zero)) {
             throw new \RuntimeException("Error: random number S = 0");
         }
@@ -102,7 +63,6 @@ class Signer
      */
     public function verify(PublicKeyInterface $key, SignatureInterface $signature, \GMP $hash): bool
     {
-
         $generator = $key->getGenerator();
         $n = $generator->getOrder();
         $r = $signature->getR();

@@ -2,6 +2,7 @@
 
 require __DIR__ . "/../vendor/autoload.php";
 
+use Mdanter\Ecc\Crypto\Signature\SignHasher;
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
@@ -26,8 +27,10 @@ $derSerializer = new DerPublicKeySerializer($adapter);
 $pemSerializer = new PemPublicKeySerializer($derSerializer);
 $key = $pemSerializer->parse($keyData);
 
+$hasher = new SignHasher($algorithm);
+$hash = $hasher->makeHash($document, $generator);
+
 $signer = new Signer($adapter);
-$hash = $signer->hashData($generator, $algorithm, $document);
 $check = $signer->verify($key, $sig, $hash);
 
 if ($check) {

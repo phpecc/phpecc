@@ -233,4 +233,95 @@ class MathTest extends AbstractTestCase
         $integer = gmp_init($integer, 10);
         $this->assertEquals($result, gmp_strval($math->digestInteger($integer), 10));
     }
+
+    public function fixedSizeIntProvider()
+    {
+        $two = gmp_init(2, 10);
+        $maxRange8 = gmp_sub(gmp_pow($two, 8), gmp_init(1));
+        $maxRange16 = gmp_sub(gmp_pow($two, 16), gmp_init(1));
+        $maxRange24 = gmp_sub(gmp_pow($two, 24), gmp_init(1));
+        $maxRange32 = gmp_sub(gmp_pow($two, 32), gmp_init(1));
+        $bits519Unpadded = gmp_init("7d48a8cdd8ea2de81d9ad3d5b6597472264bd2c1da2e6ae175dd50397d7812383dce09988bfce60b370e5a0f3eb0090d18545935b77ba521f5db598bf3ed03616a", 16);
+        $bits519Padded = gmp_init("007d48a8cdd8ea2de81d9ad3d5b6597472264bd2c1da2e6ae175dd50397d7812383dce09988bfce60b370e5a0f3eb0090d18545935b77ba521f5db598bf3ed03616a", 16);
+        return $this->_getAdapters([
+            [gmp_init(0), 1, "00"],
+            [gmp_init(1), 1, "01"],
+            [$maxRange8, 1, "ff"],
+
+            [gmp_init(0), 2, "0000"],
+            [$maxRange8, 2, "00ff"],
+            [gmp_init(256), 2, "0100"],
+            [$maxRange16, 2, "ffff"],
+
+            [gmp_init(0), 4, "00000000"],
+            [gmp_init(1), 4, "00000001"],
+            [gmp_init(2), 4, "00000002"],
+            [$maxRange8, 4, "000000ff"],
+            [$maxRange16, 4, "0000ffff"],
+            [$maxRange24, 4, "00ffffff"],
+            [$maxRange32, 4, "ffffffff"],
+
+            [$bits519Unpadded, 66, "007d48a8cdd8ea2de81d9ad3d5b6597472264bd2c1da2e6ae175dd50397d7812383dce09988bfce60b370e5a0f3eb0090d18545935b77ba521f5db598bf3ed03616a"],
+            [$bits519Padded, 66, "007d48a8cdd8ea2de81d9ad3d5b6597472264bd2c1da2e6ae175dd50397d7812383dce09988bfce60b370e5a0f3eb0090d18545935b77ba521f5db598bf3ed03616a"],
+        ]);
+    }
+
+    /**
+     * @param GmpMathInterface $math
+     * @param \GMP $integer
+     * @param int $size
+     * @param string $expectHex
+     * @dataProvider fixedSizeIntProvider
+     */
+    public function testFixedSizeInt(GmpMathInterface $math, \GMP $integer, $size, $expectHex)
+    {
+        // convert to $binary
+        $binary = $math->intToFixedSizeString($integer, $size);
+
+        // check binary against expectHex
+        $hex = unpack("H*", $binary)[1];
+        $this->assertEquals($expectHex, $hex, 'binary should match expected value');
+
+        // convert to int
+        $read = $math->stringToInt($binary);
+        $this->assertEquals(0, gmp_cmp($read, $integer), 'numbers should equal after reading');
+    }
+
+    public function testNegativeSizeDisallowed()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Byte size cannot be negative");
+
+        (new GmpMath())->intToFixedSizeString(gmp_init(0), -1);
+    }
+
+    /**
+     * @return array
+     */
+    public function tooLargeProvider()
+    {
+        return $this->_getAdapters([
+            [gmp_init(1), 0],
+            [gmp_init(256), 1],
+            [gmp_init(65536), 2],
+            [gmp_pow(2, 32), 1],
+            [gmp_pow(2, 32), 2],
+            [gmp_pow(2, 32), 3],
+            [gmp_pow(2, 32), 4],
+        ]);
+    }
+
+    /**
+     * @param GmpMathInterface $math
+     * @param \GMP $integer
+     * @param int $size
+     * @dataProvider tooLargeProvider
+     */
+    public function testLargeValuesRejected(GmpMathInterface $math, \GMP $integer, $size)
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Number overflows byte size");
+
+        $math->intToFixedSizeString($integer, $size);
+    }
 }
