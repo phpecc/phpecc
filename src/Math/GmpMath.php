@@ -223,6 +223,10 @@ class GmpMath implements GmpMathInterface
             throw new \RuntimeException("Byte size cannot be negative");
         }
 
+        if (gmp_cmp($x, 0) < 0) {
+            throw new \RuntimeException("x was negative - not yet supported");
+        }
+
         $two = gmp_init(2);
         $range = gmp_pow($two, $byteSize * 8);
         if (NumberSize::bnNumBits($this, $x) >= NumberSize::bnNumBits($this, $range)) {
