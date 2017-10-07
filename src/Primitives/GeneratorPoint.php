@@ -88,12 +88,11 @@ class GeneratorPoint extends Point
     /**
      * @param \GMP $x
      * @param \GMP $y
-     * @param \GMP $order
      * @return PublicKeyInterface
      */
-    public function getPublicKeyFrom(\GMP $x, \GMP $y, \GMP $order = null): PublicKeyInterface
+    public function getPublicKeyFrom(\GMP $x, \GMP $y): PublicKeyInterface
     {
-        $pubPoint = $this->getCurve()->getPoint($x, $y, $order);
+        $pubPoint = $this->getCurve()->getPoint($x, $y, $this->getOrder());
         return new PublicKey($this->getAdapter(), $this, $pubPoint);
     }
 
