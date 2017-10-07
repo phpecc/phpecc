@@ -18,7 +18,7 @@ $algorithm = 'sha256';
 
 ## You'll be restoring from a key, as opposed to generating one.
 $pemSerializer = new PemPrivateKeySerializer(new DerPrivateKeySerializer($adapter));
-$keyData = file_get_contents(__DIR__ . '/../tests/data/openssl-priv.pem');
+$keyData = file_get_contents(__DIR__ . '/../tests/data/openssl-secp256r1.pem');
 $key = $pemSerializer->parse($keyData);
 
 $document = 'I am writing today...';

@@ -21,8 +21,8 @@ $pemPriv = new PemPrivateKeySerializer(new DerPrivateKeySerializer());
 $pemPub = new PemPublicKeySerializer(new DerPublicKeySerializer());
 
 # These .pem and .key are for different keys
-$alicePriv = $pemPriv->parse(file_get_contents(__DIR__ . '/../tests/data/openssl-priv.pem'));
-$bobPub = $pemPub->parse(file_get_contents(__DIR__ . '/../tests/data/openssl-pub.key'));
+$alicePriv = $pemPriv->parse(file_get_contents(__DIR__ . '/../tests/data/openssl-secp256r1.pem'));
+$bobPub = $pemPub->parse(file_get_contents(__DIR__ . '/../tests/data/openssl-secp256r1.1.pub.pem'));
 
 $exchange = $alicePriv->createExchange($bobPub);
 $shared = $exchange->calculateSharedKey();
