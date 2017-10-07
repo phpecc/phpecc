@@ -27,10 +27,8 @@ namespace Mdanter\Ecc\Crypto\EcDH;
  */
 
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
-use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Math\GmpMathInterface;
-use Mdanter\Ecc\Primitives\PointInterface;
 
 /**
  * This class is the implementation of ECDH.
@@ -52,7 +50,7 @@ class EcDH implements EcDHInterface
     /**
      * Secret key between the two parties
      *
-     * @var PointInterface
+     * @var PublicKeyInterface
      */
     private $secretKey = null;
 
@@ -86,7 +84,7 @@ class EcDH implements EcDHInterface
     {
         $this->calculateKey();
 
-        return $this->secretKey->getX();
+        return $this->secretKey->getPoint()->getX();
     }
 
     /**
@@ -97,7 +95,7 @@ class EcDH implements EcDHInterface
     {
         $this->calculateKey();
 
-        return new PublicKey($this->adapter, $this->senderKey->getPoint(), $this->secretKey);
+        return $this->secretKey;
     }
 
     /**
@@ -128,7 +126,16 @@ class EcDH implements EcDHInterface
         $this->checkExchangeState();
 
         if ($this->secretKey === null) {
-            $this->secretKey = $this->recipientKey->getPoint()->mul($this->senderKey->getSecret());
+            try {
+                // Multiply our secret with recipients public key
+                $point = $this->recipientKey->getPoint()->mul($this->senderKey->getSecret());
+
+                // Ensure we completed a valid exchange, ensure we can create a
+                // public key instance for the shared secret using our generator.
+                $this->secretKey = $this->senderKey->getPoint()->getPublicKeyFrom($point->getX(), $point->getY());
+            } catch (\Exception $e) {
+                throw new \RuntimeException("Invalid ECDH exchange");
+            }
         }
     }
 
@@ -149,6 +156,12 @@ class EcDH implements EcDHInterface
 
         if ($this->recipientKey === null) {
             throw new \RuntimeException('Recipient key not set.');
+        }
+
+        // Check the point exists on our curve.
+        $point = $this->recipientKey->getPoint();
+        if (!$this->senderKey->getPoint()->getCurve()->contains($point->getX(), $point->getY())) {
+            throw new \RuntimeException("Invalid ECDH exchange - Point does not exist on our curve");
         }
     }
 }
