@@ -61,7 +61,7 @@ class PublicKey implements PublicKeyInterface
     protected $adapter;
 
     /**
-     * Initialize a new instance.
+     * Initialize a new PublicKey instance.
      *
      * @param  GmpMathInterface  $adapter
      * @param  GeneratorPoint    $generator
@@ -82,6 +82,13 @@ class PublicKey implements PublicKeyInterface
             || $adapter->cmp($point->getY(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getY()) <= 0
         ) {
             throw new \RuntimeException("Generator point has x and y out of range.");
+        }
+
+        // Sanity check. Point (x,y) values are qualified against it's
+        // generator and curve. Here we ensure the Point and Generator
+        // are the same.
+        if (!$generator->getCurve()->equals($point->getCurve())) {
+            throw new \RuntimeException("Curve for given point not in common with GeneratorPoint");
         }
     }
 
