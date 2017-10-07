@@ -37,6 +37,12 @@ this concern.
 
 The library uses a non-branching Montgomery ladder for scalar multiplication, as it's constant time and avoids secret 
 dependant branches. 
+
+### Compatibility notice:
+
+A dependency used by this library in v0.4.x interacts with a newly reserved keyword in PHP 7.2. Therefore the library
+cannot be used on 7.2. For a PHP7.0+ branch, you should upgrade to [v0.5.x](https://github.com/phpecc/phpecc/releases/tag/v0.5.0)
+
  
 ### License
 

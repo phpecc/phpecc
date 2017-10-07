@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=5.6.0, <7.2",
         "ext-gmp": "*",
         "paragonie/random_compat": "^1|^2",
         "fgrosse/phpasn1": "~1.5"
