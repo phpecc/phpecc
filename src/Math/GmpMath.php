@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc\Math;
 
 use Mdanter\Ecc\Util\BinaryString;
+use Mdanter\Ecc\Util\NumberSize;
 
 class GmpMath implements GmpMathInterface
 {
@@ -209,6 +210,38 @@ class GmpMath implements GmpMathInterface
     public function jacobi(\GMP $a, \GMP $n)
     {
         return gmp_jacobi($a, $n);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see GmpMathInterface::intToFixedSizeString()
+     */
+    public function intToFixedSizeString(\GMP $x, $byteSize)
+    {
+        if ($byteSize < 0) {
+            throw new \RuntimeException("Byte size cannot be negative");
+        }
+
+        if (gmp_cmp($x, 0) < 0) {
+            throw new \RuntimeException("x was negative - not yet supported");
+        }
+
+        $two = gmp_init(2);
+        $range = gmp_pow($two, $byteSize * 8);
+        if (NumberSize::bnNumBits($this, $x) >= NumberSize::bnNumBits($this, $range)) {
+            throw new \RuntimeException("Number overflows byte size");
+        }
+
+        $maskShift = gmp_pow($two, 8);
+        $mask = gmp_mul(gmp_init(255), $range);
+
+        $binary = '';
+        for ($i = $byteSize - 1; $i >= 0; $i--) {
+            $mask = gmp_div($mask, $maskShift);
+            $binary .= pack('C', gmp_strval(gmp_div(gmp_and($x, $mask), gmp_pow($two, $i * 8)), 10));
+        }
+
+        return $binary;
     }
 
     /**

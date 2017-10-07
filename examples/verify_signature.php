@@ -1,6 +1,6 @@
 <?php
 
-require "../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Signature\Signer;
@@ -21,7 +21,7 @@ $sigSerializer = new DerSignatureSerializer();
 $sig = $sigSerializer->parse($sigData);
 
 // Parse public key
-$keyData = file_get_contents('../tests/data/openssl-pub.pem');
+$keyData = file_get_contents(__DIR__ . '/../tests/data/openssl-pub.pem');
 $derSerializer = new DerPublicKeySerializer($adapter);
 $pemSerializer = new PemPublicKeySerializer($derSerializer);
 $key = $pemSerializer->parse($keyData);
