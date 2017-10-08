@@ -13,14 +13,13 @@ class PemPrivateKeySerializerTest extends AbstractTestCase
 {
     public function testReadsDer()
     {
-        $der = file_get_contents(__DIR__ . "/../../../data/openssl-priv.pem");
+        $der = file_get_contents(__DIR__ . "/../../../data/openssl-secp256r1.pem");
         $adapter = EccFactory::getAdapter();
         $derSerializer = new DerPrivateKeySerializer($adapter);
         $pemSerializer = new PemPrivateKeySerializer($derSerializer);
         $key = $pemSerializer->parse($der);
         $this->assertInstanceOf(PrivateKey::class, $key);
     }
-
 
     public function testConsistent()
     {

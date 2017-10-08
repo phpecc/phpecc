@@ -27,6 +27,21 @@ class PublicKeyTest extends AbstractTestCase
         new PublicKey($adapter, $generator192, $tooLarge);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Curve for given point not in common with GeneratorPoint
+     */
+    public function testPointGeneratorMismatch()
+    {
+        $adapter = EccFactory::getAdapter();
+        $generator384 = EccFactory::getNistCurves($adapter)->generator384();
+
+        $generator192 = EccFactory::getNistCurves($adapter)->generator192();
+        $mismatchPoint = $generator192->createPrivateKey()->getPublicKey()->getPoint();
+
+        new PublicKey($adapter, $generator384, $mismatchPoint);
+    }
+
     public function testInstance()
     {
         $adapter = EccFactory::getAdapter();
