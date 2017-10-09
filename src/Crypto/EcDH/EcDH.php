@@ -212,5 +212,11 @@ class EcDH implements EcDHInterface
         if ($this->recipientKey === null) {
             throw new \RuntimeException('Recipient key not set.');
         }
+
+        // Check the point exists on our curve.
+        $point = $this->recipientKey->getPoint();
+        if (!$this->senderKey->getPoint()->getCurve()->contains($point->getX(), $point->getY())) {
+            throw new \RuntimeException("Invalid ECDH exchange - Point does not exist on our curve");
+        }
     }
 }

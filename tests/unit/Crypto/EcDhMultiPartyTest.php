@@ -3,6 +3,7 @@
 namespace Mdanter\Ecc\Tests\Crypto;
 
 use Mdanter\Ecc\Message\MessageFactory;
+use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 use Mdanter\Ecc\EccFactory;
 
@@ -42,5 +43,27 @@ class EcDhMultiPartyTest extends AbstractTestCase
         $this->assertTrue($bobSharedKey == $aliceSharedKey);
         $this->assertTrue($aliceSharedKey == $carolSharedKey);
         $this->assertTrue($carolSharedKey == $bobSharedKey);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Invalid ECDH exchange - Point does not exist on our curve
+     */
+    public function testChecksCurveMismatch()
+    {
+        $g521Priv = gmp_init("933647627474908018426578245710479111318013963124904148836279534969474325811737975019251749444245449462797733969359656644867805138716790671286350292237562679", 10);
+        $p1 = EccFactory::getNistCurves()->generator521()->getPrivateKeyFrom($g521Priv);
+
+        $g192Pub = "0468e3642493c4e433a741c78ab67ee607d94925c506e9554d43de2d1c71493334c681cf4683aee863d90e9732745d5bc7";
+        $g192 = EccFactory::getNistCurves()->generator192();
+
+        $adapter = EccFactory::getAdapter();
+        $p2 = (new UncompressedPointSerializer($adapter))->unserialize($g192->getCurve(), $g192Pub);
+        $pubkey = $g192->getPublicKeyFrom($p2->getX(), $p2->getY());
+
+        $p1
+            ->createExchange(new MessageFactory($adapter), $pubkey)
+            ->calculateSharedKey()
+        ;
     }
 }
