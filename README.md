@@ -44,6 +44,8 @@ This package is released under the MIT license.
 * composer
 * ext-gmp
 
+For PHP5.6 compatibility, use the v0.4.x releases.
+
 ### Installation
 
 You can install this library via Composer :
