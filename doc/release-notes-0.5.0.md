@@ -10,6 +10,11 @@ A minor BC break was included in the release - the hashing functions
 were extracted from Signer into a new class, SignHasher, which
 allows us to fix a bug described in the pull request.
 
+A patch was merged to the ECDH class which should make invalid curve
+attacks more difficult to execute. More details can be found on the
+pull request. People using ECDH are urged to upgrade to v0.5.0 or
+v0.4.4 if PHP5.6 support is required.
+
 A performance improvement was also included, making scalar
 multiplication 14% faster.
 
