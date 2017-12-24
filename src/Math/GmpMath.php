@@ -308,7 +308,7 @@ class GmpMath implements GmpMathInterface
      * {@inheritDoc}
      * @see GmpMathInterface::baseConvert()
      */
-    public function baseConvert(string $number, int $from, int $to): string
+    public function baseConvert($number, int $from, int $to): string
     {
         return gmp_strval(gmp_init($number, $from), $to);
     }

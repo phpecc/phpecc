@@ -212,7 +212,7 @@ interface GmpMathInterface
      * @param int $toBase
      * @return string
      */
-    public function baseConvert(string $value, int $fromBase, int $toBase): string;
+    public function baseConvert($value, int $fromBase, int $toBase): string;
 
     /**
      * @return NumberTheory
