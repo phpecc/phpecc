@@ -30,6 +30,10 @@ class RandomGeneratorFactory
         if (self::$forcedGenerator !== null) {
             return self::$forcedGenerator;
         }
+        
+        if (function_exists('random_bytes')) {
+            return self::getRandomBytesGenerator($debug);
+        }
 
         if (extension_loaded('mcrypt')) {
             return self::getUrandomGenerator($debug);
@@ -41,6 +45,19 @@ class RandomGeneratorFactory
 
         throw new \RuntimeException('No usable RandomGenerator was found');
     }
+    
+    /**
+     * @param bool $debug
+     * @return DebugDecorator|RandomNumberGeneratorInterface
+     */
+    public static function getRandomBytesGenerator($debug = false)
+    {
+        return self::wrapAdapter(
+            new RandomBytesGenerator(MathAdapterFactory::getAdapter($debug)),
+            'random_bytes',
+            $debug
+        );
+    }  
 
     /**
      * @param bool $debug
