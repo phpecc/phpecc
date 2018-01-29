@@ -22,8 +22,8 @@ The library supports the following curves:
  - secp256k1
  - nistp192
  - nistp224
- - nistp256 / secg256r1
- - nistp384 / secg384r1
+ - nistp256 / secp256r1
+ - nistp384 / secp384r1
  - nistp521
 
 During ECDSA, a random value `k` is required. It is acceptable to use a true RNG to generate this value, but 
