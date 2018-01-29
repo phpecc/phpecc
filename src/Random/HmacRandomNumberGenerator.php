@@ -37,7 +37,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
         'sha1' => 160,
         'sha224' => 224,
         'sha256' => 256,
-        'sha384' => 385,
+        'sha384' => 384,
         'sha512' => 512
     );
 
