@@ -254,8 +254,8 @@ TEXT
                 $fCurveGetPoint = false;
             }
 
-            $this->assertEquals(true, $fCurveContains);
-            $this->assertEquals(true, $fCurveGetPoint);
+            $this->assertTrue($fCurveContains);
+            $this->assertTrue($fCurveGetPoint);
         }
     }
 
