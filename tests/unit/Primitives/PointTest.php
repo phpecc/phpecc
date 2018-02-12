@@ -71,17 +71,17 @@ class PointTest extends AbstractTestCase
         $infinity = $curve->getInfinity();
 
         $debug = $infinity->__debugInfo();
-        $this->assertTrue(isset($debug['x']));
-        $this->assertTrue(isset($debug['y']));
-        $this->assertTrue(isset($debug['z']));
-        $this->assertTrue(isset($debug['curve']));
+        $this->assertArrayHasKey('x', $debug);
+        $this->assertArrayHasKey('y', $debug);
+        $this->assertArrayHasKey('z', $debug);
+        $this->assertArrayHasKey('curve', $debug);
 
         $point = new Point($adapter, $curve, gmp_init(13, 10), gmp_init(7, 10), gmp_init(7, 10));
         $debug = $point->__debugInfo();
-        $this->assertTrue(isset($debug['x']));
-        $this->assertTrue(isset($debug['y']));
-        $this->assertTrue(isset($debug['z']));
-        $this->assertTrue(isset($debug['curve']));
+        $this->assertArrayHasKey('x', $debug);
+        $this->assertArrayHasKey('y', $debug);
+        $this->assertArrayHasKey('z', $debug);
+        $this->assertArrayHasKey('curve', $debug);
     }
 
     public function testMulAlreadyInfinity()

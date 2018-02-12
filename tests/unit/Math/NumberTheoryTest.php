@@ -72,8 +72,8 @@ class NumberTheoryTest extends AbstractTestCase
             $p = gmp_init($r->p, 10);
             $root1 = $theory->squareRootModP($a, $p);
             $root2 = $adapter->sub($p, $root1);
-            $this->assertTrue(in_array(gmp_strval($root1, 10), $r->res));
-            $this->assertTrue(in_array(gmp_strval($root2, 10), $r->res));
+            $this->assertContains(gmp_strval($root1, 10), $r->res);
+            $this->assertContains(gmp_strval($root2, 10), $r->res);
         }
     }
 
@@ -124,7 +124,7 @@ class NumberTheoryTest extends AbstractTestCase
             $y_coordinate = str_pad($y_coordinate, 64, '0', STR_PAD_LEFT);
 
             // Successfully regenerated uncompressed ECDSA key from the x coordinate and the parity byte.
-            $this->assertTrue('04'.$x_coordinate.$y_coordinate == $o->decompressed);
+            $this->assertEquals('04'.$x_coordinate.$y_coordinate, $o->decompressed);
         }
     }
 
@@ -149,7 +149,7 @@ class NumberTheoryTest extends AbstractTestCase
             $compressed = '0'.(($math->equals($mod, gmp_init(0))) ? '2' : '3').$x;
 
             // Check that the mod function reported the parity for the y value.
-            $this->assertTrue($compressed === $o->compressed);
+            $this->assertSame($compressed, $o->compressed);
         }
     }
 }

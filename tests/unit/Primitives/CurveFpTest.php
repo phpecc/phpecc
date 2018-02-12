@@ -47,8 +47,8 @@ class CurveFpTest extends AbstractTestCase
         $curve = new CurveFp($parameters, $adapter);
 
         $debug = $curve->__debugInfo();
-        $this->assertTrue(isset($debug['a']));
-        $this->assertTrue(isset($debug['b']));
-        $this->assertTrue(isset($debug['prime']));
+        $this->assertArrayHasKey('a', $debug);
+        $this->assertArrayHasKey('b', $debug);
+        $this->assertArrayHasKey('prime', $debug);
     }
 }

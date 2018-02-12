@@ -60,7 +60,7 @@ class MathTest extends AbstractTestCase
     {
         foreach ($this->decHexMap as $hex => $dec) {
             $actual = $adapter->decHex((string) $dec);
-            $this->assertTrue($hex === $actual, "$hex === $actual");
+            $this->assertSame($hex, $actual, "$hex === $actual");
         }
     }
 
@@ -120,10 +120,10 @@ class MathTest extends AbstractTestCase
         $this->assertTrue(is_object($bitwiseand) && $bitwiseand instanceof \GMP);
 
         $hexdec = $math->decHex('10');
-        $this->assertTrue(is_string($hexdec));
+        $this->assertInternalType('string', $hexdec);
 
         $dechex = $math->hexDec($hexdec);
-        $this->assertTrue(is_string($dechex));
+        $this->assertInternalType('string', $dechex);
     }
 
     /**
