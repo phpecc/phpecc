@@ -24,7 +24,7 @@ class Parser
     private $adapter;
 
     /**
-     * @var UncompressedPointSerializer
+     * @var PointSerializerInterface
      */
     private $pointSerializer;
 
@@ -51,8 +51,7 @@ class Parser
             throw new \RuntimeException('Invalid data.');
         }
 
-        /** @var Sequence $asnObject */
-        if ($asnObject->getNumberofChildren() != 2) {
+        if (! ($asnObject instanceof Sequence) || $asnObject->getNumberOfChildren() != 2) {
             throw new \RuntimeException('Invalid data.');
         }
 

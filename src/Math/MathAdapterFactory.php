@@ -19,7 +19,7 @@ class MathAdapterFactory
 
     /**
      * @param bool $debug
-     * @return DebugDecorator|GmpMathInterface|null
+     * @return DebugDecorator|GmpMathInterface
      */
     public static function getAdapter(bool $debug = false): GmpMathInterface
     {
