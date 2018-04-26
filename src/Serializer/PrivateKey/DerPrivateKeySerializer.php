@@ -90,7 +90,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
     {
         $asnObject = ASNObject::fromBinary($data);
 
-        if (! ($asnObject instanceof Sequence) || $asnObject->getNumberofChildren() !== 4) {
+        if (! ($asnObject instanceof Sequence) || $asnObject->getNumberOfChildren() !== 4) {
             throw new \RuntimeException('Invalid data.');
         }
 

@@ -95,7 +95,6 @@ class EcDH implements EcDHInterface
     public function createMultiPartyKey(): PublicKeyInterface
     {
         $this->calculateKey();
-
         return $this->secretKey;
     }
 

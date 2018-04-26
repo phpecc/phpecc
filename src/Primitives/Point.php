@@ -95,8 +95,8 @@ class Point implements PointInterface
         $this->x          = $x;
         $this->y          = $y;
         $this->order      = $order !== null ? $order : gmp_init(0, 10);
-        $this->infinity   = (bool) $infinity;
-        if (! $infinity && ! $curve->contains($x, $y)) {
+        $this->infinity   = $infinity;
+        if (!$infinity && !$curve->contains($x, $y)) {
             throw new \RuntimeException("Curve " . $curve . " does not contain point (" . $adapter->toString($x) . ", " . $adapter->toString($y) . ")");
         }
 
@@ -122,7 +122,7 @@ class Point implements PointInterface
      */
     public function isInfinity(): bool
     {
-        return (bool) $this->infinity;
+        return $this->infinity;
     }
 
     /**
@@ -284,9 +284,11 @@ class Point implements PointInterface
             $this->cswap($r[0], $r[1], $j ^ 1, $k);
         }
 
-        $r[0]->validate();
+        /** @var Point $result */
+        $result = $r[0];
+        $result->validate();
 
-        return $r[0];
+        return $result;
     }
 
     /**
@@ -311,7 +313,7 @@ class Point implements PointInterface
      */
     public function cswapValue(& $a, & $b, int $cond, int $maskBitSize)
     {
-        $isGMP = is_object($a) && $a instanceof \GMP;
+        $isGMP = $a instanceof \GMP;
 
         $sa = $isGMP ? $a : gmp_init(intval($a), 10);
         $sb = $isGMP ? $b : gmp_init(intval($b), 10);

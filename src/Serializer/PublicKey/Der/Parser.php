@@ -23,7 +23,7 @@ class Parser
     private $adapter;
 
     /**
-     * @var UncompressedPointSerializer
+     * @var PointSerializerInterface
      */
     private $pointSerializer;
 
@@ -47,11 +47,22 @@ class Parser
     {
         $asnObject = ASNObject::fromBinary($binaryData);
 
-        if (! ($asnObject instanceof Sequence) || $asnObject->getNumberofChildren() != 2) {
+        if (! ($asnObject instanceof Sequence) || $asnObject->getNumberOfChildren() != 2) {
             throw new \RuntimeException('Invalid data.');
         }
 
         $children = $asnObject->getChildren();
+        if (count($children) < 2) {
+            throw new \RuntimeException("Invalid data: missing curve or public key data");
+        }
+
+        if (!($children[0] instanceof Sequence)) {
+            throw new \RuntimeException("Invalid data: invalid data for curve info");
+        }
+
+        if (count($children[0]) < 2) {
+            throw new \RuntimeException("Invalid data: missing curve or algorithm info");
+        }
 
         $oid = $children[0]->getChildren()[0];
         $curveOid = $children[0]->getChildren()[1];

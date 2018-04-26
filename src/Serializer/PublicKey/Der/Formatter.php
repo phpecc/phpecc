@@ -17,7 +17,7 @@ use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 class Formatter
 {
     /**
-     * @var UncompressedPointSerializer
+     * @var PointSerializerInterface
      */
     private $pointSerializer;
 
@@ -36,7 +36,7 @@ class Formatter
      */
     public function format(PublicKeyInterface $key): string
     {
-        if (! ($key->getCurve() instanceof NamedCurveFp)) {
+        if (!($key->getCurve() instanceof NamedCurveFp)) {
             throw new \RuntimeException('Not implemented for unnamed curves');
         }
 

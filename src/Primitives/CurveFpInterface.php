@@ -116,7 +116,7 @@ interface CurveFpInterface
      * Compares the curve to another.
      *
      * @param  CurveFpInterface $other
-     * @return int              < 0 if $this < $other, 0 if $other == $this, > 0 if $this > $other
+     * @return int
      */
     public function cmp(CurveFpInterface $other): int;
 
