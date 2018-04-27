@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Curves;
 
+use Mdanter\Ecc\Curves\BrainpoolCurve;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
@@ -19,6 +20,10 @@ class CurveFactoryTest extends AbstractTestCase
             [NistCurve::NAME_P256],
             [NistCurve::NAME_P384],
             [NistCurve::NAME_P521],
+            [BrainpoolCurve::NAME_P160R1],
+            [BrainpoolCurve::NAME_P256R1],
+            [BrainpoolCurve::NAME_P384R1],
+            [BrainpoolCurve::NAME_P512R1],
             [SecgCurve::NAME_SECP_112R1],
             [SecgCurve::NAME_SECP_192K1],
             [SecgCurve::NAME_SECP_256R1],
