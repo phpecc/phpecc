@@ -24,6 +24,8 @@ OTHER DEALINGS IN THE SOFTWARE.
  *************************************************************************/
 namespace Mdanter\Ecc\Primitives;
 
+use Mdanter\Ecc\Exception\PointRecoveryException;
+use Mdanter\Ecc\Exception\SquareRootException;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\ModularArithmetic;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
@@ -114,16 +116,20 @@ class CurveFp implements CurveFpInterface
         $math = $this->adapter;
         $prime = $this->getPrime();
 
-        $root = $this->adapter->getNumberTheory()->squareRootModP(
-            $math->add(
+        try {
+            $root = $this->adapter->getNumberTheory()->squareRootModP(
                 $math->add(
-                    $this->modAdapter->pow($xCoord, gmp_init(3, 10)),
-                    $math->mul($this->getA(), $xCoord)
+                    $math->add(
+                        $this->modAdapter->pow($xCoord, gmp_init(3, 10)),
+                        $math->mul($this->getA(), $xCoord)
+                    ),
+                    $this->getB()
                 ),
-                $this->getB()
-            ),
-            $prime
-        );
+                $prime
+            );
+        } catch (SquareRootException $e) {
+            throw new PointRecoveryException("Failed to recover y coordinate for point", 0, $e);
+        }
 
         if ($math->equals($math->mod($root, gmp_init(2, 10)), gmp_init(1)) === $wasOdd) {
             return $root;

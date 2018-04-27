@@ -7,6 +7,8 @@ use FG\ASN1\ASNObject;
 use FG\ASN1\Universal\Sequence;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Math\GmpMathInterface;
+use Mdanter\Ecc\Primitives\CurveFp;
+use Mdanter\Ecc\Primitives\CurveParameters;
 use Mdanter\Ecc\Serializer\Util\CurveOidMapper;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;

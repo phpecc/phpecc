@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Mdanter\Ecc\Tests\Math;
 
 use Mdanter\Ecc\EccFactory;
+use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\NumberTheory;
 use Mdanter\Ecc\Tests\AbstractTestCase;
@@ -27,6 +28,7 @@ class NumberTheoryTest extends AbstractTestCase
 
     protected function setUp()
     {
+        // todo: in the future, turn these into data providers instead
         // file containing a json array of {compressed=>'', decompressed=>''} values
         // of compressed and uncompressed ECDSA public keys (testing secp256k1 curve)
         $file_comp = TEST_DATA_DIR.'/compression.json';
@@ -45,21 +47,30 @@ class NumberTheoryTest extends AbstractTestCase
         $this->sqrt_data = json_decode(file_get_contents($file_sqrt));
     }
 
-    /**
-     * @dataProvider getAdapters
-     * @expectedException \LogicException
-     */
-    public function testSqrtDataWithNoRoots(GmpMathInterface $adapter)
+    public function getInvalidRootsProvider(): array
     {
-        $theory = $adapter->getNumberTheory();
-
-        foreach ($this->sqrt_data->no_root as $r) {
-            // todo: turn into adapter
-            $a = gmp_init($r->a, 10);
-            $p = gmp_init($r->p, 10);
-            $theory->squareRootModP($a, $p);
+        $file_sqrt = TEST_DATA_DIR.'/square_root_mod_p.json';
+        $sqrt_data = json_decode(file_get_contents($file_sqrt));
+        $fixtures = [];
+        foreach ($sqrt_data->no_root as $r) {
+            $fixtures[] = [$r->a, $r->p];
         }
+        return $fixtures;
     }
+
+    /**
+     * @dataProvider getInvalidRootsProvider
+     * @expectedException \Mdanter\Ecc\Exception\SquareRootException
+     * @param string $a
+     * @param string $p
+     */
+    public function testSqrtDataWithNoRoots(string $a, string $p)
+    {
+        $adapter = new GmpMath();
+        $theory = $adapter->getNumberTheory();
+        $theory->squareRootModP(gmp_init($a, 10), gmp_init($p, 10));
+    }
+
     /**
      * @dataProvider getAdapters
      */
