@@ -14,7 +14,7 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 class PointTest extends AbstractTestCase
 {
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\PointException
      * @expectedExceptionMessage Curve curve(1, 1, 23) does not contain point (2, 2)
      */
     public function testConstructorInvalidCurvePoint()
@@ -150,7 +150,7 @@ class PointTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\PointException
      * @expectedExceptionMessage Curve curve(-3, 41058363725152142129326129780047268409114441015993725554835256314039467401291, 115792089210356248762697446949407573530086143415290314195533631308867097853951) does not contain point (58449750472625921448203013684212508347339475414040948669953216871973381284903, 50970277084784601725958135138198442242271560603337990589052444638672428978267)
      */
     public function testRejectsInvalidPoints()

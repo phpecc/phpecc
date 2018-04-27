@@ -40,7 +40,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Mdanter\\Ecc\\Tests\\": "tests/unit"
+            "Mdanter\\Ecc\\Tests\\": "tests/unit",
+            "Mdanter\\Ecc\\WycheProof\\": "tests/wycheproof"
         }
     }
 }
