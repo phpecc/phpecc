@@ -15,6 +15,9 @@ test-examples:
 phpunit-ci: pretest
 		vendor/bin/phpunit --coverage-text --coverage-clover=tests/output/coverage.clover
 
+phpunit-full-ci: pretest
+		vendor/bin/phpunit -c phpunit.full.xml --coverage-text --coverage-clover=tests/output/coverage.clover
+
 ifndef STRICT
 STRICT = 0
 endif

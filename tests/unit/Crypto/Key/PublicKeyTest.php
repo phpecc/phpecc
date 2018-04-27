@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\Tests\Crypto\Key;
 
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\EccFactory;
+use Mdanter\Ecc\Exception\PublicKeyException;
 use Mdanter\Ecc\Primitives\CurveFp;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Primitives\Point;
@@ -12,10 +13,9 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class PublicKeyTest extends AbstractTestCase
 {
-
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Generator point has x and y out of range
+     * @expectedException \Mdanter\Ecc\Exception\PublicKeyException
+     * @expectedExceptionMessage Point has x and y out of range
      */
     public function testBadPointForGenerator()
     {
@@ -24,11 +24,17 @@ class PublicKeyTest extends AbstractTestCase
         $generator384 = EccFactory::getNistCurves($adapter)->generator384();
 
         $tooLarge = $generator384->createPrivateKey()->getPublicKey()->getPoint();
-        new PublicKey($adapter, $generator192, $tooLarge);
+        try {
+            new PublicKey($adapter, $generator192, $tooLarge);
+        } catch (PublicKeyException $e) {
+            $this->assertEquals($e->getGenerator(), $generator192);
+            $this->assertEquals($e->getPoint(), $tooLarge);
+            throw $e;
+        }
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\PublicKeyException
      * @expectedExceptionMessage Curve for given point not in common with GeneratorPoint
      */
     public function testPointGeneratorMismatch()
@@ -39,7 +45,13 @@ class PublicKeyTest extends AbstractTestCase
         $generator192 = EccFactory::getNistCurves($adapter)->generator192();
         $mismatchPoint = $generator192->createPrivateKey()->getPublicKey()->getPoint();
 
-        new PublicKey($adapter, $generator384, $mismatchPoint);
+        try {
+            new PublicKey($adapter, $generator384, $mismatchPoint);
+        } catch (PublicKeyException $e) {
+            $this->assertEquals($e->getGenerator(), $generator384);
+            $this->assertEquals($e->getPoint(), $mismatchPoint);
+            throw $e;
+        }
     }
 
     public function testInstance()

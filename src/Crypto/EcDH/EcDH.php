@@ -29,6 +29,7 @@ namespace Mdanter\Ecc\Crypto\EcDH;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Exception\ExchangeException;
 use Mdanter\Ecc\Math\GmpMathInterface;
 
 /**
@@ -135,7 +136,7 @@ class EcDH implements EcDHInterface
                 // public key instance for the shared secret using our generator.
                 $this->secretKey = $this->senderKey->getPoint()->getPublicKeyFrom($point->getX(), $point->getY());
             } catch (\Exception $e) {
-                throw new \RuntimeException("Invalid ECDH exchange");
+                throw new ExchangeException("Invalid ECDH exchange", 0, $e);
             }
         }
     }
@@ -152,17 +153,17 @@ class EcDH implements EcDHInterface
         }
 
         if ($this->senderKey === null) {
-            throw new \RuntimeException('Sender key not set.');
+            throw new ExchangeException('Sender key not set.');
         }
 
         if ($this->recipientKey === null) {
-            throw new \RuntimeException('Recipient key not set.');
+            throw new ExchangeException('Recipient key not set.');
         }
 
         // Check the point exists on our curve.
         $point = $this->recipientKey->getPoint();
         if (!$this->senderKey->getPoint()->getCurve()->contains($point->getX(), $point->getY())) {
-            throw new \RuntimeException("Invalid ECDH exchange - Point does not exist on our curve");
+            throw new ExchangeException("Invalid ECDH exchange - Point does not exist on our curve");
         }
     }
 }
