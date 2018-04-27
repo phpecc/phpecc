@@ -35,8 +35,14 @@ class CurveFactory
                 return $nistFactory->curve521();
             case BrainpoolCurve::NAME_P160R1:
                 return $brainpoolFactory->curve160r1();
+            case BrainpoolCurve::NAME_P192R1:
+                return $brainpoolFactory->curve192r1();
+            case BrainpoolCurve::NAME_P224R1:
+                return $brainpoolFactory->curve224r1();
             case BrainpoolCurve::NAME_P256R1:
                 return $brainpoolFactory->curve256r1();
+            case BrainpoolCurve::NAME_P330R1:
+                return $brainpoolFactory->curve330r1();
             case BrainpoolCurve::NAME_P384R1:
                 return $brainpoolFactory->curve384r1();
             case BrainpoolCurve::NAME_P512R1:
@@ -82,8 +88,14 @@ class CurveFactory
                 return $nistFactory->generator521();
             case BrainpoolCurve::NAME_P160R1:
                 return $brainpoolFactory->generator160r1();
+            case BrainpoolCurve::NAME_P192R1:
+                return $brainpoolFactory->generator192r1();
+            case BrainpoolCurve::NAME_P224R1:
+                return $brainpoolFactory->generator224r1();
             case BrainpoolCurve::NAME_P256R1:
                 return $brainpoolFactory->generator256r1();
+            case BrainpoolCurve::NAME_P330R1:
+                return $brainpoolFactory->generator330r1();
             case BrainpoolCurve::NAME_P384R1:
                 return $brainpoolFactory->generator384r1();
             case BrainpoolCurve::NAME_P512R1:
