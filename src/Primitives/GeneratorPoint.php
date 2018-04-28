@@ -12,6 +12,7 @@ use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 use Mdanter\Ecc\Exception\InvalidSignatureException;
+use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializerInterface;
 
 /**
  * Curve point from which public and private keys can be derived.
@@ -107,7 +108,7 @@ class GeneratorPoint extends Point
         return new PrivateKey($this->getAdapter(), $this, $secretMultiplier);
     }
 
-    public function getDerSignatureFrom(string $binary, DerSignatureSerializer $serializer)
+    public function getDerSignatureFrom(string $binary, DerSignatureSerializerInterface $serializer)
     {
         $signature = $serializer->parse($binary);
 
