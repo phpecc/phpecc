@@ -6,6 +6,7 @@ namespace Mdanter\Ecc\Tests\Curves;
 use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
+use Mdanter\Ecc\Exception\UnsupportedCurveException;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class CurveFactoryTest extends AbstractTestCase
@@ -39,20 +40,34 @@ class CurveFactoryTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
      * @expectedExceptionMessage Unknown curve.
      */
     public function testFailsOnUnknownCurve()
     {
-        CurveFactory::getCurveByName('unknown');
+        $curveName = 'unknown';
+        try {
+            CurveFactory::getCurveByName($curveName);
+        } catch (UnsupportedCurveException $e) {
+            $this->assertTrue($e->hasCurveName());
+            $this->assertEquals($curveName, $e->getCurveName());
+            throw $e;
+        }
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
      * @expectedExceptionMessage Unknown generator.
      */
     public function testFailsOnUnknownGenerator()
     {
-        CurveFactory::getGeneratorByName('unknown');
+        $curveName = 'unknown';
+        try {
+            CurveFactory::getGeneratorByName($curveName);
+        } catch (UnsupportedCurveException $e) {
+            $this->assertTrue($e->hasCurveName());
+            $this->assertEquals($curveName, $e->getCurveName());
+            throw $e;
+        }
     }
 }

@@ -33,7 +33,7 @@ class CurveOidMapperTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
      */
     public function testGetBytesUnknownCurve()
     {
@@ -43,7 +43,7 @@ class CurveOidMapperTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
      */
     public function testGetCurveOid()
     {
@@ -53,7 +53,7 @@ class CurveOidMapperTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
      */
     public function testCurveUnknownOid()
     {
@@ -62,7 +62,7 @@ class CurveOidMapperTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
      */
     public function testGeneratorUnknownOid()
     {
