@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\Signature\Der;
 
+use FG\ASN1\Exception\ParserException;
 use FG\ASN1\Identifier;
-use FG\ASN1\ASNObject;
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
+use Mdanter\Ecc\Exception\InvalidSignatureException;
 
 class Parser
 {
@@ -17,26 +18,25 @@ class Parser
      */
     public function parse(string $binary): SignatureInterface
     {
-        $object = ASNObject::fromBinary($binary);
-        if ($object->getType() !== Identifier::SEQUENCE) {
-            throw new \RuntimeException('Invalid data');
-        }
+        $template = [
+            Identifier::SEQUENCE => [
+                Identifier::INTEGER,
+                Identifier::INTEGER,
+            ],
+        ];
 
-        $content = $object->getContent();
-        if (count($content) !== 2) {
-            throw new \RuntimeException('Failed to parse signature');
-        }
-
-        /** @var \FG\ASN1\Universal\Integer $r  */
-        /** @var \FG\ASN1\Universal\Integer $s  */
-        list ($r, $s) = $content;
-        if ($r->getType() !== Identifier::INTEGER || $s->getType() !== Identifier::INTEGER) {
-            throw new \RuntimeException('Failed to parse signature');
+        $parser = new \FG\ASN1\TemplateParser();
+        try {
+            $sequence = $parser->parseBinary($binary, $template);
+        } catch (ParserException $e) {
+            throw new InvalidSignatureException("Invalid ASN.1 for signature", 0, $e);
+        } catch (\Exception $e) {
+            throw new InvalidSignatureException("Invalid DER for signature", 0, $e);
         }
 
         return new Signature(
-            gmp_init($r->getContent(), 10),
-            gmp_init($s->getContent(), 10)
+            gmp_init($sequence[0]->getContent(), 10),
+            gmp_init($sequence[1]->getContent(), 10)
         );
     }
 }
