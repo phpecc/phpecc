@@ -8,6 +8,7 @@ use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Exception\ExchangeException;
 use Mdanter\Ecc\Exception\PointNotOnCurveException;
 use Mdanter\Ecc\Exception\PointRecoveryException;
+use Mdanter\Ecc\Exception\UnsupportedCurveException;
 use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Serializer\Point\CompressedPointSerializer;
 use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
@@ -15,11 +16,31 @@ use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 
 class EcDHTest extends AbstractTestCase
 {
+    private $ignoredCurves = [
+
+        // brainpoolPXXXr1 curves
+        '1.3.36.3.3.2.8.1.1.1',
+        '1.3.36.3.3.2.8.1.1.3',
+        '1.3.36.3.3.2.8.1.1.5',
+        '1.3.36.3.3.2.8.1.1.7',
+        '1.3.36.3.3.2.8.1.1.9',
+        '1.3.36.3.3.2.8.1.1.11',
+        '1.3.36.3.3.2.8.1.1.13',
+
+        // brainpoolPXXXt1 curves
+        '1.3.36.3.3.2.8.1.1.6',
+        '1.3.36.3.3.2.8.1.1.8',
+        '1.3.36.3.3.2.8.1.1.10',
+        '1.3.36.3.3.2.8.1.1.12',
+        '1.3.36.3.3.2.8.1.1.14',
+    ];
+
     public function getEcDHFixtures(): array
     {
         $curveList = $this->getCurvesList();
         $fixtures = json_decode($this->importFile("import/wycheproof/testvectors/ecdh_test.json"), true);
         $results = [];
+        $math = new GmpMath();
         foreach ($fixtures['testGroups'] as $fixture) {
             if (in_array($fixture['curve'], $curveList)) {
                 foreach ($fixture['tests'] as $test) {
@@ -28,9 +49,26 @@ class EcDHTest extends AbstractTestCase
                     if (!empty(array_intersect(["UnnamedCurve"], $test['flags']))) {
                         continue;
                     }
+
                     // Library doesn't have all code paths available right now
                     if ($test['public'] === "3052301406072a8648ce3d020106092b2403030208010105033a00046caa3d6d86f792df7b29e41eb4203150f60f4fca10f57d0b2454abfb201f9f7e6dcbb92bdcfb9240dc86bcaeaf157c77bca22b2ec86ee8d6") {
                         continue;
+                    }
+
+                    if (in_array("CompressedPoint", $test['flags'], true)) {
+                        $pubKeySerializer = new DerPublicKeySerializer($math, new CompressedPointSerializer($math));
+                    } else {
+                        $pubKeySerializer = new DerPublicKeySerializer($math, new UncompressedPointSerializer());
+                    }
+
+                    try {
+                        $pubKeySerializer->parse(hex2bin($test['public']));
+                    } catch (UnsupportedCurveException $e) {
+                        if (in_array($e->getOid(), $this->ignoredCurves)) {
+                            continue;
+                        }
+                    } catch (\Exception $e) {
+                        // fall through here, probably required in test
                     }
 
                     $results[] = [
@@ -78,15 +116,7 @@ class EcDHTest extends AbstractTestCase
             $this->expectExceptionMessage("Failed to recover y coordinate for point");
         }
 
-        try {
-            $pubKey = $pubKeySerializer->parse(hex2bin($public));
-        } catch (\RuntimeException $e) {
-            if ($e->getMessage() === "Invalid data: unsupported generator.") {
-                $this->markTestSkipped("Skipped test case ({$tcId}), no support for generator");
-                return;
-            }
-            throw $e;
-        }
+        $pubKey = $pubKeySerializer->parse(hex2bin($public));
 
         $privateKey = $generator->getPrivateKeyFrom(gmp_init($private, 16));
 
