@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\Signature;
 
-use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 
-class DerSignatureSerializer
+class DerSignatureSerializer implements DerSignatureSerializerInterface
 {
     /**
      * @var Der\Parser
