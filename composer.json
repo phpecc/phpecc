@@ -24,14 +24,14 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": "^7.0",
         "ext-gmp": "*",
-        "fgrosse/phpasn1": "v2.0.x"
+        "fgrosse/phpasn1": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0",
-        "squizlabs/php_codesniffer": "~2",
-        "symfony/yaml": "~2.6|~3.0"
+        "squizlabs/php_codesniffer": "^2.0",
+        "symfony/yaml": "^2.6|^3.0"
     },
     "autoload": {
         "psr-4": {
