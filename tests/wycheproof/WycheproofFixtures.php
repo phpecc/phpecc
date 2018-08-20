@@ -25,4 +25,11 @@ class WycheproofFixtures
         $decoded = json_decode(file_get_contents($path), true);
         return new EcdsaFixtures($decoded['testGroups']);
     }
+
+    public function getSpecificEcdsaFixtures(string $curve, string $hashAlg)
+    {
+        $path = $this->getFixturePath("ecdsa_{$curve}_{$hashAlg}_test.json");
+        $decoded = json_decode(file_get_contents($path), true);
+        return new EcdsaFixtures($decoded['testGroups']);
+    }
 }

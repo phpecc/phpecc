@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\WycheProof;
 use Mdanter\Ecc\Crypto\Signature\HasherInterface;
 use Mdanter\Ecc\Crypto\Signature\SignHasher;
 use Mdanter\Ecc\Curves\CurveFactory;
+use Mdanter\Ecc\Curves\NistCurve;
 
 class EcdsaFixtures
 {
@@ -13,6 +14,13 @@ class EcdsaFixtures
         "SHA-224" => "sha224",
         "SHA-256" => "sha256",
         "SHA-384" => "sha384",
+        "SHA-512" => "sha512",
+    ];
+    private $curveAltName = [
+        "secp224r1" => NistCurve::NAME_P224,
+        "secp256r1" => NistCurve::NAME_P256,
+        "secp384r1" => NistCurve::NAME_P384,
+        "secp521r1" => NistCurve::NAME_P521,
     ];
 
     public function __construct(array $testGroups)
@@ -28,15 +36,28 @@ class EcdsaFixtures
         return new SignHasher($this->hashFunctions[$id]);
     }
 
-    public function makeFixtures(array $supportedCurves): array
+    /**
+     * Pass 'supported
+     * @param array $limitToCurves
+     * @return array
+     * @throws \Mdanter\Ecc\Exception\UnsupportedCurveException
+     */
+    public function makeFixtures(array $limitToCurves = []): array
     {
         $fixtures = [];
         foreach ($this->groups as $group) {
-            if (!in_array($group['key']['curve'], $supportedCurves)) {
-                continue;
+            $curve = $group['key']['curve'];
+            if (array_key_exists($curve, $this->curveAltName)) {
+                $curve = $this->curveAltName[$curve];
             }
 
-            $generator = CurveFactory::getGeneratorByName($group['key']['curve']);
+            if (count($limitToCurves) > 0) {
+                if (!in_array($curve, $limitToCurves)) {
+                    continue;
+                }
+            }
+
+            $generator = CurveFactory::getGeneratorByName($curve);
             $publicKey = $generator->getPublicKeyFrom(gmp_init($group['key']['wx'], 16), gmp_init($group['key']['wy'], 16));
             $hasher = $this->getHasher($group['sha']);
 
