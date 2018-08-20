@@ -10,7 +10,6 @@ use Mdanter\Ecc\Crypto\Signature\HasherInterface;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 use Mdanter\Ecc\Crypto\Signature\Signer;
 use Mdanter\Ecc\Exception\InvalidSignatureException;
-use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 
@@ -35,13 +34,10 @@ class SecondEcdsaTest extends AbstractTestCase
         '1.3.36.3.3.2.8.1.1.14',
     ];
 
-    public function getEcdsaVerifyFixtures(): array
+    private function filterSet(EcdsaFixtures $fixturesSet, array $disabledFlags): array
     {
-        $curveList = $this->getCurvesList();
-        $wycheproof = new WycheproofFixtures(__DIR__ . "/../import/wycheproof");
         $fixtures = [];
-        $disabledFlags = ["MissingZero"];
-        foreach ($wycheproof->getEcdsaFixtures()->makeFixtures($curveList) as $fixture) {
+        foreach ($fixturesSet->makeFixtures() as $fixture) {
             if (!empty(array_intersect($fixture[6], $disabledFlags))) {
                 continue;
             }
@@ -56,37 +52,159 @@ class SecondEcdsaTest extends AbstractTestCase
         return $fixtures;
     }
 
+    private function readSpecificSet(string $curveName, string $hasherName): array
+    {
+        $wycheproof = new WycheproofFixtures(__DIR__ . "/../import/wycheproof");
+        $disabledFlags = ["MissingZero"];
+        return $this->filterSet($wycheproof->getSpecificEcdsaFixtures($curveName, $hasherName), $disabledFlags);
+    }
+
+    public function getEcdsaTestVectors(): array
+    {
+        $wycheproof = new WycheproofFixtures(__DIR__ . "/../import/wycheproof");
+        $disabledFlags = ["MissingZero"];
+        return $this->filterSet($wycheproof->getEcdsaFixtures(), $disabledFlags);
+    }
+
     /**
-     * @dataProvider getEcdsaVerifyFixtures
-     * @param string $curveName
-     * @param string $public
-     * @param string $private
-     * @param string $shared
-     * @param string $result
-     * @param string $comment
+     * @dataProvider getEcdsaTestVectors
      */
     public function testEcdsa(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
     {
-        $badSigComments = [
-            "length = 2**64 - 1",
-            "length = 2**40 - 1",
-            "length = 2**32 - 1",
-            "length = 2**31 - 1",
-            "incorrect length",
-            "indefinite length without termination",
-            "removing sequence",
-            "appending 0's to sequence",
-            "prepending 0's to sequence",
-            "appending unused 0's",
-            "appending null value",
-            "wrong length",
-            "uint64 overflow in length",
-            "uint32 overflow in length",
-            "wrong length",
-            'dropping value of integer',
-            "Signature with special case values for r and s",
-        ];
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
 
+    public function getEcdsaSecp224r1Sha224TestVectors(): array
+    {
+        return $this->readSpecificSet("secp224r1", "sha224");
+    }
+
+    /**
+     * @dataProvider getEcdsaSecp224r1Sha224TestVectors
+     */
+    public function testSecp224r1Sha224(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaSecp224r1Sha256TestVectors(): array
+    {
+        return $this->readSpecificSet("secp224r1", "sha256");
+    }
+
+    /**
+     * @dataProvider getEcdsaSecp224r1Sha256TestVectors
+     */
+    public function testSecp224r1Sha256(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaSecp224r1Sha512TestVectors(): array
+    {
+        return $this->readSpecificSet("secp224r1", "sha512");
+    }
+
+    /**
+     * @dataProvider getEcdsaSecp224r1Sha512TestVectors
+     */
+    public function testSecp224r1Sha512(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaSecp256k1Sha256TestVectors(): array
+    {
+        return $this->readSpecificSet("secp256k1", "sha256");
+    }
+
+    /**
+     * @dataProvider getEcdsaSecp256k1Sha256TestVectors
+     */
+    public function testSecp256k1Sha256(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaSecp256k1Sha512TestVectors(): array
+    {
+        return $this->readSpecificSet("secp256k1", "sha512");
+    }
+
+    /**
+     * @dataProvider getEcdsaSecp256k1Sha512TestVectors
+     */
+    public function testSecp256k1Sha512(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaSecp256r1Sha256TestVectors(): array
+    {
+        return $this->readSpecificSet("secp256r1", "sha256");
+    }
+    /**
+     * @dataProvider getEcdsaSecp256r1Sha256TestVectors
+     */
+    public function testSecp256r1Sha256(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaSecp256r1Sha512TestVectors(): array
+    {
+        return $this->readSpecificSet("secp256r1", "sha512");
+    }
+
+    /**
+     * @dataProvider getEcdsaSecp256r1Sha512TestVectors
+     */
+    public function testSecp256r1Sha512(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaSecp384r1Sha256TestVectors(): array
+    {
+        return $this->readSpecificSet("secp384r1", "sha384");
+    }
+
+    /**
+     * @dataProvider getEcdsaSecp384r1Sha256TestVectors
+     */
+    public function testSecp384r1Sha256(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaSecp384r1Sha512TestVectors(): array
+    {
+        return $this->readSpecificSet("secp384r1", "sha512");
+    }
+
+    /**
+     * @dataProvider getEcdsaSecp384r1Sha512TestVectors
+     */
+    public function testSecp384r1Sha512(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaSecp521r1Sha512TestVectors(): array
+    {
+        return $this->readSpecificSet("secp521r1", "sha512");
+    }
+
+    /**
+     * @dataProvider getEcdsaSecp521r1Sha512TestVectors
+     */
+    public function testSecp521r1Sha512(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    protected function doTest(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
         /** @var SignatureInterface|null $sig */
         $sig = null;
         $verified = false;
@@ -97,17 +215,12 @@ class SecondEcdsaTest extends AbstractTestCase
             $sigSer = new DerSignatureSerializer();
             $sig = $sigSer->parse(hex2bin($sigHex));
             $hash = $hasher->makeHash(hex2bin($message), $generator);
-            echo "Testing ECDSA verification\n";
-            print_r($sig);
             $verified = $signer->verify($publicKey, $sig, $hash);
         } catch (InvalidSignatureException $e) {
-            echo get_class($e).PHP_EOL;
             $verified = false;
         } catch (ParserException $e) {
-            echo get_class($e).PHP_EOL;
             $verified = false;
         } catch (\Exception $e) {
-            echo get_class($e).PHP_EOL;
             $error = $e;
         }
 
@@ -118,8 +231,6 @@ class SecondEcdsaTest extends AbstractTestCase
         if (!$verified && $result === 'valid') {
             $this->fail("Signature not verified");
         } else if ($verified && $result === "invalid") {
-            echo "sigHex: $sigHex\n";
-
             $this->fail("Signature verified");
         }
         $this->assertTrue(true);
