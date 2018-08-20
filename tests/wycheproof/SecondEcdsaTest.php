@@ -7,20 +7,14 @@ namespace Mdanter\Ecc\WycheProof;
 use FG\ASN1\Exception\ParserException;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Signature\HasherInterface;
+use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 use Mdanter\Ecc\Crypto\Signature\Signer;
-use Mdanter\Ecc\Curves\CurveFactory;
-use Mdanter\Ecc\Exception\ExchangeException;
-use Mdanter\Ecc\Exception\PointNotOnCurveException;
-use Mdanter\Ecc\Exception\PointRecoveryException;
-use Mdanter\Ecc\Exception\UnsupportedCurveException;
+use Mdanter\Ecc\Exception\InvalidSignatureException;
 use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
-use Mdanter\Ecc\Serializer\Point\CompressedPointSerializer;
-use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
-use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 
-class ECDSATest extends AbstractTestCase
+class SecondEcdsaTest extends AbstractTestCase
 {
     private $ignoredCurves = [
 
@@ -61,6 +55,7 @@ class ECDSATest extends AbstractTestCase
         }
         return $fixtures;
     }
+
     /**
      * @dataProvider getEcdsaVerifyFixtures
      * @param string $curveName
@@ -70,35 +65,63 @@ class ECDSATest extends AbstractTestCase
      * @param string $result
      * @param string $comment
      */
-    public function testEcdsa(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sig, string $result, array $flags, string $tcId, string $comment)
+    public function testEcdsa(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
     {
-        $data = hex2bin($message);
-        $hash = $hasher->makeHash($data, $generator);
-
         $badSigComments = [
+            "length = 2**64 - 1",
+            "length = 2**40 - 1",
+            "length = 2**32 - 1",
+            "length = 2**31 - 1",
+            "incorrect length",
+            "indefinite length without termination",
+            "removing sequence",
+            "appending 0's to sequence",
+            "prepending 0's to sequence",
+            "appending unused 0's",
+            "appending null value",
+            "wrong length",
+            "uint64 overflow in length",
+            "uint32 overflow in length",
             "wrong length",
             'dropping value of integer',
             "Signature with special case values for r and s",
         ];
 
-        if (in_array($comment, $badSigComments)) {
-            $this->expectException(ParserException::class);
+        /** @var SignatureInterface|null $sig */
+        $sig = null;
+        $verified = false;
+        $error = false;
+        $signer = new Signer($generator->getAdapter());
+
+        try {
             $sigSer = new DerSignatureSerializer();
-            $sig = $sigSer->parse(hex2bin($sig));
-            if ($sig) {
-                $this->fail("should have failed parsing sig");
-            }
-        } else {
-            $sigSer = new DerSignatureSerializer();
-            $sig = $sigSer->parse(hex2bin($sig));
+            $sig = $sigSer->parse(hex2bin($sigHex));
+            $hash = $hasher->makeHash(hex2bin($message), $generator);
+            echo "Testing ECDSA verification\n";
+            print_r($sig);
+            $verified = $signer->verify($publicKey, $sig, $hash);
+        } catch (InvalidSignatureException $e) {
+            echo get_class($e).PHP_EOL;
+            $verified = false;
+        } catch (ParserException $e) {
+            echo get_class($e).PHP_EOL;
+            $verified = false;
+        } catch (\Exception $e) {
+            echo get_class($e).PHP_EOL;
+            $error = $e;
         }
 
-        $signer = new Signer(new GmpMath());
-        $verified = $signer->verify($publicKey, $sig, $hash);
-        if ($result === "valid" || $result === "acceptable") {
-            $this->assertTrue($verified);
-        } else {
-            $this->assertFalse($verified);
+        if ($error) {
+            throw $error;
         }
+
+        if (!$verified && $result === 'valid') {
+            $this->fail("Signature not verified");
+        } else if ($verified && $result === "invalid") {
+            echo "sigHex: $sigHex\n";
+
+            $this->fail("Signature verified");
+        }
+        $this->assertTrue(true);
     }
 }
