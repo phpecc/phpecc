@@ -10,9 +10,6 @@ use Mdanter\Ecc\Crypto\Key\PrivateKey;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
-use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
-use Mdanter\Ecc\Exception\SignatureDecodeException;
-use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializerInterface;
 
 /**
  * Curve point from which public and private keys can be derived.
@@ -106,26 +103,5 @@ class GeneratorPoint extends Point
     public function getPrivateKeyFrom(\GMP $secretMultiplier): PrivateKeyInterface
     {
         return new PrivateKey($this->getAdapter(), $this, $secretMultiplier);
-    }
-
-    public function getDerSignatureFrom(string $binary, DerSignatureSerializerInterface $serializer)
-    {
-        $signature = $serializer->parse($binary);
-
-        $one = gmp_init(1);
-        $max = gmp_sub($this->getOrder(), $one);
-        if (gmp_cmp($signature->getR(), $one) < 0) {
-            throw new SignatureDecodeException("R < 1");
-        } else if (gmp_cmp($signature->getR(), $max) > 0) {
-            throw new SignatureDecodeException("R >= (order-1)");
-        }
-
-        if (gmp_cmp($signature->getS(), $one) < 0) {
-            throw new SignatureDecodeException("S < 1");
-        } else if (gmp_cmp($signature->getS(), $max) > 0) {
-            throw new SignatureDecodeException("S > (order-1)");
-        }
-
-        return $signature;
     }
 }
