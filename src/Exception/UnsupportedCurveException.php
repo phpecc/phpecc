@@ -5,7 +5,7 @@ namespace Mdanter\Ecc\Exception;
 
 use Throwable;
 
-class UnsupportedCurveException extends EccException
+class UnsupportedCurveException extends \RuntimeException
 {
     /**
      * @var null|string

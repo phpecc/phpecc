@@ -7,7 +7,7 @@ use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Primitives\PointInterface;
 use Throwable;
 
-class PublicKeyException extends EccException
+class PublicKeyException extends \RuntimeException
 {
     /**
      * @var GeneratorPoint
