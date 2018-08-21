@@ -13,31 +13,12 @@ use Mdanter\Ecc\Exception\InvalidSignatureException;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 
-class SecondEcdsaTest extends AbstractTestCase
+class EcdsaTest extends AbstractTestCase
 {
-    private $ignoredCurves = [
-
-        // brainpoolPXXXr1 curves
-        '1.3.36.3.3.2.8.1.1.1',
-        '1.3.36.3.3.2.8.1.1.3',
-        '1.3.36.3.3.2.8.1.1.5',
-        '1.3.36.3.3.2.8.1.1.7',
-        '1.3.36.3.3.2.8.1.1.9',
-        '1.3.36.3.3.2.8.1.1.11',
-        '1.3.36.3.3.2.8.1.1.13',
-
-        // brainpoolPXXXt1 curves
-        '1.3.36.3.3.2.8.1.1.6',
-        '1.3.36.3.3.2.8.1.1.8',
-        '1.3.36.3.3.2.8.1.1.10',
-        '1.3.36.3.3.2.8.1.1.12',
-        '1.3.36.3.3.2.8.1.1.14',
-    ];
-
     private function filterSet(EcdsaFixtures $fixturesSet, array $disabledFlags): array
     {
         $fixtures = [];
-        foreach ($fixturesSet->makeFixtures() as $fixture) {
+        foreach ($fixturesSet->makeFixtures($this->getCurvesList()) as $fixture) {
             if (!empty(array_intersect($fixture[6], $disabledFlags))) {
                 continue;
             }
@@ -233,6 +214,6 @@ class SecondEcdsaTest extends AbstractTestCase
         } else if ($verified && $result === "invalid") {
             $this->fail("Signature verified");
         }
-        $this->assertTrue(true);
+        $this->assertEquals($result !== 'invalid', $verified);
     }
 }

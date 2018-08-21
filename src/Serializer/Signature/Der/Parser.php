@@ -6,7 +6,6 @@ namespace Mdanter\Ecc\Serializer\Signature\Der;
 use FG\ASN1\ASNObject;
 use FG\ASN1\Identifier;
 use FG\ASN1\Universal\Integer;
-use FG\ASN1\Universal\Sequence;
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 use Mdanter\Ecc\Exception\InvalidSignatureException;
