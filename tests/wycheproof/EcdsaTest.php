@@ -9,42 +9,73 @@ use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Signature\HasherInterface;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 use Mdanter\Ecc\Crypto\Signature\Signer;
+use Mdanter\Ecc\Curves\CurveFactory;
 use Mdanter\Ecc\Exception\SignatureDecodeException;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 
 class EcdsaTest extends AbstractTestCase
 {
-    private function filterSet(EcdsaFixtures $fixturesSet, array $disabledFlags): array
+    private function filterSet(array $fixtures, array $limitToCurves, array $disabledFlags): array
     {
-        $fixtures = [];
-        foreach ($fixturesSet->makeFixtures($this->getCurvesList()) as $fixture) {
-            if (!empty(array_intersect($fixture[6], $disabledFlags))) {
-                continue;
+        $results = [];
+        foreach ($fixtures['testGroups'] as $group) {
+            $curve = $group['key']['curve'];
+            if (array_key_exists($curve, $this->curveAltName)) {
+                $curve = $this->curveAltName[$curve];
             }
-            if ($fixture[8] === "long form encoding of length") {
-                continue;
+
+            if (count($limitToCurves) > 0) {
+                if (!in_array($curve, $limitToCurves)) {
+                    continue;
+                }
             }
-            if ($fixture[8] === "length contains leading 0") {
-                continue;
+
+            $generator = CurveFactory::getGeneratorByName($curve);
+            $publicKey = $generator->getPublicKeyFrom(gmp_init($group['key']['wx'], 16), gmp_init($group['key']['wy'], 16));
+            $hasher = $this->getHasher($group['sha']);
+
+            if (!array_key_exists('tests', $group)) {
+                throw new \RuntimeException("Missing tests key");
             }
-            $fixtures[] = $fixture;
+            foreach ($group['tests'] as $test) {
+                if (!empty(array_intersect($test['flags'], $disabledFlags))) {
+                    continue;
+                }
+                if ($test['comment'] === "long form encoding of length") {
+                    continue;
+                }
+                if ($test['comment'] === "length contains leading 0") {
+                    continue;
+                }
+                $results[] = [
+                    $generator,
+                    $publicKey,
+                    $hasher,
+                    $test['msg'],
+                    $test['sig'],
+                    $test['result'],
+                    $test['flags'],
+                    $test['tcId'],
+                    $test['comment'],
+                ];
+            }
         }
-        return $fixtures;
+        return $results;
     }
 
     private function readSpecificSet(string $curveName, string $hasherName): array
     {
-        $wycheproof = new WycheproofFixtures(__DIR__ . "/../import/wycheproof");
+        $fixtures = json_decode($this->importFile("import/wycheproof/testvectors/ecdsa_{$curveName}_{$hasherName}_test.json"), true);
         $disabledFlags = ["MissingZero"];
-        return $this->filterSet($wycheproof->getSpecificEcdsaFixtures($curveName, $hasherName), $disabledFlags);
+        return $this->filterSet($fixtures, $this->getCurvesList(), $disabledFlags);
     }
 
     public function getEcdsaTestVectors(): array
     {
-        $wycheproof = new WycheproofFixtures(__DIR__ . "/../import/wycheproof");
+        $fixtures = json_decode($this->importFile("import/wycheproof/testvectors/ecdsa_test.json"), true);
         $disabledFlags = ["MissingZero"];
-        return $this->filterSet($wycheproof->getEcdsaFixtures(), $disabledFlags);
+        return $this->filterSet($fixtures, $this->getCurvesList(), $disabledFlags);
     }
 
     /**

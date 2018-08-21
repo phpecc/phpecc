@@ -37,13 +37,6 @@ class EcdhTest extends AbstractTestCase
         '1.3.36.3.3.2.8.1.1.14',
     ];
 
-    private $curveAltName = [
-        "secp224r1" => NistCurve::NAME_P224,
-        "secp256r1" => NistCurve::NAME_P256,
-        "secp384r1" => NistCurve::NAME_P384,
-        "secp521r1" => NistCurve::NAME_P521,
-    ];
-
 
     public function getEcDHFixtures(): array
     {
