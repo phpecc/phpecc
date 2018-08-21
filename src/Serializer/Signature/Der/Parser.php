@@ -8,7 +8,7 @@ use FG\ASN1\Identifier;
 use FG\ASN1\Universal\Integer;
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
-use Mdanter\Ecc\Exception\InvalidSignatureException;
+use Mdanter\Ecc\Exception\SignatureDecodeException;
 
 class Parser
 {
@@ -23,20 +23,20 @@ class Parser
         $asnObject = ASNObject::fromBinary($binary, $offsetIndex);
 
         if ($offsetIndex != strlen($binary)) {
-            throw new InvalidSignatureException('Invalid data.');
+            throw new SignatureDecodeException('Invalid data.');
         }
 
         // Set inherits from Sequence, so use getType!
         if ($asnObject->getType() !== Identifier::SEQUENCE) {
-            throw new InvalidSignatureException('Invalid tag for sequence.');
+            throw new SignatureDecodeException('Invalid tag for sequence.');
         }
 
         if ($asnObject->getNumberofChildren() !== 2) {
-            throw new InvalidSignatureException('Invalid data.');
+            throw new SignatureDecodeException('Invalid data.');
         }
 
         if (!($asnObject[0] instanceof Integer && $asnObject[1] instanceof Integer)) {
-            throw new InvalidSignatureException('Invalid data.');
+            throw new SignatureDecodeException('Invalid data.');
         }
 
         return new Signature(

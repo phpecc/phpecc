@@ -11,7 +11,7 @@ use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
-use Mdanter\Ecc\Exception\InvalidSignatureException;
+use Mdanter\Ecc\Exception\SignatureDecodeException;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializerInterface;
 
 /**
@@ -115,15 +115,15 @@ class GeneratorPoint extends Point
         $one = gmp_init(1);
         $max = gmp_sub($this->getOrder(), $one);
         if (gmp_cmp($signature->getR(), $one) < 0) {
-            throw new InvalidSignatureException("R < 1");
+            throw new SignatureDecodeException("R < 1");
         } else if (gmp_cmp($signature->getR(), $max) > 0) {
-            throw new InvalidSignatureException("R >= (order-1)");
+            throw new SignatureDecodeException("R >= (order-1)");
         }
 
         if (gmp_cmp($signature->getS(), $one) < 0) {
-            throw new InvalidSignatureException("S < 1");
+            throw new SignatureDecodeException("S < 1");
         } else if (gmp_cmp($signature->getS(), $max) > 0) {
-            throw new InvalidSignatureException("S > (order-1)");
+            throw new SignatureDecodeException("S > (order-1)");
         }
 
         return $signature;

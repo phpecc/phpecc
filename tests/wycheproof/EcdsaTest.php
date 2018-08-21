@@ -9,7 +9,7 @@ use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Crypto\Signature\HasherInterface;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 use Mdanter\Ecc\Crypto\Signature\Signer;
-use Mdanter\Ecc\Exception\InvalidSignatureException;
+use Mdanter\Ecc\Exception\SignatureDecodeException;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
 
@@ -197,7 +197,7 @@ class EcdsaTest extends AbstractTestCase
             $sig = $sigSer->parse(hex2bin($sigHex));
             $hash = $hasher->makeHash(hex2bin($message), $generator);
             $verified = $signer->verify($publicKey, $sig, $hash);
-        } catch (InvalidSignatureException $e) {
+        } catch (SignatureDecodeException $e) {
             $verified = false;
         } catch (ParserException $e) {
             $verified = false;
