@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Exception;
 
-class ExchangeException extends EccException
+class ExchangeException extends \RuntimeException
 {
 
 }
