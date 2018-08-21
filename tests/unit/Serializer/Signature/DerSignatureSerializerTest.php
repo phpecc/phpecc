@@ -25,8 +25,8 @@ class DerSignatureSerializerTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Invalid data
+     * @expectedException \Mdanter\Ecc\Exception\SignatureDecodeException
+     * @expectedExceptionMessage Invalid tag for sequence.
      */
     public function testInvalidASN1()
     {
@@ -38,8 +38,8 @@ class DerSignatureSerializerTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Failed to parse signature
+     * @expectedException \Mdanter\Ecc\Exception\SignatureDecodeException
+     * @expectedExceptionMessage Invalid data.
      */
     public function testInvalidASN2()
     {
@@ -51,14 +51,29 @@ class DerSignatureSerializerTest extends AbstractTestCase
     }
     
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Failed to parse signature
+     * @expectedException \Mdanter\Ecc\Exception\SignatureDecodeException
+     * @expectedExceptionMessage Invalid data.
      */
     public function testInvalidASN3()
     {
         // bitstring isn't an integer
         $sequence = new Sequence(
             new BitString('41'),
+            new BitString('ab')
+        );
+        $binary = $sequence->getBinary();
+        $serializer = new DerSignatureSerializer();
+        $serializer->parse($binary);
+    }
+
+    /**
+     * @expectedException \Mdanter\Ecc\Exception\SignatureDecodeException
+     * @expectedExceptionMessage Invalid data.
+     */
+    public function testInvalidASN4()
+    {
+        // bitstring isn't an integer
+        $sequence = new Sequence(
             new BitString('ab')
         );
         $binary = $sequence->getBinary();
