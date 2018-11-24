@@ -31,7 +31,7 @@
     "require": {
         "php": "^7.0",
         "ext-gmp": "*",
-        "fgrosse/phpasn1": "dev-wycheproof"
+        "fgrosse/phpasn1": "dev-wycheproof-rebased-len2"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0",
