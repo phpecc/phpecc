@@ -97,6 +97,9 @@ class SecCurveTest extends AbstractTestCase
 
         $this->assertTrue($adapter->equals($sigNist->getR(), $sigSecp->getR()));
         $this->assertTrue($adapter->equals($sigNist->getS(), $sigSecp->getS()));
+
+        $this->assertTrue($signer->verify($secpKey->getPublicKey(), $sigSecp, $message));
+        $this->assertTrue($signer->verify($nistKey->getPublicKey(), $sigNist, $message));
     }
 
     /**
@@ -123,5 +126,8 @@ class SecCurveTest extends AbstractTestCase
 
         $this->assertTrue($adapter->equals($sigNist->getR(), $sigSecp->getR()));
         $this->assertTrue($adapter->equals($sigNist->getS(), $sigSecp->getS()));
+
+        $this->assertTrue($signer->verify($secpKey->getPublicKey(), $sigSecp, $message));
+        $this->assertTrue($signer->verify($nistKey->getPublicKey(), $sigNist, $message));
     }
 }
