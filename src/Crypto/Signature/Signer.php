@@ -108,11 +108,11 @@ class Signer
 
         $math = $this->adapter;
         $one = gmp_init(1, 10);
-        if ($math->cmp($r, $one) < 1 || $math->cmp($r, $math->sub($n, $one)) > 0) {
+        if ($math->cmp($r, $one) < 0 || $math->cmp($r, $math->sub($n, $one)) > 0) {
             return false;
         }
 
-        if ($math->cmp($s, $one) < 1 || $math->cmp($s, $math->sub($n, $one)) > 0) {
+        if ($math->cmp($s, $one) < 0 || $math->cmp($s, $math->sub($n, $one)) > 0) {
             return false;
         }
 
