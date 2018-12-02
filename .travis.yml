@@ -14,15 +14,12 @@ matrix:
   fast_finish: true
 
   exclude:
-      # Disable standard phpunit test on 7.0, reenable with COVERAGE
-    - php: 7.0
-      env: PHPUNIT=true
-      # Disable standard phpunit test on 7.0, reenable with FULL
+      # Disable standard phpunit test on 7.0, reenable with FULL, and with COVERAGE
     - php: 7.2
       env: PHPUNIT=true
   include:
       # This reenables php7.0/phpunit test with COVERAGE
-    - php: 7.0
+    - php: 7.2
       env: PHPUNIT=true COVERAGE_SHARDS=5 COVERAGE=true
       # This reenables php7.0/phpunit test with extended tests (wycheproof)
     - php: 7.2
