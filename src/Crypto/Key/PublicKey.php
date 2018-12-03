@@ -76,10 +76,14 @@ class PublicKey implements PublicKeyInterface
         $this->point = $point;
         $this->adapter = $adapter;
 
-        $n = $generator->getOrder();
+        // step 1: not point at infinity.
+        if ($point->isInfinity()) {
+            throw new \RuntimeException("Cannot use point at infinity for public key");
+        }
 
-        if ($adapter->cmp($point->getX(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getX()) <= 0
-            || $adapter->cmp($point->getY(), gmp_init(0, 10)) < 0 || $adapter->cmp($n, $point->getY()) <= 0
+        // step 2 full & partial public key validation routine
+        if ($adapter->cmp($point->getX(), gmp_init(0, 10)) < 0 || $adapter->cmp($this->curve->getPrime(), $point->getX()) < 0
+            || $adapter->cmp($point->getY(), gmp_init(0, 10)) < 0 || $adapter->cmp($this->curve->getPrime(), $point->getY()) < 0
         ) {
             throw new \RuntimeException("Generator point has x and y out of range.");
         }
