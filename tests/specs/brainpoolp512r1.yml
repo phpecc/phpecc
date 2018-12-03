@@ -1,4 +1,4 @@
-name: brainpoolp512r1
+name: brainpoolP512r1
 
 diffie:
  # https://tools.ietf.org/html/rfc7027

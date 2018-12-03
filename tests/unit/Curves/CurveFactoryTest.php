@@ -23,7 +23,7 @@ class CurveFactoryTest extends AbstractTestCase
             [BrainpoolCurve::NAME_P160R1],
             [BrainpoolCurve::NAME_P192R1],
             [BrainpoolCurve::NAME_P256R1],
-            [BrainpoolCurve::NAME_P330R1],
+            [BrainpoolCurve::NAME_P320R1],
             [BrainpoolCurve::NAME_P384R1],
             [BrainpoolCurve::NAME_P512R1],
             [SecgCurve::NAME_SECP_112R1],

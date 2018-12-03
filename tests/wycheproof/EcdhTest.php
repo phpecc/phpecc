@@ -6,7 +6,6 @@ namespace Mdanter\Ecc\WycheProof;
 
 use FG\ASN1\Exception\ParserException;
 use Mdanter\Ecc\Curves\CurveFactory;
-use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Exception\ExchangeException;
 use Mdanter\Ecc\Exception\PointNotOnCurveException;
 use Mdanter\Ecc\Exception\PointRecoveryException;
@@ -19,16 +18,6 @@ use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 class EcdhTest extends AbstractTestCase
 {
     private $ignoredCurves = [
-
-        // brainpoolPXXXr1 curves
-        '1.3.36.3.3.2.8.1.1.1',
-        '1.3.36.3.3.2.8.1.1.3',
-        '1.3.36.3.3.2.8.1.1.5',
-        '1.3.36.3.3.2.8.1.1.7',
-        '1.3.36.3.3.2.8.1.1.9',
-        '1.3.36.3.3.2.8.1.1.11',
-        '1.3.36.3.3.2.8.1.1.13',
-
         // brainpoolPXXXt1 curves
         '1.3.36.3.3.2.8.1.1.6',
         '1.3.36.3.3.2.8.1.1.8',
@@ -131,7 +120,7 @@ class EcdhTest extends AbstractTestCase
         return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
     }
 
-    public function getSecp224r1Fixtures()
+    public function getSecp224r1Fixtures(): array
     {
         return $this->getSpecificFixtures("secp224r1");
     }
@@ -144,7 +133,7 @@ class EcdhTest extends AbstractTestCase
         return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
     }
 
-    public function getSecp256r1Fixtures()
+    public function getSecp256r1Fixtures(): array
     {
         return $this->getSpecificFixtures("secp256r1");
     }
@@ -157,7 +146,7 @@ class EcdhTest extends AbstractTestCase
         return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
     }
 
-    public function getSecp256k1Fixtures()
+    public function getSecp256k1Fixtures(): array
     {
         return $this->getSpecificFixtures("secp256k1");
     }
@@ -170,7 +159,7 @@ class EcdhTest extends AbstractTestCase
         return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
     }
 
-    public function getSecp384r1Fixtures()
+    public function getSecp384r1Fixtures(): array
     {
         return $this->getSpecificFixtures("secp384r1");
     }
@@ -183,7 +172,7 @@ class EcdhTest extends AbstractTestCase
         return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
     }
 
-    public function getSecp521r1Fixtures()
+    public function getSecp521r1Fixtures(): array
     {
         return $this->getSpecificFixtures("secp521r1");
     }
@@ -192,6 +181,71 @@ class EcdhTest extends AbstractTestCase
      * @dataProvider getSecp521r1Fixtures
      */
     public function testSecp521r1Fixtures(string $curveName, string $public, string $private, string $shared, array $flags, string $result, string $comment, int $tcId)
+    {
+        return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
+    }
+
+    public function getBrainpoolP224R1Fixtures(): array
+    {
+        return $this->getSpecificFixtures("brainpoolP224r1");
+    }
+
+    /**
+     * @dataProvider getBrainpoolP224R1Fixtures
+     */
+    public function testBrainpoolP224R1(string $curveName, string $public, string $private, string $shared, array $flags, string $result, string $comment, int $tcId)
+    {
+        return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
+    }
+
+    public function getBrainpoolP256R1Fixtures(): array
+    {
+        return $this->getSpecificFixtures("brainpoolP256r1");
+    }
+
+    /**
+     * @dataProvider getBrainpoolP256R1Fixtures
+     */
+    public function testBrainpoolP256R1(string $curveName, string $public, string $private, string $shared, array $flags, string $result, string $comment, int $tcId)
+    {
+        return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
+    }
+
+    public function getBrainpoolP320R1Fixtures(): array
+    {
+        return $this->getSpecificFixtures("brainpoolP320r1");
+    }
+
+    /**
+     * @dataProvider getBrainpoolP320R1Fixtures
+     */
+    public function testBrainpoolP320R1(string $curveName, string $public, string $private, string $shared, array $flags, string $result, string $comment, int $tcId)
+    {
+        return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
+    }
+
+    public function getBrainpoolP384R1Fixtures(): array
+    {
+        return $this->getSpecificFixtures("brainpoolP384r1");
+    }
+
+    /**
+     * @dataProvider getBrainpoolP384R1Fixtures
+     */
+    public function testBrainpoolP384R1(string $curveName, string $public, string $private, string $shared, array $flags, string $result, string $comment, int $tcId)
+    {
+        return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
+    }
+
+    public function getBrainpoolP512R1Fixtures(): array
+    {
+        return $this->getSpecificFixtures("brainpoolP512r1");
+    }
+
+    /**
+     * @dataProvider getBrainpoolP512R1Fixtures
+     */
+    public function testBrainpoolP512R1(string $curveName, string $public, string $private, string $shared, array $flags, string $result, string $comment, int $tcId)
     {
         return $this->doTest($curveName, $public, $private, $shared, $flags, $result, $comment, $tcId);
     }

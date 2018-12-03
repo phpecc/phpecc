@@ -37,13 +37,13 @@ use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
  */
 class BrainpoolCurve
 {
-    const NAME_P160R1 = 'brainpoolp160r1';
-    const NAME_P192R1 = 'brainpoolp192r1';
-    const NAME_P224R1 = 'brainpoolp224r1';
-    const NAME_P256R1 = 'brainpoolp256r1';
-    const NAME_P330R1 = 'brainpoolp330r1';
-    const NAME_P384R1 = 'brainpoolp384r1';
-    const NAME_P512R1 = 'brainpoolp512r1';
+    const NAME_P160R1 = 'brainpoolP160r1';
+    const NAME_P192R1 = 'brainpoolP192r1';
+    const NAME_P224R1 = 'brainpoolP224r1';
+    const NAME_P256R1 = 'brainpoolP256r1';
+    const NAME_P320R1 = 'brainpoolP320r1';
+    const NAME_P384R1 = 'brainpoolP384r1';
+    const NAME_P512R1 = 'brainpoolP512r1';
 
     /**
      * @var GmpMathInterface
@@ -191,30 +191,30 @@ class BrainpoolCurve
     }
 
     /**
-     * Returns a Brainpool P330 curve.
+     * Returns a Brainpool P320 curve.
      *
      * @return NamedCurveFp
      */
-    public function curve330r1(): NamedCurveFp
+    public function curve320r1(): NamedCurveFp
     {
         $p = gmp_init('D35E472036BC4FB7E13C785ED201E065F98FCFA6F6F40DEF4F92B9EC7893EC28FCD412B1F1B32E27', 16);
         $a = gmp_init('3EE30B568FBAB0F883CCEBD46D3F3BB8A2A73513F5EB79DA66190EB085FFA9F492F375A97D860EB4', 16);
         $b = gmp_init('520883949DFDBC42D3AD198640688A6FE13F41349554B49ACC31DCCD884539816F5EB4AC8FB1F1A6', 16);
 
-        $parameters = new CurveParameters(330, $p, $a, $b);
+        $parameters = new CurveParameters(320, $p, $a, $b);
 
-        return new NamedCurveFp(self::NAME_P330R1, $parameters, $this->adapter);
+        return new NamedCurveFp(self::NAME_P320R1, $parameters, $this->adapter);
     }
 
     /**
-     * Returns a Brainpool P330 generator.
+     * Returns a Brainpool P320 generator.
      *
      * @param  RandomNumberGeneratorInterface $randomGenerator
      * @return GeneratorPoint
      */
-    public function generator330r1(RandomNumberGeneratorInterface $randomGenerator = null): GeneratorPoint
+    public function generator320r1(RandomNumberGeneratorInterface $randomGenerator = null): GeneratorPoint
     {
-        $curve = $this->curve330r1();
+        $curve = $this->curve320r1();
 
         $order = gmp_init('D35E472036BC4FB7E13C785ED201E065F98FCFA5B68F12A32D482EC7EE8658E98691555B44C59311', 16);
         $x = gmp_init('43BD7E9AFB53D8B85289BCC48EE5BFE6F20137D10A087EB6E7871E2A10A599C710AF8D0D39E20611', 16);
