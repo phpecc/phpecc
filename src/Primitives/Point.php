@@ -299,24 +299,22 @@ class Point implements PointInterface
      */
     private function cswap(self $a, self $b, int $cond, int $curveSize)
     {
-        $this->cswapValue($a->x, $b->x, $cond, $curveSize);
-        $this->cswapValue($a->y, $b->y, $cond, $curveSize);
-        $this->cswapValue($a->order, $b->order, $cond, $curveSize);
-        $this->cswapValue($a->infinity, $b->infinity, $cond, 8);
+        $this->cswapGmp($a->x, $b->x, $cond, $curveSize);
+        $this->cswapGmp($a->y, $b->y, $cond, $curveSize);
+        $this->cswapGmp($a->order, $b->order, $cond, $curveSize);
+        $this->cswapBool($a->infinity, $b->infinity, $cond);
     }
 
     /**
-     * @param bool|\GMP $a
-     * @param bool|\GMP $b
+     * @param \GMP $a
+     * @param \GMP $b
      * @param int $cond
      * @param int $maskBitSize
      */
-    public function cswapValue(& $a, & $b, int $cond, int $maskBitSize)
+    public function cswapGmp(\GMP & $a, \GMP & $b, int $cond, int $maskBitSize)
     {
-        $isGMP = is_object($a) && $a instanceof \GMP;
-
-        $sa = $isGMP ? $a : gmp_init(intval($a), 10);
-        $sb = $isGMP ? $b : gmp_init(intval($b), 10);
+        $sa = $a;
+        $sb = $b;
 
         $mask = str_pad('', $maskBitSize, (string) (1 - intval($cond)), STR_PAD_LEFT);
         $mask = gmp_init($mask, 2);
@@ -328,8 +326,31 @@ class Point implements PointInterface
         $sb = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($sa, $sb), $taA);
         $sa = $this->adapter->bitwiseXor($this->adapter->bitwiseXor($sa, $sb), $taB);
 
-        $a = $isGMP ? $sa : (bool) gmp_strval($sa, 10);
-        $b = $isGMP ? $sb : (bool) gmp_strval($sb, 10);
+        $a = $sa;
+        $b = $sb;
+    }
+
+    /**
+     * @param bool $a
+     * @param bool $b
+     * @param int $cond
+     */
+    public function cswapBool(bool & $a, bool & $b, int $cond)
+    {
+        $sa = intval($a);
+        $sb = intval($b);
+
+        $mask = 1 - intval($cond);
+
+        $taA = $sa & $mask;
+        $taB = $sb & $mask;
+
+        $sa = ($sa ^ $sb) ^ $taB;
+        $sb = ($sa ^ $sb) ^ $taA;
+        $sa = ($sa ^ $sb) ^ $taB;
+
+        $a = (bool) $sa;
+        $b = (bool) $sb;
     }
 
     /**

@@ -119,7 +119,7 @@ class PointTest extends AbstractTestCase
         $this->assertTrue($point->equals($sum));
     }
 
-    public function testConditionalSwap()
+    public function testConditionalSwapGmp()
     {
         $aa = gmp_init('104564512312317874865', 10);
         $ab = gmp_init('04156456456456456456', 10);
@@ -133,20 +133,50 @@ class PointTest extends AbstractTestCase
 
         $point = $curve->getPoint(gmp_init(13, 10), gmp_init(7, 10), gmp_init(7, 10));
 
-        $point->cswapValue($a, $b, (int) false, $curve->getSize());
+        $point->cswapGmp($a, $b, (int) false, $curve->getSize());
 
         $this->assertEquals($adapter->toString($aa), $adapter->toString($a));
         $this->assertEquals($adapter->toString($ab), $adapter->toString($b));
 
-        $point->cswapValue($a, $b, (int) true, $curve->getSize());
+        $point->cswapGmp($a, $b, (int) true, $curve->getSize());
 
         $this->assertEquals($adapter->toString($aa), $adapter->toString($b));
         $this->assertEquals($adapter->toString($ab), $adapter->toString($a));
 
-        $point->cswapValue($a, $b, (int) false, $curve->getSize());
+        $point->cswapGmp($a, $b, (int) false, $curve->getSize());
 
         $this->assertEquals($adapter->toString($aa), $adapter->toString($b));
         $this->assertEquals($adapter->toString($ab), $adapter->toString($a));
+    }
+
+    public function testConditionalSwapBool()
+    {
+        $aa = true;
+        $ab = false;
+
+        $a = $aa;
+        $b = $ab;
+
+        $adapter = new GmpMath();
+        $parameters = new CurveParameters(67, gmp_init(23, 10), gmp_init(1, 10), gmp_init(1, 10));
+        $curve = new CurveFp($parameters, $adapter);
+
+        $point = $curve->getPoint(gmp_init(13, 10), gmp_init(7, 10), gmp_init(7, 10));
+
+        $point->cswapBool($a, $b, (int) false, $curve->getSize());
+
+        $this->assertTrue($a);
+        $this->assertFalse($b);
+
+        $point->cswapBool($a, $b, (int) true, $curve->getSize());
+
+        $this->assertFalse($a);
+        $this->assertTrue($b);
+
+        $point->cswapBool($a, $b, (int) false, $curve->getSize());
+
+        $this->assertFalse($a);
+        $this->assertTrue($b);
     }
 
     /**
