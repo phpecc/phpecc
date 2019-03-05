@@ -4,6 +4,7 @@ php:
     - 7.0
     - 7.1
     - 7.2
+    - 7.3
     - nightly
 
 env:
@@ -15,14 +16,14 @@ matrix:
 
   exclude:
       # Disable standard phpunit test on 7.0, reenable with FULL, and with COVERAGE
-    - php: 7.2
+    - php: 7.3
       env: PHPUNIT=true
   include:
       # This reenables php7.0/phpunit test with COVERAGE
-    - php: 7.2
+    - php: 7.3
       env: PHPUNIT=true COVERAGE_SHARDS=5 COVERAGE=true
       # This reenables php7.0/phpunit test with extended tests (wycheproof)
-    - php: 7.2
+    - php: 7.3
       env: FULL=true
       # This runs phpcs on php7.0 - only code style and examples
     - php: 7.0
