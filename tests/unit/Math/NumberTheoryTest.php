@@ -26,7 +26,7 @@ class NumberTheoryTest extends AbstractTestCase
      */
     protected $generator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // todo: in the future, turn these into data providers instead
         // file containing a json array of {compressed=>'', decompressed=>''} values
