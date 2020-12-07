@@ -5,14 +5,14 @@ namespace Mdanter\Ecc\Tests\Crypto\EcDH;
 
 use Mdanter\Ecc\Crypto\EcDH\EcDH;
 use Mdanter\Ecc\EccFactory;
-use Mdanter\Ecc\Primitives\Point;
+use Mdanter\Ecc\Exception\ExchangeException;
 use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class EcDHTest extends AbstractTestCase
 {
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\ExchangeException
      * @expectedExceptionMessage Sender key not set
      */
     public function testExceptionOnInvalidState()
@@ -23,7 +23,7 @@ class EcDHTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Mdanter\Ecc\Exception\ExchangeException
      * @expectedExceptionMessage Recipient key not set
      */
     public function testExceptionOnInvalidState1()
@@ -59,7 +59,7 @@ class EcDHTest extends AbstractTestCase
         $p2 = (new UncompressedPointSerializer())->unserialize($g192->getCurve(), $g192Pub);
         $pubkey = $g192->getPublicKeyFrom($p2->getX(), $p2->getY());
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(ExchangeException::class);
         $this->expectExceptionMessage("Invalid ECDH exchange - Point does not exist on our curve");
 
         $p1

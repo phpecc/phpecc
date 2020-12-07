@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Curves;
 
+use Mdanter\Ecc\Exception\UnknownCurveException;
+use Mdanter\Ecc\Exception\UnsupportedCurveException;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
@@ -41,7 +43,9 @@ class CurveFactory
             case SecgCurve::NAME_SECP_384R1:
                 return $secpFactory->curve384r1();
             default:
-                throw new \RuntimeException('Unknown curve.');
+                $error = new UnsupportedCurveException('Unknown curve.');
+                $error->setCurveName($name);
+                throw $error;
         }
     }
 
@@ -77,7 +81,9 @@ class CurveFactory
             case SecgCurve::NAME_SECP_384R1:
                 return $secpFactory->generator384r1();
             default:
-                throw new \RuntimeException('Unknown generator.');
+                $error = new UnsupportedCurveException('Unknown generator.');
+                $error->setCurveName($name);
+                throw $error;
         }
     }
 

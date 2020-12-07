@@ -14,22 +14,19 @@ matrix:
   fast_finish: true
 
   exclude:
-      # Disable phpunit test on 7.0, reenable with COVERAGE
-    - php: 7.0
+      # Disable standard phpunit test on 7.0, reenable with FULL, and with COVERAGE
+    - php: 7.2
       env: PHPUNIT=true
-
   include:
       # This reenables php7.0/phpunit test with COVERAGE
-    - php: 7.0
+    - php: 7.2
       env: PHPUNIT=true COVERAGE_SHARDS=5 COVERAGE=true
-
-      # This runs phpcs on php7.0 - only code style
+      # This reenables php7.0/phpunit test with extended tests (wycheproof)
+    - php: 7.2
+      env: FULL=true
+      # This runs phpcs on php7.0 - only code style and examples
     - php: 7.0
-      env: CODESTYLE=true
-
-      # This runs phpcs on php7.0 - only examples
-    - php: 7.0
-      env: EXAMPLES=true
+      env: CODESTYLE=true EXAMPLES=true
 
 sudo: false
 
@@ -40,6 +37,7 @@ before_script:
 
 script:
     - if [ "${PHPUNIT}" = "true" ]; then make phpunit-ci; fi
+    - if [ "${FULL}" = "true" ]; then make phpunit-full-ci; fi
     - if [ "${CODESTYLE}" = "true" ]; then make phpcs && echo "PHPCS OK"; fi
     - if [ "${EXAMPLES}" = "true" ]; then make test-examples && echo "Examples OK"; fi
 

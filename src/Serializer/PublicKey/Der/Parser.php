@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Mdanter\Ecc\Serializer\PublicKey\Der;
 
 use FG\ASN1\ASNObject;
+use FG\ASN1\Identifier;
 use FG\ASN1\Universal\Sequence;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
 use Mdanter\Ecc\Math\GmpMathInterface;
@@ -46,17 +47,47 @@ class Parser
     public function parse(string $binaryData): PublicKeyInterface
     {
         $asnObject = ASNObject::fromBinary($binaryData);
+        if ($asnObject->getType() !== Identifier::SEQUENCE) {
+            throw new \RuntimeException('Invalid data.');
+        }
 
-        if (! ($asnObject instanceof Sequence) || $asnObject->getNumberofChildren() != 2) {
+        /** @var Sequence $asnObject */
+        if ($asnObject->getNumberofChildren() != 2) {
             throw new \RuntimeException('Invalid data.');
         }
 
         $children = $asnObject->getChildren();
+        if (count($children) != 2) {
+            throw new \RuntimeException('Invalid data.');
+        }
+
+        if (count($children) != 2) {
+            throw new \RuntimeException('Invalid data.');
+        }
+
+        if ($children[0]->getType() !== Identifier::SEQUENCE) {
+            throw new \RuntimeException('Invalid data.');
+        }
+
+        if (count($children[0]->getChildren()) != 2) {
+            throw new \RuntimeException('Invalid data.');
+        }
+
+        if ($children[0]->getChildren()[0]->getType() !== Identifier::OBJECT_IDENTIFIER) {
+            throw new \RuntimeException('Invalid data.');
+        }
+
+        if ($children[0]->getChildren()[1]->getType() !== Identifier::OBJECT_IDENTIFIER) {
+            throw new \RuntimeException('Invalid data.');
+        }
+
+        if ($children[1]->getType() !== Identifier::BITSTRING) {
+            throw new \RuntimeException('Invalid data.');
+        }
 
         $oid = $children[0]->getChildren()[0];
         $curveOid = $children[0]->getChildren()[1];
         $encodedKey = $children[1];
-
         if ($oid->getContent() !== DerPublicKeySerializer::X509_ECDSA_OID) {
             throw new \RuntimeException('Invalid data: non X509 data.');
         }
