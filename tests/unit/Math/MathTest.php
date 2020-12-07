@@ -15,7 +15,7 @@ class MathTest extends AbstractTestCase
 
     private $primeCount = 10;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $file = TEST_DATA_DIR.'/primes.lst';
 
