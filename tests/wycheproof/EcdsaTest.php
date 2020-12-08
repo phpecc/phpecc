@@ -52,12 +52,12 @@ class EcdsaTest extends AbstractTestCase
                     $generator,
                     $publicKey,
                     $hasher,
-                    $test['msg'],
-                    $test['sig'],
-                    $test['result'],
-                    $test['flags'],
-                    $test['tcId'],
-                    $test['comment'],
+                    (string) $test['msg'],
+                    (string) $test['sig'],
+                    (string) $test['result'],
+                    (array) $test['flags'],
+                    (string) $test['tcId'],
+                    (string) $test['comment'],
                 ];
             }
         }
