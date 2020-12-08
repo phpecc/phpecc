@@ -24,12 +24,10 @@ class DerSignatureSerializerTest extends AbstractTestCase
         $this->assertEquals($expected, $serialized);
     }
 
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\SignatureDecodeException
-     * @expectedExceptionMessage Invalid tag for sequence.
-     */
     public function testInvalidASN1()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\SignatureDecodeException::class);
+        $this->expectExceptionMessage('Invalid tag for sequence.');
         // Bitstring is not a sequence..
         $bitString = new BitString('ab');
         $binary = $bitString->getBinary();
@@ -37,25 +35,21 @@ class DerSignatureSerializerTest extends AbstractTestCase
         $serializer->parse($binary);
     }
 
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\SignatureDecodeException
-     * @expectedExceptionMessage Invalid data.
-     */
     public function testInvalidASN2()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\SignatureDecodeException::class);
+        $this->expectExceptionMessage('Invalid data.');
         // Sequence != 2 items
         $sequence = new Sequence();
         $binary = $sequence->getBinary();
         $serializer = new DerSignatureSerializer();
         $serializer->parse($binary);
     }
-    
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\SignatureDecodeException
-     * @expectedExceptionMessage Invalid data.
-     */
+
     public function testInvalidASN3()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\SignatureDecodeException::class);
+        $this->expectExceptionMessage('Invalid data.');
         // bitstring isn't an integer
         $sequence = new Sequence(
             new BitString('41'),
@@ -66,12 +60,10 @@ class DerSignatureSerializerTest extends AbstractTestCase
         $serializer->parse($binary);
     }
 
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\SignatureDecodeException
-     * @expectedExceptionMessage Invalid data.
-     */
     public function testInvalidASN4()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\SignatureDecodeException::class);
+        $this->expectExceptionMessage('Invalid data.');
         // bitstring isn't an integer
         $sequence = new Sequence(
             new BitString('ab')

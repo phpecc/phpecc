@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Math;
 
-use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\NumberTheory;
-use Mdanter\Ecc\Tests\AbstractTestCase;
 
-class NumberTheoryTest extends AbstractTestCase
+class NumberTheoryTest extends NumberTheoryTestBase
 {
     /**
      * @var
@@ -26,46 +24,25 @@ class NumberTheoryTest extends AbstractTestCase
      */
     protected $generator;
 
-    protected function setUp(): void
-    {
-        // todo: in the future, turn these into data providers instead
-        // file containing a json array of {compressed=>'', decompressed=>''} values
-        // of compressed and uncompressed ECDSA public keys (testing secp256k1 curve)
-        $file_comp = TEST_DATA_DIR.'/compression.json';
-
-        if (! file_exists($file_comp)) {
-            $this->fail('Key compression input data not found');
-        }
-
-        $file_sqrt = TEST_DATA_DIR.'/square_root_mod_p.json';
-        if (! file_exists($file_sqrt)) {
-            $this->fail('Square root input data not found');
-        }
-        $this->generator = EccFactory::getSecgCurves()->generator256k1();
-        $this->compression_data = json_decode(file_get_contents($file_comp));
-
-        $this->sqrt_data = json_decode(file_get_contents($file_sqrt));
-    }
-
     public function getInvalidRootsProvider(): array
     {
         $file_sqrt = TEST_DATA_DIR.'/square_root_mod_p.json';
         $sqrt_data = json_decode(file_get_contents($file_sqrt));
         $fixtures = [];
         foreach ($sqrt_data->no_root as $r) {
-            $fixtures[] = [$r->a, $r->p];
+            $fixtures[] = [(string) $r->a, (string) $r->p];
         }
         return $fixtures;
     }
 
     /**
      * @dataProvider getInvalidRootsProvider
-     * @expectedException \Mdanter\Ecc\Exception\SquareRootException
      * @param string $a
      * @param string $p
      */
     public function testSqrtDataWithNoRoots(string $a, string $p)
     {
+        $this->expectException(\Mdanter\Ecc\Exception\SquareRootException::class);
         $adapter = new GmpMath();
         $theory = $adapter->getNumberTheory();
         $theory->squareRootModP(gmp_init($a, 10), gmp_init($p, 10));

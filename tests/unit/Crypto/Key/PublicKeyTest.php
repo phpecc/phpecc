@@ -13,12 +13,11 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class PublicKeyTest extends AbstractTestCase
 {
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\PublicKeyException
-     * @expectedExceptionMessage Point has x and y out of range
-     */
     public function testBadPointForGenerator()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\PublicKeyException::class);
+        $this->expectExceptionMessage('Point has x and y out of range');
+
         $adapter = EccFactory::getAdapter();
         $generator192 = EccFactory::getNistCurves($adapter)->generator192();
         $generator384 = EccFactory::getNistCurves($adapter)->generator384();
@@ -33,12 +32,11 @@ class PublicKeyTest extends AbstractTestCase
         }
     }
 
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\PublicKeyException
-     * @expectedExceptionMessage Curve for given point not in common with GeneratorPoint
-     */
     public function testPointGeneratorMismatch()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\PublicKeyException::class);
+        $this->expectExceptionMessage('Curve for given point not in common with GeneratorPoint');
+
         $adapter = EccFactory::getAdapter();
         $generator384 = EccFactory::getNistCurves($adapter)->generator384();
 

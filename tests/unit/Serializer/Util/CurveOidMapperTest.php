@@ -14,7 +14,11 @@ class CurveOidMapperTest extends AbstractTestCase
 {
     public function testGetNames()
     {
-        $this->assertInternalType('array', CurveOidMapper::getNames());
+        if (version_compare(\PHPUnit\Runner\Version::id(), '7.0.0') >= 0) {
+            $this->assertIsArray(CurveOidMapper::getNames());
+        } else {
+            $this->assertInternalType('array', CurveOidMapper::getNames());
+        }
     }
 
     public function testValidValues()
@@ -32,40 +36,32 @@ class CurveOidMapperTest extends AbstractTestCase
         $this->assertTrue($G->equals($gen));
     }
 
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
-     */
     public function testGetBytesUnknownCurve()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\UnsupportedCurveException::class);
         $adapter = EccFactory::getAdapter();
         $curve = new NamedCurveFp('badcurve', new CurveParameters(10, gmp_init(1), gmp_init(1), gmp_init(1)), $adapter);
         CurveOidMapper::getByteSize($curve);
     }
 
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
-     */
     public function testGetCurveOid()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\UnsupportedCurveException::class);
         $adapter = EccFactory::getAdapter();
         $curve = new NamedCurveFp('badcurve', new CurveParameters(10, gmp_init(1), gmp_init(1), gmp_init(1)), $adapter);
         CurveOidMapper::getCurveOid($curve);
     }
 
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
-     */
     public function testCurveUnknownOid()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\UnsupportedCurveException::class);
         $oid = new ObjectIdentifier('1.3');
         CurveOidMapper::getCurveFromOid($oid);
     }
 
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\UnsupportedCurveException
-     */
     public function testGeneratorUnknownOid()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\UnsupportedCurveException::class);
         $oid = new ObjectIdentifier('1.3');
         CurveOidMapper::getGeneratorFromOid($oid);
     }

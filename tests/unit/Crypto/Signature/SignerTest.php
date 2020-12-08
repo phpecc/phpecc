@@ -8,12 +8,10 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class SignerTest extends AbstractTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unsupported hashing algorithm
-     */
     public function testInvalidHashAlgorithm()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported hashing algorithm');
         new SignHasher("blahblah");
     }
 }

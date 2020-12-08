@@ -11,23 +11,19 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class EcDHTest extends AbstractTestCase
 {
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\ExchangeException
-     * @expectedExceptionMessage Sender key not set
-     */
     public function testExceptionOnInvalidState()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\ExchangeException::class);
+        $this->expectExceptionMessage('Sender key not set');
         $adapter = EccFactory::getAdapter();
         $ecdh = new EcDH($adapter);
         $ecdh->calculateSharedKey();
     }
 
-    /**
-     * @expectedException \Mdanter\Ecc\Exception\ExchangeException
-     * @expectedExceptionMessage Recipient key not set
-     */
     public function testExceptionOnInvalidState1()
     {
+        $this->expectException(\Mdanter\Ecc\Exception\ExchangeException::class);
+        $this->expectExceptionMessage('Recipient key not set');
         $G = EccFactory::getNistCurves()->generator521();
         $adapter = EccFactory::getAdapter();
         $ecdh = new EcDH($adapter);
