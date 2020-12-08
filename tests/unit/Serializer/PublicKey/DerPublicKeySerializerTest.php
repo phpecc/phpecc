@@ -17,12 +17,11 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class DerPublicKeySerializerTest extends AbstractTestCase
 {
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Invalid data.
-     */
     public function testFirstFailure()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid data.');
+
         $asn = new Integer(1);
         $binary = $asn->getBinary();
 
@@ -30,12 +29,10 @@ class DerPublicKeySerializerTest extends AbstractTestCase
         $serializer->parse($binary);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Invalid data: non X509 data.
-     */
     public function testInvalidEcdsaOid()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid data: non X509 data.');
 
         $sequence = new Sequence(
             new Sequence(
@@ -50,12 +47,11 @@ class DerPublicKeySerializerTest extends AbstractTestCase
         $serializer->parse($binary);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Not implemented for unnamed curves
-     */
     public function testInvalidCurve()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Not implemented for unnamed curves');
+
         $adapter = EccFactory::getAdapter();
         $p = gmp_init('6277101735386680763835789423207666416083908700390324961279', 10);
         $b = gmp_init('64210519e59c80e70fa7e9ab72243049feb8deecc146b9b1', 16);

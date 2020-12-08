@@ -43,3 +43,11 @@ TEXT
         ini_set('xdebug.max_nesting_level', $requiredNestingLevel);
     }
 }
+
+if (version_compare(\PHPUnit\Runner\Version::id(), '7.0.0') >= 0) {
+    class_alias ('Mdanter\Ecc\Tests\Math\MathTestPhpunit7', 'Mdanter\Ecc\Tests\Math\MathTestBase');
+    class_alias ('Mdanter\Ecc\Tests\Math\NumberTheoryTestPhpunit7', 'Mdanter\Ecc\Tests\Math\NumberTheoryTestBase');
+} else {
+    class_alias ('Mdanter\Ecc\Tests\Math\MathTestPhpunit6', 'Mdanter\Ecc\Tests\Math\MathTestBase');
+    class_alias ('Mdanter\Ecc\Tests\Math\NumberTheoryTestPhpunit6', 'Mdanter\Ecc\Tests\Math\NumberTheoryTestBase');
+}

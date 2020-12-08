@@ -10,12 +10,11 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class HmacRandomNumberGeneratorTest extends AbstractTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unsupported hashing algorithm
-     */
     public function testRequireValidAlgorithm()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported hashing algorithm');
+
         $math = EccFactory::getAdapter();
         $g = EccFactory::getNistCurves()->generator192();
         $privateKey  = new PrivateKey($math, $g, gmp_init(1, 10));

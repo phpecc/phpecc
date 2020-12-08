@@ -17,7 +17,11 @@ class CurveParametersTest extends AbstractTestCase
 
         $parameters = new CurveParameters($size, $p, $a, $b);
 
-        $this->assertInternalType('int', $size);
+        if (version_compare(\PHPUnit\Runner\Version::id(), '7.0.0') >= 0) {
+            $this->assertIsInt($size);
+        } else {
+            $this->assertInternalType('int', $size);
+        }
         $this->assertEquals($size, $parameters->getSize());
         $this->assertInstanceOf(\GMP::class, $parameters->getA());
         $this->assertInstanceOf(\GMP::class, $parameters->getB());

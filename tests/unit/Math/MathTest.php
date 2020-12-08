@@ -5,33 +5,12 @@ namespace Mdanter\Ecc\Tests\Math;
 
 use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
-use Mdanter\Ecc\Tests\AbstractTestCase;
 
-class MathTest extends AbstractTestCase
+class MathTest extends MathTestBase
 {
-    private $knownPrimes;
-
     private $startPrime = 31;
 
     private $primeCount = 10;
-
-    protected function setUp(): void
-    {
-        $file = TEST_DATA_DIR.'/primes.lst';
-
-        if (! file_exists($file)) {
-            $this->fail('Primes not found');
-        }
-
-        $lines = file($file);
-        if (! $lines) {
-            $this->fail('Empty prime file');
-        }
-
-        $this->knownPrimes = array_map(function ($i) {
-            return intval($i);
-        }, $lines);
-    }
 
     private $decHexMap = array(
         '00' => 0,
@@ -64,12 +43,10 @@ class MathTest extends AbstractTestCase
         }
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to convert negative integer to string
-     */
     public function testDecHexFailure()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to convert negative integer to string');
         $math = new GmpMath();
         $math->decHex('-1');
     }
@@ -120,10 +97,18 @@ class MathTest extends AbstractTestCase
         $this->assertTrue(is_object($bitwiseand) && $bitwiseand instanceof \GMP);
 
         $hexdec = $math->decHex('10');
-        $this->assertInternalType('string', $hexdec);
+        if (version_compare(\PHPUnit\Runner\Version::id(), '7.0.0') >= 0) {
+            $this->assertIsString($hexdec);
+        } else {
+            $this->assertInternalType('string', $hexdec);
+        }
 
         $dechex = $math->hexDec($hexdec);
-        $this->assertInternalType('string', $dechex);
+        if (version_compare(\PHPUnit\Runner\Version::id(), '7.0.0') >= 0) {
+            $this->assertIsString($dechex);
+        } else {
+            $this->assertInternalType('string', $dechex);
+        }
     }
 
     /**
@@ -183,12 +168,10 @@ class MathTest extends AbstractTestCase
         }
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to convert negative integer to string
-     */
     public function testIntToStringFailure()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to convert negative integer to string');
         $math = new GmpMath();
         $math->intToString(gmp_init(-1, 10));
     }
@@ -206,12 +189,10 @@ class MathTest extends AbstractTestCase
         $this->assertFalse($math->isPrime(gmp_init(4, 10)));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Negative exponents (-1) not allowed
-     */
     public function testPowModNegativeExponent()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Negative exponents (-1) not allowed');
         $math = new GmpMath();
         $math->powmod(gmp_init(4, 10), gmp_init(-1), gmp_init(10));
     }

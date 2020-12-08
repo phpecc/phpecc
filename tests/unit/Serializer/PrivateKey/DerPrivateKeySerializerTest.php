@@ -38,12 +38,11 @@ class DerPrivateKeySerializerTest extends AbstractTestCase
         $this->assertTrue($adapter->equals($parsed->getSecret(), $key->getSecret()));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Invalid data: only version 1 (RFC5915) keys are supported.
-     */
     public function testHandlingOfNonV1Key()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid data: only version 1 (RFC5915) keys are supported.');
+
         $adapter = EccFactory::getAdapter();
         $G = EccFactory::getNistCurves($adapter)->generator192();
         $key = $G->createPrivateKey();
@@ -63,12 +62,11 @@ class DerPrivateKeySerializerTest extends AbstractTestCase
         $derPrivSerializer->parse($binary);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Invalid data.
-     */
     public function testParseInvalidASN()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Invalid data.');
+
         $asn = new Integer(1);
         $binary = $asn->getBinary();
 

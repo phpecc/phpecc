@@ -9,12 +9,10 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class UncompressedPointSerializerTest extends AbstractTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid data: only uncompressed keys are supported.
-     */
     public function testChecksPrefix()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid data: only uncompressed keys are supported.');
         $data = '01aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
         $serializer = new UncompressedPointSerializer();
         $serializer->unserialize(EccFactory::getNistCurves()->curve192(), $data);
