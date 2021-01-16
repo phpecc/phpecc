@@ -60,8 +60,8 @@ class NumberTheoryTest extends NumberTheoryTestBase
             $p = gmp_init($r->p, 10);
             $root1 = $theory->squareRootModP($a, $p);
             $root2 = $adapter->sub($p, $root1);
-            $this->assertContains(gmp_strval($root1, 10), $r->res);
-            $this->assertContains(gmp_strval($root2, 10), $r->res);
+            $this->assertContains((int) gmp_strval($root1, 10), $r->res);
+            $this->assertContains((int) gmp_strval($root2, 10), $r->res);
         }
     }
 
