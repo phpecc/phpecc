@@ -1,10 +1,10 @@
-phpecc v0.6.0
+phpecc v1.0.0
 
-v0.6.0 includes support for PHP8.
+v1.0.0 includes support for PHP8.
 
 Support for PHP versions 7.0, 7.1, 7.2 is retained for compatibility.
 
-0.6.0 Change log
+1.0.0 Change log
 ================
 
 ## PHP version

@@ -47,13 +47,13 @@ This package is released under the MIT license.
 Support for older PHP versions:
  * v0.4.x: php ^5.6|<7.2
  * v0.5.x: php ^7.0
- * v0.6.x: php ^7.0|^8.0
+ * v1.0.x: php ^7.0|^8.0
 
 ### Installation
 
 You can install this library via Composer :
 
-`composer require mdanter/ecc:^0.6.0`
+`composer require mdanter/ecc:^1.0`
 
 ### Contribute
 
