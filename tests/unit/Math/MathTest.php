@@ -140,7 +140,7 @@ class MathTest extends MathTestBase
             $currentPrime = $math->nextPrime($currentPrime);
             $this->assertTrue($math->isPrime($currentPrime));
 
-            $this->assertContains(gmp_strval($currentPrime, 10), $this->knownPrimes);
+            $this->assertContains((int)gmp_strval($currentPrime, 10), $this->knownPrimes);
         }
     }
 
