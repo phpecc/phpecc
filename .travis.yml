@@ -17,18 +17,18 @@ matrix:
   fast_finish: true
 
   exclude:
-      # Disable standard phpunit test on 7.0, reenable with FULL, and with COVERAGE
-    - php: 7.2
+      # Disable standard phpunit test on 8.0, reenable with FULL, and with COVERAGE
+    - php: 8.0
       env: PHPUNIT=true
   include:
-      # This reenables php7.0/phpunit test with COVERAGE
-    - php: 7.2
+      # This reenables php8.0/phpunit test with COVERAGE
+    - php: 8.0
       env: PHPUNIT=true COVERAGE_SHARDS=5 COVERAGE=true
-      # This reenables php7.0/phpunit test with extended tests (wycheproof)
-    - php: 7.2
+      # This reenables php8.0/phpunit test with extended tests (wycheproof)
+    - php: 8.0
       env: FULL=true
-      # This runs phpcs on php7.0 - only code style and examples
-    - php: 7.0
+      # This runs phpcs on php7.4 - only code style and examples
+    - php: 7.4
       env: CODESTYLE=true EXAMPLES=true
 
 sudo: false
