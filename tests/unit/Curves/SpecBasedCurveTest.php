@@ -6,7 +6,6 @@ namespace Mdanter\Ecc\Tests\Curves;
 use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Crypto\Signature\SignHasher;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
-use Mdanter\Ecc\Random\RandomNumberGeneratorInterface;
 use Mdanter\Ecc\Serializer\Point\CompressedPointSerializer;
 use Mdanter\Ecc\Serializer\Point\UncompressedPointSerializer;
 use Mdanter\Ecc\Tests\AbstractTestCase;
@@ -38,6 +37,12 @@ class SpecBasedCurveTest extends AbstractTestCase
             __DIR__ . '/../../specs/secp-256k1.yml',
             __DIR__ . '/../../specs/secp-256r1.yml',
             __DIR__ . '/../../specs/secp-384r1.yml',
+            __DIR__ . '/../../specs/brainpoolp160r1.yml',
+            __DIR__ . '/../../specs/brainpoolp192r1.yml',
+            __DIR__ . '/../../specs/brainpoolp256r1.yml',
+            __DIR__ . '/../../specs/brainpoolp320r1.yml',
+            __DIR__ . '/../../specs/brainpoolp384r1.yml',
+            __DIR__ . '/../../specs/brainpoolp512r1.yml',
             __DIR__ . '/../../specs/nist-p192.yml',
             __DIR__ . '/../../specs/nist-p224.yml',
             __DIR__ . '/../../specs/nist-p256.yml',

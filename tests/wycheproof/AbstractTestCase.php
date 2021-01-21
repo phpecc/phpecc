@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\WycheProof;
 
 use Mdanter\Ecc\Crypto\Signature\HasherInterface;
 use Mdanter\Ecc\Crypto\Signature\SignHasher;
+use Mdanter\Ecc\Curves\BrainpoolCurve;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
 use Mdanter\Ecc\Math\MathAdapterFactory;
@@ -76,6 +77,11 @@ abstract class AbstractTestCase extends TestCase
             NistCurve::NAME_P256,
             NistCurve::NAME_P384,
             NistCurve::NAME_P521,
+            BrainpoolCurve::NAME_P224R1,
+            BrainpoolCurve::NAME_P256R1,
+            BrainpoolCurve::NAME_P320R1,
+            BrainpoolCurve::NAME_P384R1,
+            BrainpoolCurve::NAME_P512R1,
             SecgCurve::NAME_SECP_112R1,
             SecgCurve::NAME_SECP_192K1,
             SecgCurve::NAME_SECP_256K1,

@@ -215,6 +215,71 @@ class EcdsaTest extends AbstractTestCase
         return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
     }
 
+    public function getEcdsaBrainpoolP224R1Sha224TestVectors(): array
+    {
+        return $this->readSpecificSet("brainpoolP224r1", "sha224");
+    }
+
+    /**
+     * @dataProvider getEcdsaBrainpoolP224R1Sha224TestVectors
+     */
+    public function testBrainpoolP224R1Sha224(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaBrainpoolP256R1Sha256TestVectors(): array
+    {
+        return $this->readSpecificSet("brainpoolP256r1", "sha256");
+    }
+
+    /**
+     * @dataProvider getEcdsaBrainpoolP256R1Sha256TestVectors
+     */
+    public function testBrainpoolP256R1Sha256(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaBrainpoolP320R1Sha384TestVectors(): array
+    {
+        return $this->readSpecificSet("brainpoolP320r1", "sha384");
+    }
+
+    /**
+     * @dataProvider getEcdsaBrainpoolP320R1Sha384TestVectors
+     */
+    public function testBrainpoolP320R1Sha384(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaBrainpoolP384R1Sha384TestVectors(): array
+    {
+        return $this->readSpecificSet("brainpoolP384r1", "sha384");
+    }
+
+    /**
+     * @dataProvider getEcdsaBrainpoolP384R1Sha384TestVectors
+     */
+    public function testBrainpoolP384R1Sha384(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
+    public function getEcdsaBrainpoolP512R1Sha512TestVectors(): array
+    {
+        return $this->readSpecificSet("brainpoolP512r1", "sha512");
+    }
+
+    /**
+     * @dataProvider getEcdsaBrainpoolP512R1Sha512TestVectors
+     */
+    public function testBrainpoolP512R1Sha512(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
+    {
+        return $this->doTest($generator, $publicKey, $hasher, $message, $sigHex, $result, $flags, $tcId, $comment);
+    }
+
     protected function doTest(GeneratorPoint $generator, PublicKey $publicKey, HasherInterface $hasher, string $message, string $sigHex, string $result, array $flags, string $tcId, string $comment)
     {
         /** @var SignatureInterface|null $sig */
