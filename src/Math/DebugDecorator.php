@@ -546,7 +546,7 @@ class DebugDecorator implements GmpMathInterface
      * {@inheritDoc}
      * @see \Mdanter\Ecc\Math\GmpMathInterface::baseConvert()
      */
-    public function baseConvert(string $value, int $fromBase, int $toBase): string
+    public function baseConvert($value, int $fromBase, int $toBase): string
     {
         $func = __METHOD__;
         $args = func_get_args();
