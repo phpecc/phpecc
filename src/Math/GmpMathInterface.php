@@ -117,17 +117,17 @@ interface GmpMathInterface
     public function toString(\GMP $value): string;
 
     /**
-     * Converts an hexadecimal string to decimal.
+     * Converts an hexadecimal string to base 10 string.
      *
      * @param  string $hexString
-     * @return int|string
+     * @return string
      */
     public function hexDec(string $hexString): string;
 
     /**
-     * Converts a decimal string to hexadecimal.
+     * Converts a base10 string to hexadecimal.
      *
-     * @param  int|string $decString
+     * @param  string $decString
      * @return string
      */
     public function decHex(string $decString): string;
@@ -186,8 +186,8 @@ interface GmpMathInterface
     public function intToFixedSizeString(\GMP $x, int $byteSize): string;
 
     /**
-     *
-     * @param  int|string $s
+     * converts a base 10 string to a GMP object
+     * @param  string $s
      * @return \GMP
      */
     public function stringToInt(string $s): \GMP;

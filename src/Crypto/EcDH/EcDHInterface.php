@@ -58,7 +58,6 @@ interface EcDHInterface
      * Sets the recipient key.
      *
      * @param  PublicKeyInterface $key
-     * @return void
      */
     public function setRecipientKey(PublicKeyInterface $key);
 }
