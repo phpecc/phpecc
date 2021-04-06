@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\Signature;
 
-use Mdanter\Ecc\Crypto\Signature\Signature;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
+use Mdanter\Ecc\Exception\SignatureDecodeException;
 
-class HexSignatureSerializer
+class HexSignatureSerializer implements HexSignatureSerializerInterface
 {
     /**
      * @var Hex\Parser
@@ -17,9 +18,6 @@ class HexSignatureSerializer
      */
     private $formatter;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->parser = new Hex\Parser();
@@ -30,18 +28,18 @@ class HexSignatureSerializer
      * @param SignatureInterface $signature
      * @return string
      */
-    public function serialize(SignatureInterface $signature)
+    public function serialize(SignatureInterface $signature): string
     {
         return $this->formatter->serialize($signature);
     }
 
     /**
      * @param string $binary
-     * @return Signature
-     * @throws \FG\ASN1\Exception\ParserException
+     * @return SignatureInterface
+     * @throws SignatureDecodeException
      */
-    public function parse($binary)
+    public function parse(string $hex): SignatureInterface
     {
-        return $this->parser->parse($binary);
+        return $this->parser->parse($hex);
     }
 }

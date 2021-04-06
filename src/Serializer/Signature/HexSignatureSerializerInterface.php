@@ -7,7 +7,7 @@ namespace Mdanter\Ecc\Serializer\Signature;
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 use Mdanter\Ecc\Exception\SignatureDecodeException;
 
-interface DerSignatureSerializerInterface
+interface HexSignatureSerializerInterface
 {
     /**
      * @param SignatureInterface $signature
@@ -20,5 +20,5 @@ interface DerSignatureSerializerInterface
      * @return SignatureInterface
      * @throws SignatureDecodeException
      */
-    public function parse(string $binary): SignatureInterface;
+    public function parse(string $hex): SignatureInterface;
 }
