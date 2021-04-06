@@ -16,6 +16,9 @@ class Parser
      */
     public function parse(string $hex): SignatureInterface
     {
+        if (!preg_match('/^[0-9a-fA-F|]+$/', $hex)) {
+            throw new SignatureDecodeException('Invalid hex string.');
+        }
         $parts = explode('|', $hex);
         if (count($parts) === 1) {
             if (strlen($hex) !== 128) {
