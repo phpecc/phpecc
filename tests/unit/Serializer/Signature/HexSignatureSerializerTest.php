@@ -11,7 +11,7 @@ use Mdanter\Ecc\Tests\AbstractTestCase;
 
 class HexSignatureSerializerTest extends AbstractTestCase
 {
-    public function testParsesSignature()
+    public function testSerializesSignature()
     {
         $r = gmp_init('15012732708734045374201164973195778115424038544478436215140305923518805725225', 10);
         $s = gmp_init('32925333523544781093325025052915296870609904100588287156912210086353851961511', 10);
@@ -20,6 +20,32 @@ class HexSignatureSerializerTest extends AbstractTestCase
         $serializer = new HexSignatureSerializer();
         $serialized = $serializer->serialize($signature);
         $this->assertEquals($expected, $serialized);
+    }
+
+    public function testParsesSignature1()
+    {
+        $math = new GmpMath();
+        $r = gmp_init('15012732708734045374201164973195778115424038544478436215140305923518805725225', 10);
+        $s = gmp_init('32925333523544781093325025052915296870609904100588287156912210086353851961511', 10);
+        $hexsig = strtolower('2130e7d504c4a498c3b3c7c0fed6de2a84811a3bd89badb8627658f2b1ea502948cb1410308e3efc512b4ce0974f6d0869e9454095c8855abea6b6325a40d0a7');
+        $signature = new Signature($r, $s);
+        $serializer = new HexSignatureSerializer();
+        $parsed = $serializer->parse($hexsig);
+        $this->assertTrue($math->equals($signature->getR(), $parsed->getR()));
+        $this->assertTrue($math->equals($signature->getS(), $parsed->getS()));
+    }
+
+    public function testParsesPipedSignature()
+    {
+        $math = new GmpMath();
+        $r = gmp_init('00012732708734045374201164973195778115424038544478436215140305923518805725225', 10);
+        $s = gmp_init('32925333523544781093325025052915296870609904100588287156912210086353851961511', 10);
+        $hexsig = strtolower('734da6a5f0409389cb8bf223f1ff45150a151ae3c15b8627658f2b1ea5029|48cb1410308e3efc512b4ce0974f6d0869e9454095c8855abea6b6325a40d0a7');
+        $signature = new Signature($r, $s);
+        $serializer = new HexSignatureSerializer();
+        $parsed = $serializer->parse($hexsig);
+        $this->assertTrue($math->equals($signature->getR(), $parsed->getR()));
+        $this->assertTrue($math->equals($signature->getS(), $parsed->getS()));
     }
 
     public function testInvalidHex()

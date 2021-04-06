@@ -13,6 +13,6 @@ class Formatter
      */
     public function serialize(SignatureInterface $signature): string
     {
-        return str_pad(gmp_strval($signature->getR(), 16), 32, '0', STR_PAD_LEFT) . str_pad(gmp_strval($signature->getS(), 16), 32, '0', STR_PAD_LEFT);
+        return str_pad(gmp_strval($signature->getR(), 16), 64, '0', STR_PAD_LEFT) . str_pad(gmp_strval($signature->getS(), 16), 64, '0', STR_PAD_LEFT);
     }
 }
