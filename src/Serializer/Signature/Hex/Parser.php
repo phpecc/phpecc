@@ -16,22 +16,15 @@ class Parser
      */
     public function parse(string $hex): SignatureInterface
     {
-        if (!preg_match('/^[0-9a-fA-F|]+$/', $hex)) {
+        if (!preg_match('/^[0-9a-fA-F]+$/', $hex)) {
             throw new SignatureDecodeException('Invalid hex string.');
         }
-        $parts = explode('|', $hex);
-        if (count($parts) === 1) {
-            if (strlen($hex) !== 128) {
-                throw new SignatureDecodeException('Invalid data.');
-            }
-            $rHex = substr($hex, 0, 64);
-            $sHex = substr($hex, 64);
-        } else if (count($parts) === 2) {
-            $rHex = $parts[0];
-            $sHex = $parts[1];
-        } else {
+        $halflen = (int)strlen($hex)/2;
+        if (strlen($hex) !== 2 * $halflen) {
             throw new SignatureDecodeException('Invalid data.');
         }
+        $rHex = substr($hex, 0, $halflen);
+        $sHex = substr($hex, $halflen);
         return new Signature(
             gmp_init($rHex, 16),
             gmp_init($sHex, 16)
