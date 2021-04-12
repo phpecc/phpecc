@@ -8,6 +8,7 @@ use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Random\RandomGeneratorFactory;
 use Mdanter\Ecc\Serializer\Signature\HexSignatureSerializer;
 use Mdanter\Ecc\Tests\AbstractTestCase;
+use Mdanter\Ecc\Curves\CurveFactory;
 
 class HexSignatureSerializerTest extends AbstractTestCase
 {
@@ -18,8 +19,22 @@ class HexSignatureSerializerTest extends AbstractTestCase
         $expected = strtolower('2130e7d504c4a498c3b3c7c0fed6de2a84811a3bd89badb8627658f2b1ea502948cb1410308e3efc512b4ce0974f6d0869e9454095c8855abea6b6325a40d0a7');
         $signature = new Signature($r, $s);
         $serializer = new HexSignatureSerializer();
-        $serialized = $serializer->serialize($signature);
+        $curve = CurveFactory::getCurveByName('nistp256');
+        $serialized = $serializer->serialize($signature, $curve);
         $this->assertEquals($expected, $serialized);
+    }
+
+    public function testSerializesInvalidCurve()
+    {
+        $this->expectException(\Mdanter\Ecc\Exception\SignatureDecodeException::class);
+        $this->expectExceptionMessage('Signature length does not match curve');
+        $r = gmp_init('15012732708734045374201164973195778115424038544478436215140305923518805725225', 10);
+        $s = gmp_init('32925333523544781093325025052915296870609904100588287156912210086353851961511', 10);
+        $expected = strtolower('2130e7d504c4a498c3b3c7c0fed6de2a84811a3bd89badb8627658f2b1ea502948cb1410308e3efc512b4ce0974f6d0869e9454095c8855abea6b6325a40d0a7');
+        $signature = new Signature($r, $s);
+        $serializer = new HexSignatureSerializer();
+        $curve = CurveFactory::getCurveByName('nistp224');
+        $serialized = $serializer->serialize($signature, $curve);
     }
 
     public function testParsesSignature1()
@@ -30,7 +45,8 @@ class HexSignatureSerializerTest extends AbstractTestCase
         $hexsig = strtolower('2130e7d504c4a498c3b3c7c0fed6de2a84811a3bd89badb8627658f2b1ea502948cb1410308e3efc512b4ce0974f6d0869e9454095c8855abea6b6325a40d0a7');
         $signature = new Signature($r, $s);
         $serializer = new HexSignatureSerializer();
-        $parsed = $serializer->parse($hexsig);
+        $curve = CurveFactory::getCurveByName('nistp256');
+        $parsed = $serializer->parse($hexsig, $curve);
         $this->assertTrue($math->equals($signature->getR(), $parsed->getR()));
         $this->assertTrue($math->equals($signature->getS(), $parsed->getS()));
     }
@@ -42,7 +58,8 @@ class HexSignatureSerializerTest extends AbstractTestCase
         // Not a valid hex string
         $hexstring = 'xyz';
         $serializer = new HexSignatureSerializer();
-        $serializer->parse($hexstring);
+        $curve = CurveFactory::getCurveByName('nistp256');
+        $serializer->parse($hexstring, $curve);
     }
 
     public function testInvalidHexSig()
@@ -52,7 +69,8 @@ class HexSignatureSerializerTest extends AbstractTestCase
         // Hexstring too short
         $hexstring = 'abc';
         $serializer = new HexSignatureSerializer();
-        $serializer->parse($hexstring);
+        $curve = CurveFactory::getCurveByName('nistp256');
+        $serializer->parse($hexstring, $curve);
     }
     
     public function testInvalidLength()
@@ -62,7 +80,8 @@ class HexSignatureSerializerTest extends AbstractTestCase
         // Hexstring too short
         $hexstring = strtolower('2130e7d504c4a498c3b3c7c0fed6de2a84811a3bd89badb8627658f2b1e502948cb1410308e3efc512b4ce0974f6d0869e9454095c8855abea6b6325a40d0a7');
         $serializer = new HexSignatureSerializer();
-        $serializer->parse($hexstring);
+        $curve = CurveFactory::getCurveByName('nistp256');
+        $serializer->parse($hexstring, $curve);
     }
 
     public function testIsConsistent()
@@ -76,9 +95,10 @@ class HexSignatureSerializerTest extends AbstractTestCase
         $r = $rbg->generate($max);
         $s = $rbg->generate($max);
         $signature = new Signature($r, $s);
-        
-        $serialized = $serializer->serialize($signature);
-        $parsed = $serializer->parse($serialized);
+        $curve = CurveFactory::getCurveByName('nistp256');
+
+        $serialized = $serializer->serialize($signature, $curve);
+        $parsed = $serializer->parse($serialized, $curve);
         
         $this->assertTrue($math->equals($signature->getR(), $parsed->getR()));
         $this->assertTrue($math->equals($signature->getS(), $parsed->getS()));
@@ -95,9 +115,10 @@ class HexSignatureSerializerTest extends AbstractTestCase
         $r = $rbg->generate($max);
         $s = $rbg->generate($max);
         $signature = new Signature($r, $s);
+        $curve = CurveFactory::getCurveByName('nistp256');
 
-        $serialized = $serializer->serialize($signature);
-        $parsed = $serializer->parse($serialized);
+        $serialized = $serializer->serialize($signature, $curve);
+        $parsed = $serializer->parse($serialized, $curve);
 
         $this->assertTrue($math->equals($signature->getR(), $parsed->getR()));
         $this->assertTrue($math->equals($signature->getS(), $parsed->getS()));

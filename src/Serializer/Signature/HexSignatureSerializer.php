@@ -5,6 +5,7 @@ namespace Mdanter\Ecc\Serializer\Signature;
 
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
 use Mdanter\Ecc\Exception\SignatureDecodeException;
+use Mdanter\Ecc\Primitives\CurveFpInterface;
 
 class HexSignatureSerializer implements HexSignatureSerializerInterface
 {
@@ -27,10 +28,11 @@ class HexSignatureSerializer implements HexSignatureSerializerInterface
     /**
      * @param SignatureInterface $signature
      * @return string
+     * @throws SignatureDecodeException
      */
-    public function serialize(SignatureInterface $signature): string
+    public function serialize(SignatureInterface $signature, CurveFpInterface $curve): string
     {
-        return $this->formatter->serialize($signature);
+        return $this->formatter->serialize($signature, $curve);
     }
 
     /**
@@ -38,8 +40,8 @@ class HexSignatureSerializer implements HexSignatureSerializerInterface
      * @return SignatureInterface
      * @throws SignatureDecodeException
      */
-    public function parse(string $hex): SignatureInterface
+    public function parse(string $hex, CurveFpInterface $curve): SignatureInterface
     {
-        return $this->parser->parse($hex);
+        return $this->parser->parse($hex, $curve);
     }
 }
