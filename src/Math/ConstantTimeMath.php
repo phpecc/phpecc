@@ -181,15 +181,25 @@ class ConstantTimeMath extends GmpMath
     /**
      * How many trailing zero bits are in this number?
      *
+     * We can't just use gmp_scan1() for this, because its runtime
+     * is variable based on the number of trailing 0 bits.
+     *
      * @param GMP $num
      * @return int
      */
     public function trailingZeroes(GMP $num): int
     {
-        return \max(
-            0,
-            \gmp_scan1($num, 0)
-        );
+        $trailing = 0;
+        $b = 0;
+        $found = 0;
+        $strval = gmp_strval($num, 2);
+        for ($i = BinaryString::length($strval) - 1; $i >= 0; --$i) {
+            $bit = $this->ord($strval[$i]) & 1;
+            $trailing = ((-$bit & $b) & ~$found) ^ ($trailing & $found);
+            $found |= -$bit; // -1 if found, 0 if not
+            ++$b;
+        }
+        return $trailing;
     }
 
     /**
