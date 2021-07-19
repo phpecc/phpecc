@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Tests\Math;
 
+use Mdanter\Ecc\Math\ConstantTimeMath;
 use Mdanter\Ecc\Math\GmpMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 
@@ -312,5 +313,13 @@ class MathTest extends MathTestBase
         $this->expectExceptionMessage("Number overflows byte size");
 
         $math->intToFixedSizeString($integer, $size);
+    }
+
+
+    public function getAdapters()
+    {
+        return $this->_getAdapters(array(
+            array(new ConstantTimeMath())
+        ));
     }
 }
