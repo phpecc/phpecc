@@ -7,6 +7,19 @@ use Mdanter\Ecc\Math\ConstantTimeMath;
 
 class ConstantTimeMathTest extends MathTestBase
 {
+    public function testCmp()
+    {
+        $math = new ConstantTimeMath();
+        $big    = '01' . bin2hex(random_bytes(16)) . '01';
+        $bigger = '7f' . bin2hex(random_bytes(16)) . '7f';
+        $a = gmp_init($big, 16);
+        $b = gmp_init($bigger, 16);
+
+        $this->assertEquals(-1, $math->cmp($a, $b), "{$a} < {$b}");
+        $this->assertEquals(0, $math->cmp($a, $a), "{$a} == {$b}");
+        $this->assertEquals(1, $math->cmp($b, $a), "{$a} > {$b}");
+    }
+
     public function testOrdChr()
     {
         $math = new ConstantTimeMath();

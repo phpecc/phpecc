@@ -18,6 +18,34 @@ use Mdanter\Ecc\Util\BinaryString;
 class ConstantTimeMath extends GmpMath
 {
     /**
+     * Compare two GMP objects, without timing leaks.
+     *
+     * @param GMP $first
+     * @param GMP $other
+     * @return int -1 if $first < $other
+     *              0 if $first === $other
+     *              1 if $first > $other
+     */
+    public function cmp(GMP $first, GMP $other): int
+    {
+        /**
+         * @var GMP $left
+         * @var GMP $right
+         * @var int $length
+         */
+        list($left, $right, $length) = $this->normalizeLengths($first, $other);
+        $gt = 0;
+        $eq = 1;
+        $i = $length;
+        while ($i !== 0) {
+            --$i;
+            $gt |= (($this->ord($right[$i]) - $this->ord($left[$i])) >> 8) & $eq;
+            $eq &= (($this->ord($right[$i]) ^ $this->ord($left[$i])) -1) >> 8;
+        }
+        return ($gt + $gt + $eq) - 1;
+    }
+
+    /**
      * {@inheritDoc}
      * @see GmpMathInterface::inverseMod()
      */
@@ -130,14 +158,12 @@ class ConstantTimeMath extends GmpMath
         $mask = -($bit & 1) & 0xff;
 
         // Work with the positive hex values:
-        $a_hex = gmp_strval(gmp_abs($a), 16);
-        $b_hex = gmp_strval(gmp_abs($b), 16);
-        $length = max(BinaryString::length($a_hex), BinaryString::length($b_hex));
-        $length += $length & 1;
-
-        $left = hex2bin(str_pad($a_hex, $length, '0', STR_PAD_LEFT));
-        $right = hex2bin(str_pad($b_hex, $length, '0', STR_PAD_LEFT));
-        $length >>= 1;
+        /**
+         * @var GMP $left
+         * @var GMP $right
+         * @var int $length
+         */
+        list($left, $right, $length) = $this->normalizeLengths($a, $b);
 
         $out = [];
         for ($i = 0; $i < $length; ++$i) {
@@ -198,5 +224,25 @@ class ConstantTimeMath extends GmpMath
     public function chr(int $c): string
     {
         return pack('C', $c);
+    }
+
+    /**
+     * Normalize the lengths of two input numbers.
+     *
+     * @param GMP $a
+     * @param GMP $b
+     * @return array<array-key, GMP|int>
+     */
+    public function normalizeLengths(GMP $a, GMP $b): array
+    {
+        $a_hex = gmp_strval(gmp_abs($a), 16);
+        $b_hex = gmp_strval(gmp_abs($b), 16);
+        $length = max(BinaryString::length($a_hex), BinaryString::length($b_hex));
+        $length += $length & 1;
+
+        $left = hex2bin(str_pad($a_hex, $length, '0', STR_PAD_LEFT));
+        $right = hex2bin(str_pad($b_hex, $length, '0', STR_PAD_LEFT));
+        $length >>= 1;
+        return [$left, $right, $length];
     }
 }
