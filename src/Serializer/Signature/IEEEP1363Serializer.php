@@ -2,6 +2,7 @@
 namespace Mdanter\Ecc\Serializer\Signature;
 
 use Mdanter\Ecc\Crypto\Signature\SignatureInterface;
+use Mdanter\Ecc\Primitives\CurveFp;
 
 /**
  * Class IEEEP1363Serializer
@@ -19,19 +20,29 @@ class IEEEP1363Serializer implements IEEEP1363SerializerInterface
      */
     private $formatter;
 
-    public function __construct()
+    /**
+     * @var CurveFp
+     */
+    private $curveFp;
+
+    public function __construct(CurveFp $curveFp = null)
     {
         $this->parser = new IEEEP1363\Parser();
         $this->formatter = new IEEEP1363\Formatter();
+        $this->curveFp = $curveFp;
     }
     
     /**
      * @param SignatureInterface $signature
+     * @param int $curveSize Expected bit length of the R and S
      * @return string
      */
-    public function serialize(SignatureInterface $signature): string
+    public function serialize(SignatureInterface $signature, int $curveSize = 0): string
     {
-        return $this->formatter->serialize($signature);
+        if ($this->curveFp && !$curveSize) {
+            $curveSize = $this->curveFp->getSize();
+        }
+        return $this->formatter->serialize($signature, $curveSize);
     }
 
     /**
