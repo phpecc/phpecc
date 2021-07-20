@@ -17,6 +17,41 @@ use Mdanter\Ecc\Util\BinaryString;
  */
 class ConstantTimeMath extends GmpMath
 {
+
+    /**
+     * Compare signs. Returns [$gt, $eq].
+     *
+     * Sets $gt to 1 if $first > $other.
+     * Sets $eq to1 if $first === $other.
+     *
+     * See {@link cmp()} for usage.
+     *
+     * | first | other | gt | eq |
+     * |-------|-------|----|----|
+     * |    -1 |    -1 |  0 |  1 |
+     * |    -1 |     0 |  0 |  0 |
+     * |    -1 |     1 |  0 |  0 |
+     * |     0 |    -1 |  1 |  0 |
+     * |     0 |     0 |  0 |  1 |
+     * |     0 |     1 |  1 |  0 |
+     * |     1 |    -1 |  1 |  0 |
+     * |     1 |     0 |  1 |  0 |
+     * |     1 |     1 |  0 |  1 |
+     *
+     * @param int $first_sign
+     * @param int $other_sign
+     * @return int[]
+     */
+    public function compareSigns(int $first_sign, int $other_sign): array
+    {
+        // Coerce to positive (-1, 0, 1) -> (0, 1, 2)
+        ++$first_sign;
+        ++$other_sign;
+        $gt = (($other_sign - $first_sign) >> 2) & 1;
+        $eq = ((($first_sign ^ $other_sign) - 1) >> 2) & 1;
+        return [$gt, $eq];
+    }
+
     /**
      * Compare two GMP objects, without timing leaks.
      *
@@ -29,18 +64,19 @@ class ConstantTimeMath extends GmpMath
     public function cmp(GMP $first, GMP $other): int
     {
         /**
-         * @var GMP $left
-         * @var GMP $right
+         * @var string $left
+         * @var string $right
          * @var int $length
          */
         list($left, $right, $length) = $this->normalizeLengths($first, $other);
-        $gt = 0;
-        $eq = 1;
-        $i = $length;
-        while ($i !== 0) {
-            --$i;
+
+        $first_sign = \gmp_sign($first);
+        $other_sign = \gmp_sign($other);
+        list($gt, $eq) = $this->compareSigns($first_sign, $other_sign);
+
+        for ($i = 0; $i < $length; ++$i) {
             $gt |= (($this->ord($right[$i]) - $this->ord($left[$i])) >> 8) & $eq;
-            $eq &= (($this->ord($right[$i]) ^ $this->ord($left[$i])) -1) >> 8;
+            $eq &= (($this->ord($right[$i]) ^ $this->ord($left[$i])) - 1) >> 8;
         }
         return ($gt + $gt + $eq) - 1;
     }
@@ -159,8 +195,8 @@ class ConstantTimeMath extends GmpMath
 
         // Work with the positive hex values:
         /**
-         * @var GMP $left
-         * @var GMP $right
+         * @var string $left
+         * @var string $right
          * @var int $length
          */
         list($left, $right, $length) = $this->normalizeLengths($a, $b);
@@ -186,6 +222,8 @@ class ConstantTimeMath extends GmpMath
      *
      * @param GMP $num
      * @return int
+     *
+     * @psalm-suppress UnusedVariable (False positive; https://github.com/vimeo/psalm/issues/6145)
      */
     public function trailingZeroes(GMP $num): int
     {
@@ -221,7 +259,7 @@ class ConstantTimeMath extends GmpMath
      */
     public function ord(string $chr): int
     {
-        return unpack('C', $chr)[1];
+        return (int) unpack('C', $chr)[1];
     }
 
     /**
@@ -241,7 +279,7 @@ class ConstantTimeMath extends GmpMath
      *
      * @param GMP $a
      * @param GMP $b
-     * @return array<array-key, GMP|int>
+     * @return array<array-key, string|int>
      */
     public function normalizeLengths(GMP $a, GMP $b): array
     {
