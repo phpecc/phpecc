@@ -44,6 +44,7 @@ jobs:
 
   coverage:
     runs-on: ${{ matrix.operating-system }}
+    timeout-minutes: 30
     strategy:
       matrix:
         operating-system: ['ubuntu-20.04']
