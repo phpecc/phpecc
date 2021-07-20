@@ -154,6 +154,12 @@ TEXT
      */
     public function testGetPublicKey($name, GeneratorPoint $generator, $k, $expectedX, $expectedY)
     {
+        static $ran = 0;
+        if (PHPECC_COVERAGE) {
+            if (++$ran > 10) {
+                $this->markTestSkipped('This is way too slow during code coverage tests');
+            }
+        }
         $adapter = $generator->getAdapter();
 
         $privateKey = $generator->getPrivateKeyFrom(gmp_init($k, 10));
@@ -291,6 +297,12 @@ TEXT
      */
     public function testGetDiffieHellmanSharedSecret(GeneratorPoint $generator, $alice, $bob, $expectedX)
     {
+        static $ran = 0;
+        if (PHPECC_COVERAGE) {
+            if (++$ran > 10) {
+                $this->markTestSkipped('This is way too slow during code coverage tests');
+            }
+        }
         $adapter = $generator->getAdapter();
         $alicePrivKey = $generator->getPrivateKeyFrom(gmp_init($alice, 10));
         $bobPrivKey = $generator->getPrivateKeyFrom(gmp_init($bob, 10));
@@ -340,6 +352,12 @@ TEXT
      */
     public function testHmacSignatures(GeneratorPoint $G, $privKey, $algo, $message, $eK, $eR, $eS)
     {
+        static $ran = 0;
+        if (PHPECC_COVERAGE) {
+            if (++$ran > 10) {
+                $this->markTestSkipped('This is way too slow during code coverage tests');
+            }
+        }
         $math = $G->getAdapter();
 
         $privateKey = $G->getPrivateKeyFrom(gmp_init($privKey, 16));
@@ -417,7 +435,14 @@ TEXT
      */
     public function testEcdsaSignatureGeneration(GeneratorPoint $G, $privKeyHex, $kHex, $eR, $eS, $hashHex = null, $msg = null, $algo = null)
     {
-        $math = $G->getAdapter();
+        static $ran = 0;
+        if (PHPECC_COVERAGE) {
+            if (++$ran > 10) {
+                $this->markTestSkipped('This is way too slow during code coverage tests');
+            }
+        }
+
+        $math = $this->skipConstantTimeOnCoverage($G->getAdapter());
         $signer = new Signer($math);
         $privateKey = $G->getPrivateKeyFrom(gmp_init($privKeyHex, 10));
         $k = gmp_init($kHex, 16);
@@ -447,6 +472,12 @@ TEXT
      */
     public function getEcdsaVerifyFixtures()
     {
+        static $ran = 0;
+        if (PHPECC_COVERAGE) {
+            if (++$ran > 10) {
+                $this->markTestSkipped('This is way too slow during code coverage tests');
+            }
+        }
         $files = $this->readTestFixture('ecdsa-verify');
         $datasets = [];
 
@@ -506,7 +537,13 @@ TEXT
      */
     public function testEcdsaSignatureVerification(GeneratorPoint $G, $eR, $eS, $x, $y, $result, $cause = null, $hashHex = null, $msg = null, $algo = null)
     {
-        $math = $G->getAdapter();
+        static $ran = 0;
+        if (PHPECC_COVERAGE) {
+            if (++$ran > 10) {
+                $this->markTestSkipped('This is way too slow during code coverage tests');
+            }
+        }
+        $math = $this->skipConstantTimeOnCoverage($G->getAdapter());
         $signer = new Signer($math);
         try {
             $publicKey = $G->getPublicKeyFrom(gmp_init($x, 16), gmp_init($y, 16));

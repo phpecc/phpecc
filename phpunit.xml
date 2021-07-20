@@ -5,6 +5,7 @@
   stopOnFailure="false">
   <php>
     <const name="PHPUNIT_DEBUG" value="false" />
+    <const name="PHPECC_COVERAGE" value="true" />
     <ini name="display_errors" value="On" />
     <ini name="error_reporting" value="32767" />
   </php>
