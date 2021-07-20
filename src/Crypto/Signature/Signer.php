@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mdanter\Ecc\Crypto\Signature;
 
+use Mdanter\Ecc\Math\ConstantTimeMath;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
@@ -35,7 +36,7 @@ class Signer
      */
     public function sign(PrivateKeyInterface $key, \GMP $truncatedHash, \GMP $randomK): SignatureInterface
     {
-        $math = $this->adapter;
+        $math = new ConstantTimeMath();
         $generator = $key->getPoint();
         $modMath = $math->getModularArithmetic($generator->getOrder());
 
