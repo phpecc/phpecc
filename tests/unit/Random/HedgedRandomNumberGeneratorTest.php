@@ -5,10 +5,11 @@ namespace Mdanter\Ecc\Tests\Random;
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Crypto\Key\PrivateKey;
+use Mdanter\Ecc\Random\HedgedRandomNumberGenerator;
 use Mdanter\Ecc\Random\HmacRandomNumberGenerator;
 use Mdanter\Ecc\Tests\AbstractTestCase;
 
-class HmacRandomNumberGeneratorTest extends AbstractTestCase
+class HedgedRandomNumberGeneratorTest extends AbstractTestCase
 {
     public function testRequireValidAlgorithm()
     {
@@ -20,19 +21,20 @@ class HmacRandomNumberGeneratorTest extends AbstractTestCase
         $privateKey  = new PrivateKey($math, $g, gmp_init(1, 10));
         $hash = gmp_init(hash('sha256', 'message', false), 16);
 
-        new HmacRandomNumberGenerator($math, $privateKey, $hash, 'sha256aaaa');
+        new HedgedRandomNumberGenerator($math, $privateKey, $hash, 'sha256aaaa');
     }
 
     public function testOutputDynamic()
-    {
+    {;
+
         $math = EccFactory::getAdapter();
         $g = EccFactory::getNistCurves()->generator192();
         $privateKey  = new PrivateKey($math, $g, gmp_init(random_int(1, PHP_INT_MAX), 10));
 
         $hash = gmp_init(hash('sha256', 'message', false), 16);
-        $rng = new HmacRandomNumberGenerator($math, $privateKey, $hash, 'sha256');
+        $rng = new HedgedRandomNumberGenerator($math, $privateKey, $hash, 'sha256');
         $x = $rng->generate($g->getOrder());
         $y = $rng->generate($g->getOrder());
-        $this->assertSame(gmp_strval($x, 16), gmp_strval($y, 16));
+        $this->assertNotSame(gmp_strval($x, 16), gmp_strval($y, 16));
     }
 }
