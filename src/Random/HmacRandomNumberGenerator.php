@@ -108,6 +108,14 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
     }
 
     /**
+     * @return string
+     */
+    protected function optionalSuffix(): string
+    {
+        return '';
+    }
+
+    /**
      * @param \GMP $q
      * @return \GMP
      */
@@ -117,6 +125,7 @@ class HmacRandomNumberGenerator implements RandomNumberGeneratorInterface
         $rlen = $this->math->rightShift($this->math->add($qlen, gmp_init(7, 10)), 3);
         $hlen = $this->getHashLength($this->algorithm);
         $bx = $this->int2octets($this->privateKey->getSecret(), $rlen) . $this->int2octets($this->messageHash, $rlen);
+        $bx .= $this->optionalSuffix();
 
         $v = str_pad('', $hlen >> 3, "\x01", STR_PAD_LEFT);
         $k = str_pad('', $hlen >> 3, "\x00", STR_PAD_LEFT);
