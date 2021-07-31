@@ -16,6 +16,7 @@ class Formatter
         $r = gmp_strval($signature->getR(), 16);
         $s = gmp_strval($signature->getS(), 16);
         if ($curveSize) {
+            // Round up to nearest byte size, then double (for hex)
             $len = (($curveSize + 7) >> 3) << 1;
         } else {
             // Attempt to determine this from $r and $s
