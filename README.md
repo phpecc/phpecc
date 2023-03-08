@@ -1,10 +1,5 @@
 ## Pure PHP Elliptic Curve DSA and DH
 
-[![Build Status](https://travis-ci.org/phpecc/phpecc.svg?branch=master)](https://travis-ci.org/phpecc/phpecc)
-
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phpecc/phpecc/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phpecc/phpecc?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/phpecc/phpecc/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/phpecc/phpecc/?branch=master)
-
 [![Latest Stable Version](https://poser.pugx.org/mdanter/ecc/v/stable.png)](https://packagist.org/packages/mdanter/ecc)
 [![Total Downloads](https://poser.pugx.org/mdanter/ecc/downloads.png)](https://packagist.org/packages/mdanter/ecc)
 [![Latest Unstable Version](https://poser.pugx.org/mdanter/ecc/v/unstable.png)](https://packagist.org/packages/mdanter/ecc)
@@ -12,7 +7,7 @@
 
 ### Information
 
-This library is a rewrite/update of Matyas Danter's ECC library. All credit goes to him.
+This library is an actively maintained fork of Thomas Kerin's [`phpecc`](https://github.com/phpecc/phpecc) library, which is a rewrite/update of Matyas Danter's ECC library. All credit goes to them.
 
 For more information on Elliptic Curve Cryptography please read [this fine article](http://www.matyasdanter.com/2010/12/elliptic-curve-php-oop-dsa-and-diffie-hellman/).
 
@@ -53,16 +48,11 @@ Support for older PHP versions:
 
 You can install this library via Composer :
 
-`composer require mdanter/ecc:^1.0`
+`composer require shanecurran/phpecc`
 
 ### Contribute
 
 When sending in pull requests, please make sure to run the `make` command.
-
-The default target runs all PHPUnit and PHPCS tests. All tests
-must validate for your contribution to be accepted.
-
-It's also always a good idea to check the results of the [Scrutinizer analysis](https://scrutinizer-ci.com/g/phpecc/phpecc/) for your pull requests.
 
 ### Usage
 
