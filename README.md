@@ -52,7 +52,7 @@ Support for older PHP versions:
 
 You can install this library via Composer :
 
-`composer require shanecurran/ecc`
+`composer require shanecurran/phpecc`
 
 ### Contribute
 
