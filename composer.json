@@ -1,8 +1,8 @@
 {
-    "name": "mdanter/ecc",
+    "name": "shanecurran/phpecc",
     "description": "PHP Elliptic Curve Cryptography library",
     "type": "library",
-    "homepage": "https://github.com/phpecc/phpecc",
+    "homepage": "https://github.com/shanecurran/phpecc",
     "keywords": ["secp256k1", "secp256r1", "nistp192", "nistp224", "nistp256", "nistp384", "nistp521", "ECDSA", "diffie", "hellman", "ECDH", "elliptic", "curve", "phpecc"],
     "license": "MIT",
     "authors": [
@@ -20,6 +20,11 @@
         {
             "name": "Thomas Kerin",
             "email": "afk11@users.noreply.github.com",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Shane Curran",
+            "email": "shanecurran@users.noreply.github.com",
             "role": "Maintainer"
         }
     ],

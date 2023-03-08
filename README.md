@@ -1,9 +1,13 @@
 ## Pure PHP Elliptic Curve DSA and DH
 
-[![Latest Stable Version](https://poser.pugx.org/mdanter/ecc/v/stable.png)](https://packagist.org/packages/mdanter/ecc)
-[![Total Downloads](https://poser.pugx.org/mdanter/ecc/downloads.png)](https://packagist.org/packages/mdanter/ecc)
-[![Latest Unstable Version](https://poser.pugx.org/mdanter/ecc/v/unstable.png)](https://packagist.org/packages/mdanter/ecc)
-[![License](https://poser.pugx.org/mdanter/ecc/license.png)](https://packagist.org/packages/mdanter/ecc)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/shanecurran/phpecc/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/shanecurran/phpecc?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/shanecurran/phpecc/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/shanecurran/phpecc/?branch=master)
+
+
+[![Latest Stable Version](https://poser.pugx.org/shanecurran/phpecc/v/stable.png)](https://packagist.org/packages/shanecurran/phpecc)
+[![Total Downloads](https://poser.pugx.org/shanecurran/phpecc/downloads.png)](https://packagist.org/packages/shanecurran/phpecc)
+[![Latest Unstable Version](https://poser.pugx.org/shanecurran/phpecc/v/unstable.png)](https://packagist.org/packages/shanecurran/phpecc)
+[![License](https://poser.pugx.org/shanecurran/phpecc/license.png)](https://packagist.org/packages/shanecurran/phpecc)
 
 ### Information
 
@@ -48,11 +52,16 @@ Support for older PHP versions:
 
 You can install this library via Composer :
 
-`composer require shanecurran/phpecc`
+`composer require shanecurran/ecc`
 
 ### Contribute
 
 When sending in pull requests, please make sure to run the `make` command.
+
+The default target runs all PHPUnit and PHPCS tests. All tests
+must validate for your contribution to be accepted.
+
+It's also always a good idea to check the results of the [Scrutinizer analysis](https://scrutinizer-ci.com/g/shanecurran/phpecc/) for your pull requests.
 
 ### Usage
 
