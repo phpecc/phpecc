@@ -34,7 +34,6 @@ filter:
 
 tools:
     php_cpd: true
-    php_pdepend: true
     php_analyzer: true
     php_sim: true
     php_changetracking: true

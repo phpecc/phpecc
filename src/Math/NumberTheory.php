@@ -43,6 +43,22 @@ class NumberTheory
      * @var GmpMathInterface
      */
     private $adapter;
+    
+    /**
+     * @var GMP
+     */
+    private $zero;
+    
+    /**
+     * @var GMP
+     */
+    private $one;
+
+    /**
+     * @var GMP
+     */
+    private $two;
+
 
     /**
      * @param GmpMathInterface $adapter
