@@ -26,7 +26,7 @@
     "require": {
         "php": "^7.0||^8.0",
         "ext-gmp": "*",
-        "fgrosse/phpasn1": "^2.0"
+        "genkgo/php-asn1": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0||^8.0||^9.0",
